@@ -7,6 +7,26 @@ import (
 
 type Player int
 
+func (p Player) Stone() string {
+	stone := "-"
+	if p == Black {
+		stone = "X"
+	} else if p == White {
+		stone = "O"
+	}
+	return stone
+}
+
+func (p Player) String() string {
+	var str string
+	if p == Black {
+		str = "Black"
+	} else if p == White {
+		str = "White"
+	}
+	return str
+}
+
 type Position struct {
 	X int
 	Y int
@@ -21,18 +41,12 @@ func PlayGame(board Board, positions []Position) error {
 	for i, p := range positions {
 		if err := board.Move(p); err != nil {
 			return fmt.Errorf("Player %d unable to make the move: %v", board.Player, p)
-		} else if ended, winner := board.End(); ended {
-			fmt.Printf("Winner is: %d", winner)
+		}
+		printStatus(board, i, p)
+		if ended, winner := board.End(); ended {
+			fmt.Printf("Winner is: %s", winner)
 			break
 		}
-		var stone string
-		if board.Player == Black {
-			stone = "X"
-		} else if board.Player == White {
-			stone = "O"
-		}
-		summary := fmt.Sprintf("[%d] %s plays (%d, %d): ", i+1, stone, p.X, p.Y)
-		fmt.Printf("%s\n\n%s\n\n", summary, board)
 	}
 	return nil
 }
@@ -58,6 +72,11 @@ func NewBoard(M int, N int, K int) (*Board, error) {
 	}, nil
 }
 
+func printStatus(board Board, i int, p Position) {
+	summary := fmt.Sprintf("[%d] %s plays (%d, %d)", i+1, -board.Player, p.X, p.Y)
+	fmt.Printf("%s:\n\n%s\n\n", summary, board)
+}
+
 type Board struct {
 	Player
 	Stones map[Position]Player
@@ -73,12 +92,7 @@ func (b Board) String() string {
 		for x := 0; x < b.M; x++ {
 			position := Position{x, b.M - 1 - y}
 			player := b.Stones[position]
-			stone := "-"
-			if player == Black {
-				stone = "X"
-			} else if player == White {
-				stone = "O"
-			}
+			stone := player.Stone()
 			row = append(row, stone)
 		}
 		rowString := strings.Join(row, " | ")
@@ -90,14 +104,10 @@ func (b Board) String() string {
 }
 
 func (b *Board) Move(p Position) error {
-	if p.X < 0 {
-		return fmt.Errorf("x out of bounds (<0)")
-	} else if p.Y < 0 {
-		return fmt.Errorf("y out of bounds (<0)")
-	} else if xBound := b.M - 1; p.X > xBound {
-		return fmt.Errorf("x out of bounds (>%d)", xBound)
-	} else if yBound := b.N - 1; p.Y > yBound {
-		return fmt.Errorf("y out of bounds (>%d)", yBound)
+	if p.X < 0 || p.X > b.M-1 {
+		return fmt.Errorf("x out of bounds")
+	} else if p.Y < 0 || p.Y > b.N-1 {
+		return fmt.Errorf("y out of bounds")
 	}
 
 	if b.Stones[p] != 0 {

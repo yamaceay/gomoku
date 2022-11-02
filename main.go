@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	board, err := items.NewBoard(3, 3, 3)
+	board, err := items.NewBoard(4, 4, 3)
 	if err != nil {
 		log.Printf("couldn't create a board: %s", err)
 		return

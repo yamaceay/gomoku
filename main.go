@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/gomoku/items"
@@ -23,7 +22,5 @@ func main() {
 		{X: 1, Y: 2},
 	}
 
-	if err := items.PlayGame(*board, positions); err != nil {
-		fmt.Printf("failed to play the game: %s", err)
-	}
+	items.PlayGame(*board, positions)
 }

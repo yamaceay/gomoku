@@ -37,18 +37,18 @@ const White = -1
 
 var allDirections = []Position{{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}}
 
-func PlayGame(board Board, positions []Position) error {
+func PlayGame(board Board, positions []Position) (Board, error) {
 	for i, p := range positions {
-		if err := board.Move(p); err != nil {
-			return fmt.Errorf("Player %d unable to make the move: %v", board.Player, p)
+		if err := (&board).Move(p); err != nil {
+			return board, fmt.Errorf("Player %d unable to make the move: %v", board.Player, p)
 		}
 		printStatus(board, i, p)
-		if ended, winner := board.End(); ended {
+		if ended, winner := (&board).End(); ended {
 			fmt.Printf("Winner is: %s", winner)
 			break
 		}
 	}
-	return nil
+	return board, nil
 }
 
 func NewBoard(M int, N int, K int) (*Board, error) {

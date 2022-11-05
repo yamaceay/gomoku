@@ -1,0 +1,13 @@
+FROM golang:latest AS build
+WORKDIR /app
+COPY go.mod ./
+RUN go mod download
+COPY *.go ./
+COPY *.txt ./
+RUN go build -o /docker-gomoku
+FROM gcr.io/distroless/base-debian10
+WORKDIR /
+COPY --from=build /docker-gomoku /docker-gomoku
+EXPOSE 8080
+USER nonroot:nonroot
+CMD ["/docker-gomoku"]

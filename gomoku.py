@@ -3,10 +3,14 @@ import random
 class Gomoku:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
-        self.board = np.zeros((self.M, self.N), dtype=np.int8)
-        self.player = self.FIRST_PLAYER
-        self.winner = 0
-        self.history = []
+        if not hasattr(self, "board"):
+            self.board = np.zeros((self.M, self.N), dtype=np.int8)
+            self.history = []
+            self.player = self.FIRST_PLAYER
+            self.winner = 0
+        else:
+            self.board = np.array(self.board, dtype=np.int8)
+            self.history = [tuple(move) for move in self.history]
     
     def copy(self):
         return Gomoku(**self.__dict__)
@@ -19,16 +23,14 @@ class Gomoku:
             if not self.is_legal(move):
                 raise Exception("Illegal move: " + str(move))
             
-            self.do_move(move)
+            self.step(move)
             if self.is_win(move):
                 self.winner = self.player
                 break
             
             self.player = -self.player
-            
-        return self
     
-    def possible_moves(self):
+    def actions(self):
         moves = [
             (x, y) 
             for x in range(self.M) 
@@ -38,21 +40,25 @@ class Gomoku:
         random.shuffle(moves)
         return moves
         
-    def is_won(self):
-        return self.winner
-    
-    def is_over(self):
-        return self.is_won() or not len(self.possible_moves())
+    def fin(self):
+        return self.winner or not len(self.actions())
+
+    def step(self, move: tuple[int, int]):
+        x, y = move
+        self.board[x, y] = self.player
+        self.history += [move]
         
     def is_legal(self, move: tuple[int, int]):
         x, y = move
         return 0 <= x < self.M and 0 <= y < self.N and self.board[x, y] == 0
 
-    def do_move(self, move: tuple[int, int]):
-        x, y = move
-        self.board[x, y] = self.player
-        self.history += [move]
-
+    def is_win(self, position: tuple[int, int]):
+        directions = [(0, 1), (1, 1), (1, 0), (1, -1)]
+        for direction in directions:
+            if self.is_win_line(position, direction):
+                return True
+        return False
+    
     def is_win_line(self, position: tuple[int, int], direction: tuple[int, int]):
         x, y = position
         dx, dy = direction
@@ -71,13 +77,6 @@ class Gomoku:
             counter += 1
         return counter >= self.K
 
-    def is_win(self, position: tuple[int, int]):
-        directions = [(0, 1), (1, 1), (1, 0), (1, -1)]
-        for direction in directions:
-            if self.is_win_line(position, direction):
-                return True
-        return False
-    
     def print(self):
         if not self.winner:
             print("Current player:", self.player)

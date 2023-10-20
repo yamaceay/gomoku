@@ -1,12 +1,16 @@
 import numpy as np
+import random
 class Gomoku:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
         self.board = np.zeros((self.M, self.N), dtype=np.int8)
         self.player = self.FIRST_PLAYER
-        self.winner = None
+        self.winner = 0
         self.history = []
-        
+    
+    def copy(self):
+        return Gomoku(**self.__dict__)
+    
     def play(self, *moves: tuple[int, int]):
         if not len(moves):
             raise Exception("No moves provided")
@@ -21,19 +25,24 @@ class Gomoku:
                 break
             
             self.player = -self.player
-
-        return self.winner
+            
+        return self
     
     def possible_moves(self):
-        return [
+        moves = [
             (x, y) 
             for x in range(self.M) 
             for y in range(self.N)
             if self.is_legal((x, y))
         ]
+        random.shuffle(moves)
+        return moves
         
+    def is_won(self):
+        return self.winner
+    
     def is_over(self):
-        return self.winner or not len(self.possible_moves())
+        return self.is_won() or not len(self.possible_moves())
         
     def is_legal(self, move: tuple[int, int]):
         x, y = move

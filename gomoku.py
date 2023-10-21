@@ -1,5 +1,6 @@
 import numpy as np
 import random
+
 class Gomoku:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
@@ -12,10 +13,14 @@ class Gomoku:
             self.board = np.array(self.board, dtype=np.int8)
             self.history = [tuple(move) for move in self.history]
     
-    def copy(self):
-        return Gomoku(**self.__dict__)
+    def copy(self, include_history=False):
+        new_game = Gomoku(**self.__dict__)
+        if not include_history:
+            new_game.history = []
+            new_game.FIRST_PLAYER = new_game.player
+        return new_game
     
-    def play(self, *moves: tuple[int, int]):
+    def play(self, *moves: tuple[int, int]) -> tuple[float, bool]:
         if not len(moves):
             raise Exception("No moves provided")
         
@@ -26,10 +31,15 @@ class Gomoku:
             self.step(move)
             if self.is_win(move):
                 self.winner = self.player
-                break
+                return self.score(), True
             
             self.player = -self.player
-    
+        return 0, self.no_move()
+
+    def reset(self):
+        self.history = []
+        self.player = self.FIRST_PLAYER
+
     def actions(self):
         moves = [
             (x, y) 
@@ -41,12 +51,20 @@ class Gomoku:
         return moves
         
     def fin(self):
-        return self.winner or not len(self.actions())
+        return self.winner or self.no_move()
+
+    def no_move(self):
+        return len(self.history) == self.M * self.N
 
     def step(self, move: tuple[int, int]):
         x, y = move
         self.board[x, y] = self.player
         self.history += [move]
+        
+    def score(self):
+        if self.winner:
+            return self.FIRST_PLAYER * self.winner
+        return 0
         
     def is_legal(self, move: tuple[int, int]):
         x, y = move

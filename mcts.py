@@ -2,6 +2,7 @@ import numpy as np
 from typing import TypeVar
 
 Game = TypeVar('Game')
+C = 1
 
 class Node:
     def __init__(self, state: Game, parent=None):
@@ -10,7 +11,6 @@ class Node:
         self.children: list[Node] = []
         self.n: int = 0
         self.Q: float = .0
-        self.c = 1
 
     def is_fully_expanded(self):
         return len(self.children) == len(self.state.actions())
@@ -21,7 +21,7 @@ class Node:
     def uct_score(self, child):
         exploitation = child.Q / child.n
         exploration = np.sqrt(2 * np.log(self.n) / child.n)
-        return exploitation + self.c * exploration   
+        return exploitation + C * exploration   
  
 class Tree:
     def __init__(self, state: Game):

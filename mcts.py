@@ -13,7 +13,7 @@ class Node:
         self.Q: float = .0
 
     def is_fully_expanded(self):
-        return len(self.children) == len(self.state.actions())
+        return len(self.children) and len(self.children) == len(self.state.actions())
 
     def is_terminal(self):
         return self.state.fin()
@@ -34,17 +34,21 @@ class Tree:
             if not node.is_fully_expanded():
                 return self.expand(node)
             else:
+                if not len(node.children):
+                    raise Exception("No children")
                 node = max(node.children, key=lambda child: node.uct_score(child))
         return node
 
     def expand(self, node: Node):
-        actions = [
-            action for action in node.state.actions() 
-            if action not in [
+        actions = list(filter( 
+            lambda action: action not in [
                 child.state.history[-1] 
                 for child in node.children
-            ]
-        ]
+            ], node.state.actions()
+        ))
+        if not len(actions):
+            raise Exception("No action")
+        
         action = actions[np.random.randint(0, len(actions))]
         new_state = node.state.copy(include_history=True)
         new_state.play(action)
@@ -56,6 +60,8 @@ class Tree:
         state = node.state.copy(include_history=True)
         while not state.fin():
             state_actions = state.actions()
+            if not len(state_actions):
+                break
             action = state_actions[np.random.randint(0, len(state_actions))]
             state.play(action)
         return state.score()

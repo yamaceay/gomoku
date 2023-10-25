@@ -15,5 +15,12 @@ Monte Carlo Tree Search (MCTS):
 * Policy Network: serves as the beacon guiding the expansion of the search tree. Instead of branching out indiscriminately, it casts the spotlight on moves radiating promise and potential, ensuring that the exploration process remains strategic and focused.
 * Value Network: Adept evaluator, meticulously scrutinizing leaf nodes within the tree. It diminishes the traditional reliance on random rollouts for evaluation, infusing the processs with a heightened level of precision. It not only speeds up the evaluation but also endows it with a more profound insight into the game's dynamics. 
 
+* Binary feature matrices: 
+    * Current player's move
+    * The adversary's move
+    * The most recent move
+    * The initiating player
 
-
+Result
+* AlphaZero: 100% win rate against the MCTS baseline
+* 500 - 2500 iterations

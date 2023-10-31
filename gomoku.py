@@ -96,11 +96,13 @@ class Gomoku:
         return counter >= self.K
 
     def print(self, print_fn = print):
+        output = ""
         if not self.winner:
-            print_fn("Current player: " + str(self.player))
+            output += "Current player: " + str(self.player)
         else:
-            print_fn("Winner: " + str(self.winner))
+            output += "Winner: " + str(self.winner)
 
+        output += "\n"
         for i in range(self.M):
             row = []
             for j in range(self.N):
@@ -110,5 +112,6 @@ class Gomoku:
                     row += ["O"]
                 else:
                     row += ["."]
-            print_fn(" ".join(row))
+            output += " ".join(row) + "\n"
+        print_fn(output)
     

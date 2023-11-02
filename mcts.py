@@ -2,7 +2,6 @@ import numpy as np
 from typing import TypeVar
 
 Game = TypeVar('Game')
-C = 1
 
 class Node:
     def __init__(self, state: Game, parent=None):
@@ -12,23 +11,23 @@ class Node:
         self.n: int = 0
         self.Q: float = .0
 
-    def is_fully_expanded(self):
+    def is_fully_expanded(self) -> bool:
         return len(self.children) and len(self.children) == len(self.state.actions())
 
-    def is_terminal(self):
+    def is_terminal(self) -> bool:
         return self.state.fin()
-
-    def uct_score(self, child):
-        exploitation = child.Q / child.n
-        exploration = np.sqrt(2 * np.log(self.n) / child.n)
-        return exploitation + C * exploration   
  
+def uct_score(parent: Node, child: Node, C: float = 1.) -> float:
+    exploitation = child.Q / child.n
+    exploration = np.sqrt(2 * np.log(parent.n) / child.n)
+    return exploitation + C * exploration   
+
 class Tree:
     def __init__(self, state: Game):
         state = state.copy()
         self.root = Node(state)
 
-    def select(self):
+    def select(self) -> Node:
         node = self.root
         while not node.is_terminal():
             if not node.is_fully_expanded():
@@ -36,10 +35,10 @@ class Tree:
             else:
                 if not len(node.children):
                     raise Exception("No children")
-                node = max(node.children, key=lambda child: node.uct_score(child))
+                node = max(node.children, key=lambda child: uct_score(node, child))
         return node
 
-    def expand(self, node: Node):
+    def expand(self, node: Node) -> Node:
         actions = list(filter( 
             lambda action: action not in [
                 child.state.history[-1] 
@@ -56,7 +55,7 @@ class Tree:
         node.children.append(new_node)
         return new_node
 
-    def simulate(self, node: Node):
+    def simulate(self, node: Node) -> float:
         state = node.state.copy(include_history=True)
         while not state.fin():
             state_actions = state.actions()

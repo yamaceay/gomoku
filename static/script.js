@@ -2,6 +2,7 @@ let board;
 let currentPlayer;
 let M, N, K;
 let deactivate = false;
+let waiting = false;
 
 async function startGame() {
     // Lesen Sie die Konfigurationswerte M, N und K
@@ -48,6 +49,7 @@ function drawBoard() {
             cell.textContent = board[i][j];
             cell.className = 'cell';
             cell.addEventListener('click', () => {
+                if (waiting) return; // Überprüfen Sie, ob auf einen Zug gewartet wird
                 const result = cellClicked(move);
                 drawBoard();
                 if (result) makeMove(move);
@@ -58,12 +60,14 @@ function drawBoard() {
 }
 
 async function makeMove(move) {
+    waiting = true; // Setzen Sie waiting auf true, wenn ein Zug gemacht wird
     const response = await fetch('/move', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ move }),
     });
     const data = await response.json();
+    waiting = false; // Setzen Sie waiting auf false, wenn eine Antwort vom Server empfangen wird
     if (data.move) {
         cellClicked(data.move);
         drawBoard();
@@ -89,7 +93,7 @@ async function makeMove(move) {
 }
 
 function cellClicked([i, j]) {
-    if (deactivate) return;
+    if (deactivate || waiting) return; // Überprüfen Sie, ob auf einen Zug gewartet wird
     if (board[i][j] === '') {
         board[i][j] = currentPlayer;
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';

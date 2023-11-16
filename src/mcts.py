@@ -17,7 +17,8 @@ class Node:
     def is_terminal(self) -> bool:
         return self.state.fin()
  
-def uct_score(parent: Node, child: Node, C: float = 1.) -> float:
+def uct_score(parent: Node, child: Node, **kwargs) -> float:
+    C = kwargs.get('C', 1.0)
     exploitation = child.Q / child.n
     exploration = np.sqrt(2 * np.log(parent.n) / child.n)
     return exploitation + C * exploration   
@@ -27,7 +28,7 @@ class Tree:
         state = state.copy()
         self.root = Node(state)
 
-    def select(self) -> Node:
+    def select(self, policy=uct_score, policy_kwargs={}) -> Node:
         node = self.root
         while not node.is_terminal():
             if not node.is_fully_expanded():
@@ -35,7 +36,7 @@ class Tree:
             else:
                 if not len(node.children):
                     raise Exception("No children")
-                node = max(node.children, key=lambda child: uct_score(node, child))
+                node = max(node.children, key=lambda child: policy(node, child, **policy_kwargs))
         return node
 
     def expand(self, node: Node) -> Node:

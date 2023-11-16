@@ -8,30 +8,39 @@
 </head>
 <body>
     <form id="configForm">
-        <div>
-            <label for="rows">Rows (M):</label>
-            <input type="number" id="rows" name="rows" min="3" value="3">
-        </div>
+        <div id="expandCollapseDiv">
+            <button id="expandCollapseBtn">Expand / Collapse Options</button>
+            <div id="content" style="display: block;">
+                <div>
+                    <label for="rows">Rows (M):</label>
+                    <input type="number" id="rows" name="rows" min="3" value="3">
+                </div>
+                
+                <div>
+                    <label for="cols">Columns (N):</label>
+                    <input type="number" id="cols" name="cols" min="3" value="3">
+                </div>
         
-        <div>
-            <label for="cols">Columns (N):</label>
-            <input type="number" id="cols" name="cols" min="3" value="3">
+                <div>
+                    <label for="winLength">Win Length (K):</label>
+                    <input type="number" id="winLength" name="winLength" min="3" value="3">
+                </div>
+        
+                <div>
+                    <label for="player">Player:</label>
+                    <select id="player" name="player">
+                        <option value="RandomPlayer">RandomPlayer</option>
+                        <option value="UCTPlayer">UCTPlayer</option>
+                        <option value="UCTPBPlayer">UCTPBPlayer</option>
+                        <option value="UCTQPlayer">UCTQPlayer</option>
+                        <option value="UCTQPBPlayer">UCTQPBPlayer</option>
+                    </select>
+                </div>
+        
+                <button type="button" onclick="startGame()">Start Game</button>
+            </div>
         </div>
 
-        <div>
-            <label for="winLength">Win Length (K):</label>
-            <input type="number" id="winLength" name="winLength" min="3" value="3">
-        </div>
-
-        <div>
-            <label for="player">Player:</label>
-            <select id="player" name="player">
-                <option value="RandomPlayer">RandomPlayer</option>
-                <option value="MCTSPlayer">MCTSPlayer</option>
-            </select>
-        </div>
-
-        <button type="button" onclick="startGame()">Start Game</button>
     </form>
 
     <div id="game">
@@ -40,5 +49,15 @@
     </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        document.getElementById('expandCollapseBtn').addEventListener('click', function() {
+            var content = document.getElementById('content');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+            } else {
+                content.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

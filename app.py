@@ -1,14 +1,28 @@
 from flask import Flask, request, jsonify, render_template
-from gomoku import Gomoku
-from players import Player, RandomPlayer, MCTSPlayer
+from src import Gomoku, \
+    Player, RandomPlayer, UCTPlayer, UCTQPlayer, \
+    Model, ADPModel, \
+    uct_pb_score, uct_score
 
 app = Flask(__name__, static_url_path='/static')
 game = None
 player: Player = None
 
+policies = {
+    'uct_score': uct_score,
+    'uct_pb_score': uct_pb_score,
+}
+
+models = {
+    'ADPModel': ADPModel(),
+}
+
 players = {
     'RandomPlayer': RandomPlayer(),
-    'MCTSPlayer': MCTSPlayer(),
+    'UCTPlayer': UCTPlayer(policy=policies["uct_score"]),
+    'UCTPBPlayer': UCTPlayer(policy=policies["uct_pb_score"]),
+    'UCTQPlayer': UCTQPlayer(policy=policies['uct_score'], model=models["ADPModel"]),
+    'UCTQPBPlayer': UCTQPlayer(policy=policies['uct_pb_score'], model=models["ADPModel"]),
 }
 
 @app.route('/')

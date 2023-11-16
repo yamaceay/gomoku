@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template
 from src import Gomoku, \
     Player, RandomPlayer, UCTPlayer, UCTQPlayer, \
     Model, ADPModel, \
-    uct_pb_score, uct_score
+    pb_score, uct_pb_score, uct_score
 
 app = Flask(__name__, static_url_path='/static')
 game = None
@@ -11,6 +11,7 @@ player: Player = None
 policies = {
     'uct_score': uct_score,
     'uct_pb_score': uct_pb_score,
+    'pb_score': pb_score,
 }
 
 models = {
@@ -18,11 +19,13 @@ models = {
 }
 
 players = {
-    'RandomPlayer': RandomPlayer(),
-    'UCTPlayer': UCTPlayer(policy=policies["uct_score"]),
-    'UCTPBPlayer': UCTPlayer(policy=policies["uct_pb_score"]),
-    'UCTQPlayer': UCTQPlayer(policy=policies['uct_score'], model=models["ADPModel"]),
-    'UCTQPBPlayer': UCTQPlayer(policy=policies['uct_pb_score'], model=models["ADPModel"]),
+    '_': RandomPlayer(),
+    '_UCT_UCB': UCTPlayer(policy=policies["uct_score"]),
+    '_UCT_PB': UCTPlayer(policy=policies["pb_score"]),
+    '_UCT_UCB_PB': UCTPlayer(policy=policies["uct_pb_score"]),
+    '_UCT_UCB_Q': UCTQPlayer(policy=policies['uct_score'], model=models["ADPModel"]),
+    '_UCT_PB_Q': UCTQPlayer(policy=policies['pb_score'], model=models["ADPModel"]),
+    '_UCT_UCB_PB_Q': UCTQPlayer(policy=policies['uct_pb_score'], model=models["ADPModel"]),
 }
 
 @app.route('/')

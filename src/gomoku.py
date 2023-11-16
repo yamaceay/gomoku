@@ -77,6 +77,41 @@ class Gomoku:
                 return True
         return False
     
+    def find_near(self, position: tuple[int, int], values: list[int]) -> int:
+        counter = 0
+        directions = [(0, 1), (1, 1), (1, 0), (1, -1)]
+        for direction in directions:
+            counter += self.find_near_line(position, direction, values)
+        return counter
+
+    def find_near_line(self, position: tuple[int, int], direction: tuple[int, int], pattern: list[int]) -> int:
+        x, y = position
+        dx, dy = direction
+        counter = 0
+        
+        for i in range(len(pattern)):
+            board_items = []
+            for j in range(len(pattern)):
+                new_x = x + (1 - i + j) * dx
+                new_y = y + (1 - i + j) * dy
+                if not (0 <= new_x < self.M and 0 <= new_y < self.N):
+                    board_items = []
+                    break
+                board_items += [self.board[new_x, new_y]]
+
+            if not len(board_items):
+                continue
+            
+            matches = True
+            for bi, pi in zip(board_items, pattern):
+                if bi != pi:
+                    matches = False
+                    break
+            if matches:
+                counter += 1
+                
+        return counter
+
     def is_win_line(self, position: tuple[int, int], direction: tuple[int, int]):
         x, y = position
         dx, dy = direction

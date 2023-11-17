@@ -9,6 +9,7 @@ async function startGame() {
     M = parseInt(document.getElementById('rows').value);
     N = parseInt(document.getElementById('cols').value);
     K = parseInt(document.getElementById('winLength').value);
+    ADJ = parseInt(document.getElementById('adj').value);
     player = document.getElementById('player').value;
 
     // Überprüfen Sie, ob die Werte gültig sind
@@ -21,7 +22,7 @@ async function startGame() {
     const response = await fetch('/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ M, N, K, player }),
+        body: JSON.stringify({ M, N, K, ADJ, player }),
     });
     const data = await response.json();
     if (data.success) {

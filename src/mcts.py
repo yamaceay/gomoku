@@ -24,9 +24,10 @@ def uct_score(parent: Node, child: Node, **kwargs) -> float:
     return exploitation + C * exploration   
 
 class Tree:
-    def __init__(self, state: Game):
+    def __init__(self, state: Game, **kwargs):
         state = state.copy()
         self.root = Node(state)
+        self.only_adjacents = kwargs.get('only_adjacents', False)
 
     def select(self, policy=uct_score, policy_kwargs={}) -> Node:
         node = self.root
@@ -40,6 +41,22 @@ class Tree:
         return node
 
     def expand(self, node: Node) -> Node:
+        if self.only_adjacents:
+            adjacent_actions = node.state.actions(only_adjacents=True)
+            adjacent_filtered_actions = list(filter( 
+                lambda action: action not in [
+                    child.state.history[-1] 
+                    for child in node.children
+                ], adjacent_actions
+            ))
+            if len(adjacent_filtered_actions):
+                action = adjacent_filtered_actions[np.random.randint(0, len(adjacent_filtered_actions))]
+                new_state = node.state.copy(include_history=True)
+                new_state.play(action)
+                new_node = Node(new_state, parent=node)
+                node.children.append(new_node)
+                return new_node
+                
         actions = list(filter( 
             lambda action: action not in [
                 child.state.history[-1] 

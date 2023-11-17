@@ -38,13 +38,14 @@ class RandomPlayer(Player):
         return moves[random_move]
             
 class UCTPlayer(Player):
-    def __init__(self, iterations=1000, policy=uct_score, policy_kwargs={}):
+    def __init__(self, iterations=1000, policy=uct_score, policy_kwargs={}, tree_kwargs={}):
         self.iterations = iterations
         self.policy = policy
         self.policy_kwargs = policy_kwargs
+        self.tree_kwargs = tree_kwargs
 
     def next_move(self, game: Gomoku):
-        tree = Tree(game)
+        tree = Tree(game, **self.tree_kwargs)
         
         @timeout(TIMEOUT)
         def iterate():
@@ -131,11 +132,12 @@ def uct_pb_score(parent: Node, child: Node, **kwargs) -> float:
     return ucb + C_PB * pbs
     
 class UCTQPlayer(Player):
-    def __init__(self, iterations=1000, max_depth=10, policy=uct_score, policy_kwargs={}, model=None):
+    def __init__(self, iterations=1000, max_depth=10, policy=uct_score, policy_kwargs={}, tree_kwargs={}, model=None):
         self.iterations = iterations
         self.max_depth = max_depth
         self.policy = policy
         self.policy_kwargs = policy_kwargs
+        self.tree_kwargs = tree_kwargs
         self.model = model
     
     def simulate(self, node: Node):
@@ -155,7 +157,7 @@ class UCTQPlayer(Player):
         return state.score()
         
     def next_move(self, game: Gomoku):
-        tree = Tree(game)
+        tree = Tree(game, **self.tree_kwargs)
         
         @timeout(TIMEOUT)
         def iterate():

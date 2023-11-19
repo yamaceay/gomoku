@@ -10,6 +10,7 @@ DIR_PATH = "./models"
 HIDDEN_DIM = 100
 INPUT_DIM = 2 * (5 * (len(PB_DICT) - 1) + 1) + 2
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class ShallowNN(torch.nn.Module):
     def __init__(self, params, **kwargs):
         super(ShallowNN, self).__init__()
@@ -20,7 +21,7 @@ class ShallowNN(torch.nn.Module):
         if self.loss_fn == 'mse':
             self.loss_fn = torch.nn.MSELoss(reduction='mean')
         
-        self.optimizer_fn = kwargs.get('optimizer_fn', torch.optim.SGD)
+        self.optimizer_fn = kwargs.get('optimizer_fn', torch.optim.Adam)
         self.lr = kwargs.get('lr', 0.1)
         
         self.layers = []
@@ -31,12 +32,15 @@ class ShallowNN(torch.nn.Module):
             ]
         
         self.model = torch.nn.Sequential(*self.layers)
+        self.model = self.model.to(device)
         self.optimizer = self.optimizer_fn(self.model.parameters(), lr=self.lr)
 
     def forward(self, x):
         return self.model(x)
 
     def train(self, x, y):
+        x = x.to(device)
+        y = y.to(device)
         y_pred = self.forward(x)
         loss = self.loss_fn(y_pred, y)
         self.optimizer.zero_grad()
@@ -59,6 +63,8 @@ class ValueNetwork(ShallowNN):
             params=[INPUT_DIM, HIDDEN_DIM, 1], 
             **kwargs
         )
+        
+        self.model = self.model.to(device)
     
     def forward(self, state: Gomoku):
         if state.fin():
@@ -69,8 +75,8 @@ class ValueNetwork(ShallowNN):
         return self.model(features)
     
     def train(self, prev_state: Gomoku, state: Gomoku, reward: float):
-        prev_V = self.forward(prev_state)
-        V = self.forward(state)
+        prev_V = self.forward(prev_state).to(device)
+        V = self.forward(state).to(device)
         lr = self.lr
         if V == 0:
             lr *= self.magnify
@@ -116,7 +122,7 @@ class ValueNetwork(ShallowNN):
         for c in rest:
             features += to_bits(c)
         features += [int(state.player == 1), int(state.player == -1)]
-        return torch.FloatTensor(features)
+        return torch.FloatTensor(features).to(device)
     
     def load_model(self, filepath: str = None):
         if filepath is None:
@@ -154,6 +160,8 @@ def get_rewards_actions(state: Gomoku, value_network: ValueNetwork) -> list[tupl
         state_new = state.copy()
         state_new.play(action)
         value = value_network.forward(state_new)
+        if value.device != device:
+            value = value.to(device)
         rewards_actions.append((value, action))
         
     rewards_actions = list(reversed(sorted(rewards_actions)))
@@ -186,7 +194,7 @@ def comp_models(game_kwargs, last_model: ValueNetwork, best_model: ValueNetwork,
             break
         action = policy.forward(game, model2)
         game.play(action)
-    win = game.score() 
+    win = game.score()
     return win, last_model_starts
       
 def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, value_network_kwargs, policy_network_kwargs, eval: bool = True):
@@ -194,7 +202,10 @@ def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, valu
     
     for i in tqdm(range(1, epochs+1), position=0, leave=True, desc="Training"):
         current_model = ValueNetwork(**value_network_kwargs)
-        current_model.load_model()
+        try:
+            current_model.load_model()
+        except Exception as e:
+            print(e)
         
         game = Gomoku(**game_kwargs)
         losses = train_one_episode(game, current_model, policy)
@@ -224,7 +235,7 @@ def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, valu
                 print("Avg. win rate of current model: {}".format(sum(model_stats) / len(model_stats)))
                 
                 if sum(model_stats) > n_test_games / 2:    
-                    current_model.save_model() 
+                    current_model.save_model()      
 
 if __name__ == "__main__":
     train_adp(
@@ -239,10 +250,22 @@ if __name__ == "__main__":
             'ADJ': 2,
         }, value_network_kwargs={
             'alpha': 0.9,
-            'magnify': 5,
+            'magnify': 1,
         }, policy_network_kwargs={
             'epsilon': 0.1,
         }
     )
+    
+    # print(comp_models(
+    #     game_kwargs={
+    #         'M': 10,
+    #         'N': 10,
+    #         'K': 5,
+    #         'ADJ': 2,
+    #     }, 
+    #     last_model=ValueNetwork(alpha=0.9, magnify=1, model_path="epoch_4.h5"), 
+    #     best_model=ValueNetwork(alpha=0.9, magnify=1), 
+    #     policy=PolicyNetwork(epsilon = 0.1),
+    # ))
 
     

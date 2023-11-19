@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 from src import Gomoku, \
-    Player, RandomPlayer, UCTPlayer, UCTQPlayer, \
-    Model, ADPModel, \
-    pb_score, uct_pb_score, uct_score
+    Player, RandomPlayer, UCT_Player, UCT_ADP_Player, \
+    pb_score, uct_pb_score, uct_score, \
+    ValueNetwork \
 
 app = Flask(__name__, static_url_path='/static')
 game = None
@@ -15,23 +15,23 @@ policies = {
 }
 
 models = {
-    'ADPModel': ADPModel(),
+    'ADPModel': ValueNetwork(alpha = 0.9, magnify = 5, model_path = 'best.h5'),
 }
 
 players = {
     '_': RandomPlayer(),
-    '_UCT_UCB': UCTPlayer(policy=policies["uct_score"]),
-    '_UCT_UCB_ADJ': UCTPlayer(policy=policies["uct_score"], tree_kwargs={"only_adjacents": True}),
-    '_UCT_PB': UCTPlayer(policy=policies["pb_score"]),
-    '_UCT_PB_ADJ': UCTPlayer(policy=policies["pb_score"], tree_kwargs={"only_adjacents": True}),
-    '_UCT_UCB_PB': UCTPlayer(policy=policies["uct_pb_score"]),
-    '_UCT_UCB_PB_ADJ': UCTPlayer(policy=policies["uct_pb_score"], tree_kwargs={"only_adjacents": True}),
-    '_UCT_UCB_Q': UCTQPlayer(policy=policies['uct_score'], model=models["ADPModel"]),
-    '_UCT_UCB_ADJ_Q': UCTQPlayer(policy=policies['uct_score'], tree_kwargs={"only_adjacents": True}, model=models["ADPModel"]),
-    '_UCT_PB_Q': UCTQPlayer(policy=policies['pb_score'], model=models["ADPModel"]),
-    '_UCT_PB_ADJ_Q': UCTQPlayer(policy=policies['pb_score'], tree_kwargs={"only_adjacents": True}, model=models["ADPModel"]),
-    '_UCT_UCB_PB_Q': UCTQPlayer(policy=policies['uct_pb_score'], model=models["ADPModel"]),
-    '_UCT_UCB_PB_ADJ_Q': UCTQPlayer(policy=policies['uct_pb_score'], tree_kwargs={"only_adjacents": True}, model=models["ADPModel"]),
+    '_UCT_UCB': UCT_Player(policy=policies["uct_score"]),
+    '_UCT_UCB_ADJ': UCT_Player(policy=policies["uct_score"], tree_kwargs={"only_adjacents": True}),
+    '_UCT_PB': UCT_Player(policy=policies["pb_score"]),
+    '_UCT_PB_ADJ': UCT_Player(policy=policies["pb_score"], tree_kwargs={"only_adjacents": True}),
+    '_UCT_UCB_PB': UCT_Player(policy=policies["uct_pb_score"]),
+    '_UCT_UCB_PB_ADJ': UCT_Player(policy=policies["uct_pb_score"], tree_kwargs={"only_adjacents": True}),
+    '_UCT_UCB_Q': UCT_ADP_Player(policy=policies['uct_score'], model=models["ADPModel"]),
+    '_UCT_UCB_ADJ_Q': UCT_ADP_Player(policy=policies['uct_score'], tree_kwargs={"only_adjacents": True}, model=models["ADPModel"]),
+    '_UCT_PB_Q': UCT_ADP_Player(policy=policies['pb_score'], model=models["ADPModel"]),
+    '_UCT_PB_ADJ_Q': UCT_ADP_Player(policy=policies['pb_score'], tree_kwargs={"only_adjacents": True}, model=models["ADPModel"]),
+    '_UCT_UCB_PB_Q': UCT_ADP_Player(policy=policies['uct_pb_score'], model=models["ADPModel"]),
+    '_UCT_UCB_PB_ADJ_Q': UCT_ADP_Player(policy=policies['uct_pb_score'], tree_kwargs={"only_adjacents": True}, model=models["ADPModel"]),
 }
 
 @app.route('/')
@@ -42,7 +42,7 @@ def index():
 def start_game():
     data = request.json
     global game, player
-    game = Gomoku(M=data.get("M"), N=data.get("N"), K=data.get("K"), FIRST_PLAYER=1, ADJ=data.get("ADJ"))
+    game = Gomoku(M=data.get("M"), N=data.get("N"), K=data.get("K"), ADJ=data.get("ADJ"))
     player = players[data.get("player")]
     return jsonify(success=True)
 

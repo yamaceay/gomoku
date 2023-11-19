@@ -37,7 +37,7 @@ class RandomPlayer(Player):
         random_move  = np.random.randint(0, len(moves))
         return moves[random_move]
             
-class UCTPlayer(Player):
+class UCT_Player(Player):
     def __init__(self, iterations=1000, policy=uct_score, policy_kwargs={}, tree_kwargs={}):
         self.iterations = iterations
         self.policy = policy
@@ -62,7 +62,7 @@ class UCTPlayer(Player):
         best_child = max(tree.root.children, key=lambda child: child.Q)
         return best_child.state.history[-1]
     
-class UCTQPlayer(Player):
+class UCT_ADP_Player(Player):
     def __init__(self, iterations=1000, max_depth=10, policy=uct_score, policy_kwargs={}, tree_kwargs={}, model=None):
         self.iterations = iterations
         self.max_depth = max_depth
@@ -82,7 +82,7 @@ class UCTQPlayer(Player):
                 state.play(action)
             else:
                 if self.model is not None:
-                    return self.model(state)
+                    return self.model.forward(state)
                 else:
                     return np.random.random()
         return state.score()
@@ -104,11 +104,3 @@ class UCTQPlayer(Player):
         
         best_child = max(tree.root.children, key=lambda child: child.Q)
         return best_child.state.history[-1]
-    
-class Model:
-    def __call__(self, state: Gomoku) -> float:
-        raise NotImplementedError
-    
-class ADPModel(Model):
-    def __call__(self, state: Gomoku) -> float:
-        return np.random.random()

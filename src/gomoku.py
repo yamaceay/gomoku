@@ -7,14 +7,20 @@ import random
 class Gomoku:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
+        if not hasattr(self, "FIRST_PLAYER"):
+            self.FIRST_PLAYER = 1
+        if not hasattr(self, "ADJ"):
+            self.ADJ = 0
         if not hasattr(self, "board"):
             self.board = np.zeros((self.M, self.N), dtype=np.int8)
+            self.line_cache = {}
             self.adjacents = set()
             self.history = []
             self.player = self.FIRST_PLAYER
             self.winner = 0
         else:
             self.board = np.array(self.board, dtype=np.int8)
+            self.line_cache = {}
             self.adjacents = set(self.adjacents)
             self.history = [tuple(move) for move in self.history]
     
@@ -36,6 +42,7 @@ class Gomoku:
             self.step(move)
             if self.is_win(move):
                 self.winner = self.player
+                self.player = -self.player
                 return self.score(), True
             
             self.player = -self.player
@@ -68,6 +75,7 @@ class Gomoku:
     def step(self, move: tuple[int, int]):
         x, y = move
         self.board[x, y] = self.player
+        self.line_cache = {}
         if self.ADJ:
             for dx in range(-self.ADJ, self.ADJ + 1):
                 for dy in range(-self.ADJ, self.ADJ + 1):
@@ -76,7 +84,7 @@ class Gomoku:
                         continue
                     self.adjacents.add("{},{}".format(new_x, new_y))
         self.history += [move]
-        
+    
     def score(self) -> float:
         if self.winner:
             return self.FIRST_PLAYER * self.winner
@@ -86,17 +94,19 @@ class Gomoku:
         x, y = move
         return 0 <= x < self.M and 0 <= y < self.N and self.board[x, y] == 0
 
+    @property
+    def directions(self) -> list[tuple[int, int]]:
+        return [(0, 1), (1, 1), (1, 0), (1, -1)]
+
     def is_win(self, position: tuple[int, int]) -> bool:
-        directions = [(0, 1), (1, 1), (1, 0), (1, -1)]
-        for direction in directions:
+        for direction in self.directions:
             if self.is_win_line(position, direction):
                 return True
         return False
     
     def find_near(self, position: tuple[int, int], values: list[int]) -> int:
         counter = 0
-        directions = [(0, 1), (1, 1), (1, 0), (1, -1)]
-        for direction in directions:
+        for direction in self.directions:
             counter += self.find_near_line(position, direction, values)
         return counter
 
@@ -107,7 +117,7 @@ class Gomoku:
         
         for i in range(1 - len(pattern), len(pattern)):
             new_position = x + i * dx, y + i * dy 
-            _, board_items = self.get_line(new_position, direction, len(pattern))
+            board_items = self.get_line(new_position, direction, len(pattern))
         
             if not len(board_items):
                 continue
@@ -122,35 +132,44 @@ class Gomoku:
                 
         return counter
     
-    def get_line(self, position: tuple[int, int], direction: tuple[int, int], length: int) -> tuple[list[tuple[int, int]], list[int]]:
+    def get_line(self, position: tuple[int, int], direction: tuple[int, int], length: int) -> list[int]:
+        key = (position, direction, length)
+        if key in self.line_cache:
+            return self.line_cache[key]
+        
         x, y = position
         dx, dy = direction
-        indices, values = [], []
+        values = []
         for i in range(length):
             new_x, new_y = x + i * dx, y + i * dy
             if not (0 <= new_x < self.M and 0 <= new_y < self.N):
-                return [], []
-            indices += [(new_x, new_y)]
+                return []
             values += [self.board[new_x, new_y]]
-        return indices, values
+            
+        self.line_cache[key] = values
+        return values
 
     def is_win_line(self, position: tuple[int, int], direction: tuple[int, int]) -> bool:
+        counter = 0
+        
         x, y = position
         dx, dy = direction
+        bwx, bwy = x - dx, y - dy
+        fwx, fwy = x + dx, y + dy
         
-        counter = 0        
-        for i in range(1 - self.K, self.K):
-            if counter >= self.K:
-                break
-            if i != 0:
-                new_x, new_y = x + i * dx, y + i * dy
-                if not (0 <= new_x < self.M and 0 <= new_y < self.N):
-                    continue
-                if self.board[new_x, new_y] != self.board[x, y]:
-                    counter = 0
-                    continue
-            counter += 1
-        return counter >= self.K
+        fw_values = self.get_line((fwx, fwy), (dx, dy), self.K-1)
+        bw_values = self.get_line((bwx, bwy), (-dx, -dy), self.K-1)
+
+        values = bw_values[::-1] + [self.board[x, y]] + fw_values
+
+        for value in values:
+            if value == self.board[x, y]:
+                counter += 1
+                if counter >= self.K:
+                    return True
+            else:
+                counter = 0
+        return False
 
     def print(self, print_fn = print):
         output = ""

@@ -86,9 +86,7 @@ class Gomoku:
         self.history += [move]
     
     def score(self) -> float:
-        if self.winner:
-            return self.FIRST_PLAYER * self.winner
-        return 0
+        return int(self.winner and self.FIRST_PLAYER)
         
     def is_legal(self, move: tuple[int, int]) -> bool:
         x, y = move
@@ -154,13 +152,12 @@ class Gomoku:
         
         x, y = position
         dx, dy = direction
-        bwx, bwy = x - dx, y - dy
-        fwx, fwy = x + dx, y + dy
-        
-        fw_values = self.get_line((fwx, fwy), (dx, dy), self.K-1)
-        bw_values = self.get_line((bwx, bwy), (-dx, -dy), self.K-1)
-
-        values = bw_values[::-1] + [self.board[x, y]] + fw_values
+        values = [
+            self.board[x + i * dx, y + i * dy]
+            for i in range(1 - self.K, self.K)
+            if 0 <= x + i * dx < self.M 
+            and 0 <= y + i * dy < self.N
+        ]
 
         for value in values:
             if value == self.board[x, y]:

@@ -8,52 +8,48 @@
 </head>
 <body>
     <form id="configForm">
-        <div id="expandCollapseDiv">
-            <button id="expandCollapseBtn">Expand / Collapse Options</button>
-            <div id="content" style="display: block;">
-                <div>
-                    <label for="rows">Rows (M):</label>
-                    <input type="number" id="rows" name="rows" min="3" value="3">
-                </div>
-                
-                <div>
-                    <label for="cols">Columns (N):</label>
-                    <input type="number" id="cols" name="cols" min="3" value="3">
-                </div>
-        
-                <div>
-                    <label for="winLength">Win Length (K):</label>
-                    <input type="number" id="winLength" name="winLength" min="3" value="3">
-                </div>
-
-                <div>
-                    <label for="adj"># Adjacent Grids:</label>
-                    <input type="number" id="adj" name="adj" min="0" value="2">
-                </div>
-        
-                <div>
-                    <label for="player">Player:</label>
-                    <select id="player" name="player">
-                        <option value="_">_</option>
-                        <option value="_UCT_PB">_UCT_PB</option>
-                        <option value="_UCT_PB_ADJ">_UCT_PB_ADJ</option>
-                        <option value="_UCT_UCB">_UCT_UCB</option>
-                        <option value="_UCT_UCB_ADJ">_UCT_UCB_ADJ</option>
-                        <option value="_UCT_UCB_PB">_UCT_UCB_PB</option>
-                        <option value="_UCT_UCB_PB_ADJ">_UCT_UCB_PB_ADJ</option>
-                        <option value="_UCT_PB_Q">_UCT_PB_Q</option>
-                        <option value="_UCT_PB_ADJ_Q">_UCT_PB_ADJ_Q</option>
-                        <option value="_UCT_UCB_Q">_UCT_UCB_Q</option>
-                        <option value="_UCT_UCB_ADJ_Q">_UCT_UCB_ADJ_Q</option>
-                        <option value="_UCT_UCB_PB_Q">_UCT_UCB_PB_Q</option>
-                        <option value="_UCT_UCB_PB_ADJ_Q">_UCT_UCB_PB_ADJ_Q</option>
-                    </select>
-                </div>
-        
-                <button type="button" onclick="startGame()">Start Game</button>
+        <div id="content" style="display: block;">
+            <div>
+                <label for="rows">Rows (M):</label>
+                <input type="number" id="rows" name="rows" min="3" value="3">
             </div>
-        </div>
+            
+            <div>
+                <label for="cols">Columns (N):</label>
+                <input type="number" id="cols" name="cols" min="3" value="3">
+            </div>
 
+            <div>
+                <label for="winLength">Win Length (K):</label>
+                <input type="number" id="winLength" name="winLength" min="3" value="3">
+            </div>
+
+            <div>
+                <label for="adj"># Adjacent Grids:</label>
+                <input type="number" id="adj" name="adj" min="0" value="2">
+            </div>
+
+            <div>
+                <label for="player">Player:</label>
+                <select id="player" name="player">
+                    <option value="_">_</option>
+                    <option value="_UCT_PB">_UCT_PB</option>
+                    <option value="_UCT_PB_ADJ">_UCT_PB_ADJ</option>
+                    <option value="_UCT_UCB">_UCT_UCB</option>
+                    <option value="_UCT_UCB_ADJ">_UCT_UCB_ADJ</option>
+                    <option value="_UCT_UCB_PB">_UCT_UCB_PB</option>
+                    <option value="_UCT_UCB_PB_ADJ">_UCT_UCB_PB_ADJ</option>
+                    <option value="_UCT_ADP1_PB">_UCT_ADP1_PB</option>
+                    <option value="_UCT_ADP1_PB_ADJ">_UCT_ADP1_PB_ADJ</option>
+                    <option value="_UCT_ADP1_UCB">_UCT_ADP1_UCB</option>
+                    <option value="_UCT_ADP1_UCB_ADJ">_UCT_ADP1_UCB_ADJ</option>
+                    <option value="_UCT_ADP1_UCB_PB">_UCT_ADP1_UCB_PB</option>
+                    <option value="_UCT_ADP1_UCB_PB_ADJ">_UCT_ADP1_UCB_PB_ADJ</option>
+                </select>
+            </div>
+
+            <button type="button" onclick="startGame()">Start Game</button>
+        </div>
     </form>
 
     <div id="game">
@@ -62,15 +58,5 @@
     </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script>
-        document.getElementById('expandCollapseBtn').addEventListener('click', function() {
-            var content = document.getElementById('content');
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-            } else {
-                content.style.display = 'none';
-            }
-        });
-    </script>
 </body>
 </html>

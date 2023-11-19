@@ -1,6 +1,7 @@
 import os
 import torch
 from .gomoku import Gomoku
+from tqdm import tqdm
 from .patterns import PB_DICT, lti
 import random
 
@@ -53,8 +54,6 @@ class ValueNetwork(ShallowNN):
         self.alpha = kwargs.pop('alpha', 1)
         self.magnify = kwargs.pop('magnify', 1)
         self.model_path = kwargs.pop('model_path', os.path.join(DIR_PATH, "best.h5"))
-        if os.path.exists(self.model_path):
-            self.load_model(self.model_path)
         
         super(ValueNetwork, self).__init__(
             params=[INPUT_DIM, HIDDEN_DIM, 1], 
@@ -63,7 +62,7 @@ class ValueNetwork(ShallowNN):
     
     def forward(self, state: Gomoku):
         if state.fin():
-            reward = abs(state.score())
+            reward = state.score()
             return torch.FloatTensor([reward])
         
         features = self.extract_features(state)
@@ -119,14 +118,18 @@ class ValueNetwork(ShallowNN):
         features += [int(state.player == 1), int(state.player == -1)]
         return torch.FloatTensor(features)
     
-    def load_model(self, filepath: str):
+    def load_model(self, filepath: str = None):
+        if filepath is None:
+            filepath = self.model_path
         if os.path.exists(filepath):
             self.model.load_state_dict(torch.load(filepath))
             print('Loaded existing model at '+filepath)
         else:
             print('File '+filepath+' does not exist')
         
-    def save_model(self, filepath: str):
+    def save_model(self, filepath: str = None):
+        if filepath is None:
+            filepath = self.model_path
         torch.save(self.model.state_dict(), filepath)
         print('Saved model at '+filepath)
     
@@ -162,44 +165,37 @@ def train_one_episode(state: Gomoku, value_network: ValueNetwork, policy_network
         prev_state = state.copy()
         action = policy_network.forward(state, value_network)
         state.play(action)
-        reward = int(state.score() > 0)
+        reward = state.score()
         loss = value_network.train(prev_state, state, reward)
         losses += [loss]
     return losses
 
-def comp_models_in_many_games(game_kwargs, last_model: ValueNetwork, best_model: ValueNetwork, policy: PolicyNetwork, n_games: int = 100):
-    stats = []
-    for _ in range(n_games):
-        last_model_starts = random.random() < .5
-        if last_model_starts:
-            model1 = last_model
-            model2 = best_model
-        else:
-            model1 = best_model
-            model2 = last_model
-        game = Gomoku(**game_kwargs)
-        while not game.fin():
-            action = policy.forward(game, model1)
-            game.play(action)
-            if game.fin():
-                break
-            action = policy.forward(game, model2)
-            game.play(action)
-        win = int(game.score() > 0)
-        stats += [(win, last_model_starts)]
-    return stats
+def comp_models(game_kwargs, last_model: ValueNetwork, best_model: ValueNetwork, policy: PolicyNetwork):
+    last_model_starts = random.random() < .5
+    if last_model_starts:
+        model1 = last_model
+        model2 = best_model
+    else:
+        model1 = best_model
+        model2 = last_model
+    game = Gomoku(**game_kwargs)
+    while not game.fin():
+        action = policy.forward(game, model1)
+        game.play(action)
+        if game.fin():
+            break
+        action = policy.forward(game, model2)
+        game.play(action)
+    win = game.score() 
+    return win, last_model_starts
       
-def train_adp(game_kwargs, value_network_kwargs, policy_network_kwargs, eval: bool = True, epochs: int = 2000, checkpoint: int = 100, n_test_games: int = 5):
-    best_model_path = os.path.join(DIR_PATH, "best.h5")
-    current_model = ValueNetwork(**value_network_kwargs)
-    if os.path.exists(best_model_path):
-        current_model.load_model(best_model_path)
-    elif eval:
-        raise Exception("No best model found")
-    
+def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, value_network_kwargs, policy_network_kwargs, eval: bool = True):
     policy = PolicyNetwork(**policy_network_kwargs)
     
-    for i in range(1, epochs+1):
+    for i in tqdm(range(1, epochs+1), position=0, leave=True, desc="Training"):
+        current_model = ValueNetwork(**value_network_kwargs)
+        current_model.load_model()
+        
         game = Gomoku(**game_kwargs)
         losses = train_one_episode(game, current_model, policy)
         print("Epoch {}, Loss {}".format(i, sum(losses)))
@@ -210,26 +206,43 @@ def train_adp(game_kwargs, value_network_kwargs, policy_network_kwargs, eval: bo
             
             if eval:
                 best_model = ValueNetwork(**value_network_kwargs)
-                best_model.load_model(best_model_path)
+                best_model.load_model()
                 
-                stats = comp_models_in_many_games(game_kwargs, current_model, best_model, policy, n_games=n_test_games)
-                sum_win = sum([win for win, _ in stats])
-                if sum_win > n_test_games / 2:
-                    print("Current model won {} of {}".format(sum_win, n_test_games))
-                    
-                    current_model.save_model(best_model_path)      
+                curr_model_stats = []
+                best_model_stats = []
+                for _ in tqdm(range(n_test_games), position=1, leave=True, disable=(not eval), desc="Testing epoch {}".format(i)):
+                    win, curr_model_starts = comp_models(game_kwargs, current_model, best_model, policy)
+                    if curr_model_starts:
+                        curr_model_stats += [win]
+                    else:
+                        best_model_stats += [1 - win]
+                
+                model_stats = curr_model_stats + best_model_stats
+                
+                print("As 1st player, current model won {} of {} games".format(sum(curr_model_stats), len(curr_model_stats)))
+                print("As 2nd player, current model won {} of {} games".format(sum(best_model_stats), len(best_model_stats)))
+                print("Avg. win rate of current model: {}".format(sum(model_stats) / len(model_stats)))
+                
+                if sum(model_stats) > n_test_games / 2:    
+                    current_model.save_model() 
 
 if __name__ == "__main__":
-    train_adp(epochs=1, eval=False, game_kwargs={
-        'M': 10,
-        'N': 10,
-        'K': 5,
-        'ADJ': 2,
-    }, value_network_kwargs={
-        'alpha': 0.9,
-        'magnify': 5,
-    }, policy_network_kwargs={
-        'epsilon': 0.1,
-    })
+    train_adp(
+        epochs = 10, 
+        checkpoint = 2, 
+        n_test_games = 5, 
+        eval = True, 
+        game_kwargs={
+            'M': 10,
+            'N': 10,
+            'K': 5,
+            'ADJ': 2,
+        }, value_network_kwargs={
+            'alpha': 0.9,
+            'magnify': 5,
+        }, policy_network_kwargs={
+            'epsilon': 0.1,
+        }
+    )
 
     

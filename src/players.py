@@ -3,8 +3,6 @@ from .mcts import Tree, Node, uct_score
 import numpy as np
 import threading
 
-TIMEOUT = 2.5
-
 class TimeoutError(Exception):
     pass
 
@@ -38,16 +36,17 @@ class RandomPlayer(Player):
         return moves[random_move]
             
 class UCT_Player(Player):
-    def __init__(self, iterations=1000, policy=uct_score, policy_kwargs={}, tree_kwargs={}):
+    def __init__(self, iterations=10000, timeout_ms=5000, policy=uct_score, policy_kwargs={}, tree_kwargs={}):
         self.iterations = iterations
         self.policy = policy
         self.policy_kwargs = policy_kwargs
         self.tree_kwargs = tree_kwargs
+        self.timeout_ms = timeout_ms
 
     def next_move(self, game: Gomoku):
         tree = Tree(game, **self.tree_kwargs)
         
-        @timeout(TIMEOUT)
+        @timeout(self.timeout_ms / 1000)
         def iterate():
             for _ in range(self.iterations):
                 node = tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
@@ -62,13 +61,11 @@ class UCT_Player(Player):
         best_child = max(tree.root.children, key=lambda child: child.Q)
         return best_child.state.history[-1]
     
-class UCT_ADP_Player(Player):
-    def __init__(self, iterations=1000, max_depth=10, policy=uct_score, policy_kwargs={}, tree_kwargs={}, model=None):
-        self.iterations = iterations
+class UCT_ADP_Player(UCT_Player):
+    def __init__(self, max_depth=10, model=None, **kwargs):
+        super(UCT_ADP_Player, self).__init__(**kwargs)
+    
         self.max_depth = max_depth
-        self.policy = policy
-        self.policy_kwargs = policy_kwargs
-        self.tree_kwargs = tree_kwargs
         self.model = model
     
     def simulate(self, node: Node):
@@ -81,26 +78,6 @@ class UCT_ADP_Player(Player):
                 action = state_actions[np.random.randint(0, len(state_actions))]
                 state.play(action)
             else:
-                if self.model is not None:
-                    return self.model.forward(state)
-                else:
-                    return np.random.random()
+                assert(self.model is not None)
+                return self.model.forward(state)
         return state.score()
-        
-    def next_move(self, game: Gomoku):
-        tree = Tree(game, **self.tree_kwargs)
-        
-        @timeout(TIMEOUT)
-        def iterate():
-            for _ in range(self.iterations):
-                node = tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
-                value = tree.simulate(node)
-                tree.backpropagate(node, value)
-        
-        try:
-            iterate()
-        except TimeoutError as e:
-            print(e)
-        
-        best_child = max(tree.root.children, key=lambda child: child.Q)
-        return best_child.state.history[-1]

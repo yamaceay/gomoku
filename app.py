@@ -15,23 +15,23 @@ policies = {
 }
 
 models = {
-    'ADPModel': ValueNetwork(alpha = 0.9, magnify = 5, model_path = 'best.h5'),
+    'ADP1': ValueNetwork(alpha = 0.9, magnify = 5),
 }
 
 players = {
     '_': RandomPlayer(),
-    '_UCT_UCB': UCT_Player(policy=policies["uct_score"]),
-    '_UCT_UCB_ADJ': UCT_Player(policy=policies["uct_score"], tree_kwargs={"only_adjacents": True}),
-    '_UCT_PB': UCT_Player(policy=policies["pb_score"]),
-    '_UCT_PB_ADJ': UCT_Player(policy=policies["pb_score"], tree_kwargs={"only_adjacents": True}),
-    '_UCT_UCB_PB': UCT_Player(policy=policies["uct_pb_score"]),
-    '_UCT_UCB_PB_ADJ': UCT_Player(policy=policies["uct_pb_score"], tree_kwargs={"only_adjacents": True}),
-    '_UCT_UCB_Q': UCT_ADP_Player(policy=policies['uct_score'], model=models["ADPModel"]),
-    '_UCT_UCB_ADJ_Q': UCT_ADP_Player(policy=policies['uct_score'], tree_kwargs={"only_adjacents": True}, model=models["ADPModel"]),
-    '_UCT_PB_Q': UCT_ADP_Player(policy=policies['pb_score'], model=models["ADPModel"]),
-    '_UCT_PB_ADJ_Q': UCT_ADP_Player(policy=policies['pb_score'], tree_kwargs={"only_adjacents": True}, model=models["ADPModel"]),
-    '_UCT_UCB_PB_Q': UCT_ADP_Player(policy=policies['uct_pb_score'], model=models["ADPModel"]),
-    '_UCT_UCB_PB_ADJ_Q': UCT_ADP_Player(policy=policies['uct_pb_score'], tree_kwargs={"only_adjacents": True}, model=models["ADPModel"]),
+    '_UCT_UCB': UCT_Player(timeout_ms=5000, policy=policies["uct_score"]),
+    '_UCT_UCB_ADJ': UCT_Player(timeout_ms=5000, policy=policies["uct_score"], tree_kwargs={"only_adjacents": True}),
+    '_UCT_PB': UCT_Player(timeout_ms=5000, policy=policies["pb_score"]),
+    '_UCT_PB_ADJ': UCT_Player(timeout_ms=5000, policy=policies["pb_score"], tree_kwargs={"only_adjacents": True}),
+    '_UCT_UCB_PB': UCT_Player(timeout_ms=5000, policy=policies["uct_pb_score"]),
+    '_UCT_UCB_PB_ADJ': UCT_Player(timeout_ms=5000, policy=policies["uct_pb_score"], tree_kwargs={"only_adjacents": True}),
+    '_UCT_ADP1_UCB': UCT_ADP_Player(timeout_ms=5000, max_depth=10, policy=policies['uct_score'], model=models["ADP1"]),
+    '_UCT_ADP1_UCB_ADJ': UCT_ADP_Player(timeout_ms=5000, max_depth=10, policy=policies['uct_score'], tree_kwargs={"only_adjacents": True}, model=models["ADP1"]),
+    '_UCT_ADP1_PB': UCT_ADP_Player(timeout_ms=5000, max_depth=10, policy=policies['pb_score'], model=models["ADP1"]),
+    '_UCT_ADP1_PB_ADJ': UCT_ADP_Player(timeout_ms=5000, max_depth=10, policy=policies['pb_score'], tree_kwargs={"only_adjacents": True}, model=models["ADP1"]),
+    '_UCT_ADP1_UCB_PB': UCT_ADP_Player(timeout_ms=5000, max_depth=10, policy=policies['uct_pb_score'], model=models["ADP1"]),
+    '_UCT_ADP1_UCB_PB_ADJ': UCT_ADP_Player(timeout_ms=5000, max_depth=10, policy=policies['uct_pb_score'], tree_kwargs={"only_adjacents": True}, model=models["ADP1"]),
 }
 
 @app.route('/')

@@ -57,6 +57,7 @@ class Tree:
         state = state.copy()
         self.root = Node(state)
         self.only_adjacents = kwargs.get('only_adjacents', False)
+        self.decay = kwargs.get('decay', 0.9)
 
     def select(self, policy=uct_score, policy_kwargs={}) -> Node:
         node = self.root
@@ -115,5 +116,5 @@ class Tree:
     def backpropagate(self, node: Node, reward: float):
         while node is not None:
             node.n += 1
-            node.Q += reward
+            node.Q += self.decay * reward
             node = node.parent

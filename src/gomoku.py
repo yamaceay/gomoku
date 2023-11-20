@@ -86,7 +86,7 @@ class Gomoku:
         self.history += [move]
     
     def score(self) -> float:
-        return int(self.winner and self.FIRST_PLAYER)
+        return self.winner * self.FIRST_PLAYER
         
     def is_legal(self, move: tuple[int, int]) -> bool:
         x, y = move

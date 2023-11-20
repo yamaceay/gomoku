@@ -16,7 +16,7 @@ class ShallowNN(torch.nn.Module):
         super(ShallowNN, self).__init__()
         
         self.layer = kwargs.get('layer', torch.nn.Linear)
-        self.activation_fn = kwargs.get('activation_fn', torch.nn.Sigmoid)
+        self.activation_fn = kwargs.get('activation_fn', torch.nn.Tanh)
         self.loss_fn = kwargs.get('loss_fn', 'mse')
         if self.loss_fn == 'mse':
             self.loss_fn = torch.nn.MSELoss(reduction='mean')
@@ -176,6 +176,7 @@ def train_one_episode(state: Gomoku, value_network: ValueNetwork, policy_network
         reward = state.score()
         loss = value_network.train(prev_state, state, reward)
         losses += [loss]
+    print(state.score())
     return losses
 
 def comp_models(game_kwargs, last_model: ValueNetwork, best_model: ValueNetwork, policy: PolicyNetwork):
@@ -209,7 +210,8 @@ def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, valu
         
         game = Gomoku(**game_kwargs)
         losses = train_one_episode(game, current_model, policy)
-        print("Epoch {}, Loss {}".format(i, sum(losses)))
+        mse_loss = sum(list(map(lambda l: l * l, losses)))
+        print("Epoch {}, Loss {}".format(i, mse_loss))
         
         if i % checkpoint == 0:
             new_path = os.path.join(DIR_PATH, "epoch_%s.h5" % i)
@@ -224,9 +226,9 @@ def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, valu
                 for _ in tqdm(range(n_test_games), position=1, leave=True, disable=(not eval), desc="Testing epoch {}".format(i)):
                     win, curr_model_starts = comp_models(game_kwargs, current_model, best_model, policy)
                     if curr_model_starts:
-                        curr_model_stats += [win]
+                        curr_model_stats += [int(win > 0)]
                     else:
-                        best_model_stats += [1 - win]
+                        best_model_stats += [int(win <= 0)]
                 
                 model_stats = curr_model_stats + best_model_stats
                 
@@ -239,19 +241,19 @@ def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, valu
 
 if __name__ == "__main__":
     train_adp(
-        epochs_start = 10,
+        # epochs_start = 5,
         epochs = 30, 
-        checkpoint = 2, 
-        n_test_games = 5, 
+        checkpoint = 5, 
+        n_test_games = 9, 
         eval = True, 
         game_kwargs={
-            'M': 10,
-            'N': 10,
+            'M': 7,
+            'N': 7,
             'K': 5,
             'ADJ': 2,
         }, value_network_kwargs={
             'alpha': 0.9,
-            'magnify': 1,
+            'magnify': 2,
         }, policy_network_kwargs={
             'epsilon': 0.1,
         }
@@ -259,8 +261,8 @@ if __name__ == "__main__":
     
     # print(comp_models(
     #     game_kwargs={
-    #         'M': 10,
-    #         'N': 10,
+    #         'M': 6,
+    #         'N': 6,
     #         'K': 5,
     #         'ADJ': 2,
     #     }, 

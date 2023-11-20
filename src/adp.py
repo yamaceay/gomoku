@@ -83,7 +83,7 @@ class ValueNetwork(ShallowNN):
     def opt(self, state: Gomoku, state_next: Gomoku, reward: float):
         V = self.forward(state).to(device)
         V_next = self.forward(state_next).to(device)
-        loss = self.alpha * (reward + self.gamma * V_next - V)
+        loss = self.alpha * (reward + V_next - V)
         # print("Reward: {}, Curr: {}, Next: {}, Loss: {}".format(reward, V, V_next, loss))
         return loss
     
@@ -125,17 +125,23 @@ class ValueNetwork(ShallowNN):
         return torch.FloatTensor(features).to(device)
     
     def train(self, state: Gomoku, policy_network):
-        losses = []
+        history = [state]
         while not state.fin():
-            prev_state = state.copy()
             action = policy_network.forward(state, self)
             state.play(action)
-            reward = state.score()
-            loss = self.opt(prev_state, state, reward)
+            history += [state.copy()]
+        
+        delta_reward = history[-1].score() * (1 - self.gamma)
+        losses = []
+        for i in range(len(history) - 1):
+            prev_state, state = history[-i-2], history[-i-1]
+            loss = self.opt(prev_state, state, delta_reward)
             self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
             losses += [loss]
+            delta_reward *= self.gamma
+            
         losses = torch.stack(losses).to(device)
         objective = torch.zeros_like(losses).to(device)
         loss = self.loss_fn(losses, objective)

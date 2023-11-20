@@ -56,6 +56,7 @@ class ShallowNN(torch.nn.Module):
 class ValueNetwork(ShallowNN):
     def __init__(self, **kwargs):
         self.alpha = kwargs.pop('alpha', 1)
+        self.gamma = kwargs.pop('gamma', 0.9)
         self.magnify = kwargs.pop('magnify', 1)
         self.model_path = kwargs.pop('model_path', os.path.join(DIR_PATH, "best.h5"))
         
@@ -63,6 +64,8 @@ class ValueNetwork(ShallowNN):
             params=[INPUT_DIM, HIDDEN_DIM, 1], 
             **kwargs
         )
+        
+        self.winning_encodings = ["xxxx-", "xxx-x", "xx-xx"]
         
         self.model = self.model.to(device)
     
@@ -74,14 +77,15 @@ class ValueNetwork(ShallowNN):
         features = self.extract_features(state)
         return self.model(features)
     
-    def train(self, prev_state: Gomoku, state: Gomoku, reward: float):
-        prev_V = self.forward(prev_state).to(device)
+    def train(self, state: Gomoku, state_next: Gomoku, reward: float):
         V = self.forward(state).to(device)
+        V_next = self.forward(state_next).to(device)
         lr = self.lr
-        if V == 0:
+        if V_next == 0:
             lr *= self.magnify
         optimizer = self.optimizer_fn(self.model.parameters(), lr=lr)
-        loss = self.alpha * (reward + V - prev_V)
+        loss = self.alpha * (reward + self.gamma * V_next - V)
+        print("Curr: {}, Next: {}, Rew: {}, Loss: {}".format(V, V_next, reward, loss))
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
@@ -164,7 +168,7 @@ def get_rewards_actions(state: Gomoku, value_network: ValueNetwork) -> list[tupl
             value = value.to(device)
         rewards_actions.append((value, action))
         
-    rewards_actions = list(reversed(sorted(rewards_actions)))
+    rewards_actions = list(reversed(sorted(rewards_actions, key=lambda ra: ra[0])))
     return rewards_actions
       
 def train_one_episode(state: Gomoku, value_network: ValueNetwork, policy_network: PolicyNetwork):
@@ -176,7 +180,6 @@ def train_one_episode(state: Gomoku, value_network: ValueNetwork, policy_network
         reward = state.score()
         loss = value_network.train(prev_state, state, reward)
         losses += [loss]
-    print(state.score())
     return losses
 
 def comp_models(game_kwargs, last_model: ValueNetwork, best_model: ValueNetwork, policy: PolicyNetwork):
@@ -254,6 +257,7 @@ if __name__ == "__main__":
         }, value_network_kwargs={
             'alpha': 0.9,
             'magnify': 2,
+            'gamma': 0.9,
         }, policy_network_kwargs={
             'epsilon': 0.1,
         }

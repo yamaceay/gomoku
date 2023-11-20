@@ -197,10 +197,10 @@ def comp_models(game_kwargs, last_model: ValueNetwork, best_model: ValueNetwork,
     win = game.score()
     return win, last_model_starts
       
-def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, value_network_kwargs, policy_network_kwargs, eval: bool = True):
+def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, value_network_kwargs, policy_network_kwargs, epochs_start: int = 0, eval: bool = True):
     policy = PolicyNetwork(**policy_network_kwargs)
     
-    for i in tqdm(range(1, epochs+1), position=0, leave=True, desc="Training"):
+    for i in tqdm(range(epochs_start+1, epochs+1), position=0, leave=True, desc="Training"):
         current_model = ValueNetwork(**value_network_kwargs)
         try:
             current_model.load_model()
@@ -239,7 +239,8 @@ def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, valu
 
 if __name__ == "__main__":
     train_adp(
-        epochs = 10, 
+        epochs_start = 10,
+        epochs = 30, 
         checkpoint = 2, 
         n_test_games = 5, 
         eval = True, 

@@ -26,7 +26,7 @@ class ShallowNN(torch.nn.Module):
         
         self.layer = kwargs.get('layer', torch.nn.Linear)
         self.activation_fn = kwargs.get('activation_fn', torch.nn.Tanh)
-        self.loss_fn = kwargs.get('loss_fn', 'mae')
+        self.loss_fn = kwargs.get('loss_fn', 'mse')
         if self.loss_fn == 'mse':
             self.loss_fn = torch.nn.MSELoss(reduction='sum')
         elif self.loss_fn == 'mae':
@@ -70,14 +70,13 @@ class ValueNetwork(ShallowNN):
         self.alpha = kwargs.pop('alpha', 1)
         self.gamma = kwargs.pop('gamma', 0.9)
         self.magnify = kwargs.pop('magnify', 1)
+        self.n_steps = kwargs.pop('n_steps', 1)
         self.model_path = kwargs.pop('model_path', os.path.join(DIR_PATH, "best.h5"))
         
         super(ValueNetwork, self).__init__(
             params=[INPUT_DIM, HIDDEN_DIM, 1], 
             **kwargs
         )
-        
-        # self.winning_encodings = ["xxxx-", "xxx-x", "xx-xx"]
         
         self.model = self.model.to(device)
     
@@ -89,12 +88,16 @@ class ValueNetwork(ShallowNN):
         features = self.extract_features(state)
         return self.model(features)
     
-    def opt(self, state: Gomoku, state_next: Gomoku, reward: float):
-        V = self.forward(state).to(device)
-        V_next = self.forward(state_next).to(device)
-        loss = self.alpha * (reward + V_next - V)
-        # print("Reward: {}, Curr: {}, Next: {}, Loss: {}".format(reward, V, V_next, loss))
-        return loss
+    def opt(self, *states: list[Gomoku]):
+        assert len(states) > 1, "At least 2 states are required"
+        
+        V_func = lambda i: self.forward(states[i]).to(device) * (self.gamma ** i)
+        [V, *V_next] = list(map(V_func, range(len(states))))
+
+        loss = self.alpha * (sum(V_next) - V)
+                
+        loss_squared = loss ** 2
+        return loss_squared
     
     def extract_features(self, state: Gomoku):
         all_indices = [(x, y) 
@@ -134,26 +137,27 @@ class ValueNetwork(ShallowNN):
         return torch.FloatTensor(features).to(device)
     
     def train(self, state: Gomoku, policy_network):
-        history = [state]
+        history = [state.copy(include_history=True)]
         while not state.fin():
             action = policy_network.forward(state, self)
             state.play(action)
-            history += [state.copy()]
-        
-        delta_reward = history[-1].score() * (1 - self.gamma)
+            history += [state.copy(include_history=True)]
+            
         losses = []
-        for i in range(len(history) - 1):
-            prev_state, state = history[-i-2], history[-i-1]
-            loss = self.opt(prev_state, state, delta_reward)
-            self.optimizer.zero_grad()
-            loss.backward()
-            self.optimizer.step()
+        for i in range(len(history) - 2, -1, -1):
+            states = history[i:]
+            if i + self.n_steps < len(history) - 1:
+                states = states[:self.n_steps+1]
+            loss = self.opt(*states)
             losses += [loss]
-            delta_reward *= self.gamma
             
         losses = torch.stack(losses).to(device)
         objective = torch.zeros_like(losses).to(device)
         loss = self.loss_fn(losses, objective)
+        
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
         return loss.cpu().detach().item()
     
     def load_model(self, filepath: str = None):
@@ -260,34 +264,35 @@ def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, valu
                     current_model.load_model() 
 
 if __name__ == "__main__":
-    # train_adp(
-    #     epochs_start = 100,
-    #     epochs = 200, 
-    #     checkpoint = 5, 
-    #     n_test_games = 9, 
-    #     eval = True, 
-    #     game_kwargs={
-    #         'M': 7,
-    #         'N': 7,
-    #         'K': 5,
-    #         'ADJ': 2,
-    #     }, value_network_kwargs={
-    #         'alpha': 0.9,
-    #         'magnify': 2,
-    #         'gamma': 0.9,
-    #         'lr': 0.001,
-    #     }, policy_network_kwargs={
-    #         'epsilon': 0.1,
-    #     }
-    # )
+    train_adp(
+        # epochs_start = 20,
+        epochs = 20, 
+        checkpoint = 5, 
+        n_test_games = 9, 
+        eval = True, 
+        game_kwargs={
+            'M': 7,
+            'N': 7,
+            'K': 5,
+            'ADJ': 2,
+        }, value_network_kwargs={
+            'alpha': 0.1,
+            'magnify': 2,
+            'gamma': 0.9,
+            'lr': 0.001,
+            'n_steps': 1,
+        }, policy_network_kwargs={
+            'epsilon': 0.1,
+        }
+    )
     
-    print(comp_models(
-        {'M': 7, 'N': 7, 'K': 5, 'ADJ': 2},
-        ValueNetwork(alpha=0.9, magnify=1, model_path="epoch_170.h5"), 
-        ValueNetwork(alpha=0.9, magnify=1, model_path="epoch_150.h5"), 
-        policy=PolicyNetwork(epsilon = 0.1),
-        print_game=True,
-    ))
+    # print(comp_models(
+    #     {'M': 7, 'N': 7, 'K': 5, 'ADJ': 2},
+    #     ValueNetwork(alpha=0.9, magnify=1, model_path="epoch_5.h5"), 
+    #     ValueNetwork(alpha=0.9, magnify=1, model_path="epoch_20.h5"), 
+    #     policy=PolicyNetwork(epsilon = 0.1),
+    #     print_game=True,
+    # ))
     
 
     

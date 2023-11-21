@@ -4,11 +4,20 @@ from .gomoku import Gomoku
 from tqdm import tqdm
 from .patterns import PB_DICT, lti
 import random
+import logging
 
 DIR_PATH = "./models"
 
 HIDDEN_DIM = 100
 INPUT_DIM = 2 * (5 * (len(PB_DICT) - 1) + 1) + 2
+
+# configure a logger which logs to the 'adp.log'
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('[%(asctime)s] %(message)s')
+file_handler = logging.FileHandler('adp.log')
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class ShallowNN(torch.nn.Module):
@@ -152,15 +161,15 @@ class ValueNetwork(ShallowNN):
             filepath = self.model_path
         if os.path.exists(filepath):
             self.model.load_state_dict(torch.load(filepath))
-            print('Loaded existing model at '+filepath)
+            logger.info('Loaded existing model at '+filepath)
         else:
-            print('File '+filepath+' does not exist')
+            logger.info('File '+filepath+' does not exist')
         
     def save_model(self, filepath: str = None):
         if filepath is None:
             filepath = self.model_path
         torch.save(self.model.state_dict(), filepath)
-        print('Saved model at '+filepath)
+        logger.info('Saved model at '+filepath)
     
 class PolicyNetwork:
     def __init__(self, **kwargs):
@@ -190,14 +199,11 @@ def get_rewards_actions(state: Gomoku, value_network: ValueNetwork) -> list[tupl
     rewards_actions = list(reversed(sorted(rewards_actions, key=lambda ra: ra[0])))
     return rewards_actions
 
-def comp_models(game_kwargs, last_model: ValueNetwork, best_model: ValueNetwork, policy: PolicyNetwork, print_game: bool = False):
-    last_model_starts = random.random() < .5
-    if last_model_starts:
-        model1 = last_model
-        model2 = best_model
-    else:
-        model1 = best_model
-        model2 = last_model
+def comp_models(game_kwargs, model1: ValueNetwork, model2: ValueNetwork, policy: PolicyNetwork, print_game: bool = False):
+    model2_starts = random.random() < .5
+    if model2_starts:
+        model1, model2 = model2, model1
+        
     game = Gomoku(**game_kwargs)
     while not game.fin():
         action = policy.forward(game, model1)
@@ -209,21 +215,21 @@ def comp_models(game_kwargs, last_model: ValueNetwork, best_model: ValueNetwork,
     win = game.score()
     if print_game:
         game.print()
-    return win, last_model_starts
+    return win, not model2_starts
       
 def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, value_network_kwargs, policy_network_kwargs, epochs_start: int = 0, eval: bool = True):
     policy = PolicyNetwork(**policy_network_kwargs)
     
-    for i in tqdm(range(epochs_start+1, epochs+1), position=0, leave=True, desc="Training"):
-        current_model = ValueNetwork(**value_network_kwargs)
-        try:
-            current_model.load_model()
-        except Exception as e:
-            print(e)
+    current_model = ValueNetwork(**value_network_kwargs)
+    try:
+        current_model.load_model()
+    except Exception as e:
+        logger.info(e)
         
+    for i in tqdm(range(epochs_start+1, epochs+1), position=0, leave=False, desc="Training"):
         game = Gomoku(**game_kwargs)
         loss = current_model.train(game, policy)
-        print("Epoch {}, Loss {}".format(i, loss))
+        logger.info("Epoch {}, Loss {}".format(i, loss))
         
         if i % checkpoint == 0:
             new_path = os.path.join(DIR_PATH, "epoch_%s.h5" % i)
@@ -235,7 +241,7 @@ def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, valu
                 
                 curr_model_stats = []
                 best_model_stats = []
-                for _ in tqdm(range(n_test_games), position=1, leave=True, disable=(not eval), desc="Testing epoch {}".format(i)):
+                for _ in tqdm(range(n_test_games), position=1, leave=False, disable=(not eval), desc="Testing epoch {}".format(i)):
                     win, curr_model_starts = comp_models(game_kwargs, current_model, best_model, policy)
                     if curr_model_starts:
                         curr_model_stats += [int(win > 0)]
@@ -244,42 +250,44 @@ def train_adp(epochs: int, checkpoint: int, n_test_games: int, game_kwargs, valu
                 
                 model_stats = curr_model_stats + best_model_stats
                 
-                print("As 1st player, current model won {} of {} games".format(sum(curr_model_stats), len(curr_model_stats)))
-                print("As 2nd player, current model won {} of {} games".format(sum(best_model_stats), len(best_model_stats)))
-                print("Avg. win rate of current model: {}".format(sum(model_stats) / len(model_stats)))
+                logger.info("As 1st player, current model won {} of {} games".format(sum(curr_model_stats), len(curr_model_stats)))
+                logger.info("As 2nd player, current model won {} of {} games".format(sum(best_model_stats), len(best_model_stats)))
+                logger.info("Avg. win rate of current model: {}".format(sum(model_stats) / len(model_stats)))
                 
                 if sum(model_stats) > n_test_games / 2:    
-                    current_model.save_model()      
+                    current_model.save_model()  
+                else:
+                    current_model.load_model() 
 
 if __name__ == "__main__":
-    train_adp(
-        epochs_start = 90,
-        epochs = 120, 
-        checkpoint = 5, 
-        n_test_games = 9, 
-        eval = True, 
-        game_kwargs={
-            'M': 7,
-            'N': 7,
-            'K': 5,
-            'ADJ': 2,
-        }, value_network_kwargs={
-            'alpha': 0.9,
-            'magnify': 2,
-            'gamma': 0.9,
-            'lr': 0.001,
-        }, policy_network_kwargs={
-            'epsilon': 0.1,
-        }
-    )
+    # train_adp(
+    #     epochs_start = 100,
+    #     epochs = 200, 
+    #     checkpoint = 5, 
+    #     n_test_games = 9, 
+    #     eval = True, 
+    #     game_kwargs={
+    #         'M': 7,
+    #         'N': 7,
+    #         'K': 5,
+    #         'ADJ': 2,
+    #     }, value_network_kwargs={
+    #         'alpha': 0.9,
+    #         'magnify': 2,
+    #         'gamma': 0.9,
+    #         'lr': 0.001,
+    #     }, policy_network_kwargs={
+    #         'epsilon': 0.1,
+    #     }
+    # )
     
-    # print(comp_models(
-    #     {'M': 7, 'N': 7, 'K': 5, 'ADJ': 2},
-    #     ValueNetwork(alpha=0.9, magnify=1), 
-    #     ValueNetwork(alpha=0.9, magnify=1, model_path="epoch_5.h5"), 
-    #     policy=PolicyNetwork(epsilon = 0.1),
-    #     print_game=True,
-    # ))
+    print(comp_models(
+        {'M': 7, 'N': 7, 'K': 5, 'ADJ': 2},
+        ValueNetwork(alpha=0.9, magnify=1, model_path="epoch_170.h5"), 
+        ValueNetwork(alpha=0.9, magnify=1, model_path="epoch_150.h5"), 
+        policy=PolicyNetwork(epsilon = 0.1),
+        print_game=True,
+    ))
     
 
     

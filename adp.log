@@ -1,0 +1,434 @@
+[2023-11-21 13:38:01,451] Epoch 1, Loss 3.529618978500366
+[2023-11-21 13:38:05,413] Epoch 2, Loss 3.392284631729126
+[2023-11-21 13:38:10,627] Epoch 3, Loss 3.650669813156128
+[2023-11-21 13:38:15,890] Epoch 4, Loss 3.816415309906006
+[2023-11-21 13:38:19,603] Epoch 5, Loss 3.1855850219726562
+[2023-11-21 13:38:19,604] Saved model at ./models/epoch_5.h5
+[2023-11-21 13:38:57,130] As 1st player, current model won 2 of 3 games
+[2023-11-21 13:38:57,130] As 2nd player, current model won 1 of 6 games
+[2023-11-21 13:38:57,130] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 13:39:03,719] Epoch 6, Loss 4.34586238861084
+[2023-11-21 13:39:07,444] Epoch 7, Loss 3.41367506980896
+[2023-11-21 13:39:12,146] Epoch 8, Loss 3.6358039379119873
+[2023-11-21 13:39:17,903] Epoch 9, Loss 4.237848281860352
+[2023-11-21 13:39:23,258] Epoch 10, Loss 3.6979856491088867
+[2023-11-21 13:39:23,259] Saved model at ./models/epoch_10.h5
+[2023-11-21 13:39:55,429] As 1st player, current model won 2 of 6 games
+[2023-11-21 13:39:55,429] As 2nd player, current model won 1 of 3 games
+[2023-11-21 13:39:55,429] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 13:40:00,601] Epoch 11, Loss 3.7367184162139893
+[2023-11-21 13:40:06,376] Epoch 12, Loss 3.9263792037963867
+[2023-11-21 13:40:09,442] Epoch 13, Loss 3.3529067039489746
+[2023-11-21 13:40:15,091] Epoch 14, Loss 3.883514881134033
+[2023-11-21 13:40:20,966] Epoch 15, Loss 4.060152053833008
+[2023-11-21 13:40:20,966] Saved model at ./models/epoch_15.h5
+[2023-11-21 13:40:58,698] As 1st player, current model won 2 of 6 games
+[2023-11-21 13:40:58,698] As 2nd player, current model won 1 of 3 games
+[2023-11-21 13:40:58,698] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 13:41:03,802] Epoch 16, Loss 3.857609510421753
+[2023-11-21 13:41:10,051] Epoch 17, Loss 3.9667868614196777
+[2023-11-21 13:41:15,610] Epoch 18, Loss 3.4225873947143555
+[2023-11-21 13:41:20,376] Epoch 19, Loss 3.1987688541412354
+[2023-11-21 13:41:24,541] Epoch 20, Loss 3.1388890743255615
+[2023-11-21 13:41:24,541] Saved model at ./models/epoch_20.h5
+[2023-11-21 13:42:06,879] As 1st player, current model won 2 of 4 games
+[2023-11-21 13:42:06,879] As 2nd player, current model won 0 of 5 games
+[2023-11-21 13:42:06,879] Avg. win rate of current model: 0.2222222222222222
+[2023-11-21 13:42:10,992] Epoch 21, Loss 3.1371634006500244
+[2023-11-21 13:42:16,987] Epoch 22, Loss 3.347965717315674
+[2023-11-21 13:42:23,367] Epoch 23, Loss 4.141634941101074
+[2023-11-21 13:42:29,031] Epoch 24, Loss 3.950456380844116
+[2023-11-21 13:42:34,965] Epoch 25, Loss 3.372021198272705
+[2023-11-21 13:42:34,965] Saved model at ./models/epoch_25.h5
+[2023-11-21 13:43:17,379] As 1st player, current model won 2 of 3 games
+[2023-11-21 13:43:17,379] As 2nd player, current model won 3 of 6 games
+[2023-11-21 13:43:17,379] Avg. win rate of current model: 0.5555555555555556
+[2023-11-21 13:43:17,380] Saved model at ./models/best.h5
+[2023-11-21 13:43:21,053] Epoch 26, Loss 2.920398473739624
+[2023-11-21 13:43:25,847] Epoch 27, Loss 3.7118148803710938
+[2023-11-21 13:43:31,645] Epoch 28, Loss 3.3380954265594482
+[2023-11-21 13:43:37,443] Epoch 29, Loss 3.2056314945220947
+[2023-11-21 13:43:42,253] Epoch 30, Loss 3.1648731231689453
+[2023-11-21 13:43:42,253] Saved model at ./models/epoch_30.h5
+[2023-11-21 13:43:42,254] Loaded existing model at ./models/best.h5
+[2023-11-21 13:44:34,937] As 1st player, current model won 1 of 1 games
+[2023-11-21 13:44:34,937] As 2nd player, current model won 5 of 8 games
+[2023-11-21 13:44:34,937] Avg. win rate of current model: 0.6666666666666666
+[2023-11-21 13:44:34,937] Saved model at ./models/best.h5
+[2023-11-21 13:45:52,937] Loaded existing model at ./models/best.h5
+[2023-11-21 13:45:58,949] Epoch 31, Loss 4.088716506958008
+[2023-11-21 13:46:05,778] Epoch 32, Loss 3.2715699672698975
+[2023-11-21 13:46:10,816] Epoch 33, Loss 3.08817195892334
+[2023-11-21 13:46:17,191] Epoch 34, Loss 3.244494676589966
+[2023-11-21 13:46:23,346] Epoch 35, Loss 4.137314319610596
+[2023-11-21 13:46:23,346] Saved model at ./models/epoch_35.h5
+[2023-11-21 13:46:23,347] Loaded existing model at ./models/best.h5
+[2023-11-21 13:47:10,286] As 1st player, current model won 5 of 6 games
+[2023-11-21 13:47:10,286] As 2nd player, current model won 1 of 3 games
+[2023-11-21 13:47:10,286] Avg. win rate of current model: 0.6666666666666666
+[2023-11-21 13:47:10,286] Saved model at ./models/best.h5
+[2023-11-21 13:47:14,878] Epoch 36, Loss 3.9784364700317383
+[2023-11-21 13:47:19,720] Epoch 37, Loss 3.967177152633667
+[2023-11-21 13:47:24,381] Epoch 38, Loss 4.038912773132324
+[2023-11-21 13:47:32,170] Epoch 39, Loss 3.6084723472595215
+[2023-11-21 13:47:38,617] Epoch 40, Loss 4.162391185760498
+[2023-11-21 13:47:38,618] Saved model at ./models/epoch_40.h5
+[2023-11-21 13:47:38,618] Loaded existing model at ./models/best.h5
+[2023-11-21 13:48:25,666] As 1st player, current model won 2 of 4 games
+[2023-11-21 13:48:25,666] As 2nd player, current model won 0 of 5 games
+[2023-11-21 13:48:25,666] Avg. win rate of current model: 0.2222222222222222
+[2023-11-21 13:48:25,666] Loaded existing model at ./models/best.h5
+[2023-11-21 13:48:31,796] Epoch 41, Loss 4.16795539855957
+[2023-11-21 13:48:37,672] Epoch 42, Loss 3.7616662979125977
+[2023-11-21 13:48:44,114] Epoch 43, Loss 3.246225357055664
+[2023-11-21 13:48:50,296] Epoch 44, Loss 4.273458957672119
+[2023-11-21 13:48:55,017] Epoch 45, Loss 2.9963982105255127
+[2023-11-21 13:48:55,017] Saved model at ./models/epoch_45.h5
+[2023-11-21 13:48:55,019] Loaded existing model at ./models/best.h5
+[2023-11-21 13:49:44,647] As 1st player, current model won 2 of 3 games
+[2023-11-21 13:49:44,647] As 2nd player, current model won 3 of 6 games
+[2023-11-21 13:49:44,647] Avg. win rate of current model: 0.5555555555555556
+[2023-11-21 13:49:44,647] Saved model at ./models/best.h5
+[2023-11-21 13:49:50,984] Epoch 46, Loss 3.1806674003601074
+[2023-11-21 13:49:57,784] Epoch 47, Loss 3.3429582118988037
+[2023-11-21 13:50:00,791] Epoch 48, Loss 3.8265297412872314
+[2023-11-21 13:50:07,323] Epoch 49, Loss 4.270030975341797
+[2023-11-21 13:50:13,508] Epoch 50, Loss 3.1636171340942383
+[2023-11-21 13:50:13,508] Saved model at ./models/epoch_50.h5
+[2023-11-21 13:50:13,510] Loaded existing model at ./models/best.h5
+[2023-11-21 13:51:02,148] As 1st player, current model won 1 of 5 games
+[2023-11-21 13:51:02,148] As 2nd player, current model won 2 of 4 games
+[2023-11-21 13:51:02,148] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 13:51:02,150] Loaded existing model at ./models/best.h5
+[2023-11-21 13:51:08,495] Epoch 51, Loss 3.18347430229187
+[2023-11-21 13:51:15,652] Epoch 52, Loss 4.2567572593688965
+[2023-11-21 13:51:21,362] Epoch 53, Loss 4.211950302124023
+[2023-11-21 13:51:25,452] Epoch 54, Loss 2.932621479034424
+[2023-11-21 13:51:31,346] Epoch 55, Loss 3.0970284938812256
+[2023-11-21 13:51:31,347] Saved model at ./models/epoch_55.h5
+[2023-11-21 13:51:31,348] Loaded existing model at ./models/best.h5
+[2023-11-21 13:52:26,866] As 1st player, current model won 2 of 7 games
+[2023-11-21 13:52:26,866] As 2nd player, current model won 0 of 2 games
+[2023-11-21 13:52:26,866] Avg. win rate of current model: 0.2222222222222222
+[2023-11-21 13:52:26,868] Loaded existing model at ./models/best.h5
+[2023-11-21 13:52:32,444] Epoch 56, Loss 3.126443386077881
+[2023-11-21 13:52:38,144] Epoch 57, Loss 3.1103556156158447
+[2023-11-21 13:52:44,578] Epoch 58, Loss 4.18889045715332
+[2023-11-21 13:52:49,843] Epoch 59, Loss 4.150650501251221
+[2023-11-21 13:52:56,127] Epoch 60, Loss 3.1768829822540283
+[2023-11-21 13:52:56,127] Saved model at ./models/epoch_60.h5
+[2023-11-21 13:52:56,128] Loaded existing model at ./models/best.h5
+[2023-11-21 13:53:43,447] As 1st player, current model won 1 of 2 games
+[2023-11-21 13:53:43,447] As 2nd player, current model won 3 of 7 games
+[2023-11-21 13:53:43,447] Avg. win rate of current model: 0.4444444444444444
+[2023-11-21 13:53:43,447] Loaded existing model at ./models/best.h5
+[2023-11-21 13:54:06,075] Loaded existing model at ./models/best.h5
+[2023-11-21 13:54:11,816] Epoch 61, Loss 4.213017463684082
+[2023-11-21 13:54:17,749] Epoch 62, Loss 4.29986572265625
+[2023-11-21 13:54:24,650] Epoch 63, Loss 3.058753728866577
+[2023-11-21 13:54:30,056] Epoch 64, Loss 2.931147575378418
+[2023-11-21 13:54:34,187] Epoch 65, Loss 4.100631237030029
+[2023-11-21 13:54:34,188] Saved model at ./models/epoch_65.h5
+[2023-11-21 13:54:34,188] Loaded existing model at ./models/best.h5
+[2023-11-21 13:55:23,283] As 1st player, current model won 2 of 5 games
+[2023-11-21 13:55:23,283] As 2nd player, current model won 1 of 4 games
+[2023-11-21 13:55:23,283] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 13:55:23,284] Loaded existing model at ./models/best.h5
+[2023-11-21 13:55:29,948] Epoch 66, Loss 4.245034694671631
+[2023-11-21 13:55:36,501] Epoch 67, Loss 4.285133361816406
+[2023-11-21 13:55:39,837] Epoch 68, Loss 3.9442741870880127
+[2023-11-21 13:55:45,411] Epoch 69, Loss 4.221572399139404
+[2023-11-21 13:55:51,970] Epoch 70, Loss 3.1130118370056152
+[2023-11-21 13:55:51,971] Saved model at ./models/epoch_70.h5
+[2023-11-21 13:55:51,972] Loaded existing model at ./models/best.h5
+[2023-11-21 13:56:37,992] As 1st player, current model won 3 of 4 games
+[2023-11-21 13:56:37,992] As 2nd player, current model won 3 of 5 games
+[2023-11-21 13:56:37,992] Avg. win rate of current model: 0.6666666666666666
+[2023-11-21 13:56:37,993] Saved model at ./models/best.h5
+[2023-11-21 13:56:43,821] Epoch 71, Loss 3.097768545150757
+[2023-11-21 13:56:50,118] Epoch 72, Loss 3.0671353340148926
+[2023-11-21 13:56:56,895] Epoch 73, Loss 4.314513206481934
+[2023-11-21 13:57:02,839] Epoch 74, Loss 3.0991759300231934
+[2023-11-21 13:57:08,664] Epoch 75, Loss 3.7539405822753906
+[2023-11-21 13:57:08,665] Saved model at ./models/epoch_75.h5
+[2023-11-21 13:57:08,666] Loaded existing model at ./models/best.h5
+[2023-11-21 13:58:02,398] As 1st player, current model won 2 of 4 games
+[2023-11-21 13:58:02,398] As 2nd player, current model won 1 of 5 games
+[2023-11-21 13:58:02,398] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 13:58:02,399] Loaded existing model at ./models/best.h5
+[2023-11-21 13:58:07,741] Epoch 76, Loss 3.021921157836914
+[2023-11-21 13:58:13,505] Epoch 77, Loss 4.226194381713867
+[2023-11-21 13:58:19,596] Epoch 78, Loss 3.0550529956817627
+[2023-11-21 13:58:25,105] Epoch 79, Loss 3.0041794776916504
+[2023-11-21 13:58:29,139] Epoch 80, Loss 2.810037851333618
+[2023-11-21 13:58:29,140] Saved model at ./models/epoch_80.h5
+[2023-11-21 13:58:29,141] Loaded existing model at ./models/best.h5
+[2023-11-21 13:59:17,644] As 1st player, current model won 2 of 7 games
+[2023-11-21 13:59:17,644] As 2nd player, current model won 1 of 2 games
+[2023-11-21 13:59:17,644] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 13:59:17,646] Loaded existing model at ./models/best.h5
+[2023-11-21 13:59:22,420] Epoch 81, Loss 3.082157850265503
+[2023-11-21 13:59:28,932] Epoch 82, Loss 4.322947978973389
+[2023-11-21 13:59:33,614] Epoch 83, Loss 3.0110983848571777
+[2023-11-21 13:59:39,517] Epoch 84, Loss 4.375243186950684
+[2023-11-21 13:59:45,768] Epoch 85, Loss 4.497134208679199
+[2023-11-21 13:59:45,769] Saved model at ./models/epoch_85.h5
+[2023-11-21 13:59:45,769] Loaded existing model at ./models/best.h5
+[2023-11-21 14:00:34,197] As 1st player, current model won 1 of 4 games
+[2023-11-21 14:00:34,197] As 2nd player, current model won 3 of 5 games
+[2023-11-21 14:00:34,197] Avg. win rate of current model: 0.4444444444444444
+[2023-11-21 14:00:34,198] Loaded existing model at ./models/best.h5
+[2023-11-21 14:00:38,934] Epoch 86, Loss 2.997415542602539
+[2023-11-21 14:00:45,156] Epoch 87, Loss 4.284060955047607
+[2023-11-21 14:00:50,852] Epoch 88, Loss 4.257197380065918
+[2023-11-21 14:00:55,360] Epoch 89, Loss 3.811997413635254
+[2023-11-21 14:01:00,759] Epoch 90, Loss 3.02912974357605
+[2023-11-21 14:01:00,760] Saved model at ./models/epoch_90.h5
+[2023-11-21 14:01:00,760] Loaded existing model at ./models/best.h5
+[2023-11-21 14:01:49,326] As 1st player, current model won 2 of 4 games
+[2023-11-21 14:01:49,326] As 2nd player, current model won 3 of 5 games
+[2023-11-21 14:01:49,326] Avg. win rate of current model: 0.5555555555555556
+[2023-11-21 14:01:49,326] Saved model at ./models/best.h5
+[2023-11-21 14:01:55,511] Epoch 91, Loss 4.323163986206055
+[2023-11-21 14:02:00,854] Epoch 92, Loss 4.238445281982422
+[2023-11-21 14:02:05,693] Epoch 93, Loss 2.963080883026123
+[2023-11-21 14:02:09,472] Epoch 94, Loss 4.082838535308838
+[2023-11-21 14:02:15,703] Epoch 95, Loss 4.316951751708984
+[2023-11-21 14:02:15,704] Saved model at ./models/epoch_95.h5
+[2023-11-21 14:02:15,704] Loaded existing model at ./models/best.h5
+[2023-11-21 14:03:01,920] As 1st player, current model won 3 of 6 games
+[2023-11-21 14:03:01,921] As 2nd player, current model won 2 of 3 games
+[2023-11-21 14:03:01,921] Avg. win rate of current model: 0.5555555555555556
+[2023-11-21 14:03:01,921] Saved model at ./models/best.h5
+[2023-11-21 14:03:05,456] Epoch 96, Loss 2.795701503753662
+[2023-11-21 14:03:12,240] Epoch 97, Loss 3.0992164611816406
+[2023-11-21 14:03:18,249] Epoch 98, Loss 3.0282235145568848
+[2023-11-21 14:03:24,572] Epoch 99, Loss 4.338929176330566
+[2023-11-21 14:03:30,792] Epoch 100, Loss 4.336491584777832
+[2023-11-21 14:03:30,793] Saved model at ./models/epoch_100.h5
+[2023-11-21 14:03:30,793] Loaded existing model at ./models/best.h5
+[2023-11-21 14:04:22,541] As 1st player, current model won 3 of 3 games
+[2023-11-21 14:04:22,541] As 2nd player, current model won 3 of 6 games
+[2023-11-21 14:04:22,541] Avg. win rate of current model: 0.6666666666666666
+[2023-11-21 14:04:22,542] Saved model at ./models/best.h5
+[2023-11-21 14:05:03,277] Loaded existing model at ./models/best.h5
+[2023-11-21 14:05:07,655] Epoch 101, Loss 4.230844974517822
+[2023-11-21 14:05:14,053] Epoch 102, Loss 4.406444549560547
+[2023-11-21 14:05:20,904] Epoch 103, Loss 3.633068561553955
+[2023-11-21 14:05:28,438] Epoch 104, Loss 2.0764966011047363
+[2023-11-21 14:05:32,938] Epoch 105, Loss 2.809081554412842
+[2023-11-21 14:05:32,939] Saved model at ./models/epoch_105.h5
+[2023-11-21 14:05:32,940] Loaded existing model at ./models/best.h5
+[2023-11-21 14:06:22,265] As 1st player, current model won 6 of 8 games
+[2023-11-21 14:06:22,265] As 2nd player, current model won 0 of 1 games
+[2023-11-21 14:06:22,265] Avg. win rate of current model: 0.6666666666666666
+[2023-11-21 14:06:22,266] Saved model at ./models/best.h5
+[2023-11-21 14:06:28,899] Epoch 106, Loss 4.0228376388549805
+[2023-11-21 14:06:35,316] Epoch 107, Loss 4.3864240646362305
+[2023-11-21 14:06:41,119] Epoch 108, Loss 4.365093231201172
+[2023-11-21 14:06:47,399] Epoch 109, Loss 2.8939452171325684
+[2023-11-21 14:06:53,144] Epoch 110, Loss 2.8617801666259766
+[2023-11-21 14:06:53,145] Saved model at ./models/epoch_110.h5
+[2023-11-21 14:06:53,145] Loaded existing model at ./models/best.h5
+[2023-11-21 14:07:40,591] As 1st player, current model won 1 of 3 games
+[2023-11-21 14:07:40,591] As 2nd player, current model won 3 of 6 games
+[2023-11-21 14:07:40,591] Avg. win rate of current model: 0.4444444444444444
+[2023-11-21 14:07:40,591] Loaded existing model at ./models/best.h5
+[2023-11-21 14:07:45,992] Epoch 111, Loss 2.877329111099243
+[2023-11-21 14:07:50,814] Epoch 112, Loss 4.283249855041504
+[2023-11-21 14:07:56,636] Epoch 113, Loss 2.8991503715515137
+[2023-11-21 14:08:02,156] Epoch 114, Loss 2.866276979446411
+[2023-11-21 14:08:07,837] Epoch 115, Loss 4.36492395401001
+[2023-11-21 14:08:07,838] Saved model at ./models/epoch_115.h5
+[2023-11-21 14:08:07,838] Loaded existing model at ./models/best.h5
+[2023-11-21 14:08:57,561] As 1st player, current model won 2 of 2 games
+[2023-11-21 14:08:57,561] As 2nd player, current model won 2 of 7 games
+[2023-11-21 14:08:57,561] Avg. win rate of current model: 0.4444444444444444
+[2023-11-21 14:08:57,561] Loaded existing model at ./models/best.h5
+[2023-11-21 14:09:03,691] Epoch 116, Loss 4.390488147735596
+[2023-11-21 14:09:09,536] Epoch 117, Loss 2.8894553184509277
+[2023-11-21 14:09:15,930] Epoch 118, Loss 4.389859199523926
+[2023-11-21 14:09:22,086] Epoch 119, Loss 4.403054714202881
+[2023-11-21 14:09:25,664] Epoch 120, Loss 2.7123029232025146
+[2023-11-21 14:09:25,664] Saved model at ./models/epoch_120.h5
+[2023-11-21 14:09:25,665] Loaded existing model at ./models/best.h5
+[2023-11-21 14:10:14,013] As 1st player, current model won 2 of 3 games
+[2023-11-21 14:10:14,013] As 2nd player, current model won 4 of 6 games
+[2023-11-21 14:10:14,013] Avg. win rate of current model: 0.6666666666666666
+[2023-11-21 14:10:14,014] Saved model at ./models/best.h5
+[2023-11-21 14:10:20,862] Epoch 121, Loss 2.9152231216430664
+[2023-11-21 14:10:26,407] Epoch 122, Loss 2.832369804382324
+[2023-11-21 14:10:32,058] Epoch 123, Loss 4.372231960296631
+[2023-11-21 14:10:38,797] Epoch 124, Loss 4.411851406097412
+[2023-11-21 14:10:42,848] Epoch 125, Loss 4.243673801422119
+[2023-11-21 14:10:42,848] Saved model at ./models/epoch_125.h5
+[2023-11-21 14:10:42,849] Loaded existing model at ./models/best.h5
+[2023-11-21 14:11:30,083] As 1st player, current model won 1 of 4 games
+[2023-11-21 14:11:30,083] As 2nd player, current model won 2 of 5 games
+[2023-11-21 14:11:30,083] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 14:11:30,083] Loaded existing model at ./models/best.h5
+[2023-11-21 14:11:36,036] Epoch 126, Loss 2.8810653686523438
+[2023-11-21 14:11:41,919] Epoch 127, Loss 2.853785753250122
+[2023-11-21 14:11:47,604] Epoch 128, Loss 4.358269214630127
+[2023-11-21 14:11:52,620] Epoch 129, Loss 4.32871675491333
+[2023-11-21 14:11:58,701] Epoch 130, Loss 2.8667190074920654
+[2023-11-21 14:11:58,701] Saved model at ./models/epoch_130.h5
+[2023-11-21 14:11:58,702] Loaded existing model at ./models/best.h5
+[2023-11-21 14:12:51,210] As 1st player, current model won 3 of 6 games
+[2023-11-21 14:12:51,210] As 2nd player, current model won 1 of 3 games
+[2023-11-21 14:12:51,210] Avg. win rate of current model: 0.4444444444444444
+[2023-11-21 14:12:51,210] Loaded existing model at ./models/best.h5
+[2023-11-21 14:12:56,829] Epoch 131, Loss 4.368356704711914
+[2023-11-21 14:13:03,568] Epoch 132, Loss 4.433875560760498
+[2023-11-21 14:13:09,220] Epoch 133, Loss 4.367490768432617
+[2023-11-21 14:13:12,393] Epoch 134, Loss 2.545670986175537
+[2023-11-21 14:13:18,332] Epoch 135, Loss 4.3892693519592285
+[2023-11-21 14:13:18,332] Saved model at ./models/epoch_135.h5
+[2023-11-21 14:13:18,333] Loaded existing model at ./models/best.h5
+[2023-11-21 14:14:08,385] As 1st player, current model won 5 of 6 games
+[2023-11-21 14:14:08,385] As 2nd player, current model won 1 of 3 games
+[2023-11-21 14:14:08,385] Avg. win rate of current model: 0.6666666666666666
+[2023-11-21 14:14:08,385] Saved model at ./models/best.h5
+[2023-11-21 14:14:13,616] Epoch 136, Loss 3.9053795337677
+[2023-11-21 14:14:19,209] Epoch 137, Loss 3.6146605014801025
+[2023-11-21 14:14:26,043] Epoch 138, Loss 4.425990104675293
+[2023-11-21 14:14:31,345] Epoch 139, Loss 2.794806480407715
+[2023-11-21 14:14:37,216] Epoch 140, Loss 4.379986763000488
+[2023-11-21 14:14:37,217] Saved model at ./models/epoch_140.h5
+[2023-11-21 14:14:37,217] Loaded existing model at ./models/best.h5
+[2023-11-21 14:15:28,793] As 1st player, current model won 3 of 5 games
+[2023-11-21 14:15:28,793] As 2nd player, current model won 3 of 4 games
+[2023-11-21 14:15:28,793] Avg. win rate of current model: 0.6666666666666666
+[2023-11-21 14:15:28,794] Saved model at ./models/best.h5
+[2023-11-21 14:15:34,079] Epoch 141, Loss 2.8178598880767822
+[2023-11-21 14:15:40,788] Epoch 142, Loss 2.8811421394348145
+[2023-11-21 14:15:43,767] Epoch 143, Loss 2.520310401916504
+[2023-11-21 14:15:50,304] Epoch 144, Loss 4.414874076843262
+[2023-11-21 14:15:53,691] Epoch 145, Loss 4.094018936157227
+[2023-11-21 14:15:53,691] Saved model at ./models/epoch_145.h5
+[2023-11-21 14:15:53,692] Loaded existing model at ./models/best.h5
+[2023-11-21 14:16:40,574] As 1st player, current model won 3 of 6 games
+[2023-11-21 14:16:40,574] As 2nd player, current model won 0 of 3 games
+[2023-11-21 14:16:40,574] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 14:16:40,575] Loaded existing model at ./models/best.h5
+[2023-11-21 14:16:45,546] Epoch 146, Loss 2.797379493713379
+[2023-11-21 14:16:50,803] Epoch 147, Loss 2.8186776638031006
+[2023-11-21 14:16:56,392] Epoch 148, Loss 2.835944414138794
+[2023-11-21 14:17:02,290] Epoch 149, Loss 4.3804097175598145
+[2023-11-21 14:17:09,091] Epoch 150, Loss 2.8765745162963867
+[2023-11-21 14:17:09,092] Saved model at ./models/epoch_150.h5
+[2023-11-21 14:17:09,092] Loaded existing model at ./models/best.h5
+[2023-11-21 14:17:56,221] As 1st player, current model won 2 of 4 games
+[2023-11-21 14:17:56,221] As 2nd player, current model won 4 of 5 games
+[2023-11-21 14:17:56,221] Avg. win rate of current model: 0.6666666666666666
+[2023-11-21 14:17:56,222] Saved model at ./models/best.h5
+[2023-11-21 14:18:03,555] Epoch 151, Loss 2.861637830734253
+[2023-11-21 14:18:09,815] Epoch 152, Loss 2.8485851287841797
+[2023-11-21 14:18:15,748] Epoch 153, Loss 2.8369617462158203
+[2023-11-21 14:18:20,950] Epoch 154, Loss 2.7996973991394043
+[2023-11-21 14:18:25,649] Epoch 155, Loss 2.737865447998047
+[2023-11-21 14:18:25,649] Saved model at ./models/epoch_155.h5
+[2023-11-21 14:18:25,650] Loaded existing model at ./models/best.h5
+[2023-11-21 14:19:14,819] As 1st player, current model won 4 of 5 games
+[2023-11-21 14:19:14,819] As 2nd player, current model won 4 of 4 games
+[2023-11-21 14:19:14,819] Avg. win rate of current model: 0.8888888888888888
+[2023-11-21 14:19:14,819] Saved model at ./models/best.h5
+[2023-11-21 14:19:22,121] Epoch 156, Loss 4.434102535247803
+[2023-11-21 14:19:28,304] Epoch 157, Loss 2.834458112716675
+[2023-11-21 14:19:35,452] Epoch 158, Loss 4.43587589263916
+[2023-11-21 14:19:40,354] Epoch 159, Loss 2.756136894226074
+[2023-11-21 14:19:47,156] Epoch 160, Loss 4.422154426574707
+[2023-11-21 14:19:47,157] Saved model at ./models/epoch_160.h5
+[2023-11-21 14:19:47,157] Loaded existing model at ./models/best.h5
+[2023-11-21 14:20:38,643] As 1st player, current model won 1 of 4 games
+[2023-11-21 14:20:38,643] As 2nd player, current model won 2 of 5 games
+[2023-11-21 14:20:38,643] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 14:20:38,643] Loaded existing model at ./models/best.h5
+[2023-11-21 14:20:46,122] Epoch 161, Loss 2.4452781677246094
+[2023-11-21 14:20:52,005] Epoch 162, Loss 4.428651809692383
+[2023-11-21 14:20:57,974] Epoch 163, Loss 2.8836171627044678
+[2023-11-21 14:21:02,095] Epoch 164, Loss 2.755924940109253
+[2023-11-21 14:21:05,850] Epoch 165, Loss 4.182521820068359
+[2023-11-21 14:21:05,850] Saved model at ./models/epoch_165.h5
+[2023-11-21 14:21:05,851] Loaded existing model at ./models/best.h5
+[2023-11-21 14:21:57,411] As 1st player, current model won 1 of 5 games
+[2023-11-21 14:21:57,411] As 2nd player, current model won 2 of 4 games
+[2023-11-21 14:21:57,412] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 14:21:57,412] Loaded existing model at ./models/best.h5
+[2023-11-21 14:22:02,981] Epoch 166, Loss 3.5477967262268066
+[2023-11-21 14:22:08,158] Epoch 167, Loss 4.444734573364258
+[2023-11-21 14:22:15,099] Epoch 168, Loss 4.432733535766602
+[2023-11-21 14:22:19,187] Epoch 169, Loss 2.7013862133026123
+[2023-11-21 14:22:24,005] Epoch 170, Loss 2.762024164199829
+[2023-11-21 14:22:24,006] Saved model at ./models/epoch_170.h5
+[2023-11-21 14:22:24,006] Loaded existing model at ./models/best.h5
+[2023-11-21 14:23:10,591] As 1st player, current model won 4 of 6 games
+[2023-11-21 14:23:10,591] As 2nd player, current model won 2 of 3 games
+[2023-11-21 14:23:10,591] Avg. win rate of current model: 0.6666666666666666
+[2023-11-21 14:23:10,592] Saved model at ./models/best.h5
+[2023-11-21 14:23:14,006] Epoch 171, Loss 3.7064106464385986
+[2023-11-21 14:23:19,482] Epoch 172, Loss 3.529909372329712
+[2023-11-21 14:23:26,235] Epoch 173, Loss 4.428730010986328
+[2023-11-21 14:23:33,145] Epoch 174, Loss 4.436442852020264
+[2023-11-21 14:23:38,582] Epoch 175, Loss 4.348808765411377
+[2023-11-21 14:23:38,583] Saved model at ./models/epoch_175.h5
+[2023-11-21 14:23:38,584] Loaded existing model at ./models/best.h5
+[2023-11-21 14:24:26,204] As 1st player, current model won 5 of 6 games
+[2023-11-21 14:24:26,204] As 2nd player, current model won 2 of 3 games
+[2023-11-21 14:24:26,204] Avg. win rate of current model: 0.7777777777777778
+[2023-11-21 14:24:26,204] Saved model at ./models/best.h5
+[2023-11-21 14:24:31,731] Epoch 176, Loss 2.7973718643188477
+[2023-11-21 14:24:37,619] Epoch 177, Loss 2.7917070388793945
+[2023-11-21 14:24:43,537] Epoch 178, Loss 2.8103156089782715
+[2023-11-21 14:24:47,391] Epoch 179, Loss 4.233885765075684
+[2023-11-21 14:24:54,339] Epoch 180, Loss 4.435537815093994
+[2023-11-21 14:24:54,340] Saved model at ./models/epoch_180.h5
+[2023-11-21 14:24:54,340] Loaded existing model at ./models/best.h5
+[2023-11-21 14:25:42,875] As 1st player, current model won 4 of 7 games
+[2023-11-21 14:25:42,875] As 2nd player, current model won 0 of 2 games
+[2023-11-21 14:25:42,875] Avg. win rate of current model: 0.4444444444444444
+[2023-11-21 14:25:42,875] Loaded existing model at ./models/best.h5
+[2023-11-21 14:25:49,639] Epoch 181, Loss 2.8405535221099854
+[2023-11-21 14:25:53,382] Epoch 182, Loss 4.142869472503662
+[2023-11-21 14:26:01,099] Epoch 183, Loss 2.0047991275787354
+[2023-11-21 14:26:06,272] Epoch 184, Loss 2.8156027793884277
+[2023-11-21 14:26:12,463] Epoch 185, Loss 4.420553684234619
+[2023-11-21 14:26:12,464] Saved model at ./models/epoch_185.h5
+[2023-11-21 14:26:12,465] Loaded existing model at ./models/best.h5
+[2023-11-21 14:26:58,625] As 1st player, current model won 2 of 2 games
+[2023-11-21 14:26:58,625] As 2nd player, current model won 3 of 7 games
+[2023-11-21 14:26:58,625] Avg. win rate of current model: 0.5555555555555556
+[2023-11-21 14:26:58,625] Saved model at ./models/best.h5
+[2023-11-21 14:27:04,096] Epoch 186, Loss 2.8283610343933105
+[2023-11-21 14:27:10,529] Epoch 187, Loss 2.8650295734405518
+[2023-11-21 14:27:15,377] Epoch 188, Loss 2.7844629287719727
+[2023-11-21 14:27:20,725] Epoch 189, Loss 2.805304527282715
+[2023-11-21 14:27:26,038] Epoch 190, Loss 4.3726677894592285
+[2023-11-21 14:27:26,038] Saved model at ./models/epoch_190.h5
+[2023-11-21 14:27:26,039] Loaded existing model at ./models/best.h5
+[2023-11-21 14:28:16,806] As 1st player, current model won 5 of 6 games
+[2023-11-21 14:28:16,806] As 2nd player, current model won 0 of 3 games
+[2023-11-21 14:28:16,806] Avg. win rate of current model: 0.5555555555555556
+[2023-11-21 14:28:16,807] Saved model at ./models/best.h5
+[2023-11-21 14:28:21,895] Epoch 191, Loss 2.768831491470337
+[2023-11-21 14:28:27,996] Epoch 192, Loss 2.8464438915252686
+[2023-11-21 14:28:34,047] Epoch 193, Loss 4.409811019897461
+[2023-11-21 14:28:38,747] Epoch 194, Loss 4.318836688995361
+[2023-11-21 14:28:45,643] Epoch 195, Loss 3.629183769226074
+[2023-11-21 14:28:45,644] Saved model at ./models/epoch_195.h5
+[2023-11-21 14:28:45,645] Loaded existing model at ./models/best.h5
+[2023-11-21 14:29:33,695] As 1st player, current model won 1 of 1 games
+[2023-11-21 14:29:33,695] As 2nd player, current model won 2 of 8 games
+[2023-11-21 14:29:33,695] Avg. win rate of current model: 0.3333333333333333
+[2023-11-21 14:29:33,696] Loaded existing model at ./models/best.h5
+[2023-11-21 14:29:39,253] Epoch 196, Loss 4.366130828857422
+[2023-11-21 14:29:45,061] Epoch 197, Loss 2.8370330333709717
+[2023-11-21 14:29:51,387] Epoch 198, Loss 2.8592727184295654
+[2023-11-21 14:29:57,127] Epoch 199, Loss 2.8351070880889893
+[2023-11-21 14:30:01,700] Epoch 200, Loss 4.318414211273193
+[2023-11-21 14:30:01,700] Saved model at ./models/epoch_200.h5
+[2023-11-21 14:30:01,701] Loaded existing model at ./models/best.h5
+[2023-11-21 14:30:49,695] As 1st player, current model won 1 of 6 games
+[2023-11-21 14:30:49,695] As 2nd player, current model won 0 of 3 games
+[2023-11-21 14:30:49,695] Avg. win rate of current model: 0.1111111111111111
+[2023-11-21 14:30:49,695] Loaded existing model at ./models/best.h5

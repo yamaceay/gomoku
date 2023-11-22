@@ -271,8 +271,8 @@ if __name__ == "__main__":
         n_test_games = 9, 
         eval = True, 
         game_kwargs={
-            'M': 7,
-            'N': 7,
+            'M': 8,
+            'N': 8,
             'K': 5,
             'ADJ': 2,
         }, value_network_kwargs={

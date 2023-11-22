@@ -1,5 +1,5 @@
 import os
-from .players import UCT_Player, Node, Tree, timeout
+from .players import Player, UCT_Player, Node, Tree, timeout
 import torch
 from .gomoku import Gomoku
 from .patterns import PB_DICT, lti
@@ -176,6 +176,14 @@ class PolicyNetwork:
         if random.random() < self.epsilon:
             _, best_action = random.choice(rewards_actions)
         return best_action
+  
+class ADP_Player(Player):
+    def __init__(self, value_network, policy_network): 
+        self.value_network = value_network
+        self.policy_network = policy_network
+    
+    def next_move(self, game: Gomoku) -> tuple[int, int]:
+        return self.policy_network.forward(game, self.value_network)
   
 class UCT_ADP_Player(UCT_Player):
     def __init__(self, max_depth=10, model=None, epsilon=.0, **kwargs):

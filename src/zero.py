@@ -30,14 +30,18 @@ class AlphaZeroPlayer(Player):
         )
         
         self.board = Board(width=M, height=N, n_in_row=K)
-        start_player = int(FIRST_PLAYER != 1)
-        self.board.init_board(start_player=start_player)
+        self.start_player = int(FIRST_PLAYER != 1)
+        self.board.init_board(start_player=self.start_player)
         
     def next_move(self, game: Gomoku) -> tuple[int, int]:
-        n_moves = len(self.board.states)        
+        n_moves = len(self.board.states)
+        if n_moves > len(game.history):
+            self.board.init_board(self.start_player)
+            
         for location in game.history[n_moves:]:
             move = self.board.location_to_move(location)
             self.board.move(move)
+            
         move = self.player.next_move(self.board)
         [x, y] = self.board.move_to_location(move)
         new_move = (int(x), int(y))

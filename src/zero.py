@@ -1,5 +1,5 @@
-from .game import Game, Board
-from .mcts_alphaZero import MCTSPlayer
+from .game import Board
+from .mcts_alphaZero import MCTSPlayer as ZeroPlayer
 from .players import Player
 from .gomoku import Gomoku
 from .policy_value_net_numpy import PolicyValueNetNumpy as PolicyValueNet
@@ -23,7 +23,7 @@ class AlphaZeroPlayer(Player):
                                         encoding='bytes')  # To support python3
             
         self.best_policy = PolicyValueNet(M, N, policy_param)
-        self.player = MCTSPlayer(
+        self.player = ZeroPlayer(
             self.best_policy.policy_value_fn,
             c_puct=c_puct,
             n_playout=n_playout,

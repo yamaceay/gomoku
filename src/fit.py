@@ -7,7 +7,7 @@ import logging
 import os
 from .gomoku import Gomoku
 
-NAME_OF_TRAINING = "1step"
+NAME_OF_TRAINING = "1step_wzero"
 DIR_PATH = "./models_{}".format(NAME_OF_TRAINING)
 
 # configure a logger which logs to the 'adp.log'
@@ -58,14 +58,27 @@ def eval_adp(game_kwargs, curr_model, best_model, n_test_games: int):
     logger.info("As 2nd player, current model won {} of {} games".format(sum(best_model_stats), len(best_model_stats)))
     logger.info("Avg. win rate of current model: {:.2f}%".format(sum(model_stats) * 100 / len(model_stats)))
       
-def train_adp(epochs: int, checkpoint: int, game_kwargs, value_network_kwargs, policy_network_kwargs, epochs_start: int = 0, n_test_games: int = 0, eval: bool = False):
+def train_adp(
+    epochs: int, 
+    checkpoint: int,
+    game_kwargs, 
+    value_network_kwargs, 
+    policy_network_kwargs, 
+    epochs_start: int = 0, 
+    n_test_games: int = 0, 
+    eval: bool = False, 
+    zero_play: bool = True,
+):
     policy = PolicyNetwork(**policy_network_kwargs)
     
     value_network = ValueNetwork(**value_network_kwargs)
         
     for i in tqdm(range(epochs_start+1, epochs+1), position=0, leave=False, desc="Training"):
         game = Gomoku(**game_kwargs)
-        loss = value_network.train(game, policy)
+        if zero_play:
+            loss = value_network.train_by_zero(game, policy)
+        else:
+            loss = value_network.train(game, policy)
         logger.info("Epoch {}, Loss {}".format(i, loss))
         
         if i % checkpoint == 0:
@@ -84,7 +97,7 @@ def train_adp(epochs: int, checkpoint: int, game_kwargs, value_network_kwargs, p
                 )
 
 if __name__ == "__main__":
-    epochs_start = 400
+    epochs_start = 0
     
     game_kwargs = {
         'M': 8,
@@ -106,34 +119,35 @@ if __name__ == "__main__":
         'epsilon': 0.1,
     }
     
-    # train_adp(
-    #     epochs_start = epochs_start,
-    #     epochs = 600, 
-    #     checkpoint = 10, 
-    #     game_kwargs = game_kwargs, 
-    #     value_network_kwargs = {
-    #         'model_path': os.path.join(DIR_PATH, 'best.h5'),
-    #         **value_network_kwargs
-    #     }, 
-    #     policy_network_kwargs = policy_network_kwargs,
-    # )
+    train_adp(
+        epochs_start = epochs_start,
+        epochs = 200, 
+        checkpoint = 10, 
+        zero_play=True,
+        game_kwargs = game_kwargs, 
+        value_network_kwargs = {
+            'model_path': os.path.join(DIR_PATH, 'best.h5'),
+            **value_network_kwargs
+        }, 
+        policy_network_kwargs = policy_network_kwargs,
+    )
     
-    curr_model = ADP_Player({
-        'model_path': os.path.join(DIR_PATH, "best.h5"),
-        **value_network_kwargs,
-    }, policy_network_kwargs)
+    # curr_model = ADP_Player({
+    #     'model_path': os.path.join(DIR_PATH, "best.h5"),
+    #     **value_network_kwargs,
+    # }, policy_network_kwargs)
     
-    # best_model = AlphaZeroPlayer(**game_kwargs)
-    for i in range(1, 11):
-        best_model = ADP_Player({
-            'model_path': os.path.join(DIR_PATH, "epoch_{}.h5".format(i*10 + epochs_start)),
-            **value_network_kwargs,
-        }, policy_network_kwargs)
+    # # best_model = AlphaZeroPlayer(**game_kwargs)
+    # for i in range(1, 11):
+    #     best_model = ADP_Player({
+    #         'model_path': os.path.join(DIR_PATH, "epoch_{}.h5".format(i*10 + epochs_start)),
+    #         **value_network_kwargs,
+    #     }, policy_network_kwargs)
         
-        eval_adp(
-            game_kwargs=game_kwargs,
-            curr_model=curr_model,
-            best_model=best_model,
-            n_test_games=5,
-        )
+    #     eval_adp(
+    #         game_kwargs=game_kwargs,
+    #         curr_model=curr_model,
+    #         best_model=best_model,
+    #         n_test_games=5,
+    #     )
         

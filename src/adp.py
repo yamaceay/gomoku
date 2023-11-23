@@ -1,8 +1,10 @@
 import os
+import numpy as np
 from .players import Player, UCT_Player, Node, Tree, timeout
 import torch
 from .gomoku import Gomoku
 from .patterns import PB_DICT, lti
+from .zero import AlphaZeroPlayer
 import random
 import logging
 
@@ -131,17 +133,12 @@ class ValueNetwork(ShallowNN):
         features += [int(state.player == 1), int(state.player == -1)]
         return torch.FloatTensor(features).to(device)
     
-    def train(self, state: Gomoku, policy_network):
-        history = [state.copy(include_history=True)]
-        while not state.fin():
-            action = policy_network.forward(state, self)
-            state.play(action)
-            history += [state.copy(include_history=True)]
-            
+    def train_body(self, history: list[Gomoku]):
         losses = []
-        for i in range(len(history) - 2, -1, -1):
+        last_step = len(history)-1
+        for i in range(last_step-1, -1, -1):
             states = history[i:]
-            if i + self.n_steps < len(history) - 1:
+            if i + self.n_steps < last_step:
                 states = states[:self.n_steps+1]
             loss = self.opt(*states)
             losses += [loss]
@@ -154,6 +151,40 @@ class ValueNetwork(ShallowNN):
         loss.backward()
         self.optimizer.step()
         return loss.cpu().detach().item()
+    
+    def train_by_zero(self, state: Gomoku, policy_network):
+        zero_player = AlphaZeroPlayer(
+            M = state.M, 
+            N = state.N, 
+            K = state.K
+        )
+        
+        history = [state.copy(include_history=True)]
+        if np.random.random() < 0.5:
+            action = zero_player.next_move(state)
+            state.play(action)
+            history += [state.copy(include_history=True)]
+            
+        while not state.fin():
+            action = policy_network.forward(state, self)
+            state.play(action)                
+            history += [state.copy(include_history=True)]
+            if state.fin():
+                break
+            action = zero_player.next_move(state)
+            state.play(action)
+            history += [state.copy(include_history=True)]
+        
+        return self.train_body(history)
+    
+    def train(self, state: Gomoku, policy_network):
+        history = [state.copy(include_history=True)]
+        while not state.fin():
+            action = policy_network.forward(state, self)
+            state.play(action)
+            history += [state.copy(include_history=True)]
+            
+        return self.train_body(history)
     
     def load_model(self, filepath: str = None):
         if filepath is None:

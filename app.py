@@ -21,7 +21,7 @@ value_network_kwargs = {
     'magnify': 2,
     'gamma': 0.9,
     'lr': 0.01,
-    'n_steps': 1,   
+    'n_steps': 1,
 }
 
 policy_network_kwargs = {

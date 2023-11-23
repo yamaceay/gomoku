@@ -97,7 +97,7 @@ def train_adp(
                 )
 
 if __name__ == "__main__":
-    epochs_start = 0
+    epochs_start = 80
     
     game_kwargs = {
         'M': 8,

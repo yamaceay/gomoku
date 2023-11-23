@@ -32,7 +32,8 @@
             <div>
                 <label for="player">Player:</label>
                 <select id="player" name="player">
-                    <option value="_">_</option>
+                    <option value="_RANDOM">_</option>
+                    <option value="_ADP">_ADP</option>
                     <option value="_ALPHAZERO">_ALPHAZERO</option>
                     <!--
                         <option value="_UCT_PB">_UCT_PB</option>
@@ -51,6 +52,15 @@
                 </select>
             </div>
 
+            <div>
+                <label for="you">You:</label>
+                <select id="you" name="you">
+                    <option value="_HUMAN">_HUMAN</option>
+                    <option value="_RANDOM">_RANDOM</option>
+                    <option value="_ADP">_ADP</option>
+                    <option value="_ALPHAZERO">_ALPHAZERO</option>
+                </select>
+            </div>
             <button type="button" onclick="startGame()">Start Game</button>
         </div>
     </form>

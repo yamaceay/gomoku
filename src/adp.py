@@ -70,6 +70,10 @@ class ValueNetwork(ShallowNN):
         )
         
         self.model = self.model.to(device)
+        try:
+            self.load_model()
+        except Exception as e:
+            self.logger.info(e)
     
     def forward(self, state: Gomoku):
         if state.fin():
@@ -178,9 +182,9 @@ class PolicyNetwork:
         return best_action
   
 class ADP_Player(Player):
-    def __init__(self, value_network, policy_network): 
-        self.value_network = value_network
-        self.policy_network = policy_network
+    def __init__(self, value_network_kwargs, policy_network_kwargs): 
+        self.value_network = ValueNetwork(**value_network_kwargs)
+        self.policy_network = PolicyNetwork(**policy_network_kwargs)
     
     def next_move(self, game: Gomoku) -> tuple[int, int]:
         return self.policy_network.forward(game, self.value_network)

@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from .zero import AlphaZeroPlayer
-from .adp import ADP_Player, ValueNetwork, PolicyNetwork, get_rewards_actions
+from .adp import ADP_Player, ValueNetwork, PolicyNetwork
 from .players import Player
 import random
 import logging
@@ -58,14 +58,10 @@ def eval_adp(game_kwargs, curr_model, best_model, n_test_games: int):
     logger.info("As 2nd player, current model won {} of {} games".format(sum(best_model_stats), len(best_model_stats)))
     logger.info("Avg. win rate of current model: {:.2f}%".format(sum(model_stats) * 100 / len(model_stats)))
       
-def train_adp(epochs: int, checkpoint: int, game_kwargs, value_network_kwargs, policy_network_kwargs, epochs_start: int = 0, n_test_games: int = 0, eval: bool = True):
+def train_adp(epochs: int, checkpoint: int, game_kwargs, value_network_kwargs, policy_network_kwargs, epochs_start: int = 0, n_test_games: int = 0, eval: bool = False):
     policy = PolicyNetwork(**policy_network_kwargs)
     
     value_network = ValueNetwork(**value_network_kwargs)
-    try:
-        value_network.load_model()
-    except Exception as e:
-        logger.info(e)
         
     for i in tqdm(range(epochs_start+1, epochs+1), position=0, leave=False, desc="Training"):
         game = Gomoku(**game_kwargs)
@@ -77,8 +73,7 @@ def train_adp(epochs: int, checkpoint: int, game_kwargs, value_network_kwargs, p
             value_network.save_model(new_path)
             
             if eval:
-                policy = PolicyNetwork(**policy_network_kwargs)
-                curr_model = ADP_Player(value_network, policy)
+                curr_model = ADP_Player(value_network_kwargs, policy_network_kwargs)
                 best_model = AlphaZeroPlayer(**game_kwargs)
                 
                 eval_adp(
@@ -89,6 +84,8 @@ def train_adp(epochs: int, checkpoint: int, game_kwargs, value_network_kwargs, p
                 )
 
 if __name__ == "__main__":
+    epochs_start = 400
+    
     game_kwargs = {
         'M': 8,
         'N': 8,
@@ -101,51 +98,42 @@ if __name__ == "__main__":
         'magnify': 2,
         'gamma': 0.9,
         'lr': 0.01,
-        'n_steps': 1,   
+        'n_steps': 1, 
+        # 'logger': logger,
     }
     
     policy_network_kwargs = {
         'epsilon': 0.1,
     }
     
-    train_adp(
-        epochs_start = 500,
-        epochs = 600, 
-        checkpoint = 10, 
-        eval = False, 
-        game_kwargs = game_kwargs, 
-        value_network_kwargs = {
-            'model_path': os.path.join(DIR_PATH, 'best.h5'),
-            **value_network_kwargs
-        }, 
-        policy_network_kwargs = policy_network_kwargs,
-        # n_test_games = 9, 
-    )
-    
-    # policy = PolicyNetwork(**policy_network_kwargs)
-    
-    # value_network = ValueNetwork(
-    #     model_path=os.path.join(DIR_PATH, "best.h5"),
-    #     **value_network_kwargs,
+    # train_adp(
+    #     epochs_start = epochs_start,
+    #     epochs = 600, 
+    #     checkpoint = 10, 
+    #     game_kwargs = game_kwargs, 
+    #     value_network_kwargs = {
+    #         'model_path': os.path.join(DIR_PATH, 'best.h5'),
+    #         **value_network_kwargs
+    #     }, 
+    #     policy_network_kwargs = policy_network_kwargs,
     # )
-    # value_network.load_model()
     
-    # curr_model = ADP_Player(value_network, policy)
+    curr_model = ADP_Player({
+        'model_path': os.path.join(DIR_PATH, "best.h5"),
+        **value_network_kwargs,
+    }, policy_network_kwargs)
     
-    # # best_model = AlphaZeroPlayer(**game_kwargs)
-    # for i in range(1, 11):
-    #     best_value_network = ValueNetwork(
-    #         model_path=os.path.join(DIR_PATH, "epoch_{}.h5".format(i*10 + 400)),
-    #         **value_network_kwargs, 
-    #     )
-    #     best_value_network.load_model()
-    
-    #     best_model = ADP_Player(best_value_network, policy)
+    # best_model = AlphaZeroPlayer(**game_kwargs)
+    for i in range(1, 11):
+        best_model = ADP_Player({
+            'model_path': os.path.join(DIR_PATH, "epoch_{}.h5".format(i*10 + epochs_start)),
+            **value_network_kwargs,
+        }, policy_network_kwargs)
         
-    #     eval_adp(
-    #         game_kwargs=game_kwargs,
-    #         curr_model=curr_model,
-    #         best_model=best_model,
-    #         n_test_games=5,
-    #     )
+        eval_adp(
+            game_kwargs=game_kwargs,
+            curr_model=curr_model,
+            best_model=best_model,
+            n_test_games=5,
+        )
         

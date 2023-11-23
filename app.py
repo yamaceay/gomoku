@@ -1,29 +1,44 @@
 from flask import Flask, request, jsonify, render_template
 from src import Gomoku, \
-    Player, RandomPlayer, UCT_Player, UCT_ADP_Player, \
+    Player, RandomPlayer, ADP_Player, \
     AlphaZeroPlayer, \
-    pb_score, uct_pb_score, uct_score, \
-    ValueNetwork
+    ValueNetwork, PolicyNetwork
+    # UCT_Player, UCT_ADP_Player, \
+    # pb_score, uct_pb_score, uct_score, \
 
 app = Flask(__name__, static_url_path='/static')
 game = None
 
-game_kwargs = dict(M=8, N=8, K=5, FIRST_PLAYER=1, ADJ=2)
+game_kwargs = {
+    'M': 8,
+    'N': 8,
+    'K': 5,
+    'ADJ': 2,
+}
+
+value_network_kwargs = {
+    'alpha': 0.9,
+    'magnify': 2,
+    'gamma': 0.9,
+    'lr': 0.01,
+    'n_steps': 1,   
+}
+
+policy_network_kwargs = {
+    'epsilon': 0.1,
+}
 
 player: Player = None
 
-policies = {
-    'uct_score': uct_score,
-    'uct_pb_score': uct_pb_score,
-    'pb_score': pb_score,
-}
-
-models = {
-    'ADP1': ValueNetwork(alpha = 0.9, magnify = 5),
-}
+# policies = {
+#     'uct_score': uct_score,
+#     'uct_pb_score': uct_pb_score,
+#     'pb_score': pb_score,
+# }
 
 players = {
-    '_': RandomPlayer(),
+    '_RANDOM': RandomPlayer(),
+    '_ADP': ADP_Player(value_network_kwargs, policy_network_kwargs),
     '_ALPHAZERO': AlphaZeroPlayer(**game_kwargs),
     # '_UCT_UCB': UCT_Player(timeout_ms=5000, policy=policies["uct_score"]),
     # '_UCT_UCB_ADJ': UCT_Player(timeout_ms=5000, policy=policies["uct_score"], tree_kwargs={"only_adjacents": True}),

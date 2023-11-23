@@ -11,6 +11,7 @@ async function startGame() {
     K = parseInt(document.getElementById('winLength').value);
     ADJ = parseInt(document.getElementById('adj').value);
     player = document.getElementById('player').value;
+    you = document.getElementById('you').value;
 
     // Überprüfen Sie, ob die Werte gültig sind
     if (isNaN(M) || isNaN(N) || isNaN(K) || M <= 0 || N <= 0 || K <= 0) {

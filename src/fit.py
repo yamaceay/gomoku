@@ -99,7 +99,7 @@ def train_adp(
 
 if __name__ == "__main__":
     epochs_start = 0
-    train_instead_of_test = True
+    train_instead_of_test = False
     
     game_kwargs = {
         'M': 8,
@@ -141,7 +141,7 @@ if __name__ == "__main__":
         )
         
         # best_model = AlphaZeroPlayer(**game_kwargs)
-        for i in range(1, 20):
+        for i in range(1, 5):
             best_model = ADP_Player(
                 model_path=os.path.join(DIR_PATH, "epoch_{}.h5".format(i*10 + epochs_start)), 
                 value_network_kwargs=value_network_kwargs, 

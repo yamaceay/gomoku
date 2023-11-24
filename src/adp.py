@@ -58,12 +58,15 @@ class ShallowNN(torch.nn.Module):
         return loss.item()
     
 class ValueNetwork(ShallowNN):
-    def __init__(self, **kwargs):
+    def __init__(self, model_path: str, **kwargs):
+        self.model_path = model_path
+        if not self.model_path:
+            raise Exception('model_path is required')
+        
         self.alpha = kwargs.pop('alpha', 1)
         self.gamma = kwargs.pop('gamma', 0.9)
         self.magnify = kwargs.pop('magnify', 1)
         self.n_steps = kwargs.pop('n_steps', 1)
-        self.model_path = kwargs.pop('model_path', "models/best.h5")
         self.logger = kwargs.pop('logger', logging.getLogger(__name__))
         
         super(ValueNetwork, self).__init__(
@@ -75,7 +78,8 @@ class ValueNetwork(ShallowNN):
         try:
             self.load_model()
         except Exception as e:
-            self.logger.info(e)
+            self.logger.error(e)
+            self.logger.info('Initializing new model')
     
     def forward(self, state: Gomoku):
         if state.fin():
@@ -213,8 +217,8 @@ class PolicyNetwork:
         return best_action
   
 class ADP_Player(Player):
-    def __init__(self, value_network_kwargs, policy_network_kwargs): 
-        self.value_network = ValueNetwork(**value_network_kwargs)
+    def __init__(self, model_path: str, value_network_kwargs, policy_network_kwargs): 
+        self.value_network = ValueNetwork(model_path=model_path, **value_network_kwargs)
         self.policy_network = PolicyNetwork(**policy_network_kwargs)
     
     def next_move(self, game: Gomoku) -> tuple[int, int]:

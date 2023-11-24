@@ -62,16 +62,17 @@ def train_adp(
     epochs: int, 
     checkpoint: int,
     game_kwargs, 
+    model_path: str, 
     value_network_kwargs, 
     policy_network_kwargs, 
     epochs_start: int = 0, 
-    n_test_games: int = 0, 
-    eval: bool = False, 
+    # n_test_games: int = 0, 
+    # eval: bool = False, 
     zero_play: bool = True,
 ):
     policy = PolicyNetwork(**policy_network_kwargs)
     
-    value_network = ValueNetwork(**value_network_kwargs)
+    value_network = ValueNetwork(model_path=model_path, **value_network_kwargs)
         
     for i in tqdm(range(epochs_start+1, epochs+1), position=0, leave=False, desc="Training"):
         game = Gomoku(**game_kwargs)
@@ -85,19 +86,20 @@ def train_adp(
             new_path = os.path.join(DIR_PATH, "epoch_%s.h5" % i)
             value_network.save_model(new_path)
             
-            if eval:
-                curr_model = ADP_Player(value_network_kwargs, policy_network_kwargs)
-                best_model = AlphaZeroPlayer(**game_kwargs)
+            # if eval:
+            #     curr_model = ADP_Player(model_path, value_network_kwargs, policy_network_kwargs)
+            #     best_model = AlphaZeroPlayer(**game_kwargs)
                 
-                eval_adp(
-                    game_kwargs=game_kwargs, 
-                    curr_model=curr_model,
-                    best_model=best_model,
-                    n_test_games=n_test_games
-                )
+            #     eval_adp(
+            #         game_kwargs=game_kwargs, 
+            #         curr_model=curr_model,
+            #         best_model=best_model,
+            #         n_test_games=n_test_games
+            #     )
 
 if __name__ == "__main__":
-    epochs_start = 80
+    epochs_start = 200
+    is_test, is_train = True, False
     
     game_kwargs = {
         'M': 8,
@@ -112,42 +114,44 @@ if __name__ == "__main__":
         'gamma': 0.9,
         'lr': 0.01,
         'n_steps': 1, 
-        # 'logger': logger,
+        'logger': logger,
     }
     
     policy_network_kwargs = {
         'epsilon': 0.1,
     }
     
-    # train_adp(
-    #     epochs_start = epochs_start,
-    #     epochs = 200, 
-    #     checkpoint = 10, 
-    #     zero_play=True,
-    #     game_kwargs = game_kwargs, 
-    #     value_network_kwargs = {
-    #         'model_path': os.path.join(DIR_PATH, 'best.h5'),
-    #         **value_network_kwargs
-    #     }, 
-    #     policy_network_kwargs = policy_network_kwargs,
-    # )
+    if is_train:
+        train_adp(
+            epochs_start = epochs_start,
+            epochs = 400, 
+            checkpoint = 10, 
+            zero_play=True,
+            game_kwargs = game_kwargs, 
+            model_path = os.path.join(DIR_PATH, 'best.h5'),
+            value_network_kwargs = value_network_kwargs,
+            policy_network_kwargs = policy_network_kwargs,
+        )
     
-    curr_model = ADP_Player({
-        'model_path': os.path.join(DIR_PATH, "best.h5"),
-        **value_network_kwargs,
-    }, policy_network_kwargs)
-    
-    # best_model = AlphaZeroPlayer(**game_kwargs)
-    for i in range(1, 20):
-        best_model = ADP_Player({
-            'model_path': os.path.join(DIR_PATH, "epoch_{}.h5".format(i*10 + epochs_start)),
-            **value_network_kwargs,
-        }, policy_network_kwargs)
-        
-        eval_adp(
-            game_kwargs=game_kwargs,
-            curr_model=curr_model,
-            best_model=best_model,
-            n_test_games=5,
+    if is_test:
+        curr_model = ADP_Player(
+            model_path=os.path.join(DIR_PATH, "best.h5"),
+            value_network_kwargs=value_network_kwargs, 
+            policy_network_kwargs=policy_network_kwargs,
         )
         
+        # best_model = AlphaZeroPlayer(**game_kwargs)
+        for i in range(1, 20):
+            best_model = ADP_Player(
+                model_path=os.path.join(DIR_PATH, "epoch_{}.h5".format(i*10 + epochs_start)), 
+                value_network_kwargs=value_network_kwargs, 
+                policy_network_kwargs=policy_network_kwargs,
+            )
+            
+            eval_adp(
+                game_kwargs=game_kwargs,
+                curr_model=curr_model,
+                best_model=best_model,
+                n_test_games=5,
+            )
+            

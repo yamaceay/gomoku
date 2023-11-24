@@ -119,35 +119,35 @@ if __name__ == "__main__":
         'epsilon': 0.1,
     }
     
-    train_adp(
-        epochs_start = epochs_start,
-        epochs = 200, 
-        checkpoint = 10, 
-        zero_play=True,
-        game_kwargs = game_kwargs, 
-        value_network_kwargs = {
-            'model_path': os.path.join(DIR_PATH, 'best.h5'),
-            **value_network_kwargs
-        }, 
-        policy_network_kwargs = policy_network_kwargs,
-    )
+    # train_adp(
+    #     epochs_start = epochs_start,
+    #     epochs = 200, 
+    #     checkpoint = 10, 
+    #     zero_play=True,
+    #     game_kwargs = game_kwargs, 
+    #     value_network_kwargs = {
+    #         'model_path': os.path.join(DIR_PATH, 'best.h5'),
+    #         **value_network_kwargs
+    #     }, 
+    #     policy_network_kwargs = policy_network_kwargs,
+    # )
     
-    # curr_model = ADP_Player({
-    #     'model_path': os.path.join(DIR_PATH, "best.h5"),
-    #     **value_network_kwargs,
-    # }, policy_network_kwargs)
+    curr_model = ADP_Player({
+        'model_path': os.path.join(DIR_PATH, "best.h5"),
+        **value_network_kwargs,
+    }, policy_network_kwargs)
     
-    # # best_model = AlphaZeroPlayer(**game_kwargs)
-    # for i in range(1, 11):
-    #     best_model = ADP_Player({
-    #         'model_path': os.path.join(DIR_PATH, "epoch_{}.h5".format(i*10 + epochs_start)),
-    #         **value_network_kwargs,
-    #     }, policy_network_kwargs)
+    # best_model = AlphaZeroPlayer(**game_kwargs)
+    for i in range(1, 20):
+        best_model = ADP_Player({
+            'model_path': os.path.join(DIR_PATH, "epoch_{}.h5".format(i*10 + epochs_start)),
+            **value_network_kwargs,
+        }, policy_network_kwargs)
         
-    #     eval_adp(
-    #         game_kwargs=game_kwargs,
-    #         curr_model=curr_model,
-    #         best_model=best_model,
-    #         n_test_games=5,
-    #     )
+        eval_adp(
+            game_kwargs=game_kwargs,
+            curr_model=curr_model,
+            best_model=best_model,
+            n_test_games=5,
+        )
         

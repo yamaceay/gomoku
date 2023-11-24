@@ -7,7 +7,7 @@ import logging
 import os
 from .gomoku import Gomoku
 
-NAME_OF_TRAINING = "1step_wzero"
+NAME_OF_TRAINING = "wzero"
 DIR_PATH = "./models_{}".format(NAME_OF_TRAINING)
 
 # configure a logger which logs to the 'adp.log'
@@ -98,8 +98,8 @@ def train_adp(
             #     )
 
 if __name__ == "__main__":
-    epochs_start = 200
-    is_test, is_train = True, False
+    epochs_start = 0
+    train_instead_of_test = True
     
     game_kwargs = {
         'M': 8,
@@ -121,10 +121,10 @@ if __name__ == "__main__":
         'epsilon': 0.1,
     }
     
-    if is_train:
+    if train_instead_of_test:
         train_adp(
             epochs_start = epochs_start,
-            epochs = 400, 
+            epochs = 100, 
             checkpoint = 10, 
             zero_play=True,
             game_kwargs = game_kwargs, 
@@ -133,7 +133,7 @@ if __name__ == "__main__":
             policy_network_kwargs = policy_network_kwargs,
         )
     
-    if is_test:
+    else:
         curr_model = ADP_Player(
             model_path=os.path.join(DIR_PATH, "best.h5"),
             value_network_kwargs=value_network_kwargs, 

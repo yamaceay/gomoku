@@ -211,7 +211,10 @@ class PolicyNetwork:
     
     def forward(self, state: Gomoku, value_network: ValueNetwork) -> tuple[int, int]:            
         rewards_actions = get_rewards_actions(state, value_network)
-        _, best_action = rewards_actions[0]
+        if state.player == 1:
+            _, best_action = rewards_actions[0]
+        else:
+            _, best_action = rewards_actions[-1]
         if random.random() < self.epsilon:
             _, best_action = random.choice(rewards_actions)
         return best_action

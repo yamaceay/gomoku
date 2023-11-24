@@ -141,7 +141,7 @@ if __name__ == "__main__":
         )
         
         # best_model = AlphaZeroPlayer(**game_kwargs)
-        for i in range(1, 5):
+        for i in range(1, 40):
             best_model = ADP_Player(
                 model_path=os.path.join(DIR_PATH, "epoch_{}.h5".format(i*10 + epochs_start)), 
                 value_network_kwargs=value_network_kwargs, 
@@ -152,6 +152,6 @@ if __name__ == "__main__":
                 game_kwargs=game_kwargs,
                 curr_model=curr_model,
                 best_model=best_model,
-                n_test_games=5,
+                n_test_games=7,
             )
             

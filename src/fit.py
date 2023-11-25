@@ -98,7 +98,7 @@ def train_adp(
             #     )
 
 if __name__ == "__main__":
-    epochs_start = 0
+    start, end, step = 400, 500, 10
     train_instead_of_test = False
     
     game_kwargs = {
@@ -123,9 +123,9 @@ if __name__ == "__main__":
     
     if train_instead_of_test:
         train_adp(
-            epochs_start = epochs_start,
-            epochs = 100, 
-            checkpoint = 10, 
+            epochs_start = start,
+            epochs = end, 
+            checkpoint = step, 
             zero_play=True,
             game_kwargs = game_kwargs, 
             model_path = os.path.join(DIR_PATH, 'best.h5'),
@@ -141,9 +141,9 @@ if __name__ == "__main__":
         )
         
         # best_model = AlphaZeroPlayer(**game_kwargs)
-        for i in range(1, 40):
+        for checkpoint in range(start, end, step):
             best_model = ADP_Player(
-                model_path=os.path.join(DIR_PATH, "epoch_{}.h5".format(i*10 + epochs_start)), 
+                model_path=os.path.join(DIR_PATH, "epoch_{}.h5".format(checkpoint)), 
                 value_network_kwargs=value_network_kwargs, 
                 policy_network_kwargs=policy_network_kwargs,
             )

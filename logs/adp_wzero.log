@@ -1,157 +1,157 @@
-[2023-11-24 23:23:12,207] Loaded existing model at ./models_wzero/best.h5
-[2023-11-24 23:23:12,208] Loaded existing model at ./models_wzero/epoch_10.h5
-[2023-11-24 23:24:40,759] As 1st player, current model won 4 of 4 games
-[2023-11-24 23:24:40,759] As 2nd player, current model won 0 of 3 games
-[2023-11-24 23:24:40,759] Avg. win rate of current model: 57.14%
-[2023-11-24 23:24:40,760] Loaded existing model at ./models_wzero/epoch_20.h5
-[2023-11-24 23:26:21,824] As 1st player, current model won 4 of 5 games
-[2023-11-24 23:26:21,824] As 2nd player, current model won 0 of 2 games
-[2023-11-24 23:26:21,824] Avg. win rate of current model: 57.14%
-[2023-11-24 23:26:21,825] Loaded existing model at ./models_wzero/epoch_30.h5
-[2023-11-24 23:27:45,204] As 1st player, current model won 5 of 5 games
-[2023-11-24 23:27:45,204] As 2nd player, current model won 0 of 2 games
-[2023-11-24 23:27:45,204] Avg. win rate of current model: 71.43%
-[2023-11-24 23:27:45,204] Loaded existing model at ./models_wzero/epoch_40.h5
-[2023-11-24 23:29:41,785] As 1st player, current model won 2 of 2 games
-[2023-11-24 23:29:41,785] As 2nd player, current model won 3 of 5 games
-[2023-11-24 23:29:41,785] Avg. win rate of current model: 71.43%
-[2023-11-24 23:29:41,786] Loaded existing model at ./models_wzero/epoch_50.h5
-[2023-11-24 23:31:07,149] As 1st player, current model won 5 of 5 games
-[2023-11-24 23:31:07,149] As 2nd player, current model won 0 of 2 games
-[2023-11-24 23:31:07,149] Avg. win rate of current model: 71.43%
-[2023-11-24 23:31:07,150] Loaded existing model at ./models_wzero/epoch_60.h5
-[2023-11-24 23:32:15,960] As 1st player, current model won 5 of 5 games
-[2023-11-24 23:32:15,960] As 2nd player, current model won 0 of 2 games
-[2023-11-24 23:32:15,960] Avg. win rate of current model: 71.43%
-[2023-11-24 23:32:15,961] Loaded existing model at ./models_wzero/epoch_70.h5
-[2023-11-24 23:33:17,453] As 1st player, current model won 2 of 2 games
-[2023-11-24 23:33:17,453] As 2nd player, current model won 1 of 5 games
-[2023-11-24 23:33:17,453] Avg. win rate of current model: 42.86%
-[2023-11-24 23:33:17,453] Loaded existing model at ./models_wzero/epoch_80.h5
-[2023-11-24 23:34:48,356] As 1st player, current model won 3 of 3 games
-[2023-11-24 23:34:48,356] As 2nd player, current model won 0 of 4 games
-[2023-11-24 23:34:48,356] Avg. win rate of current model: 42.86%
-[2023-11-24 23:34:48,356] Loaded existing model at ./models_wzero/epoch_90.h5
-[2023-11-24 23:36:34,757] As 1st player, current model won 4 of 4 games
-[2023-11-24 23:36:34,757] As 2nd player, current model won 1 of 3 games
-[2023-11-24 23:36:34,757] Avg. win rate of current model: 71.43%
-[2023-11-24 23:36:34,758] Loaded existing model at ./models_wzero/epoch_100.h5
-[2023-11-24 23:38:20,165] As 1st player, current model won 4 of 4 games
-[2023-11-24 23:38:20,165] As 2nd player, current model won 0 of 3 games
-[2023-11-24 23:38:20,165] Avg. win rate of current model: 57.14%
-[2023-11-24 23:38:20,166] Loaded existing model at ./models_wzero/epoch_110.h5
-[2023-11-24 23:40:23,208] As 1st player, current model won 3 of 3 games
-[2023-11-24 23:40:23,208] As 2nd player, current model won 0 of 4 games
-[2023-11-24 23:40:23,208] Avg. win rate of current model: 42.86%
-[2023-11-24 23:40:23,209] Loaded existing model at ./models_wzero/epoch_120.h5
-[2023-11-24 23:42:03,837] As 1st player, current model won 3 of 4 games
-[2023-11-24 23:42:03,837] As 2nd player, current model won 1 of 3 games
-[2023-11-24 23:42:03,837] Avg. win rate of current model: 57.14%
-[2023-11-24 23:42:03,838] Loaded existing model at ./models_wzero/epoch_130.h5
-[2023-11-24 23:43:25,174] As 1st player, current model won 2 of 2 games
-[2023-11-24 23:43:25,174] As 2nd player, current model won 0 of 5 games
-[2023-11-24 23:43:25,174] Avg. win rate of current model: 28.57%
-[2023-11-24 23:43:25,175] Loaded existing model at ./models_wzero/epoch_140.h5
-[2023-11-24 23:44:46,168] As 1st player, current model won 5 of 5 games
-[2023-11-24 23:44:46,169] As 2nd player, current model won 1 of 2 games
-[2023-11-24 23:44:46,169] Avg. win rate of current model: 85.71%
-[2023-11-24 23:44:46,169] Loaded existing model at ./models_wzero/epoch_150.h5
-[2023-11-24 23:46:21,027] As 1st player, current model won 3 of 4 games
-[2023-11-24 23:46:21,027] As 2nd player, current model won 0 of 3 games
-[2023-11-24 23:46:21,027] Avg. win rate of current model: 42.86%
-[2023-11-24 23:46:21,028] Loaded existing model at ./models_wzero/epoch_160.h5
-[2023-11-24 23:48:24,877] As 1st player, current model won 3 of 4 games
-[2023-11-24 23:48:24,877] As 2nd player, current model won 0 of 3 games
-[2023-11-24 23:48:24,877] Avg. win rate of current model: 42.86%
-[2023-11-24 23:48:24,878] Loaded existing model at ./models_wzero/epoch_170.h5
-[2023-11-24 23:49:50,015] As 1st player, current model won 3 of 3 games
-[2023-11-24 23:49:50,015] As 2nd player, current model won 0 of 4 games
-[2023-11-24 23:49:50,015] Avg. win rate of current model: 42.86%
-[2023-11-24 23:49:50,016] Loaded existing model at ./models_wzero/epoch_180.h5
-[2023-11-24 23:51:09,541] As 1st player, current model won 3 of 3 games
-[2023-11-24 23:51:09,541] As 2nd player, current model won 0 of 4 games
-[2023-11-24 23:51:09,541] Avg. win rate of current model: 42.86%
-[2023-11-24 23:51:09,541] Loaded existing model at ./models_wzero/epoch_190.h5
-[2023-11-24 23:52:30,596] As 1st player, current model won 1 of 1 games
-[2023-11-24 23:52:30,596] As 2nd player, current model won 0 of 6 games
-[2023-11-24 23:52:30,596] Avg. win rate of current model: 14.29%
-[2023-11-24 23:52:30,597] Loaded existing model at ./models_wzero/epoch_200.h5
-[2023-11-24 23:54:20,461] As 1st player, current model won 7 of 7 games
-[2023-11-24 23:54:20,461] As 2nd player, current model won 0 of 0 games
-[2023-11-24 23:54:20,461] Avg. win rate of current model: 100.00%
-[2023-11-24 23:54:20,461] Loaded existing model at ./models_wzero/epoch_210.h5
-[2023-11-24 23:56:07,111] As 1st player, current model won 3 of 3 games
-[2023-11-24 23:56:07,111] As 2nd player, current model won 1 of 4 games
-[2023-11-24 23:56:07,111] Avg. win rate of current model: 57.14%
-[2023-11-24 23:56:07,111] Loaded existing model at ./models_wzero/epoch_220.h5
-[2023-11-24 23:57:46,394] As 1st player, current model won 4 of 4 games
-[2023-11-24 23:57:46,394] As 2nd player, current model won 0 of 3 games
-[2023-11-24 23:57:46,394] Avg. win rate of current model: 57.14%
-[2023-11-24 23:57:46,395] Loaded existing model at ./models_wzero/epoch_230.h5
-[2023-11-24 23:59:48,435] As 1st player, current model won 2 of 2 games
-[2023-11-24 23:59:48,435] As 2nd player, current model won 1 of 5 games
-[2023-11-24 23:59:48,435] Avg. win rate of current model: 42.86%
-[2023-11-24 23:59:48,435] Loaded existing model at ./models_wzero/epoch_240.h5
-[2023-11-25 00:01:23,972] As 1st player, current model won 3 of 3 games
-[2023-11-25 00:01:23,972] As 2nd player, current model won 1 of 4 games
-[2023-11-25 00:01:23,972] Avg. win rate of current model: 57.14%
-[2023-11-25 00:01:23,973] Loaded existing model at ./models_wzero/epoch_250.h5
-[2023-11-25 00:02:14,887] As 1st player, current model won 1 of 1 games
-[2023-11-25 00:02:14,887] As 2nd player, current model won 0 of 6 games
-[2023-11-25 00:02:14,887] Avg. win rate of current model: 14.29%
-[2023-11-25 00:02:14,888] Loaded existing model at ./models_wzero/epoch_260.h5
-[2023-11-25 00:04:02,664] As 1st player, current model won 5 of 5 games
-[2023-11-25 00:04:02,664] As 2nd player, current model won 0 of 2 games
-[2023-11-25 00:04:02,664] Avg. win rate of current model: 71.43%
-[2023-11-25 00:04:02,664] Loaded existing model at ./models_wzero/epoch_270.h5
-[2023-11-25 00:05:32,495] As 1st player, current model won 5 of 5 games
-[2023-11-25 00:05:32,495] As 2nd player, current model won 0 of 2 games
-[2023-11-25 00:05:32,495] Avg. win rate of current model: 71.43%
-[2023-11-25 00:05:32,496] Loaded existing model at ./models_wzero/epoch_280.h5
-[2023-11-25 00:07:25,239] As 1st player, current model won 4 of 4 games
-[2023-11-25 00:07:25,240] As 2nd player, current model won 0 of 3 games
-[2023-11-25 00:07:25,240] Avg. win rate of current model: 57.14%
-[2023-11-25 00:07:25,240] Loaded existing model at ./models_wzero/epoch_290.h5
-[2023-11-25 00:08:47,641] As 1st player, current model won 4 of 4 games
-[2023-11-25 00:08:47,641] As 2nd player, current model won 0 of 3 games
-[2023-11-25 00:08:47,641] Avg. win rate of current model: 57.14%
-[2023-11-25 00:08:47,642] Loaded existing model at ./models_wzero/epoch_300.h5
-[2023-11-25 00:10:02,192] As 1st player, current model won 3 of 4 games
-[2023-11-25 00:10:02,193] As 2nd player, current model won 0 of 3 games
-[2023-11-25 00:10:02,193] Avg. win rate of current model: 42.86%
-[2023-11-25 00:10:02,193] Loaded existing model at ./models_wzero/epoch_310.h5
-[2023-11-25 00:11:26,993] As 1st player, current model won 3 of 3 games
-[2023-11-25 00:11:26,993] As 2nd player, current model won 0 of 4 games
-[2023-11-25 00:11:26,993] Avg. win rate of current model: 42.86%
-[2023-11-25 00:11:26,993] Loaded existing model at ./models_wzero/epoch_320.h5
-[2023-11-25 00:12:31,163] As 1st player, current model won 5 of 5 games
-[2023-11-25 00:12:31,163] As 2nd player, current model won 0 of 2 games
-[2023-11-25 00:12:31,163] Avg. win rate of current model: 71.43%
-[2023-11-25 00:12:31,163] Loaded existing model at ./models_wzero/epoch_330.h5
-[2023-11-25 00:14:09,660] As 1st player, current model won 5 of 5 games
-[2023-11-25 00:14:09,661] As 2nd player, current model won 0 of 2 games
-[2023-11-25 00:14:09,661] Avg. win rate of current model: 71.43%
-[2023-11-25 00:14:09,661] Loaded existing model at ./models_wzero/epoch_340.h5
-[2023-11-25 00:15:24,601] As 1st player, current model won 1 of 1 games
-[2023-11-25 00:15:24,601] As 2nd player, current model won 0 of 6 games
-[2023-11-25 00:15:24,601] Avg. win rate of current model: 14.29%
-[2023-11-25 00:15:24,602] Loaded existing model at ./models_wzero/epoch_350.h5
-[2023-11-25 00:16:43,222] As 1st player, current model won 2 of 2 games
-[2023-11-25 00:16:43,222] As 2nd player, current model won 0 of 5 games
-[2023-11-25 00:16:43,222] Avg. win rate of current model: 28.57%
-[2023-11-25 00:16:43,222] Loaded existing model at ./models_wzero/epoch_360.h5
-[2023-11-25 00:18:07,200] As 1st player, current model won 3 of 3 games
-[2023-11-25 00:18:07,200] As 2nd player, current model won 1 of 4 games
-[2023-11-25 00:18:07,200] Avg. win rate of current model: 57.14%
-[2023-11-25 00:18:07,201] Loaded existing model at ./models_wzero/epoch_370.h5
-[2023-11-25 00:19:22,000] As 1st player, current model won 6 of 6 games
-[2023-11-25 00:19:22,000] As 2nd player, current model won 0 of 1 games
-[2023-11-25 00:19:22,000] Avg. win rate of current model: 85.71%
-[2023-11-25 00:19:22,001] Loaded existing model at ./models_wzero/epoch_380.h5
-[2023-11-25 00:21:10,649] As 1st player, current model won 3 of 3 games
-[2023-11-25 00:21:10,649] As 2nd player, current model won 1 of 4 games
-[2023-11-25 00:21:10,649] Avg. win rate of current model: 57.14%
-[2023-11-25 00:21:10,649] Loaded existing model at ./models_wzero/epoch_390.h5
-[2023-11-25 00:22:54,838] As 1st player, current model won 3 of 3 games
-[2023-11-25 00:22:54,838] As 2nd player, current model won 1 of 4 games
-[2023-11-25 00:22:54,838] Avg. win rate of current model: 57.14%
+[2023-11-25 10:07:11,336] Loaded existing model at ./models_wzero/best.h5
+[2023-11-25 10:07:11,337] Loaded existing model at ./models_wzero/epoch_10.h5
+[2023-11-25 10:08:07,184] As 1st player, current model won 3 of 3 games
+[2023-11-25 10:08:07,184] As 2nd player, current model won 3 of 4 games
+[2023-11-25 10:08:07,184] Avg. win rate of current model: 85.71%
+[2023-11-25 10:08:07,187] Loaded existing model at ./models_wzero/epoch_20.h5
+[2023-11-25 10:09:07,075] As 1st player, current model won 3 of 3 games
+[2023-11-25 10:09:07,075] As 2nd player, current model won 4 of 4 games
+[2023-11-25 10:09:07,075] Avg. win rate of current model: 100.00%
+[2023-11-25 10:09:07,077] Loaded existing model at ./models_wzero/epoch_30.h5
+[2023-11-25 10:10:19,363] As 1st player, current model won 2 of 3 games
+[2023-11-25 10:10:19,363] As 2nd player, current model won 3 of 4 games
+[2023-11-25 10:10:19,363] Avg. win rate of current model: 71.43%
+[2023-11-25 10:10:19,365] Loaded existing model at ./models_wzero/epoch_40.h5
+[2023-11-25 10:11:35,983] As 1st player, current model won 1 of 1 games
+[2023-11-25 10:11:35,983] As 2nd player, current model won 4 of 6 games
+[2023-11-25 10:11:35,983] Avg. win rate of current model: 71.43%
+[2023-11-25 10:11:35,985] Loaded existing model at ./models_wzero/epoch_50.h5
+[2023-11-25 10:12:58,683] As 1st player, current model won 3 of 3 games
+[2023-11-25 10:12:58,683] As 2nd player, current model won 3 of 4 games
+[2023-11-25 10:12:58,683] Avg. win rate of current model: 85.71%
+[2023-11-25 10:12:58,684] Loaded existing model at ./models_wzero/epoch_60.h5
+[2023-11-25 10:13:45,672] As 1st player, current model won 3 of 3 games
+[2023-11-25 10:13:45,672] As 2nd player, current model won 1 of 4 games
+[2023-11-25 10:13:45,672] Avg. win rate of current model: 57.14%
+[2023-11-25 10:13:45,674] Loaded existing model at ./models_wzero/epoch_70.h5
+[2023-11-25 10:14:35,238] As 1st player, current model won 2 of 3 games
+[2023-11-25 10:14:35,239] As 2nd player, current model won 2 of 4 games
+[2023-11-25 10:14:35,239] Avg. win rate of current model: 57.14%
+[2023-11-25 10:14:35,240] Loaded existing model at ./models_wzero/epoch_80.h5
+[2023-11-25 10:15:31,347] As 1st player, current model won 3 of 3 games
+[2023-11-25 10:15:31,347] As 2nd player, current model won 2 of 4 games
+[2023-11-25 10:15:31,347] Avg. win rate of current model: 71.43%
+[2023-11-25 10:15:31,348] Loaded existing model at ./models_wzero/epoch_90.h5
+[2023-11-25 10:16:53,323] As 1st player, current model won 2 of 2 games
+[2023-11-25 10:16:53,323] As 2nd player, current model won 5 of 5 games
+[2023-11-25 10:16:53,323] Avg. win rate of current model: 100.00%
+[2023-11-25 10:16:53,325] Loaded existing model at ./models_wzero/epoch_100.h5
+[2023-11-25 10:18:40,355] As 1st player, current model won 3 of 3 games
+[2023-11-25 10:18:40,355] As 2nd player, current model won 3 of 4 games
+[2023-11-25 10:18:40,355] Avg. win rate of current model: 85.71%
+[2023-11-25 10:18:40,357] Loaded existing model at ./models_wzero/epoch_110.h5
+[2023-11-25 10:19:54,792] As 1st player, current model won 1 of 3 games
+[2023-11-25 10:19:54,792] As 2nd player, current model won 3 of 4 games
+[2023-11-25 10:19:54,792] Avg. win rate of current model: 57.14%
+[2023-11-25 10:19:54,794] Loaded existing model at ./models_wzero/epoch_120.h5
+[2023-11-25 10:20:46,802] As 1st player, current model won 3 of 4 games
+[2023-11-25 10:20:46,802] As 2nd player, current model won 0 of 3 games
+[2023-11-25 10:20:46,802] Avg. win rate of current model: 42.86%
+[2023-11-25 10:20:46,804] Loaded existing model at ./models_wzero/epoch_130.h5
+[2023-11-25 10:22:00,094] As 1st player, current model won 3 of 3 games
+[2023-11-25 10:22:00,094] As 2nd player, current model won 2 of 4 games
+[2023-11-25 10:22:00,094] Avg. win rate of current model: 71.43%
+[2023-11-25 10:22:00,096] Loaded existing model at ./models_wzero/epoch_140.h5
+[2023-11-25 10:22:49,289] As 1st player, current model won 1 of 3 games
+[2023-11-25 10:22:49,289] As 2nd player, current model won 3 of 4 games
+[2023-11-25 10:22:49,289] Avg. win rate of current model: 57.14%
+[2023-11-25 10:22:49,290] Loaded existing model at ./models_wzero/epoch_150.h5
+[2023-11-25 10:23:46,837] As 1st player, current model won 2 of 3 games
+[2023-11-25 10:23:46,837] As 2nd player, current model won 3 of 4 games
+[2023-11-25 10:23:46,837] Avg. win rate of current model: 71.43%
+[2023-11-25 10:23:46,839] Loaded existing model at ./models_wzero/epoch_160.h5
+[2023-11-25 10:24:58,296] As 1st player, current model won 3 of 5 games
+[2023-11-25 10:24:58,296] As 2nd player, current model won 2 of 2 games
+[2023-11-25 10:24:58,296] Avg. win rate of current model: 71.43%
+[2023-11-25 10:24:58,297] Loaded existing model at ./models_wzero/epoch_170.h5
+[2023-11-25 10:26:08,767] As 1st player, current model won 2 of 4 games
+[2023-11-25 10:26:08,767] As 2nd player, current model won 3 of 3 games
+[2023-11-25 10:26:08,767] Avg. win rate of current model: 71.43%
+[2023-11-25 10:26:08,768] Loaded existing model at ./models_wzero/epoch_180.h5
+[2023-11-25 10:27:34,122] As 1st player, current model won 5 of 5 games
+[2023-11-25 10:27:34,123] As 2nd player, current model won 1 of 2 games
+[2023-11-25 10:27:34,123] Avg. win rate of current model: 85.71%
+[2023-11-25 10:27:34,125] Loaded existing model at ./models_wzero/epoch_190.h5
+[2023-11-25 10:28:58,118] As 1st player, current model won 3 of 3 games
+[2023-11-25 10:28:58,118] As 2nd player, current model won 2 of 4 games
+[2023-11-25 10:28:58,119] Avg. win rate of current model: 71.43%
+[2023-11-25 10:28:58,120] Loaded existing model at ./models_wzero/epoch_200.h5
+[2023-11-25 10:30:24,115] As 1st player, current model won 1 of 3 games
+[2023-11-25 10:30:24,115] As 2nd player, current model won 2 of 4 games
+[2023-11-25 10:30:24,115] Avg. win rate of current model: 42.86%
+[2023-11-25 10:30:24,117] Loaded existing model at ./models_wzero/epoch_210.h5
+[2023-11-25 10:31:39,787] As 1st player, current model won 1 of 1 games
+[2023-11-25 10:31:39,787] As 2nd player, current model won 4 of 6 games
+[2023-11-25 10:31:39,787] Avg. win rate of current model: 71.43%
+[2023-11-25 10:31:39,789] Loaded existing model at ./models_wzero/epoch_220.h5
+[2023-11-25 10:32:40,406] As 1st player, current model won 2 of 3 games
+[2023-11-25 10:32:40,406] As 2nd player, current model won 0 of 4 games
+[2023-11-25 10:32:40,406] Avg. win rate of current model: 28.57%
+[2023-11-25 10:32:40,407] Loaded existing model at ./models_wzero/epoch_230.h5
+[2023-11-25 10:33:46,948] As 1st player, current model won 3 of 3 games
+[2023-11-25 10:33:46,948] As 2nd player, current model won 3 of 4 games
+[2023-11-25 10:33:46,948] Avg. win rate of current model: 85.71%
+[2023-11-25 10:33:46,950] Loaded existing model at ./models_wzero/epoch_240.h5
+[2023-11-25 10:34:45,363] As 1st player, current model won 5 of 5 games
+[2023-11-25 10:34:45,364] As 2nd player, current model won 1 of 2 games
+[2023-11-25 10:34:45,364] Avg. win rate of current model: 85.71%
+[2023-11-25 10:34:45,365] Loaded existing model at ./models_wzero/epoch_250.h5
+[2023-11-25 10:35:56,259] As 1st player, current model won 2 of 2 games
+[2023-11-25 10:35:56,259] As 2nd player, current model won 2 of 5 games
+[2023-11-25 10:35:56,259] Avg. win rate of current model: 57.14%
+[2023-11-25 10:35:56,261] Loaded existing model at ./models_wzero/epoch_260.h5
+[2023-11-25 10:37:22,966] As 1st player, current model won 1 of 3 games
+[2023-11-25 10:37:22,966] As 2nd player, current model won 1 of 4 games
+[2023-11-25 10:37:22,966] Avg. win rate of current model: 28.57%
+[2023-11-25 10:37:22,968] Loaded existing model at ./models_wzero/epoch_270.h5
+[2023-11-25 10:38:23,984] As 1st player, current model won 2 of 2 games
+[2023-11-25 10:38:23,984] As 2nd player, current model won 3 of 5 games
+[2023-11-25 10:38:23,984] Avg. win rate of current model: 71.43%
+[2023-11-25 10:38:23,986] Loaded existing model at ./models_wzero/epoch_280.h5
+[2023-11-25 10:39:53,908] As 1st player, current model won 3 of 6 games
+[2023-11-25 10:39:53,908] As 2nd player, current model won 0 of 1 games
+[2023-11-25 10:39:53,908] Avg. win rate of current model: 42.86%
+[2023-11-25 10:39:53,910] Loaded existing model at ./models_wzero/epoch_290.h5
+[2023-11-25 10:40:58,701] As 1st player, current model won 1 of 1 games
+[2023-11-25 10:40:58,702] As 2nd player, current model won 1 of 6 games
+[2023-11-25 10:40:58,702] Avg. win rate of current model: 28.57%
+[2023-11-25 10:40:58,703] Loaded existing model at ./models_wzero/epoch_300.h5
+[2023-11-25 10:41:49,971] As 1st player, current model won 0 of 2 games
+[2023-11-25 10:41:49,971] As 2nd player, current model won 3 of 5 games
+[2023-11-25 10:41:49,971] Avg. win rate of current model: 42.86%
+[2023-11-25 10:41:49,974] Loaded existing model at ./models_wzero/epoch_310.h5
+[2023-11-25 10:42:46,992] As 1st player, current model won 1 of 3 games
+[2023-11-25 10:42:46,992] As 2nd player, current model won 4 of 4 games
+[2023-11-25 10:42:46,992] Avg. win rate of current model: 71.43%
+[2023-11-25 10:42:46,994] Loaded existing model at ./models_wzero/epoch_320.h5
+[2023-11-25 10:43:57,522] As 1st player, current model won 2 of 6 games
+[2023-11-25 10:43:57,523] As 2nd player, current model won 0 of 1 games
+[2023-11-25 10:43:57,523] Avg. win rate of current model: 28.57%
+[2023-11-25 10:43:57,524] Loaded existing model at ./models_wzero/epoch_330.h5
+[2023-11-25 10:45:41,498] As 1st player, current model won 6 of 6 games
+[2023-11-25 10:45:41,499] As 2nd player, current model won 0 of 1 games
+[2023-11-25 10:45:41,499] Avg. win rate of current model: 85.71%
+[2023-11-25 10:45:41,500] Loaded existing model at ./models_wzero/epoch_340.h5
+[2023-11-25 10:46:44,864] As 1st player, current model won 2 of 3 games
+[2023-11-25 10:46:44,864] As 2nd player, current model won 2 of 4 games
+[2023-11-25 10:46:44,864] Avg. win rate of current model: 57.14%
+[2023-11-25 10:46:44,865] Loaded existing model at ./models_wzero/epoch_350.h5
+[2023-11-25 10:47:55,353] As 1st player, current model won 3 of 6 games
+[2023-11-25 10:47:55,353] As 2nd player, current model won 0 of 1 games
+[2023-11-25 10:47:55,353] Avg. win rate of current model: 42.86%
+[2023-11-25 10:47:55,354] Loaded existing model at ./models_wzero/epoch_360.h5
+[2023-11-25 10:49:01,776] As 1st player, current model won 1 of 4 games
+[2023-11-25 10:49:01,776] As 2nd player, current model won 2 of 3 games
+[2023-11-25 10:49:01,776] Avg. win rate of current model: 42.86%
+[2023-11-25 10:49:01,778] Loaded existing model at ./models_wzero/epoch_370.h5
+[2023-11-25 10:50:52,790] As 1st player, current model won 3 of 4 games
+[2023-11-25 10:50:52,791] As 2nd player, current model won 2 of 3 games
+[2023-11-25 10:50:52,791] Avg. win rate of current model: 71.43%
+[2023-11-25 10:50:52,793] Loaded existing model at ./models_wzero/epoch_380.h5
+[2023-11-25 10:52:18,270] As 1st player, current model won 3 of 4 games
+[2023-11-25 10:52:18,270] As 2nd player, current model won 2 of 3 games
+[2023-11-25 10:52:18,270] Avg. win rate of current model: 71.43%
+[2023-11-25 10:52:18,272] Loaded existing model at ./models_wzero/epoch_390.h5
+[2023-11-25 10:53:30,489] As 1st player, current model won 1 of 3 games
+[2023-11-25 10:53:30,489] As 2nd player, current model won 2 of 4 games
+[2023-11-25 10:53:30,490] Avg. win rate of current model: 42.86%

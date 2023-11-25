@@ -163,30 +163,30 @@ class ValueNetwork(ShallowNN):
             K = state.K
         )
         
-        history = [state.copy(include_history=True)]
+        history = [state.copy()]
         if np.random.random() < 0.5:
             action = zero_player.next_move(state)
             state.play(action)
-            history += [state.copy(include_history=True)]
+            history += [state.copy()]
             
         while not state.fin():
             action = policy_network.forward(state, self)
             state.play(action)                
-            history += [state.copy(include_history=True)]
+            history += [state.copy()]
             if state.fin():
                 break
             action = zero_player.next_move(state)
             state.play(action)
-            history += [state.copy(include_history=True)]
+            history += [state.copy()]
         
         return self.train_body(history)
     
     def train(self, state: Gomoku, policy_network):
-        history = [state.copy(include_history=True)]
+        history = [state.copy()]
         while not state.fin():
             action = policy_network.forward(state, self)
             state.play(action)
-            history += [state.copy(include_history=True)]
+            history += [state.copy()]
             
         return self.train_body(history)
     
@@ -236,7 +236,7 @@ class UCT_ADP_Player(UCT_Player):
         self.sim_policy = PolicyNetwork(epsilon=epsilon)
     
     def simulate(self, node: Node) -> float:
-        state = node.state.copy(include_history=True)
+        state = node.state.copy()
         for _ in range(self.max_depth):
             if state.fin():
                 break

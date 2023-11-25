@@ -54,7 +54,7 @@ def uct_pb_score(parent: Node, child: Node, **kwargs) -> float:
 
 class Tree:
     def __init__(self, state: Game, **kwargs):
-        state = state.copy()
+        state = state.copy_state()
         self.root = Node(state)
         self.only_adjacents = kwargs.get('only_adjacents', False)
         self.decay = kwargs.get('decay', 0.9)
@@ -81,7 +81,7 @@ class Tree:
             ))
             if len(adjacent_filtered_actions):
                 action = adjacent_filtered_actions[np.random.randint(0, len(adjacent_filtered_actions))]
-                new_state = node.state.copy(include_history=True)
+                new_state = node.state.copy()
                 new_state.play(action)
                 new_node = Node(new_state, parent=node)
                 node.children.append(new_node)
@@ -97,14 +97,14 @@ class Tree:
             raise Exception("No action")
         
         action = actions[np.random.randint(0, len(actions))]
-        new_state = node.state.copy(include_history=True)
+        new_state = node.state.copy()
         new_state.play(action)
         new_node = Node(new_state, parent=node)
         node.children.append(new_node)
         return new_node
 
     def simulate(self, node: Node) -> float:
-        state = node.state.copy(include_history=True)
+        state = node.state.copy()
         while not state.fin():
             state_actions = state.actions()
             if not len(state_actions):
@@ -116,5 +116,6 @@ class Tree:
     def backpropagate(self, node: Node, reward: float):
         while node is not None:
             node.n += 1
-            node.Q += self.decay * reward
+            node.Q += reward
             node = node.parent
+            reward *= self.decay

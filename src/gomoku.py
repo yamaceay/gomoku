@@ -24,12 +24,14 @@ class Gomoku:
             self.adjacents = set(self.adjacents)
             self.history = [tuple(move) for move in self.history]
     
-    def copy(self, include_history=False):
-        new_game = Gomoku(**self.__dict__)
-        if not include_history:
-            new_game.history = []
-            new_game.FIRST_PLAYER = new_game.player
+    def copy_state(self):
+        new_game = self.copy()
+        new_game.history = []
+        new_game.FIRST_PLAYER = new_game.player
         return new_game
+    
+    def copy(self):
+        return Gomoku(**self.__dict__)
     
     def play(self, *moves: tuple[int, int]) -> tuple[float, bool]:
         if not len(moves):

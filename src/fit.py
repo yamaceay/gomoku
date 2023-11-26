@@ -98,7 +98,7 @@ def train_adp(
             #     )
 
 if __name__ == "__main__":
-    start, end, step = 400, 500, 10
+    start, end, step = 50, 1000, 50
     train_instead_of_test = False
     
     game_kwargs = {

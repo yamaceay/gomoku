@@ -1,30 +1,13 @@
 from .gomoku import Gomoku
 from .mcts import Tree, Node, uct_score
 import numpy as np
-import threading
+import signal
 
 class TimeoutError(Exception):
     pass
 
-def timeout(seconds):
-    def decorator(function):
-        def wrapper(*args, **kwargs):
-            stop_thread = threading.Event()
-            result = None
-            def function_with_stop_check(*args, **kwargs):
-                nonlocal result
-                while not stop_thread.is_set():
-                    result = function(*args, **kwargs)
-            thread = threading.Thread(target=function_with_stop_check, args=args, kwargs=kwargs)
-            thread.start()
-            thread.join(timeout=seconds)
-            if thread.is_alive():
-                stop_thread.set()
-                raise TimeoutError
-            return result
-        return wrapper
-    return decorator
-
+def timeout_handler(signum, frame):
+    raise TimeoutError
 class Player:
     def next_move(self, game: Gomoku) -> tuple[int, int]:
         raise NotImplementedError
@@ -49,17 +32,16 @@ class UCT_Player(Player):
     def next_move(self, game: Gomoku):
         self.tree = Tree(game, **self.tree_kwargs)
         
-        @timeout(self.timeout_ms / 1000)
-        def iterate():
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(self.timeout_ms // 1000)  # alarm is set with seconds
+        
+        try:
             for _ in range(self.iterations):
                 node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
                 value = self.simulate(node)
                 self.tree.backpropagate(node, value)
-                
-        try:
-            iterate()
-        except TimeoutError as e:
-            print(e)
+        except TimeoutError:
+            pass
         
         best_child = max(self.tree.root.children, key=lambda child: child.Q)
         return best_child.state.history[-1]

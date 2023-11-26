@@ -1,6 +1,7 @@
 import os
+import signal
 import numpy as np
-from .players import Player, UCT_Player, Node, Tree, timeout
+from .players import Player, UCT_Player, Node, Tree, timeout_handler
 import torch
 from .gomoku import Gomoku
 from .patterns import PB_DICT, lti
@@ -228,12 +229,11 @@ class ADP_Player(Player):
         return self.policy_network.forward(game, self.value_network)
   
 class UCT_ADP_Player(UCT_Player):
-    def __init__(self, max_depth=10, model=None, epsilon=.0, **kwargs):
+    def __init__(self, max_depth=10, model=None, **kwargs):
         super(UCT_ADP_Player, self).__init__(**kwargs)
     
         self.max_depth = max_depth
-        self.model: ValueNetwork = model
-        self.sim_policy = PolicyNetwork(epsilon=epsilon)
+        self.model: ADP_Player = model
     
     def simulate(self, node: Node) -> float:
         state = node.state.copy()
@@ -241,13 +241,14 @@ class UCT_ADP_Player(UCT_Player):
             if state.fin():
                 break
             
-            action = self.sim_policy.forward(state, self.model)
+            action = self.model.next_move(state)
             state.play(action)
             
         if state.fin():
             return state.score()
         
         value = self.model.\
+            value_network.\
             forward(state).\
             cpu().\
             detach().\
@@ -258,17 +259,16 @@ class UCT_ADP_Player(UCT_Player):
     def next_move(self, game: Gomoku):
         self.tree = Tree(game, **self.tree_kwargs)
         
-        @timeout(self.timeout_ms / 1000)
-        def iterate():
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(self.timeout_ms // 1000)  # alarm is set with seconds
+        
+        try:
             for _ in range(self.iterations):
                 node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
                 value = self.simulate(node)
                 self.tree.backpropagate(node, value)
-                
-        try:
-            iterate()
-        except TimeoutError as e:
-            print(e)
+        except TimeoutError:
+            pass
         
         best_child = max(self.tree.root.children, key=lambda child: child.Q)
         return best_child.state.history[-1]

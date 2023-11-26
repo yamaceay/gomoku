@@ -26,7 +26,7 @@ if __name__ == '__main__':
         'epsilon': 0.1,
     }
     
-    model_path = "models_wzero/best.h5"
+    model_path = "models_wzlen/best.h5"
     
     adp = ADP_Player(model_path=model_path, value_network_kwargs=value_network_kwargs, policy_network_kwargs=policy_network_kwargs)
     zero = AlphaZeroPlayer(**game_kwargs)
@@ -36,9 +36,10 @@ if __name__ == '__main__':
     while not game.fin():
         value_network = ValueNetwork(model_path=model_path, **value_network_kwargs)
         rewards_actions = get_rewards_actions(game, value_network)
-        (max_reward, argmax_reward), (min_reward, argmin_reward) = rewards_actions[0], rewards_actions[-1]
-        print("max_reward: %s, argmax_reward: %s" % (max_reward, argmax_reward))
-        print("min_reward: %s, argmin_reward: %s" % (min_reward, argmin_reward))
+        # (max_reward, argmax_reward), (min_reward, argmin_reward) = rewards_actions[0], rewards_actions[-1]
+        # print("max_reward: %s, argmax_reward: %s" % (max_reward, argmax_reward))
+        # print("min_reward: %s, argmin_reward: %s" % (min_reward, argmin_reward))
+        print("rewards_actions: %s" % rewards_actions)
         move = adp.next_move(game)
         game.play(move)
         game.print()

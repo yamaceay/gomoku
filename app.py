@@ -38,7 +38,7 @@ player: Player = None
 
 players = {
     '_RANDOM': RandomPlayer(),
-    '_ADP': ADP_Player(value_network_kwargs, policy_network_kwargs),
+    '_ADP': ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs),
     '_ALPHAZERO': AlphaZeroPlayer(**game_kwargs),
     # '_UCT_UCB': UCT_Player(timeout_ms=5000, policy=policies["uct_score"]),
     # '_UCT_UCB_ADJ': UCT_Player(timeout_ms=5000, policy=policies["uct_score"], tree_kwargs={"only_adjacents": True}),

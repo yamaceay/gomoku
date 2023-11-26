@@ -1,12 +1,11 @@
 import numpy as np
-from typing import TypeVar
 from .patterns import PB_DICT, lti
+from .gomoku import Gomoku
 
-Game = TypeVar('Game')
 
 class Node:
-    def __init__(self, state: Game, parent=None):
-        self.state: Game = state
+    def __init__(self, state: Gomoku, parent=None):
+        self.state: Gomoku = state
         self.parent: Node = parent
         self.children: list[Node] = []
         self.n: int = 0
@@ -53,7 +52,7 @@ def uct_pb_score(parent: Node, child: Node, **kwargs) -> float:
     return ucb + C_PB * pbs
 
 class Tree:
-    def __init__(self, state: Game, **kwargs):
+    def __init__(self, state: Gomoku, **kwargs):
         state = state.copy_state()
         self.root = Node(state)
         self.only_adjacents = kwargs.get('only_adjacents', False)

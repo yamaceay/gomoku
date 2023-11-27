@@ -283,7 +283,7 @@ class Gomoku:
         return self.winner or self.no_move()
 
     def no_move(self) -> bool:
-        return np.prod(self.board) != 0
+        return bool(np.prod(self.board) != 0)
 
     def step(self, move: tuple[int, int]):
         x, y = move
@@ -319,6 +319,11 @@ class Gomoku:
     def is_legal(self, move: tuple[int, int]) -> bool:
         x, y = move
         return 0 <= x < self.M and 0 <= y < self.N and self.board[x, y] == 0
+
+    def get_history(self):
+        if not len(self.history):
+            return []
+        return list(loc_to_move(self.history, one=False))
 
     @property
     def directions(self) -> list[tuple[int, int]]:

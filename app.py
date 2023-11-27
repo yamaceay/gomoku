@@ -1,8 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from src import Gomoku, \
     Player, RandomPlayer, ADP_Player, \
-    AlphaZeroPlayer, \
-    ValueNetwork, PolicyNetwork
+    AlphaZeroPlayer
     # UCT_Player, UCT_ADP_Player, \
     # pb_score, uct_pb_score, uct_score, \
 

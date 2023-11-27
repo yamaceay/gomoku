@@ -1,0 +1,79 @@
+[2023-11-27 23:57:36,363] File ./models_wzlen/best.h5 does not exist
+[2023-11-27 23:57:53,784] Epoch 1, Loss 5.491098403930664
+[2023-11-27 23:58:03,934] Epoch 2, Loss 5.164407730102539
+[2023-11-27 23:58:21,253] Epoch 3, Loss 17.970497131347656
+[2023-11-27 23:58:31,333] Epoch 4, Loss 2.481419563293457
+[2023-11-27 23:58:51,648] Epoch 5, Loss 0.7541022300720215
+[2023-11-27 23:59:02,980] Epoch 6, Loss 0.6457951068878174
+[2023-11-27 23:59:21,820] Epoch 7, Loss 3.2898385524749756
+[2023-11-27 23:59:35,126] Epoch 8, Loss 17.185043334960938
+[2023-11-27 23:59:48,729] Epoch 9, Loss 17.22625160217285
+[2023-11-28 00:00:02,457] Epoch 10, Loss 1.18132746219635
+[2023-11-28 00:00:02,459] Saved model at ./models_wzlen/epoch_10.h5
+[2023-11-28 00:00:02,461] Loaded existing model at ./models_wzlen/epoch_10.h5
+[2023-11-28 00:01:09,527] File ./models_wzlen/best.h5 does not exist
+[2023-11-28 00:01:09,533] Loaded existing model at ./models_wzlen/epoch_10.h5
+[2023-11-28 00:02:57,917] Saved model at ./models_wzlen/best.h5
+[2023-11-28 00:02:57,917] ./models_wzlen/epoch_10.h5 is saved as the strongest model
+[2023-11-28 00:12:05,286] Loaded existing model at ./models_wzlen/best.h5
+[2023-11-28 00:12:05,293] Loaded existing model at ./models_wzlen/epoch_10.h5
+[2023-11-28 00:13:59,095] Saved model at ./models_wzlen/best.h5
+[2023-11-28 00:13:59,095] ./models_wzlen/epoch_10.h5 is saved as the strongest model
+[2023-11-28 00:13:59,096] File ./models_wzlen/epoch_20.h5 does not exist
+[2023-11-28 00:14:26,137] Loaded existing model at ./models_wzlen/best.h5
+[2023-11-28 00:14:42,792] Epoch 11, Loss 1.6210248470306396
+[2023-11-28 00:14:52,348] Epoch 12, Loss 0.06412071734666824
+[2023-11-28 00:15:02,233] Epoch 13, Loss 13.850227355957031
+[2023-11-28 00:15:16,916] Epoch 14, Loss 7.007524490356445
+[2023-11-28 00:15:41,484] Epoch 15, Loss 4.107148170471191
+[2023-11-28 00:15:53,872] Epoch 16, Loss 0.7565510869026184
+[2023-11-28 00:16:10,281] Epoch 17, Loss 0.17927631735801697
+[2023-11-28 00:16:25,766] Epoch 18, Loss 0.23767004907131195
+[2023-11-28 00:16:47,584] Epoch 19, Loss 10.046243667602539
+[2023-11-28 00:16:57,266] Epoch 20, Loss 0.05300848186016083
+[2023-11-28 00:16:57,267] Saved model at ./models_wzlen/epoch_20.h5
+[2023-11-28 00:16:57,268] Loaded existing model at ./models_wzlen/epoch_20.h5
+[2023-11-28 00:19:20,022] Saved model at ./models_wzlen/best.h5
+[2023-11-28 00:19:20,022] ./models_wzlen/epoch_20.h5 is saved as the strongest model
+[2023-11-28 00:19:29,913] Epoch 21, Loss 0.03955342620611191
+[2023-11-28 00:19:41,901] Epoch 22, Loss 3.279048204421997
+[2023-11-28 00:19:51,560] Epoch 23, Loss 2.4295456409454346
+[2023-11-28 00:20:07,610] Epoch 24, Loss 0.0414140559732914
+[2023-11-28 00:20:17,855] Epoch 25, Loss 0.2592109441757202
+[2023-11-28 00:20:33,548] Epoch 26, Loss 0.3592849671840668
+[2023-11-28 00:20:45,657] Epoch 27, Loss 18.27423858642578
+[2023-11-28 00:21:07,387] Epoch 28, Loss 0.41023731231689453
+[2023-11-28 00:21:17,615] Epoch 29, Loss 1.410702109336853
+[2023-11-28 00:21:31,330] Epoch 30, Loss 17.1990909576416
+[2023-11-28 00:21:31,332] Saved model at ./models_wzlen/epoch_30.h5
+[2023-11-28 00:21:31,334] Loaded existing model at ./models_wzlen/epoch_30.h5
+[2023-11-28 00:23:26,866] Loaded existing model at ./models_wzlen/epoch_20.h5
+[2023-11-28 00:23:26,866] ./models_wzlen/epoch_20.h5 is loaded as the strongest model
+[2023-11-28 00:23:36,846] Epoch 31, Loss 0.05465732142329216
+[2023-11-28 00:23:48,859] Epoch 32, Loss 1.1088430881500244
+[2023-11-28 00:24:18,745] Epoch 33, Loss 8.619820594787598
+[2023-11-28 00:24:48,619] Epoch 34, Loss 3.2241034507751465
+[2023-11-28 00:25:19,277] Epoch 35, Loss 8.643586158752441
+[2023-11-28 00:25:41,138] Epoch 36, Loss 9.14114761352539
+[2023-11-28 00:25:50,784] Epoch 37, Loss 0.6346098184585571
+[2023-11-28 00:26:00,392] Epoch 38, Loss 0.6030517220497131
+[2023-11-28 00:26:35,765] Epoch 39, Loss 21.200082778930664
+[2023-11-28 00:26:53,956] Epoch 40, Loss 9.949095726013184
+[2023-11-28 00:26:53,958] Saved model at ./models_wzlen/epoch_40.h5
+[2023-11-28 00:26:53,959] Loaded existing model at ./models_wzlen/epoch_40.h5
+[2023-11-28 00:28:37,216] Loaded existing model at ./models_wzlen/epoch_20.h5
+[2023-11-28 00:28:37,216] ./models_wzlen/epoch_20.h5 is loaded as the strongest model
+[2023-11-28 00:28:59,660] Epoch 41, Loss 8.622382164001465
+[2023-11-28 00:29:23,227] Epoch 42, Loss 7.87754487991333
+[2023-11-28 00:29:33,112] Epoch 43, Loss 0.08949980139732361
+[2023-11-28 00:29:45,264] Epoch 44, Loss 8.633597373962402
+[2023-11-28 00:29:55,280] Epoch 45, Loss 0.18549704551696777
+[2023-11-28 00:30:14,444] Epoch 46, Loss 0.28862687945365906
+[2023-11-28 00:30:25,774] Epoch 47, Loss 0.19934450089931488
+[2023-11-28 00:30:37,193] Epoch 48, Loss 1.2380539178848267
+[2023-11-28 00:30:47,773] Epoch 49, Loss 1.0570122003555298
+[2023-11-28 00:30:59,592] Epoch 50, Loss 17.26803207397461
+[2023-11-28 00:30:59,593] Saved model at ./models_wzlen/epoch_50.h5
+[2023-11-28 00:30:59,595] Loaded existing model at ./models_wzlen/epoch_50.h5
+[2023-11-28 00:32:21,177] Loaded existing model at ./models_wzlen/epoch_20.h5
+[2023-11-28 00:32:21,177] ./models_wzlen/epoch_20.h5 is loaded as the strongest model

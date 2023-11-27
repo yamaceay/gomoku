@@ -35,7 +35,7 @@ class AlphaZeroPlayer(Player):
         
     def next_move(self, game: Gomoku) -> tuple[int, int]:
         n_moves = len(self.board.states)
-        history = list(loc_to_move(game.history, one=False)) if len(game.history) else []
+        history = game.get_history()
         for location in history[n_moves:]:
             move = self.board.location_to_move(location)
             self.board.move(move)

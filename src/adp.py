@@ -111,9 +111,11 @@ class ValueNetwork(ShallowNN):
             for position in state.get_line_cache(length):
                 for direction in state.get_line_cache(length, position):
                     _, values = state.get_line_cache(length, position, direction)
-                    if state.player == -1 and values in WIN_ENCODE:
+                    if all(v == '-' for v in values):
+                        continue
+                    if values in WIN_ENCODE:
                         return {}, state.player
-                    if state.player == 1 and values in map(revp, WIN_ENCODE):
+                    if values in map(revp, WIN_ENCODE):
                         return {}, state.player
                     value_list[length] += [values]
         return value_list, None  

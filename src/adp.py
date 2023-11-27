@@ -4,7 +4,7 @@ import numpy as np
 from .players import Player, UCT_Player, Node, Tree, timeout_handler
 import torch
 from .gomoku import Gomoku
-from .patterns import PB_DICT, lti
+from .patterns import PB_DICT, WIN_ENCODE, revp
 from .zero import AlphaZeroPlayer
 import random
 import logging
@@ -85,9 +85,12 @@ class ValueNetwork(ShallowNN):
     def forward(self, state: Gomoku):
         if state.fin():
             reward = state.score()
-            return torch.FloatTensor([reward])
+            return torch.FloatTensor([reward]).to(device)
         
-        features = self.extract_features(state)
+        value_list, end_result = self.extract_values(state)
+        if end_result is not None:
+            return torch.FloatTensor([end_result]).to(device)
+        features = self.extract_features(state, value_list)
         return self.model(features)
     
     def opt(self, *states: list[Gomoku]):
@@ -101,31 +104,30 @@ class ValueNetwork(ShallowNN):
         loss_squared = loss ** 2
         return loss_squared
     
-    def extract_features(self, state: Gomoku):
-        all_indices = [(x, y) 
-            for x in range(state.M)
-            for y in range(state.N)
-        ]
-        
-        pattern_lengths = set([len(pattern) for pattern in PB_DICT])
-        value_list = {length: [] for length in pattern_lengths}
-        for dx, dy in state.directions:
-            for x, y in all_indices:
-                for length in pattern_lengths:
-                    values = state.get_line((x, y), (dx, dy), length)     
-                    if len(values):
-                        value_list[length] += [values]
-        
+    def extract_values(self, state: Gomoku):
+        assert len(state.line_cache), "Line cache is empty"
+        value_list = {len(pattern): [] for pattern in PB_DICT}
+        for length in state.get_line_cache():
+            for position in state.get_line_cache(length):
+                for direction in state.get_line_cache(length, position):
+                    _, values = state.get_line_cache(length, position, direction)
+                    if state.player == -1 and values in WIN_ENCODE:
+                        return {}, state.player
+                    if state.player == 1 and values in map(revp, WIN_ENCODE):
+                        return {}, state.player
+                    value_list[length] += [values]
+        return value_list, None  
+    
+    def extract_features(self, state: Gomoku, value_list: dict):        
         counts = []
-        for pattern in PB_DICT:
-            values = value_list[len(pattern)]
-            pattern_first = list(map(lti, pattern))
-            pattern_second = [-c for c in pattern_first]
+        for pattern_o in PB_DICT:
+            values = value_list[len(pattern_o)]
+            pattern_x = revp(pattern_o)
             first_count, second_count = 0, 0
             for value in values:
-                if all([v == p for v, p in zip(value, pattern_first)]):
+                if value == pattern_x:
                     first_count += 1
-                if all([v == p for v, p in zip(value, pattern_second)]):
+                if value == pattern_o:
                     second_count += 1
             counts += [first_count, second_count]
         

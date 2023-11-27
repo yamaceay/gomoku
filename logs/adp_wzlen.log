@@ -427,3 +427,4 @@
 [2023-11-26 23:11:27,537] Loaded existing model at ./models_wzlen/epoch_300.h5
 [2023-11-26 23:13:10,603] Loaded existing model at ./models_wzlen/epoch_190.h5
 [2023-11-26 23:13:10,603] ./models_wzlen/epoch_190.h5 is loaded as the strongest model
+[2023-11-27 16:09:27,641] Loaded existing model at ./models_wzlen/best.h5

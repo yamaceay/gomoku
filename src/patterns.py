@@ -33,3 +33,9 @@ PB_DICT = {
     'x-o-o-x': lambda decay: 100*decay**6,
     '--o--': lambda _: 1,
 }
+
+WIN_ENCODE = [
+    '-oooo',
+    'o-ooo',
+    'oo-oo',
+]

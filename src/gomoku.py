@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import copy
-from .patterns import PB_DICT
+from .patterns import PB_DICT, lti, itl
 import re
 # class GomokuSlow:
 #     def __init__(self, **kwargs):
@@ -189,22 +189,28 @@ import re
 #             output += " ".join(row) + "\n"
 #         print_fn(output)
     
-dtl = lambda x: 'x' if x == 1 else '-' if x == 0 else 'o'
-ltd = lambda x: 1 if x == 'x' else 0 if x == '-' else -1
 def dir_to_loc(*val: int):
-    return "".join(map(dtl, val))
+    return "".join(map(itl, val))
 def loc_to_dir(loc: str):
-    return tuple(map(ltd, list(loc)))
+    return tuple(map(lti, list(loc)))
 def move_to_loc(*moves: tuple[int, int]):
+    assert len(moves), "No move given"
     move_strs = []
     for move in moves:
-        move_strs += [f"{chr(ord('a') + move[0])}{move[1] + 1}"]
+        x_str = chr(ord('a') + move[0])
+        y_str = move[1] + 1
+        move_str = f"{x_str}{y_str}"
+        move_strs += [move_str]
     return ",".join(move_strs)
-def loc_to_move(locs: str):
+def loc_to_move(locs: str, one: bool = True):
+    assert len(locs), "No string given"
     moves = []
     for loc in locs.split(","):
-        moves += [(ord(loc[0]) - ord('a'), int(loc[1:]) - 1)]
-    if len(moves) == 1:
+        x = ord(loc[0]) - ord('a')
+        y = int(loc[1:]) - 1
+        move = (x, y)
+        moves += [move]
+    if one and len(moves) == 1:
         return moves[0]
     return tuple(moves)
 class Gomoku:
@@ -289,7 +295,12 @@ class Gomoku:
                     new_x, new_y = x + i * dx, y + i * dy
                     if not (0 <= new_x < self.M and 0 <= new_y < self.N):
                         continue
-                    self.get_line((new_x, new_y), (dx, dy), length)
+                    position, direction = (new_x, new_y), (dx, dy)
+                    indices, values = self.try_get_line(length, position, direction)
+                    if not len(indices) or all([v == 0 for v in values]):
+                        continue
+                    indices_loc, values_loc = move_to_loc(*indices), dir_to_loc(*values)
+                    self.update_line_cache(length, position, direction, indices_loc, values_loc)
         if self.ADJ:
             for (dx, dy) in self.directions:
                 for i in range(-self.ADJ, self.ADJ + 1):
@@ -311,10 +322,7 @@ class Gomoku:
 
     @property
     def directions(self) -> list[tuple[int, int]]:
-        return [
-            (0, 1), (1, 1), (1, 0), (1, -1), 
-            # (0, -1), (-1, -1), (-1, 0), (-1, 1)
-        ]
+        return [(0, 1), (1, 1), (1, 0), (1, -1)]
 
     def is_win(self, position: tuple[int, int]) -> bool:
         for direction in self.directions:
@@ -354,24 +362,27 @@ class Gomoku:
                         return indices_loc, values_loc
         return None
     
-    def get_line(self, position: tuple[int, int], direction: tuple[int, int], length: int) -> tuple[list[tuple[int, int]], list[int]]:
-        # cached_line = self.get_line_cache(length, position, direction)
-        # if cached_line is not None:
-        #     return loc_to_move(cached_line[0]), loc_to_dir(cached_line[1])
-        
+    def try_get_line(self, length: int, position: tuple[int, int], direction: tuple[int, int]) -> tuple[list[tuple[int, int]], list[int]]:
         x, y = position
         dx, dy = direction
         indices, values = [], []
+        bound = False
         for i in range(length):
             new_x, new_y = x + i * dx, y + i * dy
-            if not (0 <= new_x < self.M and 0 <= new_y < self.N):
-                return [], []
             indices += [(new_x, new_y)]
-            values += [self.board[new_x, new_y]]
-            
-        if len(values):
-            indices_loc, values_loc = move_to_loc(*indices), dir_to_loc(*values)
-            self.update_line_cache(length, position, direction, indices_loc, values_loc)
+            try:
+                if bound:
+                    return [], []
+                values += [self.board[new_x, new_y]]
+            except:
+                bound = True
+        return indices, values
+    
+    def get_line(self, length: int, position: tuple[int, int], direction: tuple[int, int]) -> tuple[list[tuple[int, int]], list[int]]:
+        indices, values = self.try_get_line(length, position, direction)
+        for (x, y) in indices:
+            if not (0 <= x < self.M and 0 <= y < self.N):
+                raise Exception("Out of bound: {}".format((x, y)))
         return indices, values
 
     def is_win_line(self, position: tuple[int, int], direction: tuple[int, int]) -> bool:
@@ -417,9 +428,10 @@ class Gomoku:
     
 if __name__ == "__main__":
     from .adp import ADP_Player
+    from .zero import AlphaZeroPlayer
     game_kwargs = {
-        'M': 10,
-        'N': 10,
+        'M': 8,
+        'N': 8,
         'K': 5,
         'ADJ': 2,
     }
@@ -438,12 +450,27 @@ if __name__ == "__main__":
     
     player = ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs)
     game = Gomoku(**game_kwargs)
+    zero = AlphaZeroPlayer(**game_kwargs)
+    
+    prev_features = None
     while not game.fin():
-        action = player.next_move(game)
-        value_list, _ = player.value_network.extract_values(game)
-        for values in value_list.values():
-            found_values = [value for value in values if value in PB_DICT]
-            print(found_values)
-        # print(player.value_network.extract_features(game, value_list))
+        action = zero.next_move(game)
         game.play(action)
+        # value_list, end = player.value_network.extract_values(game)
+        # if end is None:
+        #     features = player.value_network.extract_features(game, value_list)
+        #     if prev_features is not None:
+        #         for i in range(len(features) - 2):
+        #             if features[i] != prev_features[i]:
+        #                 print("[{}] {} -> {}".format(i, prev_features[i], features[i]))
+        #     prev_features = features 
         game.print()
+        # if game.fin():
+        #     break
+        # action = zero.next_move(game)
+        # game.play(action)
+        # value_list, end = player.value_network.extract_values(game)
+        # if end is None:
+        #     features = player.value_network.extract_features(game, value_list)
+        #     print(value_list, features)
+        # game.print()

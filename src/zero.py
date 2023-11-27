@@ -1,7 +1,7 @@
 from .game import Board
 from .mcts_alphaZero import MCTSPlayer as ZeroPlayer
 from .players import Player
-from .gomoku import Gomoku
+from .gomoku import Gomoku, loc_to_move
 from .policy_value_net_numpy import PolicyValueNetNumpy as PolicyValueNet
 import pickle
 import os
@@ -31,14 +31,12 @@ class AlphaZeroPlayer(Player):
         
         self.board = Board(width=M, height=N, n_in_row=K)
         self.start_player = int(FIRST_PLAYER != 1)
-        self.board.init_board(start_player=self.start_player)
+        self.restart()
         
     def next_move(self, game: Gomoku) -> tuple[int, int]:
         n_moves = len(self.board.states)
-        if n_moves > len(game.history):
-            self.board.init_board(self.start_player)
-            
-        for location in game.history[n_moves:]:
+        history = list(loc_to_move(game.history, one=False)) if len(game.history) else []
+        for location in history[n_moves:]:
             move = self.board.location_to_move(location)
             self.board.move(move)
             
@@ -47,8 +45,5 @@ class AlphaZeroPlayer(Player):
         new_move = (int(x), int(y))
         return new_move
     
-if __name__ == "__main__":
-    game_kwargs = dict(M=8, N=8, K=5, FIRST_PLAYER=1, ADJ=2)
-    game = Gomoku(**game_kwargs)
-    zero_player = AlphaZeroPlayer(**game_kwargs)
-    print(zero_player.next_move(game))
+    def restart(self):
+        self.board.init_board(start_player=self.start_player)

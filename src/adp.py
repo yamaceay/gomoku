@@ -111,12 +111,10 @@ class ValueNetwork(ShallowNN):
             for position in state.get_line_cache(length):
                 for direction in state.get_line_cache(length, position):
                     _, values = state.get_line_cache(length, position, direction)
-                    if all(v == '-' for v in values):
-                        continue
                     if values in WIN_ENCODE:
-                        return {}, state.player
+                        return {}, -1
                     if values in map(revp, WIN_ENCODE):
-                        return {}, state.player
+                        return {}, 1
                     value_list[length] += [values]
         return value_list, None  
     
@@ -127,10 +125,15 @@ class ValueNetwork(ShallowNN):
             pattern_x = revp(pattern_o)
             first_count, second_count = 0, 0
             for value in values:
-                if value == pattern_x:
-                    first_count += 1
-                if value == pattern_o:
-                    second_count += 1
+                len_diff = len(pattern_x) - len(value)
+                assert 0 <= len_diff <= 1, "Length difference of pattern vs. line: {}".format(len_diff)
+                add_bound = len_diff > 0
+                if value == pattern_x[:len(value)]:
+                    if not add_bound or pattern_x[len(value)] == 'o':
+                        first_count += 1
+                if value == pattern_o[:len(value)]:
+                    if not add_bound or pattern_o[len(value)] == 'x':
+                        second_count += 1
             counts += [first_count, second_count]
         
         to_bit = lambda c: int(c > 0)

@@ -202,7 +202,12 @@ def move_to_loc(*moves: tuple[int, int]):
         move_str = f"{x_str}{y_str}"
         move_strs += [move_str]
     return ",".join(move_strs)
-def loc_to_move(locs: str, one: bool = True):
+def loc_to_move_one(loc: str):
+    moves = loc_to_move(loc)
+    assert len(moves) == 1, "More than one move given"
+    return moves[0]
+
+def loc_to_move(locs: str):
     assert len(locs), "No string given"
     moves = []
     for loc in locs.split(","):
@@ -210,8 +215,6 @@ def loc_to_move(locs: str, one: bool = True):
         y = int(loc[1:]) - 1
         move = (x, y)
         moves += [move]
-    if one and len(moves) == 1:
-        return moves[0]
     return tuple(moves)
 class Gomoku:
     def __init__(self, **kwargs):
@@ -232,12 +235,6 @@ class Gomoku:
             self.board = copy.deepcopy(self.board)
             self.line_cache = copy.deepcopy(self.line_cache)
             self.adjacents = copy.deepcopy(self.adjacents)
-    
-    def copy_state(self):
-        new_game = self.copy()
-        new_game.history = ""
-        new_game.FIRST_PLAYER = new_game.player
-        return new_game
     
     def copy(self):
         return Gomoku(**self.__dict__)
@@ -317,13 +314,14 @@ class Gomoku:
         return self.winner * self.FIRST_PLAYER
         
     def is_legal(self, move: tuple[int, int]) -> bool:
+        assert isinstance(move, tuple), "Move must be a tuple of integers, got: {}".format(move)
         x, y = move
         return 0 <= x < self.M and 0 <= y < self.N and self.board[x, y] == 0
 
     def get_history(self):
         if not len(self.history):
             return []
-        return list(loc_to_move(self.history, one=False))
+        return list(loc_to_move(self.history))
 
     @property
     def directions(self) -> list[tuple[int, int]]:
@@ -354,7 +352,7 @@ class Gomoku:
         if length is None:
             return list(self.line_cache)
         elif position is None:
-            return list(map(loc_to_move, self.line_cache[length]))
+            return list(map(loc_to_move_one, self.line_cache[length]))
         else:
             position_loc = move_to_loc(position)
             if direction is None:

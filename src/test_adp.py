@@ -1,4 +1,4 @@
-from .adp import ADP_Player, get_rewards_actions, ValueNetwork
+from .adp import ADP_Player, ValueNetwork
 from .zero import AlphaZeroPlayer
 from .gomoku import Gomoku
 import logging
@@ -26,25 +26,17 @@ if __name__ == '__main__':
         'epsilon': 0.1,
     }
     
-    model_path = "models_wzlen/best.h5"
+    dir_name = "models_wzno"
+    model_path = f"{dir_name}/epoch_1000.h5"
     
     adp = ADP_Player(model_path=model_path, value_network_kwargs=value_network_kwargs, policy_network_kwargs=policy_network_kwargs)
-    zero = AlphaZeroPlayer(**game_kwargs)
     
     game = Gomoku(**game_kwargs)
 
     while not game.fin():
         value_network = ValueNetwork(model_path=model_path, **value_network_kwargs)
-        rewards_actions = get_rewards_actions(game, value_network)
-        # (max_reward, argmax_reward), (min_reward, argmin_reward) = rewards_actions[0], rewards_actions[-1]
-        # print("max_reward: %s, argmax_reward: %s" % (max_reward, argmax_reward))
-        # print("min_reward: %s, argmin_reward: %s" % (min_reward, argmin_reward))
-        print("rewards_actions: %s" % rewards_actions)
+        rewards_actions = value_network.get_rewards_actions(game)
+        print(rewards_actions[:5], rewards_actions[-5:])
         move = adp.next_move(game)
-        game.play(move)
-        game.print()
-        if game.fin():
-            break
-        move = zero.next_move(game)
         game.play(move)
         game.print()

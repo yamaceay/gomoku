@@ -7,7 +7,7 @@ import logging
 import os
 from .gomoku import Gomoku
 
-NAME_OF_TRAINING = "wzlen"
+NAME_OF_TRAINING = "wzno"
 DIR_PATH = "./models_{}".format(NAME_OF_TRAINING)
 
 # configure a logger which logs to the 'adp.log'
@@ -138,12 +138,12 @@ if __name__ == "__main__":
     }
     
     train_adp(
-        epochs_start = 10,
-        epochs_end = 50, 
-        epochs_step = 10, 
-        eval=True,
+        epochs_start = 0,
+        epochs_end = 1000, 
+        epochs_step = 50, 
+        eval=False,
         train=True,
-        zero_play=True,
+        zero_play=False,
         n_test_games=7,
         game_kwargs = game_kwargs, 
         model_path = os.path.join(DIR_PATH, 'best.h5'),

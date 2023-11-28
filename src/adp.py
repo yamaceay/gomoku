@@ -1,7 +1,6 @@
 import os
-import signal
 import numpy as np
-from .players import Player, UCT_Player, Node, Tree, timeout_handler
+from .players import Player
 import torch
 from .gomoku import Gomoku
 from .patterns import PB_DICT, WIN_ENCODE, revp
@@ -145,6 +144,23 @@ class ValueNetwork(ShallowNN):
         features += [int(state.player == 1), int(state.player == -1)]
         return torch.FloatTensor(features).to(device)
     
+    def get_rewards_actions(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:  
+        actions = state.actions(only_adjacents=True)
+        if not len(actions):
+            actions = state.actions()
+        
+        rewards_actions = []
+        for action in actions:
+            state_new = state.copy()
+            state_new.play(action)
+            value = self.forward(state_new)
+            if value.device != device:
+                value = value.to(device)
+            rewards_actions.append((value, action))
+            
+        rewards_actions = list(reversed(sorted(rewards_actions, key=lambda ra: ra[0])))
+        return rewards_actions
+    
     def train_body(self, history: list[Gomoku]):
         losses = []
         last_step = len(history)-1
@@ -218,7 +234,7 @@ class PolicyNetwork:
         self.epsilon = kwargs.get('epsilon', 0.)
     
     def forward(self, state: Gomoku, value_network: ValueNetwork) -> tuple[int, int]:            
-        rewards_actions = get_rewards_actions(state, value_network)
+        rewards_actions = value_network.get_rewards_actions(state)
         if state.player == 1:
             _, best_action = rewards_actions[0]
         else:
@@ -235,64 +251,47 @@ class ADP_Player(Player):
     def next_move(self, game: Gomoku) -> tuple[int, int]:
         return self.policy_network.forward(game, self.value_network)
   
-class UCT_ADP_Player(UCT_Player):
-    def __init__(self, max_depth=10, model=None, **kwargs):
-        super(UCT_ADP_Player, self).__init__(**kwargs)
+# class UCT_ADP_Player(UCT_Player):
+#     def __init__(self, max_depth=10, model=None, **kwargs):
+#         super(UCT_ADP_Player, self).__init__(**kwargs)
     
-        self.max_depth = max_depth
-        self.model: ADP_Player = model
+#         self.max_depth = max_depth
+#         self.model: ADP_Player = model
     
-    def simulate(self, node: Node) -> float:
-        state = node.state.copy()
-        for _ in range(self.max_depth):
-            if state.fin():
-                break
+#     def simulate(self, node: Node) -> float:
+#         state = node.state.copy()
+#         for _ in range(self.max_depth):
+#             if state.fin():
+#                 break
             
-            action = self.model.next_move(state)
-            state.play(action)
+#             action = self.model.next_move(state)
+#             state.play(action)
             
-        if state.fin():
-            return state.score()
+#         if state.fin():
+#             return state.score()
         
-        value = self.model.\
-            value_network.\
-            forward(state).\
-            cpu().\
-            detach().\
-            item()
+#         value = self.model.\
+#             value_network.\
+#             forward(state).\
+#             cpu().\
+#             detach().\
+#             item()
 
-        return value
+#         return value
     
-    def next_move(self, game: Gomoku):
-        self.tree = Tree(game, **self.tree_kwargs)
+#     def next_move(self, game: Gomoku):
+#         self.tree = Tree(game, **self.tree_kwargs)
         
-        signal.signal(signal.SIGALRM, timeout_handler)
-        signal.alarm(self.timeout_ms // 1000)  # alarm is set with seconds
+#         signal.signal(signal.SIGALRM, timeout_handler)
+#         signal.alarm(self.timeout_ms // 1000)  # alarm is set with seconds
         
-        try:
-            for _ in range(self.iterations):
-                node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
-                value = self.simulate(node)
-                self.tree.backpropagate(node, value)
-        except TimeoutError:
-            pass
+#         try:
+#             for _ in range(self.iterations):
+#                 node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
+#                 value = self.simulate(node)
+#                 self.tree.backpropagate(node, value)
+#         except TimeoutError:
+#             pass
         
-        best_child = max(self.tree.root.children, key=lambda child: child.Q)
-        return best_child.state.history[-1]
-        
-def get_rewards_actions(state: Gomoku, value_network: ValueNetwork) -> list[tuple[float, tuple[int, int]]]:  
-    actions = state.actions(only_adjacents=True)
-    if not len(actions):
-        actions = state.actions()
-    
-    rewards_actions = []
-    for action in actions:
-        state_new = state.copy()
-        state_new.play(action)
-        value = value_network.forward(state_new)
-        if value.device != device:
-            value = value.to(device)
-        rewards_actions.append((value, action))
-        
-    rewards_actions = list(reversed(sorted(rewards_actions, key=lambda ra: ra[0])))
-    return rewards_actions    
+#         best_child = max(self.tree.root.children, key=lambda child: child.Q)
+#         return best_child.state.history[-1]    

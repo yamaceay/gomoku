@@ -2,7 +2,6 @@ import numpy as np
 from .patterns import PB_DICT, lti
 from .gomoku import Gomoku
 
-
 class Node:
     def __init__(self, state: Gomoku, parent=None):
         self.state: Gomoku = state
@@ -16,6 +15,10 @@ class Node:
 
     def is_terminal(self) -> bool:
         return self.state.fin()
+    
+    def __repr__(self):
+        history = self.state.get_history()
+        return f"Node({history}, {self.n}, {self.Q})"
 
 def uct_score(parent: Node, child: Node, **kwargs) -> float:
     C = kwargs.get('C', 1.0)
@@ -26,7 +29,7 @@ def uct_score(parent: Node, child: Node, **kwargs) -> float:
 def pb_score(parent: Node, child: Node, **kwargs) -> float:
     decay = kwargs.get('decay', 0.9)
     
-    move = child.state.history[-1]
+    move = child.state.get_history()[-1]
     pb_value = 0
     for pattern, value_fn in PB_DICT.items():
         pattern_score = value_fn(decay)
@@ -53,8 +56,7 @@ def uct_pb_score(parent: Node, child: Node, **kwargs) -> float:
 
 class Tree:
     def __init__(self, state: Gomoku, **kwargs):
-        state = state.copy_state()
-        self.root = Node(state)
+        self.root = Node(state.copy())
         self.only_adjacents = kwargs.get('only_adjacents', False)
         self.decay = kwargs.get('decay', 0.9)
 
@@ -64,36 +66,26 @@ class Tree:
             if not node.is_fully_expanded():
                 return self.expand(node)
             else:
-                if not len(node.children):
-                    raise Exception("No children")
-                node = max(node.children, key=lambda child: policy(node, child, **policy_kwargs))
+                assert len(node.children), "No children"
+                sort_key = lambda child: policy(node, child, **policy_kwargs)
+                child_nodes = list(reversed(sorted(node.children, key=sort_key))) 
+                if self.root.state.player == 1:
+                    node = child_nodes[0]
+                else:
+                    node = child_nodes[-1]
         return node
 
     def expand(self, node: Node) -> Node:
-        if self.only_adjacents:
-            adjacent_actions = node.state.actions(only_adjacents=True)
-            adjacent_filtered_actions = list(filter( 
-                lambda action: action not in [
-                    child.state.history[-1] 
-                    for child in node.children
-                ], adjacent_actions
-            ))
-            if len(adjacent_filtered_actions):
-                action = adjacent_filtered_actions[np.random.randint(0, len(adjacent_filtered_actions))]
-                new_state = node.state.copy()
-                new_state.play(action)
-                new_node = Node(new_state, parent=node)
-                node.children.append(new_node)
-                return new_node
-                
+        current_history = node.state.get_history()
+        use_adjacents = len(current_history) and self.only_adjacents
+        actions = node.state.actions(only_adjacents=use_adjacents) 
         actions = list(filter( 
             lambda action: action not in [
-                child.state.history[-1] 
+                child.state.get_history()[-1] 
                 for child in node.children
             ], node.state.actions()
         ))
-        if not len(actions):
-            raise Exception("No action")
+        assert len(actions), "No action"
         
         action = actions[np.random.randint(0, len(actions))]
         new_state = node.state.copy()

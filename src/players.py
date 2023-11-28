@@ -9,7 +9,7 @@ class TimeoutError(Exception):
 def timeout_handler(signum, frame):
     raise TimeoutError
 class Player:
-    def next_move(self, game: Gomoku) -> tuple[int, int]:
+    def next_move(self, _: Gomoku) -> tuple[int, int]:
         raise NotImplementedError
 
 class RandomPlayer(Player):
@@ -29,7 +29,7 @@ class UCT_Player(Player):
     def simulate(self, node: Node) -> float:
         return self.tree.simulate(node)
 
-    def next_move(self, game: Gomoku):
+    def next_move_probs(self, game: Gomoku):
         self.tree = Tree(game, **self.tree_kwargs)
         
         signal.signal(signal.SIGALRM, timeout_handler)
@@ -43,5 +43,16 @@ class UCT_Player(Player):
         except TimeoutError:
             pass
         
-        best_child = max(self.tree.root.children, key=lambda child: child.Q)
-        return best_child.state.history[-1]
+        get_reward = lambda child: uct_score(self.tree.root, child, C=0)
+        get_action = lambda child: child.state.get_history()[-1]
+        get_reward_action = lambda child: (get_reward(child), get_action(child))
+        rewards_actions = map(get_reward_action, self.tree.root.children)
+        return list(reversed(sorted(rewards_actions, key=lambda x: x[0])))
+    
+    def next_move(self, game: Gomoku):
+        move_probs = self.next_move_probs(game)
+        if game.player == 1:
+            _, action = move_probs[0]
+        else:
+            _, action = move_probs[-1]
+        return action

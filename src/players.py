@@ -47,12 +47,9 @@ class UCT_Player(Player):
         try:
             for _ in range(self.iterations):
                 node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
-                print(f"[{self.tree.root.state.player}] {node} SELECTED")
                 if not node.is_fully_expanded() and not node.is_terminal():
                     node = self.tree.expand(node)
-                    print(f"[{self.tree.root.state.player}] {node} EXPANDED")
                     value = self.simulate(node)
-                    print(f"[{self.tree.root.state.player}] {node}: {value} SIMULATED")
                     self.tree.backpropagate(node, value)
         except TimeoutError:
             pass

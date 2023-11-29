@@ -18,7 +18,10 @@ class Node:
         return self.state.fin()
     
     def __repr__(self):
-        return f"Node({self.state.history}, {self.n}, {self.Q})"
+        if len(self.state.history):
+            return f"Node({self.state.history}, {self.Q} / {self.n})"
+        else:
+            return f"Node({self.Q:.2f} / {self.n})"
 
 def uct_score(parent: Node, child: Node, **kwargs) -> float:
     C = kwargs.get('C', 1.0)
@@ -69,10 +72,7 @@ class Tree:
                 assert len(node.children), "No children"
                 sort_key = lambda child: policy(node, child, **policy_kwargs)
                 child_nodes = sortfn(node.children, sort_key)
-                if self.root.state.player == 1:
-                    node = child_nodes[0]
-                else:
-                    node = child_nodes[-1]
+                node = child_nodes[0]
         return node
 
     def expand(self, node: Node) -> Node:
@@ -96,11 +96,14 @@ class Tree:
         state = node.state.copy()
         while not state.fin():
             state_actions = state.actions(only_adjacents=True)
-            if not len(state_actions):
-                break
+            assert len(state_actions), "No action"
             action = state_actions[np.random.randint(0, len(state_actions))]
             state.play(action)
-        return state.score()
+        score = state.score()
+        state.print()
+        print(self.root.state.history, state.score())
+        score *= self.root.state.player
+        return score
 
     def backpropagate(self, node: Node, reward: float):
         while node is not None:

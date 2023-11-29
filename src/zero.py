@@ -32,7 +32,10 @@ class AlphaZeroPlayer(Player):
         self.board = Board(width=M, height=N, n_in_row=K)
         self.start_player = int(FIRST_PLAYER != 1)
         self.restart()
-        
+    
+    def next_move_probs(self, _: Gomoku) -> list[tuple[float, tuple[int, int]]]:
+        raise NotImplementedError
+     
     def next_move(self, game: Gomoku) -> tuple[int, int]:
         n_moves = len(self.board.states)
         history = game.get_history()

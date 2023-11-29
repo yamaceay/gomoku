@@ -24,9 +24,9 @@ if __name__ == "__main__":
     }
     
     adp_model = ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs)
-    uct_player = UCT_Player(timeout_ms=5000, iterations=100, policy=uct_score, tree_kwargs={'only_adjacents': True})
+    uct_player = UCT_Player(iterations=1000, policy=uct_score, tree_kwargs={'only_adjacents': True})
     
-    game = Gomoku(**game_kwargs)
+    game = Gomoku(**game_kwargs, FIRST_PLAYER=1)
     
     while not game.fin():
         try:
@@ -36,5 +36,6 @@ if __name__ == "__main__":
             else:
                 _, action = move_probs[-1]
             game.play(action)
+            game.print()
         except TimeoutError as e:
             print(e)

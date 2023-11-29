@@ -1,5 +1,5 @@
 from .gomoku import Gomoku
-from .mcts import Tree, Node, uct_score
+from .mcts import Tree, Node, uct_score, sortfn
 import numpy as np
 import signal
 
@@ -9,14 +9,23 @@ class TimeoutError(Exception):
 def timeout_handler(signum, frame):
     raise TimeoutError
 class Player:
-    def next_move(self, _: Gomoku) -> tuple[int, int]:
+    def next_move_probs(self, _: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         raise NotImplementedError
-
-class RandomPlayer(Player):
     def next_move(self, game: Gomoku) -> tuple[int, int]:
+        rewards_actions = self.next_move_probs(game)
+        if game.player == 1:
+            _, best_action = rewards_actions[0]
+        else:
+            _, best_action = rewards_actions[-1]
+        return best_action
+class RandomPlayer(Player):
+    def next_move_probs(self, game: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         moves = game.actions()
-        random_move  = np.random.randint(0, len(moves))
-        return moves[random_move]
+        probs = np.random.random(len(moves))
+        probs /= probs.sum()
+        rewards_actions = [(probs[i], moves[i]) for i in range(len(moves))]
+        rewards_actions = sortfn(rewards_actions, lambda x: x[0])
+        return rewards_actions
             
 class UCT_Player(Player):
     def __init__(self, iterations=10000, timeout_ms=5000, policy=uct_score, policy_kwargs={}, tree_kwargs={}):
@@ -38,8 +47,13 @@ class UCT_Player(Player):
         try:
             for _ in range(self.iterations):
                 node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
-                value = self.simulate(node)
-                self.tree.backpropagate(node, value)
+                print(f"[{self.tree.root.state.player}] {node} SELECTED")
+                if not node.is_fully_expanded() and not node.is_terminal():
+                    node = self.tree.expand(node)
+                    print(f"[{self.tree.root.state.player}] {node} EXPANDED")
+                    value = self.simulate(node)
+                    print(f"[{self.tree.root.state.player}] {node}: {value} SIMULATED")
+                    self.tree.backpropagate(node, value)
         except TimeoutError:
             pass
         
@@ -47,12 +61,4 @@ class UCT_Player(Player):
         get_action = lambda child: child.state.get_history()[-1]
         get_reward_action = lambda child: (get_reward(child), get_action(child))
         rewards_actions = map(get_reward_action, self.tree.root.children)
-        return list(reversed(sorted(rewards_actions, key=lambda x: x[0])))
-    
-    def next_move(self, game: Gomoku):
-        move_probs = self.next_move_probs(game)
-        if game.player == 1:
-            _, action = move_probs[0]
-        else:
-            _, action = move_probs[-1]
-        return action
+        return sortfn(rewards_actions, key=lambda x: x[0])

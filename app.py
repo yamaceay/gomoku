@@ -1,9 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 from src import Gomoku, \
     Player, RandomPlayer, ADP_Player, \
+    uct_score, UCT_Player, \
     AlphaZeroPlayer
-    # UCT_Player, UCT_ADP_Player, \
-    # pb_score, uct_pb_score, uct_score, \
 
 app = Flask(__name__, static_url_path='/static')
 game = None
@@ -38,6 +37,8 @@ player: Player = None
 players = {
     '_RANDOM': RandomPlayer(),
     '_ADP': ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs),
+    '_UCT': UCT_Player(timeout_ms=5000, iterations=100, policy=uct_score),
+    '_UCT_ADJ': UCT_Player(timeout_ms=5000, iterations=100, policy=uct_score, tree_kwargs={'only_adjacents': True}),
     '_ALPHAZERO': AlphaZeroPlayer(**game_kwargs),
     # '_UCT_UCB': UCT_Player(timeout_ms=5000, policy=policies["uct_score"]),
     # '_UCT_UCB_ADJ': UCT_Player(timeout_ms=5000, policy=policies["uct_score"], tree_kwargs={"only_adjacents": True}),
@@ -68,13 +69,14 @@ def start_game():
 @app.route('/move', methods=['POST'])
 def make_move():
     move = request.json.get('move')
+    move = tuple(move)
     score, game_over = game.play(move)
     move = None
     
     if not game_over:
         move = player.next_move(game)
         score, game_over = game.play(move)
-        
+
     return jsonify(
         score=score, 
         game_over=game_over, 

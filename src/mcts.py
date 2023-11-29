@@ -1,5 +1,5 @@
 import numpy as np
-from .patterns import PB_DICT, lti
+from .patterns import PB_DICT, lti, sortfn
 from .gomoku import Gomoku
 
 class Node:
@@ -11,14 +11,14 @@ class Node:
         self.Q: float = .0
 
     def is_fully_expanded(self) -> bool:
-        return len(self.children) and len(self.children) == len(self.state.actions())
+        moves = self.state.actions(only_adjacents=True)
+        return len(self.children) and len(self.children) == len(moves)
 
     def is_terminal(self) -> bool:
         return self.state.fin()
     
     def __repr__(self):
-        history = self.state.get_history()
-        return f"Node({history}, {self.n}, {self.Q})"
+        return f"Node({self.state.history}, {self.n}, {self.Q})"
 
 def uct_score(parent: Node, child: Node, **kwargs) -> float:
     C = kwargs.get('C', 1.0)
@@ -64,11 +64,11 @@ class Tree:
         node = self.root
         while not node.is_terminal():
             if not node.is_fully_expanded():
-                return self.expand(node)
+                break
             else:
                 assert len(node.children), "No children"
                 sort_key = lambda child: policy(node, child, **policy_kwargs)
-                child_nodes = list(reversed(sorted(node.children, key=sort_key))) 
+                child_nodes = sortfn(node.children, sort_key)
                 if self.root.state.player == 1:
                     node = child_nodes[0]
                 else:
@@ -76,14 +76,12 @@ class Tree:
         return node
 
     def expand(self, node: Node) -> Node:
-        current_history = node.state.get_history()
-        use_adjacents = len(current_history) and self.only_adjacents
-        actions = node.state.actions(only_adjacents=use_adjacents) 
+        actions = node.state.actions(only_adjacents=True) 
         actions = list(filter( 
             lambda action: action not in [
                 child.state.get_history()[-1] 
                 for child in node.children
-            ], node.state.actions()
+            ], actions
         ))
         assert len(actions), "No action"
         
@@ -97,7 +95,7 @@ class Tree:
     def simulate(self, node: Node) -> float:
         state = node.state.copy()
         while not state.fin():
-            state_actions = state.actions()
+            state_actions = state.actions(only_adjacents=True)
             if not len(state_actions):
                 break
             action = state_actions[np.random.randint(0, len(state_actions))]
@@ -108,5 +106,5 @@ class Tree:
         while node is not None:
             node.n += 1
             node.Q += reward
-            node = node.parent
             reward *= self.decay
+            node = node.parent

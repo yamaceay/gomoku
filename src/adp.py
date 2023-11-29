@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from .mcts import sortfn
 from .players import Player
 import torch
 from .gomoku import Gomoku
@@ -146,8 +147,7 @@ class ValueNetwork(ShallowNN):
     
     def get_rewards_actions(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:  
         actions = state.actions(only_adjacents=True)
-        if not len(actions):
-            actions = state.actions()
+        assert len(actions), "No moves available"
         
         rewards_actions = []
         for action in actions:
@@ -158,7 +158,7 @@ class ValueNetwork(ShallowNN):
                 value = value.to(device)
             rewards_actions.append((value, action))
             
-        rewards_actions = list(reversed(sorted(rewards_actions, key=lambda ra: ra[0])))
+        rewards_actions = sortfn(rewards_actions, lambda ra: ra[0])
         return rewards_actions
     
     def train_body(self, history: list[Gomoku]):
@@ -233,22 +233,21 @@ class PolicyNetwork:
     def __init__(self, **kwargs):
         self.epsilon = kwargs.get('epsilon', 0.)
     
-    def forward(self, state: Gomoku, value_network: ValueNetwork) -> tuple[int, int]:            
+    def forward(self, state: Gomoku, value_network: ValueNetwork) -> list[tuple[float, tuple[int, int]]]:            
         rewards_actions = value_network.get_rewards_actions(state)
-        if state.player == 1:
-            _, best_action = rewards_actions[0]
-        else:
-            _, best_action = rewards_actions[-1]
         if random.random() < self.epsilon:
-            _, best_action = random.choice(rewards_actions)
-        return best_action
+            probs = np.random.random(len(rewards_actions))
+            probs /= probs.sum()
+            rewards_actions = [(probs[i], rewards_actions[i][1]) for i in range(len(rewards_actions))]
+            rewards_actions = sortfn(rewards_actions, lambda x: x[0])
+        return rewards_actions
   
 class ADP_Player(Player):
     def __init__(self, model_path: str, value_network_kwargs, policy_network_kwargs): 
         self.value_network = ValueNetwork(model_path=model_path, **value_network_kwargs)
         self.policy_network = PolicyNetwork(**policy_network_kwargs)
     
-    def next_move(self, game: Gomoku) -> tuple[int, int]:
+    def next_move_probs(self, game: Gomoku) -> tuple[int, int]:
         return self.policy_network.forward(game, self.value_network)
   
 # class UCT_ADP_Player(UCT_Player):

@@ -1,13 +1,13 @@
 from tqdm import tqdm
 from .zero import AlphaZeroPlayer
-from .adp import ADP_Player, ADP_Value_Net, ADP_Policy
+from .adp import ADP_Dense_Player, ADP_Value_Dense_Net
 from .players import Player
 import random
 import logging
 import os
 from .gomoku import Gomoku
 
-NAME_OF_TRAINING = "wzno"
+NAME_OF_TRAINING = "fwd"
 DIR_PATH = "./models_{}".format(NAME_OF_TRAINING)
 
 # configure a logger which logs to the 'adp.log'
@@ -76,25 +76,24 @@ def train_adp(
             len_histories += [(avg_len_history, batch)]
     max_len_history = max(len_histories, key=lambda x: x[0]) if len(len_histories) else None
 
-    value_network = ADP_Value_Net(model_path=model_path, **value_network_kwargs)
+    value_network = ADP_Value_Dense_Net(model_path=model_path, **value_network_kwargs)
     
     for batch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
         last_epoch_in_batch = batch + epochs_step
         new_path = os.path.join(DIR_PATH, "epoch_{}.h5".format(last_epoch_in_batch))
         
         if train:
-            policy = ADP_Policy(**policy_network_kwargs)
             for i in tqdm(range(1, epochs_step+1), position=1, leave=False, desc="Epochs"):
                 game = Gomoku(**game_kwargs)
                 if zero_play:
-                    loss = value_network.train_by_zero(game, policy)
+                    loss = value_network.train_by_zero(game)
                 else:
-                    loss = value_network.train(game, policy)
+                    loss = value_network.train(game)
                 logger.info("Epoch {}, Loss {}".format(batch + i, loss))
             value_network.save_model(new_path)
             
         if eval:
-            curr_model = ADP_Player(new_path, value_network_kwargs, policy_network_kwargs)
+            curr_model = ADP_Dense_Player(new_path, value_network_kwargs, policy_network_kwargs)
             avg_len_history = eval_by_zero(
                 game_kwargs=game_kwargs,
                 curr_model=curr_model,

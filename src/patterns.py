@@ -68,5 +68,7 @@ WIN_ENCODE = [
     'oo-oo',
 ]
 
-def sortfn(items: list, key) -> list:
+def sortfn(items: list, key = None) -> list:
+    if key is None:
+        return list(reversed(sorted(items)))
     return list(reversed(sorted(items, key=key)))

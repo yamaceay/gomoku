@@ -3,11 +3,9 @@ import numpy as np
 from .mcts import sortfn
 from .players import Player
 import torch
-# from torchsummary import summary
 from .gomoku import Gomoku
 from .patterns import PB_DICT, WIN_ENCODE, revp
 from .zero import AlphaZeroPlayer
-import random
 import logging
 
 HIDDEN_DIM = 100
@@ -68,32 +66,23 @@ class Conv_Net(Net):
         self.hidden_dim = kwargs.pop('hidden_dim', HIDDEN_DIM)
         self.output_dim = kwargs.pop('output_dim', OUTPUT_DIM)
         
-        super(Conv_Net, self).__init__(**kwargs)
-        
         self.conv_out_dim = self.output_channels*self.board_size[0]*self.board_size[1]
         
-        layers = [
+        super(Conv_Net, self).__init__(**kwargs)
+        
+        self.compile_model(
             torch.nn.Conv2d(self.input_channels, self.hidden_channels, kernel_size=3, stride=1, padding=1),
-            torch.nn.ReLU(),
+            torch.nn.Sigmoid(),
             torch.nn.Conv2d(self.hidden_channels, self.output_channels, kernel_size=1),
-            torch.nn.ReLU(),
+            torch.nn.Sigmoid(),
             torch.nn.Flatten(),
-        ]
-        
-        params = [
-            self.conv_out_dim, 
-            self.input_dim, 
-            self.hidden_dim, 
-            self.output_dim,
-        ]
-        
-        for i in range(len(params) - 1):
-            layers += [
-                torch.nn.Linear(params[i], params[i+1]),
-                torch.nn.Tanh(),
-            ]
-        
-        self.compile_model(*layers)
+            torch.nn.Linear(self.conv_out_dim, self.input_dim),
+            torch.nn.Tanh(),
+            torch.nn.Linear(self.input_dim, self.hidden_dim),
+            torch.nn.Tanh(),
+            torch.nn.Linear(self.hidden_dim, self.output_dim),
+            torch.nn.Tanh(),
+        )
     
 class Dense_Net(Net):
     def __init__(self, **kwargs):
@@ -103,23 +92,17 @@ class Dense_Net(Net):
         
         super(Dense_Net, self).__init__(**kwargs)
         
-        params = [
-            self.input_dim,
-            self.hidden_dim,
-            self.output_dim,
-        ]
-        
-        layers = []
-        for i in range(len(params) - 1):
-            layers += [
-                torch.nn.Linear(params[i], params[i+1]),
-                torch.nn.Tanh(),
-            ]
-       
-        self.compile_model(*layers)
+        self.compile_model(
+            torch.nn.Linear(self.input_dim, self.hidden_dim),
+            torch.nn.Tanh(),
+            torch.nn.Linear(self.hidden_dim, self.output_dim),
+            torch.nn.Tanh(),
+        )
     
 class ADP_Player(Player):
-    def opt(self, *states: list[Gomoku]):
+    def opt(self, *states: list[Gomoku], **kwargs):
+        top_down = kwargs.pop('top_down', False)
+        
         assert len(states) > 1, "At least 2 states are required"
         
         V_func = lambda i: self(states[i]).to(device) * (self.gamma ** i)
@@ -127,43 +110,52 @@ class ADP_Player(Player):
 
         loss = self.alpha * (sum(V_next) - V)
                 
+        if top_down:
+            self.nn.optimizer.zero_grad()
+            loss.backward()
+            self.nn.optimizer.step()
+                
         loss_squared = loss ** 2
         return loss_squared
     
     def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:  
-        actions = state.actions(only_adjacents=True)
+        actions = state.actions()
         assert len(actions), "No moves available"
         
         rewards_actions = []
         for action in actions:
             state_new = state.copy()
             state_new.play(action)
-            value = self(state_new)
-            if value.device != device:
-                value = value.to(device)
+            value = self(state_new).cpu().detach().item()
             rewards_actions.append((value, action))
         return sortfn(rewards_actions, key=lambda x: x[0])
     
-    def train_body(self, history: list[Gomoku]):
+    def train_body(self, history: list[Gomoku], **kwargs):
+        top_down = kwargs.pop('top_down', False)
         losses = []
         last_step = len(history)-1
         for i in range(last_step-1, -1, -1):
             states = history[i:]
             if i + self.n_steps < last_step:
                 states = states[:self.n_steps+1]
-            loss = self.opt(*states)
+            loss = self.opt(*states, top_down=top_down)
             losses += [loss]
             
         losses = torch.stack(losses).to(device)
         objective = torch.zeros_like(losses).to(device)
         loss = self.nn.loss_fn(losses, objective)
         
-        self.nn.optimizer.zero_grad()
-        loss.backward()
-        self.nn.optimizer.step()
+        if not top_down:
+            self.nn.optimizer.zero_grad()
+            loss.backward()
+            self.nn.optimizer.step()
+        
         return loss.cpu().detach().item()
     
-    def train_by_zero(self, state: Gomoku, **policy_kwargs):
+    def train_by_zero(self, state: Gomoku, **kwargs):
+        epsilon = kwargs.get('epsilon', .1)
+        top_down = kwargs.get('top_down', False)
+        
         zero_player = AlphaZeroPlayer(
             M = state.M, 
             N = state.N, 
@@ -176,9 +168,8 @@ class ADP_Player(Player):
             state.play(action)
             history += [state.copy()]
             
-        epsilon = policy_kwargs.get('epsilon', .1)
         while not state.fin():
-            action = state.actions(only_adjacents=True)[0]
+            action = state.actions()[0]
             if np.random.random() >= epsilon:
                 action = self.next_move(state)
             state.play(action)                
@@ -189,19 +180,20 @@ class ADP_Player(Player):
             state.play(action)
             history += [state.copy()]
         
-        return self.train_body(history)
+        return self.train_body(history, top_down=top_down)
     
-    def train(self, state: Gomoku, **policy_kwargs):
+    def train(self, state: Gomoku, **kwargs):
+        epsilon = kwargs.get('epsilon', .1)
+        top_down = kwargs.get('top_down', False)
         history = [state.copy()]
-        epsilon = policy_kwargs.get('epsilon', .1)
         while not state.fin():
-            action = state.actions(only_adjacents=True)[0]
+            action = state.actions()[0]
             if np.random.random() >= epsilon:
                 action = self.next_move(state)
             state.play(action)
             history += [state.copy()]
             
-        return self.train_body(history)
+        return self.train_body(history, top_down=top_down)
     
     def __call__(self, state: Gomoku):
         return self.forward(state)
@@ -304,18 +296,25 @@ class ADP_Conv_Player(ADP_Player):
         
         features = self.extract_features(state)
         return self.nn(features).squeeze(0)
-
+    
 if __name__ == '__main__':
     M, N, K = 8, 8, 5
+    adp_player = ADP_Conv_Player(
+        model_path="models_fwd/best.h5",
+        alpha=0.9,
+        magnify=1,
+        gamma=0.9,
+        lr=0.001,
+        n_steps=1,
+        epsilon=0.1,
+        M=M,
+        N=N,
+    )
     
     game = Gomoku(M=M, N=N, K=K)
     
-    adp_vnet = ADP_Conv_Player(model_path='models_fwd/best.h5', M=M, N=N)
-
-    game.play((4, 4))
-    game.play((4, 5))
-    game.print()
-    
-    print(adp_vnet(game))
-    
-    
+    print(adp_player.nn.state_dict().__dict__)
+    while not game.fin():
+        action = adp_player.next_move(game)
+        game.play(action)
+        # print(game, adp_player.next_move_probs(game)[:5])

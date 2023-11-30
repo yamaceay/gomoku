@@ -1,13 +1,12 @@
 import numpy as np
 import random
 import copy
-from .patterns import PB_DICT, move_to_loc, loc_to_move, loc_to_move_one, dir_to_loc, loc_to_dir
+from .patterns import PB_DICT, WIN_ENCODE, revp, move_to_loc, loc_to_move, loc_to_move_one, dir_to_loc, loc_to_dir
 class Gomoku:
     def __init__(self, **kwargs):
         self.M = kwargs.pop("M")
         self.N = kwargs.pop("N")
         self.K = kwargs.pop("K")
-        self.FIRST_PLAYER = kwargs.pop("FIRST_PLAYER", 1)
         self.ADJ = kwargs.pop("ADJ", 0)
         self.__dict__.update(kwargs)
         if "board" not in kwargs:
@@ -15,7 +14,7 @@ class Gomoku:
             self.line_cache = {len(pattern): {} for pattern in PB_DICT}
             self.adjacents = set()
             self.history = ""
-            self.player = self.FIRST_PLAYER
+            self.player = 1
             self.winner = 0
         else:
             self.board = copy.deepcopy(self.board)
@@ -44,16 +43,16 @@ class Gomoku:
 
     def reset(self):
         self.history = ""
-        self.player = self.FIRST_PLAYER
+        self.player = 1
 
-    def actions(self, only_adjacents: bool = False) -> list[tuple[int, int]]:
+    def actions(self) -> list[tuple[int, int]]:
         moves = [
             (x, y) 
             for x in range(self.M) 
             for y in range(self.N)
             if self.is_legal((x, y))
         ]
-        if only_adjacents and self.ADJ and len(self.history):
+        if self.ADJ and len(self.history):
             move_set = set(move_to_loc(move) for move in moves)
             move_set = self.adjacents.intersection(move_set)
             if not len(move_set):
@@ -97,7 +96,7 @@ class Gomoku:
             self.history += "," + move_to_loc(move)
     
     def score(self) -> float:
-        return self.winner * self.FIRST_PLAYER
+        return self.winner
         
     def is_legal(self, move: tuple[int, int]) -> bool:
         assert isinstance(move, (tuple, list)), "Move must be a tuple of integers, got: {}".format(move)
@@ -142,14 +141,15 @@ class Gomoku:
         else:
             position_loc = move_to_loc(position)
             if direction is None:
-                return list(map(loc_to_dir, self.line_cache[length][position_loc]))
+                if position_loc in self.line_cache[length]:
+                    return list(map(loc_to_dir, self.line_cache[length][position_loc]))
             else:
                 direction_loc = dir_to_loc(*direction)
                 if position_loc in self.line_cache[length]:
                     if direction_loc in self.line_cache[length][position_loc]:
                         indices_loc, values_loc = self.line_cache[length][position_loc][direction_loc]
                         return indices_loc, values_loc
-        return None
+        return []
     
     def try_get_line(self, length: int, position: tuple[int, int], direction: tuple[int, int]) -> tuple[list[tuple[int, int]], list[int]]:
         x, y = position
@@ -195,7 +195,34 @@ class Gomoku:
                 counter = 0
         return False
 
-    def print(self, print_fn = print):
+    def find_patterns(self, move: tuple[int, int]) -> float:
+        value_list = {len(pattern): [] for pattern in PB_DICT}
+        for length in self.get_line_cache():
+            for direction in self.get_line_cache(length, move):
+                _, values = self.get_line_cache(length, move, direction)
+                value_list[length] += [values]
+        
+        score_list = {}
+        for pattern in PB_DICT:
+            pattern_o = pattern
+            pattern_x = revp(pattern_o)
+            for value in value_list[len(pattern)]:
+                len_diff = len(pattern) - len(value)
+                assert 0 <= len_diff <= 1, "Length difference of pattern vs. line: {}".format(len_diff)
+                add_bound = len_diff > 0
+                if value == pattern_x[:len(value)]:
+                    if not add_bound or pattern_x[len(value)] == 'o':
+                        if pattern not in score_list:
+                            score_list[pattern] = [0, 0]
+                        score_list[pattern][0] += 1
+                if value == pattern_o[:len(value)]:
+                    if not add_bound or pattern_o[len(value)] == 'x':
+                        if pattern not in score_list:
+                            score_list[pattern] = [0, 0]
+                        score_list[pattern][1] += 1
+        return score_list
+    
+    def __repr__(self):
         output = ""
         if not self.winner:
             output += "Current player: " + str(self.player)
@@ -215,53 +242,18 @@ class Gomoku:
                 else:
                     row += ["."]
             output += " ".join(row) + "\n"
-        print_fn(output)
+            
+        return output
     
-if __name__ == "__main__":
-    from .adp import ADP_Player
-    from .zero import AlphaZeroPlayer
-    game_kwargs = {
-        'M': 8,
-        'N': 8,
-        'K': 5,
-        'ADJ': 2,
-    }
-    
-    value_network_kwargs = {
-        'alpha': 0.9,
-        'magnify': 2,
-        'gamma': 0.9,
-        'lr': 0.01,
-        'n_steps': 1, 
-    }
-    
-    policy_network_kwargs = {
-        'epsilon': 0.1,
-    }
-    
-    player = ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs)
-    game = Gomoku(**game_kwargs)
-    zero = AlphaZeroPlayer(**game_kwargs)
-    
-    prev_features = None
-    while not game.fin():
-        action = zero.next_move(game)
-        game.play(action)
-        # value_list, end = player.value_network.extract_values(game)
-        # if end is None:
-        #     features = player.value_network.extract_features(game, value_list)
-        #     if prev_features is not None:
-        #         for i in range(len(features) - 2):
-        #             if features[i] != prev_features[i]:
-        #                 print("[{}] {} -> {}".format(i, prev_features[i], features[i]))
-        #     prev_features = features 
-        game.print()
-        # if game.fin():
-        #     break
-        # action = zero.next_move(game)
-        # game.play(action)
-        # value_list, end = player.value_network.extract_values(game)
-        # if end is None:
-        #     features = player.value_network.extract_features(game, value_list)
-        #     print(value_list, features)
-        # game.print()
+if __name__ == '__main__':
+    game = Gomoku(M=8, N=8, K=5)
+    game.play((5, 4), (1, 5), (4, 5), (7, 5), (3, 5), (0, 5))
+    print(game)
+    for i in range(game.M):
+        for j in range(game.N):
+            action = (i, j)
+            res = game.find_patterns(action)
+            if len(res):
+                print("------")
+                print(action, res)
+                print("------")

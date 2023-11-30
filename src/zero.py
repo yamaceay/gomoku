@@ -9,7 +9,7 @@ import os
 DIR = './models_azero'
 
 class AlphaZeroPlayer(Player):
-    def __init__(self, M: int, N: int, K: int, FIRST_PLAYER: int = 1, **kwargs):
+    def __init__(self, M: int, N: int, K: int, **kwargs):
         c_puct = kwargs.get('c_puct', 5)
         n_playout = kwargs.get('n_playout', 1000)
         
@@ -30,7 +30,7 @@ class AlphaZeroPlayer(Player):
         )
         
         self.board = Board(width=M, height=N, n_in_row=K)
-        self.start_player = int(FIRST_PLAYER != 1)
+        self.start_player = 0
         self.restart()
     
     def next_move_probs(self, _: Gomoku) -> list[tuple[float, tuple[int, int]]]:

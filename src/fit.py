@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from .zero import AlphaZeroPlayer
-from .adp import ADP_Player, ADP_Dense_Player
+from .adp import ADP_Player, ADP_Dense_Player, ADP_Conv_Player
 from .players import Player
 import random
 import logging
@@ -35,7 +35,7 @@ def comp_models(game_kwargs, model1: Player, model2: Player, print_game: bool = 
     
     win = game.score()
     if print_game:
-        game.print()
+        print(game)
         
     return win, not model2_starts, len(game.get_history())
     
@@ -57,14 +57,15 @@ def train_adp(
     epochs_end: int, 
     epochs_step: int,
     game_kwargs, 
-    model_path: str, 
-    value_network_kwargs, 
-    policy_network_kwargs, 
+    model_path: str,  
     epochs_start: int = 0, 
     n_test_games: int = 0, 
     eval: bool = True, 
     train: bool = True,
+    top_down: bool = False,
     zero_play: bool = True,
+    player: ADP_Player = ADP_Dense_Player,
+    player_args: dict = {},
 ):
     
     len_histories = []
@@ -76,7 +77,7 @@ def train_adp(
             len_histories += [(avg_len_history, batch)]
     max_len_history = max(len_histories, key=lambda x: x[0]) if len(len_histories) else None
 
-    value_network = ADP_Dense_Player(model_path=model_path, **value_network_kwargs, **policy_network_kwargs)
+    adp_model = player(model_path=model_path, **player_args)
     
     for batch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
         last_epoch_in_batch = batch + epochs_step
@@ -86,14 +87,14 @@ def train_adp(
             for i in tqdm(range(1, epochs_step+1), position=1, leave=False, desc="Epochs"):
                 game = Gomoku(**game_kwargs)
                 if zero_play:
-                    loss = value_network.train_by_zero(game)
+                    loss = adp_model.train_by_zero(game, top_down=top_down)
                 else:
-                    loss = value_network.train(game)
+                    loss = adp_model.train(game, top_down=top_down)
                 logger.info("Epoch {}, Loss {}".format(batch + i, loss))
-            value_network.nn.save_model(new_path)
+            adp_model.nn.save_model(new_path)
             
         if eval:
-            curr_model = ADP_Dense_Player(model_path=new_path, **value_network_kwargs, **policy_network_kwargs)
+            curr_model = player(model_path=new_path, **player_args)
             avg_len_history = eval_by_zero(
                 game_kwargs=game_kwargs,
                 curr_model=curr_model,
@@ -107,19 +108,20 @@ def train_adp(
             
             if max_len_history is None or max_len_history[0] < new_len_history[0]:
                 max_len_history = new_len_history
-                value_network.nn.save_model(model_path)
+                adp_model.nn.save_model(model_path)
                 logger.info("{} is saved as the strongest model".format(new_path))
                 
             else:
                 old_path = os.path.join(DIR_PATH, "epoch_{}.h5".format(max_len_history[1]))
-                value_network.nn.load_model(old_path)
+                adp_model.nn.load_model(old_path)
                 logger.info("{} is loaded as the strongest model".format(old_path))
                 
 if __name__ == "__main__":
+    M, N, K = 8, 8, 5
     game_kwargs = {
-        'M': 8,
-        'N': 8,
-        'K': 5,
+        'M': M,
+        'N': N,
+        'K': K,
         'ADJ': 2,
     }
     
@@ -127,7 +129,7 @@ if __name__ == "__main__":
         'alpha': 0.9,
         'magnify': 2,
         'gamma': 0.9,
-        'lr': 0.01,
+        'lr': 0.1,
         'n_steps': 1, 
         'logger': logger,
     }
@@ -137,16 +139,23 @@ if __name__ == "__main__":
     }
     
     train_adp(
-        epochs_start = 0,
-        epochs_end = 50, 
+        epochs_start = 200,
+        epochs_end = 500, 
         epochs_step = 50, 
         eval=True,
         train=True,
         zero_play=False,
+        top_down=False,
         n_test_games=7,
-        game_kwargs = game_kwargs, 
         model_path = os.path.join(DIR_PATH, 'best.h5'),
-        value_network_kwargs = value_network_kwargs,
-        policy_network_kwargs = policy_network_kwargs,
+        game_kwargs=game_kwargs, 
+        player=ADP_Conv_Player,
+        player_args={
+            'logger': logger,
+            'M': M,
+            'N': N,
+            **value_network_kwargs, 
+            **policy_network_kwargs,
+        },
     )
             

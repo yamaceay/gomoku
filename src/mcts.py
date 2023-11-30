@@ -1,5 +1,5 @@
 import numpy as np
-from .patterns import PB_DICT, lti, sortfn
+from .patterns import PB_DICT, sortfn
 from .gomoku import Gomoku
 
 class Node:
@@ -11,7 +11,7 @@ class Node:
         self.Q: float = .0
 
     def is_fully_expanded(self) -> bool:
-        moves = self.state.actions(only_adjacents=True)
+        moves = self.state.actions()
         return len(self.children) and len(self.children) == len(moves)
 
     def is_terminal(self) -> bool:
@@ -33,22 +33,21 @@ def pb_score(parent: Node, child: Node, **kwargs) -> float:
     decay = kwargs.get('decay', 0.9)
     
     move = child.state.get_history()[-1]
+    pb_parent = parent.state.find_patterns(move)
+    pb_child = child.state.find_patterns(move)
+        
     pb_value = 0
-    for pattern, value_fn in PB_DICT.items():
-        pattern_score = value_fn(decay)
-        values = list(map(lti, pattern))
-        pb_parent = parent.state.find_near(move, values)
-        pb_child = child.state.find_near(move, values)
-        pb_diff = (pb_child - pb_parent) * pattern_score
+    for pattern in pb_parent | pb_child:
+        pattern_score = PB_DICT[pattern](decay)
         
-        reverse_values = [-c for c in values]
-        pb_reverse_parent = parent.state.find_near(move, reverse_values)
-        pb_reverse_child = child.state.find_near(move, reverse_values)
-        pb_reverse_diff = (pb_reverse_child - pb_reverse_parent) * (-5 * pattern_score)
+        parent_x, parent_o = pb_parent.get(pattern, [0, 0])
+        child_x, child_o = pb_child.get(pattern, [0, 0])
         
-        pb_value += pb_diff + pb_reverse_diff
-    pb_value *= child.state.player
+        pb_value += (child_x - parent_x) * pattern_score
+        pb_value += (child_o - parent_o) * pattern_score
+    pb_value *= -child.state.player
     pb_value /= 100000
+    
     return pb_value
     
 def uct_pb_score(parent: Node, child: Node, **kwargs) -> float:
@@ -61,7 +60,6 @@ class Tree:
     def __init__(self, state: Gomoku, **kwargs):
         self.state = state.copy()
         self.root = Node(self.state)
-        self.only_adjacents = kwargs.get('only_adjacents', False)
         self.decay = kwargs.get('decay', 0.9)
 
     def select(self, policy=uct_score, policy_kwargs={}) -> Node:
@@ -76,7 +74,7 @@ class Tree:
     def expand(self, node: Node) -> Node:
         actions = [
             action 
-            for action in node.state.actions(only_adjacents=True) 
+            for action in node.state.actions() 
             if action not in [
                 child.state.get_history()[-1] 
                 for child in node.children
@@ -94,7 +92,7 @@ class Tree:
     def simulate(self, node: Node) -> float:
         state = node.state.copy()
         while not state.fin():
-            state_actions = state.actions(only_adjacents=True)
+            state_actions = state.actions()
             assert len(state_actions), "No action"
             action = state_actions[np.random.randint(0, len(state_actions))]
             state.play(action)

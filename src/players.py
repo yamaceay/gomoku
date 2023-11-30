@@ -40,6 +40,7 @@ class UCT_Player(Player):
 
     def next_move_probs(self, game: Gomoku):
         self.tree = Tree(game, **self.tree_kwargs)
+        first_player = self.tree.root.state.player
         
         if self.timeout_ms > 0:
             signal.signal(signal.SIGALRM, timeout_handler)
@@ -50,19 +51,12 @@ class UCT_Player(Player):
                 node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
                 if not node.is_fully_expanded() and not node.is_terminal():
                     node = self.tree.expand(node)
-                    value = self.simulate(node)
-                    self.tree.backpropagate(node, value)
+                value = self.simulate(node)
+                self.tree.backpropagate(node, value)
         except TimeoutError:
             pass
         
-        # # print the whole tree
-        # def print_recursive(root: Node, depth=0):
-        #     print("  " * depth, root)
-        #     for child in root.children:
-        #         print_recursive(child, depth + 1)
-        # print_recursive(self.tree.root)
-        
-        get_reward = lambda child: uct_score(self.tree.root, child, C=0)
+        get_reward = lambda child: uct_score(self.tree.root, child, C=0) * first_player
         get_action = lambda child: child.state.get_history()[-1] 
         get_reward_action = lambda child: (get_reward(child), get_action(child))
         rewards_actions = map(get_reward_action, self.tree.root.children)

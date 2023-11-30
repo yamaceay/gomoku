@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from src import Gomoku, \
-    Player, RandomPlayer, ADP_Dense_Player, \
+    Player, RandomPlayer, ADP_Player, \
     uct_score, UCT_Player, \
     AlphaZeroPlayer
 
@@ -36,7 +36,7 @@ player: Player = None
 
 players = {
     '_RANDOM': RandomPlayer(),
-    '_ADP': ADP_Dense_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs),
+    '_ADP': ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs),
     '_UCT': UCT_Player(timeout_ms=5000, iterations=100, policy=uct_score),
     '_UCT_ADJ': UCT_Player(timeout_ms=5000, iterations=100, policy=uct_score, tree_kwargs={'only_adjacents': True}),
     '_ALPHAZERO': AlphaZeroPlayer(**game_kwargs),

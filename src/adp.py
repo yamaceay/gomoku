@@ -118,11 +118,11 @@ class Dense_Net(Net):
        
         self.compile_model(*layers)
     
-class ADP_Value_Net(Player):
+class ADP_Player(Player):
     def opt(self, *states: list[Gomoku]):
         assert len(states) > 1, "At least 2 states are required"
         
-        V_func = lambda i: self.nn(states[i]).to(device) * (self.gamma ** i)
+        V_func = lambda i: self(states[i]).to(device) * (self.gamma ** i)
         [V, *V_next] = list(map(V_func, range(len(states))))
 
         loss = self.alpha * (sum(V_next) - V)
@@ -206,9 +206,9 @@ class ADP_Value_Net(Player):
     def __call__(self, state: Gomoku):
         return self.forward(state)
     
-class ADP_Value_Dense_Net(ADP_Value_Net):
+class ADP_Dense_Player(ADP_Player):
     def __init__(self, **kwargs):
-        super(ADP_Value_Dense_Net, self).__init__()
+        super(ADP_Dense_Player, self).__init__()
         
         self.alpha = kwargs.pop('alpha', 1)
         self.gamma = kwargs.pop('gamma', 0.9)
@@ -271,9 +271,9 @@ class ADP_Value_Dense_Net(ADP_Value_Net):
         features = self.extract_features(state, value_list)
         return self.nn(features)
     
-class ADP_Value_Conv_Net(ADP_Value_Net):
+class ADP_Conv_Player(ADP_Player):
     def __init__(self, **kwargs):
-        super(ADP_Value_Conv_Net, self).__init__()
+        super(ADP_Conv_Player, self).__init__()
         
         self.alpha = kwargs.pop('alpha', 1)
         self.gamma = kwargs.pop('gamma', 0.9)
@@ -283,14 +283,6 @@ class ADP_Value_Conv_Net(ADP_Value_Net):
 
         self.nn = Conv_Net(**kwargs)
         self.nn.model = self.nn.model.to(device)
-        
-    def forward(self, state: Gomoku):
-        if state.fin():
-            reward = state.score()
-            return torch.FloatTensor([reward]).to(device)
-        
-        features = self.extract_features(state)
-        return self.nn(features)
     
     def extract_features(self, state: Gomoku):
         size = (state.M, state.N)
@@ -304,30 +296,26 @@ class ADP_Value_Conv_Net(ADP_Value_Net):
             states[3] = 1
         states = states.to(device)
         return states.unsqueeze(0)
-  
-class ADP_Dense_Player(Player):
-    def __init__(self, model_path: str, value_network_kwargs, policy_network_kwargs): 
-        self.value_network = ADP_Value_Dense_Net(model_path=model_path, **value_network_kwargs)
-        self.epsilon = policy_network_kwargs.get('epsilon', 0.)
     
-    def next_move_probs(self, game: Gomoku) -> list[tuple[float, tuple[int, int]]]:
-        return self.value_network.next_move_probs(game, epsilon=self.epsilon)  
+    def forward(self, state: Gomoku):
+        if state.fin():
+            reward = state.score()
+            return torch.FloatTensor([reward]).to(device)
+        
+        features = self.extract_features(state)
+        return self.nn(features).squeeze(0)
 
-# if __name__ == '__main__':
-#     M, N, K = 8, 8, 5
+if __name__ == '__main__':
+    M, N, K = 8, 8, 5
     
-#     game = Gomoku(M=M, N=N, K=K)
+    game = Gomoku(M=M, N=N, K=K)
     
-#     adp_vnet = ADP_Value_Dense_Net(model_path='models_fwd/best.h5')
-#     summary(adp_vnet.nn.model, (1, INPUT_DIM))
+    adp_vnet = ADP_Conv_Player(model_path='models_fwd/best.h5', M=M, N=N)
+
+    game.play((4, 4))
+    game.play((4, 5))
+    game.print()
     
-#     adp_cnet = ADP_Value_Conv_Net(model_path='models_fwd/best.h5', M=M, N=N)
-#     summary(adp_cnet.nn.model, (INPUT_CHANNELS, M, N))
-    
-#     game.play((4, 4))
-#     game.play((4, 5))
-#     game.print()
-    
-#     print(adp_cnet(game))
+    print(adp_vnet(game))
     
     

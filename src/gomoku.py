@@ -218,7 +218,7 @@ class Gomoku:
         print_fn(output)
     
 if __name__ == "__main__":
-    from .adp import ADP_Dense_Player
+    from .adp import ADP_Player
     from .zero import AlphaZeroPlayer
     game_kwargs = {
         'M': 8,
@@ -239,7 +239,7 @@ if __name__ == "__main__":
         'epsilon': 0.1,
     }
     
-    player = ADP_Dense_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs)
+    player = ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs)
     game = Gomoku(**game_kwargs)
     zero = AlphaZeroPlayer(**game_kwargs)
     

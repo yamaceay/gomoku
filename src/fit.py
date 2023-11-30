@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from .zero import AlphaZeroPlayer
-from .adp import ADP_Dense_Player, ADP_Value_Dense_Net
+from .adp import ADP_Player, ADP_Dense_Player
 from .players import Player
 import random
 import logging
@@ -76,7 +76,7 @@ def train_adp(
             len_histories += [(avg_len_history, batch)]
     max_len_history = max(len_histories, key=lambda x: x[0]) if len(len_histories) else None
 
-    value_network = ADP_Value_Dense_Net(model_path=model_path, **value_network_kwargs)
+    value_network = ADP_Dense_Player(model_path=model_path, **value_network_kwargs, **policy_network_kwargs)
     
     for batch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
         last_epoch_in_batch = batch + epochs_step
@@ -90,10 +90,10 @@ def train_adp(
                 else:
                     loss = value_network.train(game)
                 logger.info("Epoch {}, Loss {}".format(batch + i, loss))
-            value_network.save_model(new_path)
+            value_network.nn.save_model(new_path)
             
         if eval:
-            curr_model = ADP_Dense_Player(new_path, value_network_kwargs, policy_network_kwargs)
+            curr_model = ADP_Dense_Player(model_path=new_path, **value_network_kwargs, **policy_network_kwargs)
             avg_len_history = eval_by_zero(
                 game_kwargs=game_kwargs,
                 curr_model=curr_model,
@@ -107,12 +107,12 @@ def train_adp(
             
             if max_len_history is None or max_len_history[0] < new_len_history[0]:
                 max_len_history = new_len_history
-                value_network.save_model(model_path)
+                value_network.nn.save_model(model_path)
                 logger.info("{} is saved as the strongest model".format(new_path))
                 
             else:
                 old_path = os.path.join(DIR_PATH, "epoch_{}.h5".format(max_len_history[1]))
-                value_network.load_model(old_path)
+                value_network.nn.load_model(old_path)
                 logger.info("{} is loaded as the strongest model".format(old_path))
                 
 if __name__ == "__main__":
@@ -137,10 +137,10 @@ if __name__ == "__main__":
     }
     
     train_adp(
-        epochs_start = 1000,
-        epochs_end = 1200, 
+        epochs_start = 0,
+        epochs_end = 50, 
         epochs_step = 50, 
-        eval=False,
+        eval=True,
         train=True,
         zero_play=False,
         n_test_games=7,

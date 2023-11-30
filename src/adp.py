@@ -13,9 +13,48 @@ HIDDEN_DIM = 100
 INPUT_DIM = 2 * (5 * (len(PB_DICT) - 1) + 1) + 2
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-class ShallowNN(torch.nn.Module):
+
+class Conv_Net(torch.nn.Module):
+    def __init__(self, conv_params, ff_params, **kwargs):
+        super(Conv_Net, self).__init__()
+        
+        self.layer = kwargs.get('layer', torch.nn.Linear)
+        self.activation_fn = kwargs.get('activation_fn', torch.nn.Tanh)
+        self.loss_fn = kwargs.get('loss_fn', 'mse')
+        if self.loss_fn == 'mse':
+            self.loss_fn = torch.nn.MSELoss(reduction='sum')
+        elif self.loss_fn == 'mae':
+            self.loss_fn = torch.nn.L1Loss(reduction='sum')
+            
+        self.layers = []
+        # for i in range(len(conv_params) - 1):
+        #     self.layers += [
+        #         torch.nn.Conv2d(conv_params[i], conv_params[i+1], kernel_size=3, padding=1),
+        #         torch.nn.MaxPool2d(kernel_size=2, stride=2),
+        #         torch.nn.Flatten(),
+        #         self.activation_fn(),
+        #     ]
+        
+        for i in range(len(ff_params) - 1):
+            self.layers += [
+                self.layer(ff_params[i], ff_params[i+1]),
+                self.activation_fn(),
+            ]
+        
+        self.model = torch.nn.Sequential(*self.layers)
+        self.model = self.model.to(device)
+
+        self.lr = kwargs.get('lr', 0.1)
+        self.optimizer_fn = kwargs.get('optimizer_fn', torch.optim.Adam)
+        self.optimizer = self.optimizer_fn(self.model.parameters(), lr=self.lr)
+        
+
+    def __call__(self, x):
+        return self.model(x)
+    
+class FF_Net(torch.nn.Module):
     def __init__(self, params, **kwargs):
-        super(ShallowNN, self).__init__()
+        super(FF_Net, self).__init__()
         
         self.layer = kwargs.get('layer', torch.nn.Linear)
         self.activation_fn = kwargs.get('activation_fn', torch.nn.Tanh)
@@ -40,25 +79,25 @@ class ShallowNN(torch.nn.Module):
         self.optimizer = self.optimizer_fn(self.model.parameters(), lr=self.lr)
         
 
-    def forward(self, x):
+    def __call__(self, x):
         return self.model(x)
 
-    def train(self, x, y):
-        x = x.to(device)
-        y = y.to(device)
-        y_pred = self.forward(x)
-        loss = self.loss_fn(y_pred, y)
-        self.optimizer.zero_grad()
-        loss.backward()
-        self.optimizer.step()
-        return loss.item()
+    # def train(self, x, y):
+    #     x = x.to(device)
+    #     y = y.to(device)
+    #     y_pred = self.forward(x)
+    #     loss = self.loss_fn(y_pred, y)
+    #     self.optimizer.zero_grad()
+    #     loss.backward()
+    #     self.optimizer.step()
+    #     return loss.item()
     
-    def evaluate(self, x, y):
-        y_pred = self.forward(x)
-        loss = self.loss_fn(y_pred, y)
-        return loss.item()
+    # def evaluate(self, x, y):
+    #     y_pred = self.forward(x)
+    #     loss = self.loss_fn(y_pred, y)
+    #     return loss.item()
     
-class ValueNetwork(ShallowNN):
+class ADP_Value_Net(FF_Net):
     def __init__(self, model_path: str, **kwargs):
         self.model_path = model_path
         if not self.model_path:
@@ -70,7 +109,7 @@ class ValueNetwork(ShallowNN):
         self.n_steps = kwargs.pop('n_steps', 1)
         self.logger = kwargs.pop('logger', logging.getLogger(__name__))
         
-        super(ValueNetwork, self).__init__(
+        super(ADP_Value_Net, self).__init__(
             params=[INPUT_DIM, HIDDEN_DIM, 1], 
             **kwargs
         )
@@ -82,7 +121,7 @@ class ValueNetwork(ShallowNN):
             self.logger.error(e)
             self.logger.info('Initializing new model')
     
-    def forward(self, state: Gomoku):
+    def __call__(self, state: Gomoku):
         if state.fin():
             reward = state.score()
             return torch.FloatTensor([reward]).to(device)
@@ -96,7 +135,7 @@ class ValueNetwork(ShallowNN):
     def opt(self, *states: list[Gomoku]):
         assert len(states) > 1, "At least 2 states are required"
         
-        V_func = lambda i: self.forward(states[i]).to(device) * (self.gamma ** i)
+        V_func = lambda i: self(states[i]).to(device) * (self.gamma ** i)
         [V, *V_next] = list(map(V_func, range(len(states))))
 
         loss = self.alpha * (sum(V_next) - V)
@@ -153,7 +192,7 @@ class ValueNetwork(ShallowNN):
         for action in actions:
             state_new = state.copy()
             state_new.play(action)
-            value = self.forward(state_new)
+            value = self(state_new)
             if value.device != device:
                 value = value.to(device)
             rewards_actions.append((value, action))
@@ -194,7 +233,7 @@ class ValueNetwork(ShallowNN):
             history += [state.copy()]
             
         while not state.fin():
-            action = policy_network.forward(state, self)
+            action = policy_network(state, self)
             state.play(action)                
             history += [state.copy()]
             if state.fin():
@@ -208,7 +247,7 @@ class ValueNetwork(ShallowNN):
     def train(self, state: Gomoku, policy_network):
         history = [state.copy()]
         while not state.fin():
-            action = policy_network.forward(state, self)
+            action = policy_network(state, self)
             state.play(action)
             history += [state.copy()]
             
@@ -229,11 +268,11 @@ class ValueNetwork(ShallowNN):
         torch.save(self.model.state_dict(), filepath)
         self.logger.info('Saved model at '+filepath)
     
-class PolicyNetwork:
+class ADP_Policy:
     def __init__(self, **kwargs):
         self.epsilon = kwargs.get('epsilon', 0.)
     
-    def forward(self, state: Gomoku, value_network: ValueNetwork) -> list[tuple[float, tuple[int, int]]]:            
+    def __call__(self, state: Gomoku, value_network: ADP_Value_Net) -> list[tuple[float, tuple[int, int]]]:            
         rewards_actions = value_network.get_rewards_actions(state)
         if random.random() < self.epsilon:
             probs = np.random.random(len(rewards_actions))
@@ -244,11 +283,11 @@ class PolicyNetwork:
   
 class ADP_Player(Player):
     def __init__(self, model_path: str, value_network_kwargs, policy_network_kwargs): 
-        self.value_network = ValueNetwork(model_path=model_path, **value_network_kwargs)
-        self.policy_network = PolicyNetwork(**policy_network_kwargs)
+        self.value_network = ADP_Value_Net(model_path=model_path, **value_network_kwargs)
+        self.policy_network = ADP_Policy(**policy_network_kwargs)
     
     def next_move_probs(self, game: Gomoku) -> tuple[int, int]:
-        return self.policy_network.forward(game, self.value_network)
+        return self.policy_network(game, self.value_network)
   
 # class UCT_ADP_Player(UCT_Player):
 #     def __init__(self, max_depth=10, model=None, **kwargs):

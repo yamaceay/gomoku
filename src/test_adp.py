@@ -1,4 +1,4 @@
-from .adp import ADP_Player, ValueNetwork
+from .adp import ADP_Player, ADP_Value_Net
 from .zero import AlphaZeroPlayer
 from .gomoku import Gomoku
 import logging
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     game = Gomoku(**game_kwargs)
 
     while not game.fin():
-        value_network = ValueNetwork(model_path=model_path, **value_network_kwargs)
+        value_network = ADP_Value_Net(model_path=model_path, **value_network_kwargs)
         rewards_actions = value_network.get_rewards_actions(game)
         print(rewards_actions[:5], rewards_actions[-5:])
         move = adp.next_move(game)

@@ -1,5 +1,6 @@
 from .mcts import uct_score
 from .players import UCT_Player
+from .adp import ADP_Player
 from .gomoku import Gomoku
 
 if __name__ == "__main__":
@@ -22,15 +23,17 @@ if __name__ == "__main__":
         'epsilon': 0.1,
     }
     
-    # adp_model = ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs)
+    adp_model = ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs)
     uct_player = UCT_Player(iterations=5000, policy=uct_score, tree_kwargs={'only_adjacents': True})
     
     game = Gomoku(**game_kwargs)
     
     while not game.fin():
-        try:
-            action = uct_player.next_move(game)
-            game.play(action)
-            game.print()
-        except TimeoutError as e:
-            print(e)
+        action = uct_player.next_move(game)
+        game.play(action)
+        game.print()
+        if game.fin():
+            break
+        action = adp_model.next_move(game)
+        game.play(action)
+        game.print()

@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from .zero import AlphaZeroPlayer
-from .adp import ADP_Player, ValueNetwork, PolicyNetwork
+from .adp import ADP_Player, ADP_Value_Net, ADP_Policy
 from .players import Player
 import random
 import logging
@@ -76,14 +76,14 @@ def train_adp(
             len_histories += [(avg_len_history, batch)]
     max_len_history = max(len_histories, key=lambda x: x[0]) if len(len_histories) else None
 
-    value_network = ValueNetwork(model_path=model_path, **value_network_kwargs)
+    value_network = ADP_Value_Net(model_path=model_path, **value_network_kwargs)
     
     for batch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
         last_epoch_in_batch = batch + epochs_step
         new_path = os.path.join(DIR_PATH, "epoch_{}.h5".format(last_epoch_in_batch))
         
         if train:
-            policy = PolicyNetwork(**policy_network_kwargs)
+            policy = ADP_Policy(**policy_network_kwargs)
             for i in tqdm(range(1, epochs_step+1), position=1, leave=False, desc="Epochs"):
                 game = Gomoku(**game_kwargs)
                 if zero_play:

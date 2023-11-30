@@ -59,30 +59,29 @@ def uct_pb_score(parent: Node, child: Node, **kwargs) -> float:
 
 class Tree:
     def __init__(self, state: Gomoku, **kwargs):
-        self.root = Node(state.copy())
+        self.state = state.copy()
+        self.root = Node(self.state)
         self.only_adjacents = kwargs.get('only_adjacents', False)
         self.decay = kwargs.get('decay', 0.9)
 
     def select(self, policy=uct_score, policy_kwargs={}) -> Node:
         node = self.root
-        while not node.is_terminal():
-            if not node.is_fully_expanded():
-                break
-            else:
-                assert len(node.children), "No children"
-                sort_key = lambda child: policy(node, child, **policy_kwargs)
-                child_nodes = sortfn(node.children, sort_key)
-                node = child_nodes[0]
+        while not node.is_terminal() and node.is_fully_expanded():
+            assert len(node.children), "No children"
+            sort_key = lambda child: policy(node, child, **policy_kwargs)
+            child_nodes = sortfn(node.children, sort_key)
+            node = child_nodes[0]
         return node
 
     def expand(self, node: Node) -> Node:
-        actions = node.state.actions(only_adjacents=True) 
-        actions = list(filter( 
-            lambda action: action not in [
+        actions = [
+            action 
+            for action in node.state.actions(only_adjacents=True) 
+            if action not in [
                 child.state.get_history()[-1] 
                 for child in node.children
-            ], actions
-        ))
+            ]
+        ]
         assert len(actions), "No action"
         
         action = actions[np.random.randint(0, len(actions))]
@@ -99,15 +98,12 @@ class Tree:
             assert len(state_actions), "No action"
             action = state_actions[np.random.randint(0, len(state_actions))]
             state.play(action)
-        score = state.score()
-        state.print()
-        print(self.root.state.history, state.score())
-        score *= self.root.state.player
-        return score
-
+        return state.score()
+    
     def backpropagate(self, node: Node, reward: float):
+        reward *= -node.state.player
         while node is not None:
             node.n += 1
             node.Q += reward
-            reward *= self.decay
+            reward *= -self.decay
             node = node.parent

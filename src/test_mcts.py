@@ -5,9 +5,9 @@ from .gomoku import Gomoku
 
 if __name__ == "__main__":
     game_kwargs = {
-        'M': 3,
-        'N': 3,
-        'K': 3,
+        'M': 8,
+        'N': 8,
+        'K': 5,
         'ADJ': 2,
     }
     
@@ -23,21 +23,16 @@ if __name__ == "__main__":
         'epsilon': 0.1,
     }
     
-    adp_model = ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs)
-    uct_player = UCT_Player(iterations=300, policy=uct_score, tree_kwargs={'only_adjacents': True})
+    # adp_model = ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs)
+    uct_player = UCT_Player(iterations=1000, policy=uct_score, tree_kwargs={'only_adjacents': True})
     
-    game = Gomoku(**game_kwargs, FIRST_PLAYER=-1)
+    game = Gomoku(**game_kwargs)
     
-    i = 8
     while not game.fin():
         try:
             move_probs = uct_player.next_move_probs(game)
             _, action = move_probs[0]
             game.play(action)
-            # game.print()
-            if i <= 0:
-                break
-            else:
-                i-=1
+            game.print()
         except TimeoutError as e:
             print(e)

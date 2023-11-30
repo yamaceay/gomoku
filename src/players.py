@@ -28,7 +28,7 @@ class RandomPlayer(Player):
         return rewards_actions
             
 class UCT_Player(Player):
-    def __init__(self, iterations=10000, timeout_ms=5000, policy=uct_score, policy_kwargs={}, tree_kwargs={}):
+    def __init__(self, iterations=10000, timeout_ms=0, policy=uct_score, policy_kwargs={}, tree_kwargs={}):
         self.iterations = iterations
         self.policy = policy
         self.policy_kwargs = policy_kwargs
@@ -41,8 +41,9 @@ class UCT_Player(Player):
     def next_move_probs(self, game: Gomoku):
         self.tree = Tree(game, **self.tree_kwargs)
         
-        signal.signal(signal.SIGALRM, timeout_handler)
-        signal.alarm(self.timeout_ms // 1000)  # alarm is set with seconds
+        if self.timeout_ms > 0:
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(self.timeout_ms // 1000)  # alarm is set with seconds
         
         try:
             for _ in range(self.iterations):
@@ -54,8 +55,15 @@ class UCT_Player(Player):
         except TimeoutError:
             pass
         
+        # # print the whole tree
+        # def print_recursive(root: Node, depth=0):
+        #     print("  " * depth, root)
+        #     for child in root.children:
+        #         print_recursive(child, depth + 1)
+        # print_recursive(self.tree.root)
+        
         get_reward = lambda child: uct_score(self.tree.root, child, C=0)
-        get_action = lambda child: child.state.get_history()[-1]
+        get_action = lambda child: child.state.get_history()[-1] 
         get_reward_action = lambda child: (get_reward(child), get_action(child))
         rewards_actions = map(get_reward_action, self.tree.root.children)
         return sortfn(rewards_actions, key=lambda x: x[0])

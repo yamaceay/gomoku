@@ -100,24 +100,6 @@ class Dense_Net(Net):
         )
     
 class ADP_Player(Player):
-    def opt(self, *states: list[Gomoku], **kwargs):
-        top_down = kwargs.pop('top_down', False)
-        
-        assert len(states) > 1, "At least 2 states are required"
-        
-        V_func = lambda i: self(states[i]).to(device) * (self.gamma ** i)
-        [V, *V_next] = list(map(V_func, range(len(states))))
-
-        loss = self.alpha * (sum(V_next) - V)
-                
-        if top_down:
-            self.nn.optimizer.zero_grad()
-            loss.backward()
-            self.nn.optimizer.step()
-                
-        loss_squared = loss ** 2
-        return loss_squared
-    
     def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:  
         actions = state.actions()
         assert len(actions), "No moves available"
@@ -130,31 +112,43 @@ class ADP_Player(Player):
             rewards_actions.append((value, action))
         return sortfn(rewards_actions, key=lambda x: x[0])
     
-    def train_body(self, history: list[Gomoku], **kwargs):
-        top_down = kwargs.pop('top_down', False)
+    def __call__(self, state: Gomoku):
+        return self.forward(state)
+    
+    def opt(self, *states: list[Gomoku], **kwargs):
+        reward = kwargs.pop('reward', .0)
+        
+        assert len(states) > 0, "At least 1 state is required"
+        
+        V_func = lambda i: self(states[i]).to(device) * (self.gamma ** i)
+        [V, *V_next] = list(map(V_func, range(len(states))))
+
+        loss = self.alpha * (reward + sum(V_next) - V)
+        loss_squared = loss ** 2
+        return loss_squared
+    
+    def train_body(self, history: list[Gomoku]):
         losses = []
-        last_step = len(history)-1
-        for i in range(last_step-1, -1, -1):
-            states = history[i:]
-            if i + self.n_steps < last_step:
-                states = states[:self.n_steps+1]
-            loss = self.opt(*states, top_down=top_down)
+        last_state = history.pop()
+        reward = last_state.score()
+        for i in range(len(history)):
+            low, high = i, min(i + self.n_steps, len(history) - 1)
+            states = history[low:high+1]
+            loss = self.opt(*states, reward=reward)
             losses += [loss]
             
         losses = torch.stack(losses).to(device)
         objective = torch.zeros_like(losses).to(device)
         loss = self.nn.loss_fn(losses, objective)
         
-        if not top_down:
-            self.nn.optimizer.zero_grad()
-            loss.backward()
-            self.nn.optimizer.step()
+        self.nn.optimizer.zero_grad()
+        loss.backward()
+        self.nn.optimizer.step()
         
         return loss.cpu().detach().item()
     
     def train_by_zero(self, state: Gomoku, **kwargs):
         epsilon = kwargs.get('epsilon', .1)
-        top_down = kwargs.get('top_down', False)
         
         zero_player = AlphaZeroPlayer(
             M = state.M, 
@@ -180,11 +174,10 @@ class ADP_Player(Player):
             state.play(action)
             history += [state.copy()]
         
-        return self.train_body(history, top_down=top_down)
+        return self.train_body(history)
     
     def train(self, state: Gomoku, **kwargs):
         epsilon = kwargs.get('epsilon', .1)
-        top_down = kwargs.get('top_down', False)
         history = [state.copy()]
         while not state.fin():
             action = state.actions()[0]
@@ -193,10 +186,8 @@ class ADP_Player(Player):
             state.play(action)
             history += [state.copy()]
             
-        return self.train_body(history, top_down=top_down)
-    
-    def __call__(self, state: Gomoku):
-        return self.forward(state)
+        return self.train_body(history)
+
     
 class ADP_Dense_Player(ADP_Player):
     def __init__(self, **kwargs):

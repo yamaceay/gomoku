@@ -2,12 +2,13 @@ from tqdm import tqdm
 from .zero import AlphaZeroPlayer
 from .adp import ADP_Player, ADP_Dense_Player, ADP_Conv_Player
 from .players import Player
+from torch.optim import lr_scheduler
 import random
 import logging
 import os
 from .gomoku import Gomoku
 
-NAME_OF_TRAINING = "fwd"
+NAME_OF_TRAINING = "dens"
 DIR_PATH = "./models_{}".format(NAME_OF_TRAINING)
 
 # configure a logger which logs to the 'adp.log'
@@ -60,9 +61,9 @@ def train_adp(
     model_path: str,  
     epochs_start: int = 0, 
     n_test_games: int = 0, 
+    select_best: bool = False,
     eval: bool = True, 
     train: bool = True,
-    top_down: bool = False,
     zero_play: bool = True,
     player: ADP_Player = ADP_Dense_Player,
     player_args: dict = {},
@@ -79,6 +80,7 @@ def train_adp(
 
     adp_model = player(model_path=model_path, **player_args)
     
+    scheduler = lr_scheduler.LinearLR(adp_model.nn.optimizer, start_factor=1, end_factor=0.5, total_iters=30)
     for batch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
         last_epoch_in_batch = batch + epochs_step
         new_path = os.path.join(DIR_PATH, "epoch_{}.h5".format(last_epoch_in_batch))
@@ -87,10 +89,11 @@ def train_adp(
             for i in tqdm(range(1, epochs_step+1), position=1, leave=False, desc="Epochs"):
                 game = Gomoku(**game_kwargs)
                 if zero_play:
-                    loss = adp_model.train_by_zero(game, top_down=top_down)
+                    loss = adp_model.train_by_zero(game)
                 else:
-                    loss = adp_model.train(game, top_down=top_down)
+                    loss = adp_model.train(game)
                 logger.info("Epoch {}, Loss {}".format(batch + i, loss))
+                scheduler.step()
             adp_model.nn.save_model(new_path)
             
         if eval:
@@ -106,15 +109,19 @@ def train_adp(
             with open("logs/len_histories_{}.txt".format(NAME_OF_TRAINING), "a") as f:
                 f.write("{},{}\n".format(new_len_history[1], new_len_history[0]))
             
-            if max_len_history is None or max_len_history[0] < new_len_history[0]:
-                max_len_history = new_len_history
-                adp_model.nn.save_model(model_path)
-                logger.info("{} is saved as the strongest model".format(new_path))
-                
+            if select_best:
+                if max_len_history is None or max_len_history[0] < new_len_history[0]:
+                    max_len_history = new_len_history
+                    adp_model.nn.save_model(model_path)
+                    logger.info("{} is saved as the strongest model".format(new_path))
+                    
+                else:
+                    old_path = os.path.join(DIR_PATH, "epoch_{}.h5".format(max_len_history[1]))
+                    adp_model.nn.load_model(old_path)
+                    logger.info("{} is loaded as the strongest model".format(old_path))
             else:
-                old_path = os.path.join(DIR_PATH, "epoch_{}.h5".format(max_len_history[1]))
-                adp_model.nn.load_model(old_path)
-                logger.info("{} is loaded as the strongest model".format(old_path))
+                adp_model.nn.save_model(model_path)
+                logger.info("{} is saved as the latest model".format(new_path))
                 
 if __name__ == "__main__":
     M, N, K = 8, 8, 5
@@ -129,7 +136,7 @@ if __name__ == "__main__":
         'alpha': 0.9,
         'magnify': 2,
         'gamma': 0.9,
-        'lr': 0.1,
+        'lr': 0.01,
         'n_steps': 1, 
         'logger': logger,
     }
@@ -139,21 +146,21 @@ if __name__ == "__main__":
     }
     
     train_adp(
-        epochs_start = 200,
+        epochs_start = 0,
         epochs_end = 500, 
         epochs_step = 50, 
         eval=True,
         train=True,
         zero_play=False,
-        top_down=False,
         n_test_games=7,
         model_path = os.path.join(DIR_PATH, 'best.h5'),
+        select_best = False,
         game_kwargs=game_kwargs, 
-        player=ADP_Conv_Player,
+        player=ADP_Dense_Player,
         player_args={
             'logger': logger,
-            'M': M,
-            'N': N,
+            # 'M': M,
+            # 'N': N,
             **value_network_kwargs, 
             **policy_network_kwargs,
         },

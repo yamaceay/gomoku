@@ -30,6 +30,41 @@ def loc_to_move(locs: str):
         moves += [move]
     return tuple(moves)
 
+PATTERNS = [
+    '-oooo-',
+    'x-ooo-x',
+    'x-ooo--',
+    '--ooo--',
+    '--ooo-o',
+    'o-ooo-o',
+    'x-ooo-o',
+    '--oo--',
+    'x-oo--',
+    'xoo-o--',
+    'xo-oo--',
+    'xo-oo-x',
+    'xoo-o-x',
+    'xooo--', 
+    'xoo---',
+    'xoooo-',
+    '-oo-o-',
+    'xooo-o-',
+    'xoo-oo-',
+    'xooo-ox',
+    'xoo-oox',
+    'xooo-oo',
+    '-o-o-o-',
+    'xo-o-ox',
+    'xo-o-o-',
+    '--o-o--',
+    'x-o-o--',
+    'x-o-o-x',
+    '--o--',
+    '-oooo', 
+    'o-ooo', 
+    'oo-oo', 
+]
+
 PB_DICT = {
     '-oooo-': lambda _: 10000,
     'x-ooo-x': lambda decay: 1000*decay**3,
@@ -59,7 +94,7 @@ PB_DICT = {
     '--o-o--': lambda decay: 100*decay**2,
     'x-o-o--': lambda decay: 100*decay**4,
     'x-o-o-x': lambda decay: 100*decay**6,
-    # '--o--': lambda _: 1,
+    '--o--': lambda _: 1,
 }
 
 WIN_ENCODE = [

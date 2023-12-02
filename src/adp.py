@@ -9,7 +9,7 @@ from .zero import AlphaZeroPlayer
 import logging
 
 HIDDEN_DIM = 100
-INPUT_DIM = 2 * (5 * (len(PB_DICT) - 1) + 1) + 2
+INPUT_DIM = 2 * (5 * (len(PB_DICT) - 1) + 1) + 2 * (2 * len(PB_DICT)) + 2
 OUTPUT_DIM = 1
 
 INPUT_CHANNELS = 4
@@ -205,41 +205,63 @@ class ADP_Dense_Player(ADP_Player):
     def extract_values(self, state: Gomoku):
         assert len(state.line_cache), "Line cache is empty"
         value_list = {len(pattern): [] for pattern in PB_DICT}
+        affected_value_list = {len(pattern): [] for pattern in PB_DICT}
         for length in state.get_line_cache():
             for position in state.get_line_cache(length):
                 for direction in state.get_line_cache(length, position):
                     _, values = state.get_line_cache(length, position, direction)
+                    if position == state.get_history()[-1]:
+                        affected_value_list[length] += [values]
                     if values in WIN_ENCODE:
-                        return {}, -1
+                        return {}, {}, -1
                     if values in map(revp, WIN_ENCODE):
-                        return {}, 1
+                        return {}, {}, 1
                     value_list[length] += [values]
-        return value_list, None  
+        return value_list, affected_value_list, None  
     
-    def extract_features(self, state: Gomoku, value_list: dict):        
+    def extract_feature(self, values: list[str], pattern: str) -> tuple[int, int]:
+        first_count, second_count = 0, 0
+    
+        pattern_o, pattern_x = pattern, revp(pattern)
+        for value in values:
+            len_diff = len(pattern) - len(value)
+            assert 0 <= len_diff <= 1, "Length difference of pattern vs. line: {}".format(len_diff)
+            add_bound = len_diff > 0
+            if value == pattern_x[:len(value)]:
+                if not add_bound or pattern_x[len(value)] == 'o':
+                    first_count += 1
+            if value == pattern_o[:len(value)]:
+                if not add_bound or pattern_o[len(value)] == 'x':
+                    second_count += 1
+        return [first_count, second_count]
+    
+    def extract_features(self, state: Gomoku, value_list: dict, affected_value_list: dict):        
         counts = []
-        for pattern_o in PB_DICT:
-            values = value_list[len(pattern_o)]
-            pattern_x = revp(pattern_o)
-            first_count, second_count = 0, 0
-            for value in values:
-                len_diff = len(pattern_x) - len(value)
-                assert 0 <= len_diff <= 1, "Length difference of pattern vs. line: {}".format(len_diff)
-                add_bound = len_diff > 0
-                if value == pattern_x[:len(value)]:
-                    if not add_bound or pattern_x[len(value)] == 'o':
-                        first_count += 1
-                if value == pattern_o[:len(value)]:
-                    if not add_bound or pattern_o[len(value)] == 'x':
-                        second_count += 1
-            counts += [first_count, second_count]
+        not_occurred, occurred = [0, 0], [0, 0]
+        if state.player == 1:
+            occurred[0] = 1
+        else:
+            occurred[1] = 1
+        occurrences = []
+        
+        for pattern in PB_DICT:
+            values = value_list[len(pattern)]
+            counts += self.extract_feature(values, pattern)
+            
+            affected_values = affected_value_list[len(pattern)]
+            affected_new_counts = self.extract_feature(affected_values, pattern)
+            
+            occurrences += occurred if affected_new_counts[0] > 0 else not_occurred
+            occurrences += occurred if affected_new_counts[1] > 0 else not_occurred
         
         to_bit = lambda c: int(c > 0)
         to_bits = lambda c: [int(c > i) for i in range(4)] + [int((c-4)/2) if c>4 else 0]
         [vcfo, vcfx, *rest] = counts
-        features = [to_bit(vcfo), to_bit(vcfx)]
+        features = [to_bit(vcfx), to_bit(vcfo)]
         for c in rest:
             features += to_bits(c)
+        
+        features += occurrences
         features += [int(state.player == 1), int(state.player == -1)]
         return torch.FloatTensor(features).to(device)
     
@@ -248,10 +270,11 @@ class ADP_Dense_Player(ADP_Player):
             reward = state.score()
             return torch.FloatTensor([reward]).to(device)
         
-        value_list, end_result = self.extract_values(state)
+        value_list, affected_value_list, end_result = self.extract_values(state)
         if end_result is not None:
             return torch.FloatTensor([end_result]).to(device)
-        features = self.extract_features(state, value_list)
+    
+        features = self.extract_features(state, value_list, affected_value_list)
         return self.nn(features)
     
 class ADP_Conv_Player(ADP_Player):
@@ -290,21 +313,20 @@ class ADP_Conv_Player(ADP_Player):
     
 if __name__ == '__main__':
     M, N, K = 8, 8, 5
-    adp_player = ADP_Conv_Player(
-        model_path="models_fwd/best.h5",
+    adp_player = ADP_Dense_Player(
+        model_path="models_dens/best.h5",
         alpha=0.9,
         magnify=1,
         gamma=0.9,
-        lr=0.001,
+        lr=0.01,
         n_steps=1,
         epsilon=0.1,
-        M=M,
-        N=N,
+        # M=M,
+        # N=N,
     )
     
     game = Gomoku(M=M, N=N, K=K)
     
-    print(adp_player.nn.state_dict().__dict__)
     while not game.fin():
         action = adp_player.next_move(game)
         game.play(action)

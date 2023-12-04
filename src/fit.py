@@ -168,7 +168,7 @@ if __name__ == "__main__":
     }
     
     train_adp(
-        epochs_start = 0,
+        epochs_start = 150,
         epochs_end = 500, 
         epochs_step = 50, 
         eval=True,

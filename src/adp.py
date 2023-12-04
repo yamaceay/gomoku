@@ -14,7 +14,7 @@ OUTPUT_DIM = 1
 
 INPUT_CHANNELS = 4
 HIDDEN_CHANNELS = 32
-OUTPUT_CHANNELS = 4
+OUTPUT_CHANNELS = 64
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
@@ -62,25 +62,21 @@ class Conv_Net(Net):
         self.hidden_channels = kwargs.pop('hidden_channels', HIDDEN_CHANNELS)
         self.output_channels = kwargs.pop('output_channels', OUTPUT_CHANNELS)
         
-        self.input_dim = kwargs.pop('input_dim', INPUT_DIM)
-        self.hidden_dim = kwargs.pop('hidden_dim', HIDDEN_DIM)
         self.output_dim = kwargs.pop('output_dim', OUTPUT_DIM)
-        
-        self.conv_out_dim = self.output_channels*self.board_size[0]*self.board_size[1]
         
         super(Conv_Net, self).__init__(**kwargs)
         
         self.compile_model(
-            torch.nn.Conv2d(self.input_channels, self.hidden_channels, kernel_size=3, stride=1, padding=1),
-            torch.nn.Sigmoid(),
-            torch.nn.Conv2d(self.hidden_channels, self.output_channels, kernel_size=1),
-            torch.nn.Sigmoid(),
+            torch.nn.Conv2d(self.input_channels, self.hidden_channels, kernel_size=3, padding=1),
+            torch.nn.BatchNorm2d(self.hidden_channels),
+            torch.nn.ReLU(),
+            torch.nn.MaxPool2d(kernel_size=2, stride=2),
+            torch.nn.Conv2d(self.hidden_channels, self.output_channels, kernel_size=3),
+            torch.nn.BatchNorm2d(self.output_channels),
+            torch.nn.ReLU(),
+            torch.nn.MaxPool2d(kernel_size=2),
             torch.nn.Flatten(),
-            torch.nn.Linear(self.conv_out_dim, self.input_dim),
-            torch.nn.Tanh(),
-            torch.nn.Linear(self.input_dim, self.hidden_dim),
-            torch.nn.Tanh(),
-            torch.nn.Linear(self.hidden_dim, self.output_dim),
+            torch.nn.Linear(self.output_channels, self.output_dim),
             torch.nn.Tanh(),
         )
     
@@ -311,39 +307,30 @@ class ADP_Conv_Player(ADP_Player):
         features = self.extract_features(state)
         return self.nn(features).squeeze(0)
     
-if __name__ == '__main__':
-    from .fit import tournament
-    game_kwargs = {
-        'M': 8,
-        'N': 8,
-        'K': 5,
-        'ADJ': 2,
-    }
+# if __name__ == '__main__':
+#     from .fit import tournament
+#     game_kwargs = {
+#         'M': 8,
+#         'N': 8,
+#         'K': 5,
+#         'ADJ': 2,
+#     }
     
-    adp_args = {
-        "alpha": 0.9,
-        "magnify": 1,
-        "gamma": 0.9,
-        "lr": 0.001,
-        "n_steps": 1,
-        "epsilon": 0.1,
-        "M": game_kwargs['M'],
-        "N": game_kwargs['N'],
-    }
+#     adp_args = {
+#         "alpha": 0.9,
+#         "magnify": 1,
+#         "gamma": 0.9,
+#         "lr": 0.01,
+#         "n_steps": 1,
+#         "epsilon": 0.1,
+#         "M": game_kwargs['M'],
+#         "N": game_kwargs['N'],
+#     }
     
-    adp_player = ADP_Conv_Player(**adp_args)
-    game = Gomoku(**game_kwargs)
-    while not game.fin():
-        rewards_actions = adp_player.next_move_probs(game)
-        print(rewards_actions[:3])
-        action = adp_player.next_move(game)
-        game.play(action)
-        print(game)
+#     players = [
+#         ADP_Dense_Player(model_path=f"models_dens/epoch_{i}.h5", **adp_args)
+#         for i in range(50, 550, 50)
+#     ]
     
-    # players = [
-    #     ADP_Dense_Player(model_path=f"models_dens/epoch_{i}.h5", **adp_args)
-    #     for i in range(50, 550, 50)
-    # ]
-    
-    # leaderboard = tournament(game_kwargs, players, n_test_games=25)
-    # print(leaderboard)
+#     leaderboard = tournament(game_kwargs, players, n_test_games=25)
+#     print(leaderboard)

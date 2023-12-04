@@ -8,7 +8,7 @@ import logging
 import os
 from .gomoku import Gomoku
 
-NAME_OF_TRAINING = "dens"
+NAME_OF_TRAINING = "conv"
 DIR_PATH = "./models_{}".format(NAME_OF_TRAINING)
 
 # configure a logger which logs to the 'adp.log'
@@ -19,7 +19,7 @@ file_handler = logging.FileHandler('logs/adp_{}.log'.format(NAME_OF_TRAINING))
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
-def comp_models(game_kwargs, model1: Player, model2: Player, print_game: bool = False) -> tuple[bool, bool, int]:
+def comp_models(game_kwargs, model1: Player, model2: Player, print_game: bool = False) -> tuple[int, bool, int]:
     game = Gomoku(**game_kwargs)
     
     model2_starts = random.random() < .5
@@ -39,7 +39,24 @@ def comp_models(game_kwargs, model1: Player, model2: Player, print_game: bool = 
         print(game)
         
     return win, not model2_starts, len(game.get_history())
-    
+
+def tournament(game_kwargs, models: list[Player], n_test_games: int) -> list[tuple[int, int, int, int]]:
+    leaderboard = []
+    with tqdm(total=n_test_games * len(models) * (len(models) - 1) // 2, position=0, leave=False, desc="Tournament") as bar:
+        for i in range(len(models)):
+            for j in range(len(models)):
+                if i >= j:
+                    continue
+                n_wins, l_history = 0, 0
+                for _ in range(n_test_games):
+                    win, starts, len_history = comp_models(game_kwargs, models[i], models[j])
+                    n_wins += (win > 0) == starts
+                    l_history += len_history
+                    bar.update(1)
+                n_wins, l_history = n_wins / n_test_games, l_history / n_test_games
+                leaderboard += [(i, j, n_wins, l_history)]
+    return leaderboard
+
 def eval_by_zero(game_kwargs, curr_model, n_test_games: int):
     zero = AlphaZeroPlayer(**game_kwargs)
     len_histories = []
@@ -58,7 +75,6 @@ def train_adp(
     epochs_end: int, 
     epochs_step: int,
     game_kwargs, 
-    model_path: str,  
     epochs_start: int = 0, 
     n_test_games: int = 0, 
     select_best: bool = False,
@@ -69,7 +85,13 @@ def train_adp(
     player_args: dict = {},
 ):
     
+    model_path = os.path.join(DIR_PATH, 'best.h5')
+    
     len_histories = []
+    if not os.path.exists("logs/len_histories_{}.txt".format(NAME_OF_TRAINING)):
+        with open("logs/len_histories_{}.txt".format(NAME_OF_TRAINING), "w") as f:
+            f.write("")
+        
     with open("logs/len_histories_{}.txt".format(NAME_OF_TRAINING), "r") as f:
         for line in f.readlines():
             batch, avg_len_history = line.split(",")
@@ -153,14 +175,13 @@ if __name__ == "__main__":
         train=True,
         zero_play=False,
         n_test_games=7,
-        model_path = os.path.join(DIR_PATH, 'best.h5'),
         select_best = False,
         game_kwargs=game_kwargs, 
-        player=ADP_Dense_Player,
+        player=ADP_Conv_Player,
         player_args={
             'logger': logger,
-            # 'M': M,
-            # 'N': N,
+            'M': M,
+            'N': N,
             **value_network_kwargs, 
             **policy_network_kwargs,
         },

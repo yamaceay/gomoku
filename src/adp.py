@@ -312,22 +312,38 @@ class ADP_Conv_Player(ADP_Player):
         return self.nn(features).squeeze(0)
     
 if __name__ == '__main__':
-    M, N, K = 8, 8, 5
-    adp_player = ADP_Dense_Player(
-        model_path="models_dens/best.h5",
-        alpha=0.9,
-        magnify=1,
-        gamma=0.9,
-        lr=0.01,
-        n_steps=1,
-        epsilon=0.1,
-        # M=M,
-        # N=N,
-    )
+    from .fit import tournament
+    game_kwargs = {
+        'M': 8,
+        'N': 8,
+        'K': 5,
+        'ADJ': 2,
+    }
     
-    game = Gomoku(M=M, N=N, K=K)
+    adp_args = {
+        "alpha": 0.9,
+        "magnify": 1,
+        "gamma": 0.9,
+        "lr": 0.001,
+        "n_steps": 1,
+        "epsilon": 0.1,
+        "M": game_kwargs['M'],
+        "N": game_kwargs['N'],
+    }
     
+    adp_player = ADP_Conv_Player(**adp_args)
+    game = Gomoku(**game_kwargs)
     while not game.fin():
+        rewards_actions = adp_player.next_move_probs(game)
+        print(rewards_actions[:3])
         action = adp_player.next_move(game)
         game.play(action)
-        # print(game, adp_player.next_move_probs(game)[:5])
+        print(game)
+    
+    # players = [
+    #     ADP_Dense_Player(model_path=f"models_dens/epoch_{i}.h5", **adp_args)
+    #     for i in range(50, 550, 50)
+    # ]
+    
+    # leaderboard = tournament(game_kwargs, players, n_test_games=25)
+    # print(leaderboard)

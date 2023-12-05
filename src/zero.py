@@ -1,12 +1,12 @@
 from .game import Board
 from .mcts_alphaZero import MCTSPlayer as ZeroPlayer
 from .players import Player
-from .gomoku import Gomoku, loc_to_move
+from .gomoku import Gomoku
 from .policy_value_net_numpy import PolicyValueNetNumpy as PolicyValueNet
 import pickle
 import os
 
-DIR = './models_azero'
+ZERO_DIR_PATH = '_azero/models'
 
 class AlphaZeroPlayer(Player):
     def __init__(self, M: int, N: int, K: int, **kwargs):
@@ -14,7 +14,7 @@ class AlphaZeroPlayer(Player):
         n_playout = kwargs.get('n_playout', 1000)
         
         model_file = f'best_{M}_{N}_{K}'
-        model_file = os.path.join(DIR, model_file)
+        model_file = os.path.join(ZERO_DIR_PATH, model_file)
         
         try:
             policy_param = pickle.load(open(model_file, 'rb'))

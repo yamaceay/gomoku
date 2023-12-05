@@ -2,22 +2,12 @@ from tqdm import tqdm
 from .zero import AlphaZeroPlayer
 from .adp import ADP_Player, ADP_Dense_Player, ADP_Conv_Player
 from .players import Player
-from torch.optim import lr_scheduler
-import random
-import logging
-import os
 from .gomoku import Gomoku
 
-NAME_OF_TRAINING = "dens2"
-DIR_PATH = "./models_{}".format(NAME_OF_TRAINING)
-
-# configure a logger which logs to the 'adp.log'
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-formatter = logging.Formatter('[%(asctime)s] %(message)s')
-file_handler = logging.FileHandler('logs/adp_{}.log'.format(NAME_OF_TRAINING))
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
+from torch.optim import lr_scheduler
+import os
+import logging
+import random
 
 def comp_models(game_kwargs, model1: Player, model2: Player, print_game: bool = False) -> tuple[int, bool, int]:
     game = Gomoku(**game_kwargs)
@@ -39,25 +29,6 @@ def comp_models(game_kwargs, model1: Player, model2: Player, print_game: bool = 
         print(game)
         
     return win, not model2_starts, len(game.get_history())
-
-def tournament(game_kwargs, models: list[Player], n_test_games: int, start_ind: int = 0) -> list[tuple[int, int, int, int]]:
-    total_ind = 0
-    with tqdm(total=n_test_games * len(models) * (len(models) - 1) // 2, position=0, leave=False, desc="Tournament") as bar:
-        for i in range(len(models)):
-            for j in range(i+1, len(models)):
-                if total_ind < start_ind:
-                    bar.update(n_test_games)
-                    total_ind += n_test_games
-                    continue
-                n_wins, l_history = 0, 0
-                for _ in range(n_test_games):
-                    win, starts, len_history = comp_models(game_kwargs, models[i], models[j])
-                    n_wins += (win > 0) == starts
-                    l_history += len_history
-                    bar.update(1)
-                    total_ind += 1
-                n_wins, l_history = n_wins / n_test_games, l_history / n_test_games
-                yield (i, j, n_wins, l_history)
 
 def eval_by_zero(game_kwargs, curr_model, n_test_games: int):
     zero = AlphaZeroPlayer(**game_kwargs)
@@ -86,16 +57,26 @@ def train_adp(
     player: ADP_Player = ADP_Dense_Player,
     player_args: dict = {},
     end_factor: float = 0.5,
+    DIR_PATH: str = None,
 ):
     
-    model_path = os.path.join(DIR_PATH, 'best.h5')
+    BEST_MODEL_PATH = os.path.join(DIR_PATH, "models/best.h5")
+    LOSSES_PATH = os.path.join(DIR_PATH, "logs/losses.log")
+    ZERO_RESULTS_PATH = os.path.join(DIR_PATH, "logs/zero_results.log")
+
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('[%(asctime)s] %(message)s')
+    file_handler = logging.FileHandler(LOSSES_PATH)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
     
     len_histories = []
-    if not os.path.exists("logs/len_histories_{}.txt".format(NAME_OF_TRAINING)):
-        with open("logs/len_histories_{}.txt".format(NAME_OF_TRAINING), "w") as f:
+    if not os.path.exists(ZERO_RESULTS_PATH):
+        with open(ZERO_RESULTS_PATH, "w") as f:
             f.write("")
         
-    with open("logs/len_histories_{}.txt".format(NAME_OF_TRAINING), "r") as f:
+    with open(ZERO_RESULTS_PATH, "r") as f:
         for line in f.readlines():
             batch, avg_len_history = line.split(",")
             batch = int(batch)
@@ -103,12 +84,12 @@ def train_adp(
             len_histories += [(avg_len_history, batch)]
     max_len_history = max(len_histories, key=lambda x: x[0]) if len(len_histories) else None
 
-    adp_model = player(model_path=model_path, **player_args)
+    adp_model = player(model_path=BEST_MODEL_PATH, **player_args)
     
     scheduler = lr_scheduler.LinearLR(adp_model.nn.optimizer, start_factor=1, end_factor=end_factor, total_iters=30)
     for batch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
         last_epoch_in_batch = batch + epochs_step
-        new_path = os.path.join(DIR_PATH, "epoch_{}.h5".format(last_epoch_in_batch))
+        new_path = os.path.join(DIR_PATH, "models/epoch_{}.h5".format(last_epoch_in_batch))
         
         if train:
             for i in tqdm(range(1, epochs_step+1), position=1, leave=False, desc="Epochs"):
@@ -131,63 +112,19 @@ def train_adp(
             
             new_len_history = (avg_len_history, last_epoch_in_batch)
             
-            with open("logs/len_histories_{}.txt".format(NAME_OF_TRAINING), "a") as f:
+            with open(ZERO_RESULTS_PATH, "a") as f:
                 f.write("{},{}\n".format(new_len_history[1], new_len_history[0]))
             
             if select_best:
                 if max_len_history is None or max_len_history[0] < new_len_history[0]:
                     max_len_history = new_len_history
-                    adp_model.nn.save_model(model_path)
+                    adp_model.nn.save_model(BEST_MODEL_PATH)
                     logger.info("{} is saved as the strongest model".format(new_path))
                     
                 else:
-                    old_path = os.path.join(DIR_PATH, "epoch_{}.h5".format(max_len_history[1]))
+                    old_path = os.path.join(DIR_PATH, "models/epoch_{}.h5".format(max_len_history[1]))
                     adp_model.nn.load_model(old_path)
                     logger.info("{} is loaded as the strongest model".format(old_path))
             else:
-                adp_model.nn.save_model(model_path)
+                adp_model.nn.save_model(BEST_MODEL_PATH)
                 logger.info("{} is saved as the latest model".format(new_path))
-                
-if __name__ == "__main__":
-    M, N, K = 8, 8, 5
-    game_kwargs = {
-        'M': M,
-        'N': N,
-        'K': K,
-        'ADJ': 2,
-    }
-    
-    value_network_kwargs = {
-        'alpha': 0.9,
-        'magnify': 2,
-        'gamma': 0.9,
-        'lr': 0.01,
-        'n_steps': 1, 
-        'logger': logger,
-    }
-    
-    policy_network_kwargs = {
-        'epsilon': 0.1,
-    }
-    
-    train_adp(
-        epochs_start = 0,
-        epochs_end = 5000, 
-        epochs_step = 250, 
-        eval=True,
-        train=True,
-        zero_play=False,
-        n_test_games=7,
-        select_best = False,
-        game_kwargs=game_kwargs, 
-        player=ADP_Dense_Player,
-        player_args={
-            'logger': logger,
-            # 'M': M,
-            # 'N': N,
-            **value_network_kwargs, 
-            **policy_network_kwargs,
-        },
-        end_factor=0.1,
-    )
-            

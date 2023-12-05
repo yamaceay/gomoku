@@ -4,3 +4,4 @@ from .players import *
 from .patterns import *
 from .adp import *
 from .zero import *
+from .eval import *

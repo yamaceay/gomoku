@@ -244,16 +244,3 @@ class Gomoku:
             output += " ".join(row) + "\n"
             
         return output
-    
-if __name__ == '__main__':
-    game = Gomoku(M=8, N=8, K=5)
-    game.play((5, 4), (1, 5), (4, 5), (7, 5), (3, 5), (0, 5))
-    print(game)
-    for i in range(game.M):
-        for j in range(game.N):
-            action = (i, j)
-            res = game.find_patterns(action)
-            if len(res):
-                print("------")
-                print(action, res)
-                print("------")

@@ -8,7 +8,7 @@ import logging
 import os
 from .gomoku import Gomoku
 
-NAME_OF_TRAINING = "conv"
+NAME_OF_TRAINING = "dens2"
 DIR_PATH = "./models_{}".format(NAME_OF_TRAINING)
 
 # configure a logger which logs to the 'adp.log'
@@ -40,13 +40,15 @@ def comp_models(game_kwargs, model1: Player, model2: Player, print_game: bool = 
         
     return win, not model2_starts, len(game.get_history())
 
-def tournament(game_kwargs, models: list[Player], n_test_games: int) -> list[tuple[int, int, int, int]]:
-    leaderboard = []
+def tournament(game_kwargs, models: list[Player], n_test_games: int, start_ind: int = 0) -> list[tuple[int, int, int, int]]:
     with tqdm(total=n_test_games * len(models) * (len(models) - 1) // 2, position=0, leave=False, desc="Tournament") as bar:
         for i in range(len(models)):
             for j in range(len(models)):
                 if i >= j:
                     continue
+                # if bar.n < start_ind:
+                #     bar.update(1)
+                #     continue
                 n_wins, l_history = 0, 0
                 for _ in range(n_test_games):
                     win, starts, len_history = comp_models(game_kwargs, models[i], models[j])
@@ -54,8 +56,7 @@ def tournament(game_kwargs, models: list[Player], n_test_games: int) -> list[tup
                     l_history += len_history
                     bar.update(1)
                 n_wins, l_history = n_wins / n_test_games, l_history / n_test_games
-                leaderboard += [(i, j, n_wins, l_history)]
-    return leaderboard
+                yield (i, j, n_wins, l_history)
 
 def eval_by_zero(game_kwargs, curr_model, n_test_games: int):
     zero = AlphaZeroPlayer(**game_kwargs)
@@ -83,6 +84,7 @@ def train_adp(
     zero_play: bool = True,
     player: ADP_Player = ADP_Dense_Player,
     player_args: dict = {},
+    end_factor: float = 0.5,
 ):
     
     model_path = os.path.join(DIR_PATH, 'best.h5')
@@ -102,7 +104,7 @@ def train_adp(
 
     adp_model = player(model_path=model_path, **player_args)
     
-    scheduler = lr_scheduler.LinearLR(adp_model.nn.optimizer, start_factor=1, end_factor=0.5, total_iters=30)
+    scheduler = lr_scheduler.LinearLR(adp_model.nn.optimizer, start_factor=1, end_factor=end_factor, total_iters=30)
     for batch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
         last_epoch_in_batch = batch + epochs_step
         new_path = os.path.join(DIR_PATH, "epoch_{}.h5".format(last_epoch_in_batch))
@@ -114,7 +116,7 @@ def train_adp(
                     loss = adp_model.train_by_zero(game)
                 else:
                     loss = adp_model.train(game)
-                logger.info("Epoch {}, Loss {}".format(batch + i, loss))
+                logger.info("Epoch {}, Loss {}, Lr: {:.8f}".format(batch + i, loss, scheduler.get_last_lr()[-1]))
                 scheduler.step()
             adp_model.nn.save_model(new_path)
             
@@ -168,22 +170,23 @@ if __name__ == "__main__":
     }
     
     train_adp(
-        epochs_start = 150,
-        epochs_end = 500, 
-        epochs_step = 50, 
+        epochs_start = 0,
+        epochs_end = 5000, 
+        epochs_step = 250, 
         eval=True,
         train=True,
         zero_play=False,
         n_test_games=7,
         select_best = False,
         game_kwargs=game_kwargs, 
-        player=ADP_Conv_Player,
+        player=ADP_Dense_Player,
         player_args={
             'logger': logger,
-            'M': M,
-            'N': N,
+            # 'M': M,
+            # 'N': N,
             **value_network_kwargs, 
             **policy_network_kwargs,
         },
+        end_factor=0.1,
     )
             

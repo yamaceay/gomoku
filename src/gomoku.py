@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import copy
-from .patterns import PB_DICT, WIN_ENCODE, revp, move_to_loc, loc_to_move, loc_to_move_one, dir_to_loc, loc_to_dir
+from .patterns import PB_DICT, revp, move_to_loc, loc_to_move, loc_to_move_one, dir_to_loc, loc_to_dir
 class Gomoku:
     def __init__(self, **kwargs):
         self.M = kwargs.pop("M")

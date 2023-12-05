@@ -4,7 +4,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gomoku</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    
+    #game {
+        display: flex;
+        margin-left: 200px;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    
+    }
+    
+    #board {
+        display: grid;
+        grid-gap: 5px;
+    }
+    
+    .cell {
+        width: 60px;
+        height: 60px;
+        border: 1px solid;
+        display: inline-block;
+        line-height: 60px;
+        text-align: center;
+        margin: 0;
+        cursor: pointer;
+    }
+    
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    
+    #board {
+        display: grid;
+        grid-gap: 5px;
+    }
+    
+    .cell {
+        width: 60px;
+        height: 60px;
+        border: 1px solid;
+        display: inline-block;
+        line-height: 60px;
+        text-align: center;
+        margin: 0;
+        cursor: pointer;
+    }
+    
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    
+    #board {
+        display: grid;
+        grid-gap: 5px;
+    }
+    
+    .cell {
+        width: 50px;
+        height: 50px;
+        border: 1px solid;
+        display: inline-block;
+        line-height: 50px;
+        text-align: center;
+        margin: 0;
+        cursor: pointer;
+    }
+    
+    #configForm {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 200px;
+        height: 100%;
+        background-color: #ddd;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+        width: 200px;
+    }
+    
+    form label {
+        font-weight: bold;
+    }
+    
+    form input {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    
+    form button {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007BFF;
+        color: white;
+        cursor: pointer;
+    }
+    
+    form button:hover {
+        background-color: #0056b3;
+    }
+
+    pre {
+        overflow-y: scroll;
+        height: 200px;
+    }
+    </style>
 </head>
 <body>
     <form id="configForm">
@@ -33,24 +161,13 @@
                 <label for="player">Player:</label>
                 <select id="player" name="player">
                     <option value="_RANDOM">_</option>
-                    <option value="_ADP">_ADP</option>
-                    <option value="_UCT">_UCT</option>
-                    <option value="_UCT_ADJ">_UCT_ADJ</option>
+                    <option value="_ADP_v1">_ADP_v1</option>
+                    <option value="_ADP_v2">_ADP_v2</option>
+                    <option value="_ADP_v3">_ADP_v3</option>
+                    <option value="_ADP_v4">_ADP_v4</option>
+                    <option value="_UCT_1k">_UCT_1k</option>
+                    <option value="_UCT_10k">_UCT_10k</option>
                     <option value="_ALPHAZERO">_ALPHAZERO</option>
-                    <!--
-                        <option value="_UCT_PB">_UCT_PB</option>
-                        <option value="_UCT_PB_ADJ">_UCT_PB_ADJ</option>
-                        <option value="_UCT_UCB">_UCT_UCB</option>
-                        <option value="_UCT_UCB_ADJ">_UCT_UCB_ADJ</option>
-                        <option value="_UCT_UCB_PB">_UCT_UCB_PB</option>
-                        <option value="_UCT_UCB_PB_ADJ">_UCT_UCB_PB_ADJ</option>
-                        <option value="_UCT_ADP1_PB">_UCT_ADP1_PB</option>
-                        <option value="_UCT_ADP1_PB_ADJ">_UCT_ADP1_PB_ADJ</option>
-                        <option value="_UCT_ADP1_UCB">_UCT_ADP1_UCB</option>
-                        <option value="_UCT_ADP1_UCB_ADJ">_UCT_ADP1_UCB_ADJ</option>
-                        <option value="_UCT_ADP1_UCB_PB">_UCT_ADP1_UCB_PB</option>
-                        <option value="_UCT_ADP1_UCB_PB_ADJ">_UCT_ADP1_UCB_PB_ADJ</option>
-                    -->
                 </select>
             </div>
 
@@ -70,8 +187,128 @@
     <div id="game">
         <div id="board"></div>
         <div id="message"></div>
+        <pre id="probs"></pre>
     </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        let board;
+        let currentPlayer;
+        let M, N, K;
+        let deactivate = false;
+        let waiting = false;
+
+        async function startGame() {
+            // Lesen Sie die Konfigurationswerte M, N und K
+            M = parseInt(document.getElementById('rows').value);
+            N = parseInt(document.getElementById('cols').value);
+            K = parseInt(document.getElementById('winLength').value);
+            ADJ = parseInt(document.getElementById('adj').value);
+            player = document.getElementById('player').value;
+            you = document.getElementById('you').value;
+
+            // Überprüfen Sie, ob die Werte gültig sind
+            if (isNaN(M) || isNaN(N) || isNaN(K) || M <= 0 || N <= 0 || K <= 0) {
+                alert('Bitte geben Sie gültige Werte für M, N und K ein.');
+                return;
+            }
+
+            // Senden Sie eine POST-Anfrage an den Server, um das Spiel zu starten
+            const response = await fetch('/start', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ M, N, K, ADJ, player }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                // Erstellen Sie ein neues Brett und starten Sie das Spiel
+                board = Array(M).fill().map(() => Array(N).fill(''));
+                currentPlayer = 'X';
+                deactivate = false;
+                const messageElement = document.getElementById('message');
+                messageElement.textContent = '';
+                drawBoard();
+            } else {
+                alert('Es gab einen Fehler beim Starten des Spiels.');
+            }
+        }
+
+        function drawBoard() {
+            const boardDiv = document.getElementById('board');
+            boardDiv.innerHTML = '';
+            boardDiv.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
+            boardDiv.style.gridTemplateRows = `repeat(${M}, 1fr)`;
+            for (let i = 0; i < M; i++) {
+                for (let j = 0; j < N; j++) {
+                    const cell = document.createElement('div');
+                    const move = [i, j];
+                    cell.textContent = board[i][j];
+                    cell.className = 'cell';
+                    cell.addEventListener('click', () => {
+                        if (waiting) return; // Überprüfen Sie, ob auf einen Zug gewartet wird
+                        const result = cellClicked(move);
+                        drawBoard();
+                        if (result) makeMove(move);
+                    });
+                    boardDiv.appendChild(cell);
+                }
+            }
+        }
+
+        async function makeMove(move) {
+            waiting = true; // Setzen Sie waiting auf true, wenn ein Zug gemacht wird
+            const response = await fetch('/move', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ move }),
+            });
+            const data = await response.json();
+            waiting = false; // Setzen Sie waiting auf false, wenn eine Antwort vom Server empfangen wird
+            if (data.move) {
+                cellClicked(data.move);
+                drawBoard();
+            }
+
+            const probsElement = document.getElementById('probs');
+            probsElement.textContent = JSON.stringify(
+                Object.fromEntries(
+                    data.probs.map(([reward, action]) => 
+                        ["(" + action[0] + ", " + action[1] + ")", reward.toFixed(3)]
+                    )
+                ), null, 2
+            )
+
+            if (data.game_over) {
+                deactivate = true;
+                let message;
+                switch (data.winner) {
+                    case 1:
+                        message = 'Player X wins!';
+                        break;
+                    case 0:
+                        message = 'Tie break!';
+                        break;
+                    case -1:
+                        message = 'Player O wins!';
+                        break;
+                }
+                const messageElement = document.getElementById('message');
+                messageElement.textContent = message;
+            }
+        }
+
+        function cellClicked([i, j]) {
+            if (deactivate || waiting) return; // Überprüfen Sie, ob auf einen Zug gewartet wird
+            if (board[i][j] === '') {
+                board[i][j] = currentPlayer;
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                return true;
+            }
+            return false;
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            startGame();
+        });
+    </script>
 </body>
 </html>

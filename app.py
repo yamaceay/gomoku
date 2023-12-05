@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template
 from src import Gomoku, \
     Player, RandomPlayer, \
     uct_score, UCT_Player, \
+    ADP_Dense_Player, \
     AlphaZeroPlayer
 
 app = Flask(__name__, static_url_path='/static')
@@ -23,22 +24,19 @@ value_network_kwargs = {
 }
 
 policy_network_kwargs = {
-    'epsilon': 0.1,
+    # 'epsilon': 0.1,
 }
 
 player: Player = None
 
-# policies = {
-#     'uct_score': uct_score,
-#     'uct_pb_score': uct_pb_score,
-#     'pb_score': pb_score,
-# }
-
 players = {
     '_RANDOM': RandomPlayer(),
-    # '_ADP': ADP_Player("models_wzlen/best.h5", value_network_kwargs, policy_network_kwargs),
-    '_UCT_1k': UCT_Player(timeout_ms=5000, iterations=1000, policy=uct_score),
-    '_UCT_5k': UCT_Player(timeout_ms=5000, iterations=5000, policy=uct_score),
+    '_ADP_v1': ADP_Dense_Player(model_path="models_dens2/epoch_250.h5", **value_network_kwargs, **policy_network_kwargs),
+    '_ADP_v2': ADP_Dense_Player(model_path="models_dens2/epoch_500.h5", **value_network_kwargs, **policy_network_kwargs),
+    '_ADP_v3': ADP_Dense_Player(model_path="models_dens2/epoch_750.h5", **value_network_kwargs, **policy_network_kwargs),
+    '_ADP_v4': ADP_Dense_Player(model_path="models_dens2/epoch_1000.h5", **value_network_kwargs, **policy_network_kwargs),
+    '_UCT_1k': UCT_Player(iterations=1000, policy=uct_score),
+    '_UCT_10k': UCT_Player(iterations=10000, policy=uct_score),
     '_ALPHAZERO': AlphaZeroPlayer(**game_kwargs),
 }
 
@@ -60,8 +58,11 @@ def make_move():
     move = tuple(move)
     score, game_over = game.play(move)
     move = None
+    probs = []
     
     if not game_over:
+        probs = player.next_move_probs(game)
+        probs = [(float(reward), list(action)) for reward, action in probs]
         move = player.next_move(game)
         score, game_over = game.play(move)
 
@@ -69,7 +70,8 @@ def make_move():
         score=score, 
         game_over=game_over, 
         move=move, 
-        winner=game.winner
+        winner=game.winner,
+        probs = probs
     )
 
 @app.route('/status', methods=['GET'])

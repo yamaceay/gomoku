@@ -4,7 +4,7 @@ from .mcts import sortfn
 from .players import Player
 import torch
 from .gomoku import Gomoku
-from .patterns import PB_DICT, WIN_ENCODE, revp
+from .patterns import PB_DICT, revp
 from .zero import AlphaZeroPlayer
 import logging
 
@@ -208,10 +208,10 @@ class ADP_Dense_Player(ADP_Player):
                     _, values = state.get_line_cache(length, position, direction)
                     if position == state.get_history()[-1]:
                         affected_value_list[length] += [values]
-                    if values in WIN_ENCODE:
-                        return {}, {}, -1
-                    if values in map(revp, WIN_ENCODE):
-                        return {}, {}, 1
+                    # if values in WIN_ENCODE:
+                    #     return {}, {}, -1
+                    # if values in map(revp, WIN_ENCODE):
+                    #     return {}, {}, 1
                     value_list[length] += [values]
         return value_list, affected_value_list, None  
     
@@ -341,7 +341,7 @@ if __name__ == '__main__':
     fh.setLevel(logging.INFO)
     logger.addHandler(fh)
     
-    for (i, j, n_wins, l_history) in tournament(game_kwargs, players, n_test_games=25, start_ind=0):
+    for (i, j, n_wins, l_history) in tournament(game_kwargs, players, n_test_games=25, start_ind=2300):
         logger.info(json.dumps({
             "first": (i + 1) * 250, 
             "second": (j + 1) * 250, 

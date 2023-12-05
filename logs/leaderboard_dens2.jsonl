@@ -87,3 +87,6 @@
 {"first": 1500, "second": 2000, "avg_win": 0.52, "avg_len": 20.12}
 {"first": 1500, "second": 2250, "avg_win": 0.68, "avg_len": 24.56}
 {"first": 1500, "second": 2500, "avg_win": 0.56, "avg_len": 28.76}
+{"first": 1500, "second": 2750, "avg_win": 0.32, "avg_len": 31.08}
+{"first": 1500, "second": 3000, "avg_win": 0.24, "avg_len": 19.6}
+{"first": 1500, "second": 3250, "avg_win": 0.36, "avg_len": 22.84}

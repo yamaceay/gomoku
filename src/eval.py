@@ -59,17 +59,10 @@ def train_adp(
     end_factor: float = 0.5,
     DIR_PATH: str = None,
 ):
+    logger = player_args.get("logger", logging.getLogger(__name__))
     
     BEST_MODEL_PATH = os.path.join(DIR_PATH, "models/best.h5")
-    LOSSES_PATH = os.path.join(DIR_PATH, "logs/losses.log")
     ZERO_RESULTS_PATH = os.path.join(DIR_PATH, "logs/zero_results.log")
-
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
-    formatter = logging.Formatter('[%(asctime)s] %(message)s')
-    file_handler = logging.FileHandler(LOSSES_PATH)
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
     
     len_histories = []
     if not os.path.exists(ZERO_RESULTS_PATH):

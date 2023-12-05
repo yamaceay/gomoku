@@ -1,10 +1,13 @@
 import logging
 import os
-from src import train_adp, ADP_Dense_Player
+from src import train_adp, ADP_Dense_Player, ADP_Conv_Player
+import torch
 
 DIR_PATH = '_conv'
 
 LOSSES_PATH = os.path.join(DIR_PATH, "logs/losses.log")
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -21,18 +24,23 @@ if __name__ == "__main__":
         'ADJ': 2,
     }
     
-    value_network_kwargs = {
+    player = ADP_Conv_Player
+    player_kwargs = {
         'alpha': 0.9,
         'magnify': 2,
         'gamma': 0.9,
         'lr': 0.01,
         'n_steps': 1, 
         'logger': logger,
-    }
-    
-    policy_network_kwargs = {
+        'device': device,
         'epsilon': 0.1,
     }
+    
+    if player is ADP_Conv_Player:
+        player_kwargs.update({
+            "M": game_kwargs['M'],
+            "N": game_kwargs['N'],
+        })
     
     train_adp(
         epochs_start = 0,
@@ -44,13 +52,8 @@ if __name__ == "__main__":
         n_test_games=7,
         select_best = False,
         game_kwargs=game_kwargs, 
-        player=ADP_Dense_Player,
-        player_args={
-            # 'M': game_kwargs['M'],
-            # 'N': game_kwargs['N'],
-            **value_network_kwargs, 
-            **policy_network_kwargs,
-        },
+        player=player,
+        player_args=player_kwargs,
         end_factor=0.1,
         DIR_PATH=DIR_PATH,
     )

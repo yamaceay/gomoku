@@ -15,23 +15,23 @@ OUTPUT_DIM = 1
 INPUT_CHANNELS = 4
 HIDDEN_CHANNELS = 32
 OUTPUT_CHANNELS = 64
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class Net(torch.nn.Module):
     def __init__(self, **kwargs):
         self.model_path = kwargs.pop('model_path', None)
         self.logger = kwargs.pop('logger', logging.getLogger(__name__))
         self.lr = kwargs.pop('lr', 0.1)
-       
+        self.device = kwargs.pop('device', device)
+        
         super(Net, self).__init__(**kwargs)
         
     def compile_model(self, *layers): 
         self.model = torch.nn.Sequential(*layers)
-        self.model = self.model.to(device)
+        self.model = self.model.to(self.device)
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
         
-        self.loss_fn = torch.nn.MSELoss(reduction='sum')
+        self.loss_fn = torch.nn.MSELoss(reduction='mean')
         
         try:
             self.load_model()
@@ -116,7 +116,7 @@ class ADP_Player(Player):
         
         assert len(states) > 0, "At least 1 state is required"
         
-        V_func = lambda i: self(states[i]).to(device) * (self.gamma ** i)
+        V_func = lambda i: self(states[i]).to(self.device) * (self.gamma ** i)
         [V, *V_next] = list(map(V_func, range(len(states))))
 
         loss = self.alpha * (reward + sum(V_next) - V)
@@ -133,8 +133,8 @@ class ADP_Player(Player):
             loss = self.opt(*states, reward=reward)
             losses += [loss]
             
-        losses = torch.stack(losses).to(device)
-        objective = torch.zeros_like(losses).to(device)
+        losses = torch.stack(losses).to(self.device)
+        objective = torch.zeros_like(losses).to(self.device)
         loss = self.nn.loss_fn(losses, objective)
         
         self.nn.optimizer.zero_grad()
@@ -195,8 +195,9 @@ class ADP_Dense_Player(ADP_Player):
         self.n_steps = kwargs.pop('n_steps', 1)
         self.epsilon = kwargs.pop('epsilon', 0.)
         
+        self.device = kwargs.get('device', device)
+        
         self.nn = Dense_Net(**kwargs)
-        self.nn.model = self.nn.model.to(device)
         
     def extract_values(self, state: Gomoku):
         assert len(state.line_cache), "Line cache is empty"
@@ -259,16 +260,16 @@ class ADP_Dense_Player(ADP_Player):
         
         features += occurrences
         features += [int(state.player == 1), int(state.player == -1)]
-        return torch.FloatTensor(features).to(device)
+        return torch.FloatTensor(features).to(self.device)
     
     def forward(self, state: Gomoku):
         if state.fin():
             reward = state.score()
-            return torch.FloatTensor([reward]).to(device)
+            return torch.FloatTensor([reward]).to(self.device)
         
         value_list, affected_value_list, end_result = self.extract_values(state)
         if end_result is not None:
-            return torch.FloatTensor([end_result]).to(device)
+            return torch.FloatTensor([end_result]).to(self.device)
     
         features = self.extract_features(state, value_list, affected_value_list)
         return self.nn(features)
@@ -283,8 +284,9 @@ class ADP_Conv_Player(ADP_Player):
         self.n_steps = kwargs.pop('n_steps', 1)
         self.epsilon = kwargs.pop('epsilon', 0.)
 
+        self.device = kwargs.get('device', device)
+        
         self.nn = Conv_Net(**kwargs)
-        self.nn.model = self.nn.model.to(device)
     
     def extract_features(self, state: Gomoku):
         size = (state.M, state.N)
@@ -296,13 +298,13 @@ class ADP_Conv_Player(ADP_Player):
             states[2][history[-1]] = 1
         if state.player == 1:
             states[3] = 1
-        states = states.to(device)
+        states = states.to(self.device)
         return states.unsqueeze(0)
     
     def forward(self, state: Gomoku):
         if state.fin():
             reward = state.score()
-            return torch.FloatTensor([reward]).to(device)
+            return torch.FloatTensor([reward]).to(self.device)
         
         features = self.extract_features(state)
         return self.nn(features).squeeze(0)

@@ -3,62 +3,93 @@ import os
 from src import train_adp, ADP_Dense_Player, ADP_Conv_Player
 import torch
 
-DIR_PATH = '_dens'
-
-LOSSES_PATH = os.path.join(DIR_PATH, "logs/losses.log")
-
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-formatter = logging.Formatter('[%(asctime)s] %(message)s')
-file_handler = logging.FileHandler(LOSSES_PATH)
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
-
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--DIR', type=str)
+    parser.add_argument('--PLAYER', type=str, default='dense')
+
+    parser.add_argument('--START', type=int)
+    parser.add_argument('--END', type=int)
+    parser.add_argument('--STEP', type=int)
+    parser.add_argument('--EVAL', type=bool, default=True)
+    parser.add_argument('--TRAIN', type=bool, default=True)
+    
+    parser.add_argument('--ZERO_PLAY', type=bool, default=False)
+    parser.add_argument('--N_TEST_GAMES', type=int, default=7)
+    parser.add_argument('--SELECT_BEST', type=bool, default=False)
+    parser.add_argument('--LR_DECAY', type=float, default=0.99)
+    
+    parser.add_argument('--M', type=int, default=8)
+    parser.add_argument('--N', type=int, default=8)
+    parser.add_argument('--K', type=int, default=5)
+    parser.add_argument('--ADJ', type=int, default=2)
+    
+    parser.add_argument('--ALPHA', type=float, default=0.9)
+    parser.add_argument('--MAGNIFY', type=int, default=2)
+    parser.add_argument('--GAMMA', type=float, default=0.9)
+    parser.add_argument('--LR', type=float, default=0.01)
+    parser.add_argument('--N_STEPS', type=int, default=1)
+    parser.add_argument('--EPSILON', type=float, default=0.1)
+    
+    args = parser.parse_args()
+
+    LOSSES_PATH = os.path.join(args.DIR, "logs/losses.log")
+
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('[%(asctime)s] %(message)s')
+    file_handler = logging.FileHandler(LOSSES_PATH)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+    
     game_kwargs = {
-        'M': 8,
-        'N': 8,
-        'K': 5,
-        'ADJ': 2,
+        'M': args.M,
+        'N': args.N,
+        'K': args.K,
+        'ADJ': args.ADJ,
     }
     
-    player = ADP_Dense_Player
     player_kwargs = {
-        'alpha': 0.9,
-        'magnify': 2,
-        'gamma': 0.9,
-        'lr': 0.01,
-        'n_steps': 1, 
+        'alpha': args.ALPHA,
+        'magnify': args.MAGNIFY,
+        'gamma': args.GAMMA,
+        'lr': args.LR,
+        'n_steps': args.N_STEPS, 
+        'epsilon': args.EPSILON,
         'logger': logger,
         'device': device,
-        'epsilon': 0.1,
     }
     
-    lr_args = {
-        'gamma': 0.99,
+    lr_kwargs = {
+        'lr_decay': args.LR_DECAY,
     }
     
-    if player is ADP_Conv_Player:
+    if args.PLAYER == 'dense':
+        player = ADP_Dense_Player
+    else: 
+        player = ADP_Conv_Player
         player_kwargs.update({
             "M": game_kwargs['M'],
             "N": game_kwargs['N'],
         })
     
     train_adp(
-        epochs_start = 0,
-        epochs_end = 1000, 
-        epochs_step = 250, 
-        eval=True,
-        train=True,
-        zero_play=True,
-        n_test_games=7,
-        select_best = False,
+        epochs_start=args.START,
+        epochs_end=args.END,
+        epochs_step=args.STEP,
+        eval=args.EVAL,
+        train=args.TRAIN,
+        zero_play=args.ZERO_PLAY,
+        n_test_games=args.N_TEST_GAMES,
+        select_best=args.SELECT_BEST,
         game_kwargs=game_kwargs, 
         player=player,
         player_args=player_kwargs,
-        lr_args=lr_args,
-        DIR_PATH=DIR_PATH,
+        lr_args=lr_kwargs,
+        DIR_PATH=args.DIR,
     )
             

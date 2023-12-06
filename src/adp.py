@@ -121,7 +121,7 @@ class ADP_Player(Player):
 
         sum_V_next = sum(V_next) if len(V_next) else torch.tensor([0.]).to(self.device)
 
-        print("{} + {:.3f} = {:.3f}".format(reward, sum_V_next.cpu().detach().item(), V.cpu().detach().item()))
+        # print("{} + {:.3f} = {:.3f}".format(reward, sum_V_next.cpu().detach().item(), V.cpu().detach().item()))
         loss = self.alpha * (reward + sum_V_next - V)
         return loss
     

@@ -120,8 +120,7 @@ class ADP_Player(Player):
         [V, *V_next] = list(map(V_func, range(len(states))))
 
         loss = self.alpha * (reward + sum(V_next) - V)
-        loss_squared = loss ** 2
-        return loss_squared
+        return loss
     
     def train_body(self, history: list[Gomoku]):
         losses = []
@@ -141,7 +140,7 @@ class ADP_Player(Player):
         loss.backward()
         self.nn.optimizer.step()
         
-        return loss.cpu().detach().item()
+        return loss.cpu().detach().item(), reward
     
     def train_by_zero(self, state: Gomoku, **kwargs):
         epsilon = kwargs.get('epsilon', .1)

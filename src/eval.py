@@ -56,7 +56,7 @@ def train_adp(
     zero_play: bool = True,
     player: ADP_Player = ADP_Dense_Player,
     player_args: dict = {},
-    end_factor: float = 0.5,
+    lr_args: dict = {},
     DIR_PATH: str = None,
 ):
     logger = player_args.get("logger", logging.getLogger(__name__))
@@ -79,7 +79,7 @@ def train_adp(
 
     adp_model = player(model_path=BEST_MODEL_PATH, **player_args)
     
-    scheduler = lr_scheduler.LinearLR(adp_model.nn.optimizer, start_factor=1, end_factor=end_factor, total_iters=30)
+    scheduler = lr_scheduler.LinearLR(adp_model.nn.optimizer, **lr_args)
     for batch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
         last_epoch_in_batch = batch + epochs_step
         new_path = os.path.join(DIR_PATH, "models/epoch_{}.h5".format(last_epoch_in_batch))
@@ -88,10 +88,10 @@ def train_adp(
             for i in tqdm(range(1, epochs_step+1), position=1, leave=False, desc="Epochs"):
                 game = Gomoku(**game_kwargs)
                 if zero_play:
-                    loss = adp_model.train_by_zero(game)
+                    loss, reward = adp_model.train_by_zero(game)
                 else:
-                    loss = adp_model.train(game)
-                logger.info("Epoch {}, Loss {}, Lr: {:.8f}".format(batch + i, loss, scheduler.get_last_lr()[-1]))
+                    loss, reward = adp_model.train(game)
+                logger.info("Epoch: {}, MSE: {}, Reward: {}, LR: {:.5f}".format(batch + i, loss, reward, scheduler.get_last_lr()[-1]))
                 scheduler.step()
             adp_model.nn.save_model(new_path)
             

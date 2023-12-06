@@ -3,7 +3,7 @@ import os
 from src import train_adp, ADP_Dense_Player, ADP_Conv_Player
 import torch
 
-DIR_PATH = '_conv'
+DIR_PATH = '_dens'
 
 LOSSES_PATH = os.path.join(DIR_PATH, "logs/losses.log")
 
@@ -24,16 +24,22 @@ if __name__ == "__main__":
         'ADJ': 2,
     }
     
-    player = ADP_Conv_Player
+    player = ADP_Dense_Player
     player_kwargs = {
         'alpha': 0.9,
         'magnify': 2,
         'gamma': 0.9,
-        'lr': 0.01,
+        'lr': 0.05,
         'n_steps': 1, 
         'logger': logger,
         'device': device,
         'epsilon': 0.1,
+    }
+    
+    lr_args = {
+        "start_factor": 1, 
+        "end_factor": 0.01, 
+        "total_iters": 30
     }
     
     if player is ADP_Conv_Player:
@@ -44,8 +50,8 @@ if __name__ == "__main__":
     
     train_adp(
         epochs_start = 0,
-        epochs_end = 20, 
-        epochs_step = 5, 
+        epochs_end = 1000, 
+        epochs_step = 250, 
         eval=True,
         train=True,
         zero_play=False,
@@ -54,7 +60,7 @@ if __name__ == "__main__":
         game_kwargs=game_kwargs, 
         player=player,
         player_args=player_kwargs,
-        end_factor=0.1,
+        lr_args=lr_args,
         DIR_PATH=DIR_PATH,
     )
             

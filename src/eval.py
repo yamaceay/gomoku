@@ -79,7 +79,7 @@ def train_adp(
 
     adp_model = player(model_path=BEST_MODEL_PATH, **player_args)
     
-    scheduler = lr_scheduler.LinearLR(adp_model.nn.optimizer, **lr_args)
+    scheduler = lr_scheduler.ExponentialLR(adp_model.nn.optimizer, **lr_args)
     for batch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
         last_epoch_in_batch = batch + epochs_step
         new_path = os.path.join(DIR_PATH, "models/epoch_{}.h5".format(last_epoch_in_batch))

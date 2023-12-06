@@ -11,23 +11,22 @@ class Board(object):
     """board for the game"""
 
     def __init__(self, **kwargs):
-        self.width = int(kwargs.get('width', 8))
-        self.height = int(kwargs.get('height', 8))
+        self.M = int(kwargs.get('M', 8))
+        self.N = int(kwargs.get('N', 8))
+        self.K = int(kwargs.get('K', 5))
         # board states stored as a dict,
         # key: move as location on the board,
         # value: player as pieces type
         self.states = {}
-        # need how many pieces in a row to win
-        self.n_in_row = int(kwargs.get('n_in_row', 5))
         self.players = [1, 2]  # player1 and player2
 
     def init_board(self, start_player=0):
-        if self.width < self.n_in_row or self.height < self.n_in_row:
-            raise Exception('board width and height can not be '
-                            'less than {}'.format(self.n_in_row))
+        if self.M < self.K or self.N < self.K:
+            raise Exception('board M and N can not be '
+                            'less than {}'.format(self.K))
         self.current_player = self.players[start_player]  # start player
         # keep available moves in a list
-        self.availables = list(range(self.width * self.height))
+        self.availables = list(range(self.M * self.N))
         self.states = {}
         self.last_move = -1
 
@@ -39,8 +38,8 @@ class Board(object):
         0 1 2
         and move 5's location is (1,2)
         """
-        h = move // self.width
-        w = move % self.width
+        h = move // self.M
+        w = move % self.M
         return [h, w]
 
     def location_to_move(self, location):
@@ -48,28 +47,28 @@ class Board(object):
             return -1
         h = location[0]
         w = location[1]
-        move = h * self.width + w
-        if move not in range(self.width * self.height):
+        move = h * self.M + w
+        if move not in range(self.M * self.N):
             return -1
         return move
 
     def current_state(self):
         """return the board state from the perspective of the current player.
-        state shape: 4*width*height
+        state shape: 4*M*N
         """
 
-        square_state = np.zeros((4, self.width, self.height))
+        square_state = np.zeros((4, self.M, self.N))
         if self.states:
             moves, players = np.array(list(zip(*self.states.items())))
             move_curr = moves[players == self.current_player]
             move_oppo = moves[players != self.current_player]
-            square_state[0][move_curr // self.width,
-                            move_curr % self.height] = 1.0
-            square_state[1][move_oppo // self.width,
-                            move_oppo % self.height] = 1.0
+            square_state[0][move_curr // self.M,
+                            move_curr % self.N] = 1.0
+            square_state[1][move_oppo // self.M,
+                            move_oppo % self.N] = 1.0
             # indicate the last move location
-            square_state[2][self.last_move // self.width,
-                            self.last_move % self.height] = 1.0
+            square_state[2][self.last_move // self.M,
+                            self.last_move % self.N] = 1.0
         if len(self.states) % 2 == 0:
             square_state[3][:, :] = 1.0  # indicate the colour to play
         return square_state[:, ::-1, :]
@@ -84,34 +83,34 @@ class Board(object):
         self.last_move = move
 
     def has_a_winner(self):
-        width = self.width
-        height = self.height
+        M = self.M
+        N = self.N
         states = self.states
-        n = self.n_in_row
+        n = self.K
 
-        moved = list(set(range(width * height)) - set(self.availables))
-        if len(moved) < self.n_in_row *2-1:
+        moved = list(set(range(M * N)) - set(self.availables))
+        if len(moved) < self.K *2-1:
             return False, -1
 
         for m in moved:
-            h = m // width
-            w = m % width
+            h = m // M
+            w = m % M
             player = states[m]
 
-            if (w in range(width - n + 1) and
+            if (w in range(M - n + 1) and
                     len(set(states.get(i, -1) for i in range(m, m + n))) == 1):
                 return True, player
 
-            if (h in range(height - n + 1) and
-                    len(set(states.get(i, -1) for i in range(m, m + n * width, width))) == 1):
+            if (h in range(N - n + 1) and
+                    len(set(states.get(i, -1) for i in range(m, m + n * M, M))) == 1):
                 return True, player
 
-            if (w in range(width - n + 1) and h in range(height - n + 1) and
-                    len(set(states.get(i, -1) for i in range(m, m + n * (width + 1), width + 1))) == 1):
+            if (w in range(M - n + 1) and h in range(N - n + 1) and
+                    len(set(states.get(i, -1) for i in range(m, m + n * (M + 1), M + 1))) == 1):
                 return True, player
 
-            if (w in range(n - 1, width) and h in range(height - n + 1) and
-                    len(set(states.get(i, -1) for i in range(m, m + n * (width - 1), width - 1))) == 1):
+            if (w in range(n - 1, M) and h in range(N - n + 1) and
+                    len(set(states.get(i, -1) for i in range(m, m + n * (M - 1), M - 1))) == 1):
                 return True, player
 
         return False, -1
@@ -137,19 +136,19 @@ class Game(object):
 
     def graphic(self, board, player1, player2):
         """Draw the board and show game info"""
-        width = board.width
-        height = board.height
+        M = board.M
+        N = board.N
 
         print("Player", player1, "with X".rjust(3))
         print("Player", player2, "with O".rjust(3))
         print()
-        for x in range(width):
+        for x in range(M):
             print("{0:8}".format(x), end='')
         print('\r\n')
-        for i in range(height - 1, -1, -1):
+        for i in range(N - 1, -1, -1):
             print("{0:4d}".format(i), end='')
-            for j in range(width):
-                loc = i * width + j
+            for j in range(M):
+                loc = i * M + j
                 p = board.states.get(loc, -1)
                 if p == player1:
                     print('X'.center(8), end='')

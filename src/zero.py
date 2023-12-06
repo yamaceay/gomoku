@@ -29,7 +29,7 @@ class AlphaZeroPlayer(Player):
             n_playout=n_playout,
         )
         
-        self.board = Board(width=M, height=N, n_in_row=K)
+        self.board = Board(M=M, N=N, K=K)
         self.start_player = 0
         self.restart()
     

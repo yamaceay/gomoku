@@ -119,7 +119,10 @@ class ADP_Player(Player):
         V_func = lambda i: self(states[i]).to(self.device) * (self.gamma ** i)
         [V, *V_next] = list(map(V_func, range(len(states))))
 
-        loss = self.alpha * (reward + sum(V_next) - V)
+        sum_V_next = sum(V_next) if len(V_next) else torch.tensor([0.]).to(self.device)
+
+        print("{} + {:.3f} = {:.3f}".format(reward, sum_V_next.cpu().detach().item(), V.cpu().detach().item()))
+        loss = self.alpha * (reward + sum_V_next - V)
         return loss
     
     def train_body(self, history: list[Gomoku]):

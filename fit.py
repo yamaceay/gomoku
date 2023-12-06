@@ -29,7 +29,7 @@ if __name__ == "__main__":
         'alpha': 0.9,
         'magnify': 2,
         'gamma': 0.9,
-        'lr': 0.05,
+        'lr': 0.01,
         'n_steps': 1, 
         'logger': logger,
         'device': device,
@@ -37,9 +37,7 @@ if __name__ == "__main__":
     }
     
     lr_args = {
-        "start_factor": 1, 
-        "end_factor": 0.01, 
-        "total_iters": 30
+        'gamma': 0.99,
     }
     
     if player is ADP_Conv_Player:
@@ -54,7 +52,7 @@ if __name__ == "__main__":
         epochs_step = 250, 
         eval=True,
         train=True,
-        zero_play=False,
+        zero_play=True,
         n_test_games=7,
         select_best = False,
         game_kwargs=game_kwargs, 

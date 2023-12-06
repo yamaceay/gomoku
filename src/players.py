@@ -1,7 +1,7 @@
 from .gomoku import Gomoku
 from .mcts import Tree, Node, uct_score, sortfn
 import numpy as np
-import signal
+import threading
 
 class TimeoutError(Exception):
     pass
@@ -34,6 +34,7 @@ class UCT_Player(Player):
         self.policy_kwargs = policy_kwargs
         self.tree_kwargs = tree_kwargs
         self.timeout_ms = timeout_ms
+        self.stop = threading.Event()
 
     def simulate(self, node: Node) -> float:
         return self.tree.simulate(node)
@@ -43,11 +44,13 @@ class UCT_Player(Player):
         first_player = self.tree.root.state.player
         
         if self.timeout_ms > 0:
-            signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(self.timeout_ms // 1000)  # alarm is set with seconds
+            timer = threading.Timer(self.timeout_ms / 1000, self.stop.set)
+            timer.start()
         
         try:
             for _ in range(self.iterations):
+                if self.stop.is_set():
+                    break
                 node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
                 if not node.is_fully_expanded() and not node.is_terminal():
                     node = self.tree.expand(node)

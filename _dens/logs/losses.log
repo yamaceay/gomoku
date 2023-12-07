@@ -1,8 +1,0 @@
-[2023-12-07 17:38:11,587] Filepath does not exist: _dens/models/best.h5
-[2023-12-07 17:38:11,587] Initializing new model
-[2023-12-07 17:38:15,424] Epoch: 1, MSE: 0.8424739837646484, Reward: -1, LR: 0.01000
-[2023-12-07 17:38:17,089] Epoch: 2, MSE: 0.8789088129997253, Reward: 1, LR: 0.00995
-[2023-12-07 17:38:29,766] Filepath does not exist: _dens/models/best.h5
-[2023-12-07 17:38:29,766] Initializing new model
-[2023-12-07 17:38:31,349] Epoch: 1, MSE: 1.0839580297470093, Reward: 1, LR: 0.01000
-[2023-12-07 17:38:32,275] Epoch: 2, MSE: 0.9672592282295227, Reward: 1, LR: 0.00995

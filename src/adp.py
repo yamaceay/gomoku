@@ -218,7 +218,7 @@ class ADP_Dense_Player(ADP_Player):
             for position in state.get_line_cache(length):
                 for direction in state.get_line_cache(length, position):
                     _, values = state.get_line_cache(length, position, direction)
-                    if position == state.get_history()[-1]:
+                    if position == state.last_move:
                         affected_value_list[length] += [values]
                     # if values in WIN_ENCODE:
                     #     return {}, {}, -1
@@ -343,6 +343,5 @@ class ADP_Conv_Player(ADP_Player):
             reward = state.score()
             return torch.FloatTensor([reward]).to(self.device)
         
-        features = state.to_zero_input()
-        features = torch.FloatTensor(features).to(self.device)
+        features = torch.FloatTensor(state.to_zero_input()).to(self.device)
         return self.nn(features.unsqueeze(0)).squeeze(0)

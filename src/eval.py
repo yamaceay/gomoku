@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from .zero import AlphaZeroPlayer
-from .adp import ADP_Player, ADP_Dense_Player, ADP_Conv_Player
+from .adp import ADP_Player
 from .players import Player
 from .gomoku import Gomoku
 
@@ -28,7 +28,7 @@ def comp_models(game_kwargs, model1: Player, model2: Player, print_game: bool = 
     if print_game:
         print(game)
         
-    return win, not model2_starts, len(game.get_history())
+    return win, not model2_starts, len(game.history())
 
 def eval_by_zero(game_kwargs, curr_model, n_test_games: int):
     zero = AlphaZeroPlayer(**game_kwargs)
@@ -48,13 +48,13 @@ def train_adp(
     epochs_end: int, 
     epochs_step: int,
     game_kwargs, 
+    player: ADP_Player,
     epochs_start: int = 0, 
     n_test_games: int = 0, 
     select_best: bool = False,
     eval: bool = True, 
     train: bool = True,
     zero_play: bool = True,
-    player: ADP_Player = ADP_Dense_Player,
     player_args: dict = {},
     lr_args: dict = {},
     DIR_PATH: str = None,

@@ -2,7 +2,7 @@ import numpy as np
 import random
 import copy
 from .patterns import PB_DICT, revp, move_to_loc, loc_to_move, loc_to_move_one, dir_to_loc, loc_to_dir
-import torch
+
 class Gomoku:
     def __init__(self, **kwargs):
         self.M = kwargs.pop("M")
@@ -17,6 +17,7 @@ class Gomoku:
             self.history = ""
             self.player = 1
             self.winner = 0
+            self.last_move = None
         else:
             self.board = copy.deepcopy(self.board)
             self.line_cache = copy.deepcopy(self.line_cache)
@@ -91,6 +92,8 @@ class Gomoku:
                     if not (0 <= new_x < self.M and 0 <= new_y < self.N):
                         continue
                     self.adjacents.add(move_to_loc((new_x, new_y)))
+        
+        self.set_last_move(move)
         if not len(self.history):
             self.history = move_to_loc(move)
         else:
@@ -103,6 +106,9 @@ class Gomoku:
         assert isinstance(move, (tuple, list)), "Move must be a tuple of integers, got: {}".format(move)
         x, y = move
         return 0 <= x < self.M and 0 <= y < self.N and self.board[x, y] == 0
+
+    def set_last_move(self, move: tuple[int, int]):
+        self.last_move = move
 
     def get_history(self):
         if not len(self.history):
@@ -228,9 +234,8 @@ class Gomoku:
         states = np.zeros((4, *size), dtype=np.float32)
         states[0] = np.asarray(self.board == 1, dtype=np.float32)
         states[1] = np.asarray(self.board == -1, dtype=np.float32)
-        history = self.get_history()
-        if len(history):
-            states[2][history[-1]] = 1.
+        if self.last_move is not None:
+            states[2][self.last_move] = 1.
         if self.player == 1:
             states[3] = 1.
         return states

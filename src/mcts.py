@@ -32,7 +32,7 @@ def uct_score(parent: Node, child: Node, **kwargs) -> float:
 def pb_score(parent: Node, child: Node, **kwargs) -> float:
     decay = kwargs.get('decay', 0.9)
     
-    move = child.state.get_history()[-1]
+    move = child.state.last_move
     pb_parent = parent.state.find_patterns(move)
     pb_child = child.state.find_patterns(move)
         
@@ -76,7 +76,7 @@ class Tree:
             action 
             for action in node.state.actions() 
             if action not in [
-                child.state.get_history()[-1] 
+                child.state.last_move
                 for child in node.children
             ]
         ]

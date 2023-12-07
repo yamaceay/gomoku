@@ -38,6 +38,7 @@ def augment_data(game: Gomoku):
     return augmented_data
 
 if __name__ == "__main__":
+    from collections import deque
     game_kwargs = {
         'M': 8,
         'N': 8,
@@ -45,8 +46,8 @@ if __name__ == "__main__":
         'ADJ': 2,
     }
     
-    game_buffer = []
-    game_buffer_limit = 100
+    buffer_size = 100
+    buffer = deque(maxlen=buffer_size)
     
     for i in range(1):
         game = Gomoku(**game_kwargs)

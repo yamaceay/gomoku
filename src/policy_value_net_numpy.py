@@ -113,3 +113,20 @@ class PolicyValueNetNumpy():
         value = np.tanh(fc_forward(X_v, self.params[14], self.params[15]))[0]
         act_probs = zip(legal_positions, act_probs.flatten()[legal_positions])
         return act_probs, value
+    
+    def policy_value_fn_frozen_conv(self, state):
+        """
+        input: board
+        output: a list of (action, probability) tuples for each available
+        action and the score of the board state
+        """
+        current_state = state.to_zero_input()
+
+        X = current_state.reshape(-1, 4, self.board_width, self.board_height)
+        # first 3 conv layers with ReLu nonlinearity
+        for i in [0, 2, 4]:
+            X = relu(conv_forward(X, self.params[i], self.params[i+1]))
+        # value head
+        X_v = relu(conv_forward(X, self.params[10],
+                                self.params[11], padding=0))
+        return X_v.flatten()

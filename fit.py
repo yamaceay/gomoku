@@ -1,6 +1,6 @@
 import logging
 import os
-from src import train_adp, ADP_Dense_Player, ADP_Conv_Player
+from src import train_adp, ADP_Dense_Player, ADP_Pre_Player, ADP_Conv_Player
 import torch
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -62,20 +62,21 @@ if __name__ == "__main__":
         'epsilon': args.EPSILON,
         'logger': logger,
         'device': device,
+        **game_kwargs,
     }
     
     lr_kwargs = {
         'lr_decay': args.LR_DECAY,
     }
+   
+    player_types = {
+        'dense': ADP_Dense_Player,
+        'pre': ADP_Pre_Player,
+        'conv': ADP_Conv_Player,
+    }
     
-    if args.PLAYER == 'dense':
-        player = ADP_Dense_Player
-    else: 
-        player = ADP_Conv_Player
-        player_kwargs.update({
-            "M": game_kwargs['M'],
-            "N": game_kwargs['N'],
-        })
+    assert args.PLAYER in player_types, f"Player type {args.PLAYER} not found"
+    player = player_types.get(args.PLAYER)
     
     train_adp(
         epochs_start=args.START,

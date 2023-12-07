@@ -5,12 +5,16 @@ from .players import Player
 import torch
 from .gomoku import Gomoku
 from .patterns import PB_DICT, revp
-from .zero import AlphaZeroPlayer
+from .zero import AlphaZeroPlayer, AlphaZeroConv
 import logging
 
-HIDDEN_DIM = 100
 INPUT_DIM = 2 * (5 * (len(PB_DICT) - 1) + 1) + 2 * (2 * len(PB_DICT)) + 2
+HIDDEN_DIM = 100
 OUTPUT_DIM = 1
+
+PRE_INPUT_DIM = 128
+PRE_HIDDEN_DIM = 32
+PRE_OUTPUT_DIM = 1
 
 INPUT_CHANNELS = 4
 HIDDEN_CHANNELS = 32
@@ -199,6 +203,11 @@ class ADP_Dense_Player(ADP_Player):
         
         self.device = kwargs.get('device', device)
         
+        kwargs.pop('M', None)
+        kwargs.pop('N', None)
+        kwargs.pop('K', None)
+        kwargs.pop('ADJ', None)
+        
         self.nn = Dense_Net(**kwargs)
         
     def extract_values(self, state: Gomoku):
@@ -276,6 +285,42 @@ class ADP_Dense_Player(ADP_Player):
         features = self.extract_features(state, value_list, affected_value_list)
         return self.nn(features)
     
+class ADP_Pre_Player(ADP_Player):
+    def __init__(self, **kwargs):
+        super(ADP_Pre_Player, self).__init__()
+        
+        self.alpha = kwargs.pop('alpha', 1)
+        self.gamma = kwargs.pop('gamma', 0.9)
+        self.magnify = kwargs.pop('magnify', 1)
+        self.n_steps = kwargs.pop('n_steps', 1)
+        self.epsilon = kwargs.pop('epsilon', 0.)
+
+        self.device = kwargs.get('device', device)
+        
+        self.M = kwargs.pop('M')
+        self.N = kwargs.pop('N')
+        self.K = kwargs.pop('K')
+        kwargs.pop('ADJ', None)
+        
+        self.conv_nn = AlphaZeroConv(self.M, self.N, self.K)
+        
+        self.nn = Dense_Net(
+            input_dim = PRE_INPUT_DIM,
+            hidden_dim = PRE_HIDDEN_DIM,
+            output_dim = PRE_OUTPUT_DIM,
+        )
+        
+    def extract_features(self, state: Gomoku):
+        features = self.conv_nn.forward(state)
+        return torch.FloatTensor(features).to(self.device)
+    
+    def forward(self, state: Gomoku):
+        if state.fin():
+            reward = state.score()
+            return torch.FloatTensor([reward]).to(self.device)
+        
+        features = self.extract_features(state)
+        return self.nn(features)
 class ADP_Conv_Player(ADP_Player):
     def __init__(self, **kwargs):
         super(ADP_Conv_Player, self).__init__()
@@ -288,25 +333,16 @@ class ADP_Conv_Player(ADP_Player):
 
         self.device = kwargs.get('device', device)
         
+        kwargs.pop('K', None)
+        kwargs.pop('ADJ', None)
+        
         self.nn = Conv_Net(**kwargs)
-    
-    def extract_features(self, state: Gomoku):
-        size = (state.M, state.N)
-        states = torch.zeros((4, *size))
-        states[0] = torch.FloatTensor(state.board == 1)
-        states[1] = torch.FloatTensor(state.board == -1)
-        history = state.get_history()
-        if len(history):
-            states[2][history[-1]] = 1
-        if state.player == 1:
-            states[3] = 1
-        states = states.to(self.device)
-        return states.unsqueeze(0)
     
     def forward(self, state: Gomoku):
         if state.fin():
             reward = state.score()
             return torch.FloatTensor([reward]).to(self.device)
         
-        features = self.extract_features(state)
-        return self.nn(features).squeeze(0)
+        features = state.to_zero_input()
+        features = torch.FloatTensor(features).to(self.device)
+        return self.nn(features.unsqueeze(0)).squeeze(0)

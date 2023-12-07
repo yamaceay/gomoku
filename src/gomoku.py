@@ -2,6 +2,7 @@ import numpy as np
 import random
 import copy
 from .patterns import PB_DICT, revp, move_to_loc, loc_to_move, loc_to_move_one, dir_to_loc, loc_to_dir
+import torch
 class Gomoku:
     def __init__(self, **kwargs):
         self.M = kwargs.pop("M")
@@ -221,6 +222,18 @@ class Gomoku:
                             score_list[pattern] = [0, 0]
                         score_list[pattern][1] += 1
         return score_list
+    
+    def to_zero_input(self):
+        size = (self.M, self.N)
+        states = np.zeros((4, *size), dtype=np.float32)
+        states[0] = np.asarray(self.board == 1, dtype=np.float32)
+        states[1] = np.asarray(self.board == -1, dtype=np.float32)
+        history = self.get_history()
+        if len(history):
+            states[2][history[-1]] = 1.
+        if self.player == 1:
+            states[3] = 1.
+        return states
     
     def __repr__(self):
         output = ""

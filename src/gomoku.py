@@ -17,7 +17,6 @@ class Gomoku:
             self._history = ""
             self.player = 1
             self.winner = 0
-            self.last_move = None
         else:
             self.board = copy.deepcopy(self.board)
             self.line_cache = copy.deepcopy(self.line_cache)
@@ -68,8 +67,12 @@ class Gomoku:
     def no_move(self) -> bool:
         return np.where(self.board == 0, 1, 0).sum() == 0
         
-    def set_last_move(self, move: tuple[int, int]):
-        self.last_move = move
+    @property
+    def last_move(self):
+        history = self.history()
+        if not len(history):
+            return None
+        return history[-1]
 
     def history(self, rot: bool = False, lrf: bool = False, udf: bool = False) -> list[tuple[int, int]]:
         if not len(self._history):
@@ -152,7 +155,7 @@ class Gomoku:
     def _move_forward(self, move: tuple[int, int], rot: bool = False, lrf: bool = False, udf: bool = False) -> tuple[int, int]:
         x, y = move
         if rot:
-            x, y = y, self.M - 1 - x
+            x, y = self.N - 1 - y, x
         if lrf:
             y = self.N - 1 - y
         if udf:
@@ -183,7 +186,6 @@ class Gomoku:
                         continue
                     self.adjacents.add(move_to_loc((new_x, new_y)))
         
-        self.set_last_move(move)
         if not len(self._history):
             self._history = move_to_loc(move)
         else:

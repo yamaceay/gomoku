@@ -18,8 +18,9 @@ class Node:
         return self.state.fin()
     
     def __repr__(self):
-        if len(self.state.history):
-            return f"Node({self.state.history}, {self.Q} / {self.n})"
+        history = self.state.history()
+        if len(history):
+            return f"Node({history}, {self.Q:.2f} / {self.n})"
         else:
             return f"Node({self.Q:.2f} / {self.n})"
 

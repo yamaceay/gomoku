@@ -30,6 +30,30 @@ def comp_models(game_kwargs, model1: Player, model2: Player, print_game: bool = 
         
     return win, not model2_starts, len(game.history())
 
+def tournament(game_kwargs, models: list[Player], n_test_games: int, start_ind: int = 0) -> list[tuple[int, int, int, int]]:
+    total_ind = 0
+    with tqdm(
+        total=n_test_games * len(models) * (len(models) - 1) // 2, 
+        position=0, 
+        leave=False, 
+        desc="Tournament"
+    ) as bar:
+        for i in range(len(models)):
+            for j in range(i+1, len(models)):
+                if total_ind < start_ind:
+                    bar.update(n_test_games)
+                    total_ind += n_test_games
+                    continue
+                n_wins, l_history = 0, 0
+                for _ in range(n_test_games):
+                    win, starts, len_history = comp_models(game_kwargs, models[i], models[j])
+                    n_wins += (win > 0) == starts
+                    l_history += len_history
+                    bar.update(1)
+                    total_ind += 1
+                n_wins, l_history = n_wins / n_test_games, l_history / n_test_games
+                yield (i, j, n_wins, l_history)
+
 def eval_by_zero(game_kwargs, curr_model, n_test_games: int):
     zero = AlphaZeroPlayer(**game_kwargs)
     len_histories = []

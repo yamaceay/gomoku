@@ -15,26 +15,23 @@ game_kwargs = {
     'ADJ': 2,
 }
 
-value_network_kwargs = {
+adp_kwargs = {
     'alpha': 0.9,
     'magnify': 2,
     'gamma': 0.9,
     'lr': 0.01,
     'n_steps': 1,
-}
-
-policy_network_kwargs = {
-    # 'epsilon': 0.1,
+    'epsilon': 0.1,
 }
 
 player: Player = None
 
 players = {
     '_RANDOM': RandomPlayer(),
-    '_ADP_v1': ADP_Dense_Player(model_path="models_dens2/epoch_250.h5", **value_network_kwargs, **policy_network_kwargs),
-    '_ADP_v2': ADP_Dense_Player(model_path="models_dens2/epoch_500.h5", **value_network_kwargs, **policy_network_kwargs),
-    '_ADP_v3': ADP_Dense_Player(model_path="models_dens2/epoch_750.h5", **value_network_kwargs, **policy_network_kwargs),
-    '_ADP_v4': ADP_Dense_Player(model_path="models_dens2/epoch_1000.h5", **value_network_kwargs, **policy_network_kwargs),
+    '_ADP_v1': ADP_Dense_Player(model_path="_dens2/models/epoch_250.h5", **adp_kwargs, **game_kwargs),
+    '_ADP_v2': ADP_Dense_Player(model_path="_dens2/models/epoch_500.h5", **adp_kwargs, **game_kwargs),
+    '_ADP_v3': ADP_Dense_Player(model_path="_dens2/models/epoch_750.h5", **adp_kwargs, **game_kwargs),
+    '_ADP_v4': ADP_Dense_Player(model_path="_dens2/models/epoch_1000.h5", **adp_kwargs, **game_kwargs),
     '_UCT_1k': UCT_Player(iterations=1000, policy=uct_score),
     '_UCT_10k': UCT_Player(iterations=10000, policy=uct_score),
     '_ALPHAZERO': AlphaZeroPlayer(**game_kwargs),
@@ -69,17 +66,8 @@ def make_move():
     return jsonify(
         score=score, 
         game_over=game_over, 
-        move=move, 
-        winner=game.winner,
-        probs = probs
-    )
-
-@app.route('/status', methods=['GET'])
-def get_status():
-    return jsonify(
-        board=game.board.tolist(), 
-        player=game.player, 
-        winner=game.winner
+        move=move,
+        probs=probs
     )
 
 if __name__ == '__main__':

@@ -4,7 +4,7 @@ from .mcts import sortfn
 from .players import Player
 import torch
 from .gomoku import Gomoku
-from .patterns import PB_DICT, revp
+from .patterns import PB_DICT, Pattern
 from .zero import AlphaZeroPlayer, AlphaZeroConv
 import logging
 
@@ -30,7 +30,7 @@ class Net(torch.nn.Module):
         
         super(Net, self).__init__(**kwargs)
         
-    def compile_model(self, *layers): 
+    def compile_model(self, *layers) -> None: 
         self.model = torch.nn.Sequential(*layers)
         self.model = self.model.to(self.device)
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
@@ -43,17 +43,17 @@ class Net(torch.nn.Module):
             self.logger.error(e)
             self.logger.info('Initializing new model')
     
-    def forward(self, x):
+    def forward(self, x) -> torch.Tensor:
         return self.model(x)
     
-    def load_model(self, filepath: str = None):
+    def load_model(self, filepath: str = None) -> None:
         if filepath is None:
             filepath = self.model_path
         assert filepath is not None, "Filepath is required"
         assert os.path.exists(filepath), f"Filepath does not exist: {filepath}"
         self.model.load_state_dict(torch.load(filepath))
         
-    def save_model(self, filepath: str = None):
+    def save_model(self, filepath: str = None) -> None:
         if filepath is None:
             filepath = self.model_path
         assert filepath is not None, "Filepath is required"
@@ -112,7 +112,7 @@ class ADP_Player(Player):
             rewards_actions.append((value, action))
         return sortfn(rewards_actions, key=lambda x: x[0])
     
-    def __call__(self, state: Gomoku):
+    def __call__(self, state: Gomoku) -> torch.Tensor:
         return self.forward(state)
     
     def opt(self, *states: list[Gomoku], **kwargs):
@@ -203,34 +203,32 @@ class ADP_Dense_Player(ADP_Player):
         
         self.device = kwargs.get('device', device)
         
-        kwargs.pop('M', None)
-        kwargs.pop('N', None)
-        kwargs.pop('K', None)
-        kwargs.pop('ADJ', None)
+        self.game_kwargs = {
+            'M': kwargs.pop('M'),
+            'N': kwargs.pop('N'),
+            'K': kwargs.pop('K'),
+            'ADJ': kwargs.pop('ADJ', 0),
+        }
         
         self.nn = Dense_Net(**kwargs)
         
     def extract_values(self, state: Gomoku):
-        assert len(state.line_cache), "Line cache is empty"
+        assert len(state._line_cache), "Line cache is empty"
         value_list = {len(pattern): [] for pattern in PB_DICT}
         affected_value_list = {len(pattern): [] for pattern in PB_DICT}
         for length in state.get_line_cache():
             for position in state.get_line_cache(length):
                 for direction in state.get_line_cache(length, position):
-                    _, values = state.get_line_cache(length, position, direction)
+                    values = state.get_line_cache(length, position, direction)
                     if position == state.last_move:
                         affected_value_list[length] += [values]
-                    # if values in WIN_ENCODE:
-                    #     return {}, {}, -1
-                    # if values in map(revp, WIN_ENCODE):
-                    #     return {}, {}, 1
                     value_list[length] += [values]
         return value_list, affected_value_list, None  
     
     def extract_feature(self, values: list[str], pattern: str) -> tuple[int, int]:
         first_count, second_count = 0, 0
     
-        pattern_o, pattern_x = pattern, revp(pattern)
+        pattern_o, pattern_x = pattern, Pattern.revp(pattern)
         for value in values:
             len_diff = len(pattern) - len(value)
             assert 0 <= len_diff <= 1, "Length difference of pattern vs. line: {}".format(len_diff)
@@ -297,12 +295,18 @@ class ADP_Pre_Player(ADP_Player):
 
         self.device = kwargs.get('device', device)
         
-        self.M = kwargs.pop('M')
-        self.N = kwargs.pop('N')
-        self.K = kwargs.pop('K')
-        kwargs.pop('ADJ', None)
+        self.game_kwargs = {
+            'M': kwargs.pop('M'),
+            'N': kwargs.pop('N'),
+            'K': kwargs.pop('K'),
+            'ADJ': kwargs.pop('ADJ', 0),
+        }
         
-        self.conv_nn = AlphaZeroConv(self.M, self.N, self.K)
+        self.conv_nn = AlphaZeroConv(
+            M = self.game_kwargs['M'],
+            N = self.game_kwargs['N'],
+            K = self.game_kwargs['K'],
+        )
         
         self.nn = Dense_Net(
             input_dim = PRE_INPUT_DIM,
@@ -333,10 +337,18 @@ class ADP_Conv_Player(ADP_Player):
 
         self.device = kwargs.get('device', device)
         
-        kwargs.pop('K', None)
-        kwargs.pop('ADJ', None)
+        self.game_kwargs = {
+            'M': kwargs.pop('M'),
+            'N': kwargs.pop('N'),
+            'K': kwargs.pop('K'),
+            'ADJ': kwargs.pop('ADJ', 0),
+        }
         
-        self.nn = Conv_Net(**kwargs)
+        self.nn = Conv_Net(
+            M = self.game_kwargs['M'],
+            N = self.game_kwargs['N'], 
+            **kwargs
+        )
     
     def forward(self, state: Gomoku):
         if state.fin():

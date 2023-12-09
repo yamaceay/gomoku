@@ -17,10 +17,8 @@ game_kwargs = {
 
 adp_kwargs = {
     'alpha': 0.9,
-    'magnify': 2,
     'gamma': 0.9,
     'lr': 0.01,
-    'n_steps': 1,
     'epsilon': 0.1,
 }
 

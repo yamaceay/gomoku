@@ -9,32 +9,36 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--DIR', type=str)
-    parser.add_argument('--PLAYER', type=str, default='dense')
+    # model
+    parser.add_argument('--DIR', type=str, help='Directory path')
+    parser.add_argument('--PLAYER', type=str, default='dense', help='Player type')
 
-    parser.add_argument('--START', type=int)
-    parser.add_argument('--END', type=int)
-    parser.add_argument('--STEP', type=int)
-    parser.add_argument('--EVAL', type=bool, default=True)
-    parser.add_argument('--TRAIN', type=bool, default=True)
+    # epochs 
+    parser.add_argument('--START', type=int, help='Start epoch')
+    parser.add_argument('--END', type=int, help='End epoch')
+    parser.add_argument('--STEP', type=int, help='Epoch step')
+    parser.add_argument('--EVAL', type=bool, default=True, help='Evaluate or not')
+    parser.add_argument('--TRAIN', type=bool, default=True, help='Train or not')
     
-    parser.add_argument('--ZERO_PLAY', type=bool, default=False)
-    parser.add_argument('--N_TEST_GAMES', type=int, default=7)
-    parser.add_argument('--SELECT_BEST', type=bool, default=False)
-    parser.add_argument('--LR_DECAY', type=float, default=0.99)
+    # training
+    parser.add_argument('--ZERO_PLAY', type=bool, default=False, help='Learn by playing against Zero')
+    parser.add_argument('--SELECT_BEST', type=bool, default=False, help='Select best model or not')
+    parser.add_argument('--LR_DECAY', type=float, default=0.99, help='Learning rate decay')
+    parser.add_argument('--N_TEST_GAMES', type=int, default=7, help='Number of games to play against Zero')
+    parser.add_argument('--BUFFER_SIZE', type=int, default=1000, help='Buffer size')
     
-    parser.add_argument('--M', type=int, default=8)
-    parser.add_argument('--N', type=int, default=8)
-    parser.add_argument('--K', type=int, default=5)
-    parser.add_argument('--ADJ', type=int, default=2)
+    # game
+    parser.add_argument('--M', type=int, default=8, help='Board width')
+    parser.add_argument('--N', type=int, default=8, help='Board height')
+    parser.add_argument('--K', type=int, default=5, help='Number of stones to align')
+    parser.add_argument('--ADJ', type=int, default=2, help='Number of adjacent stones to consider')
     
-    parser.add_argument('--ALPHA', type=float, default=0.9)
-    parser.add_argument('--MAGNIFY', type=int, default=2)
-    parser.add_argument('--GAMMA', type=float, default=0.9)
-    parser.add_argument('--LR', type=float, default=0.01)
-    parser.add_argument('--N_STEPS', type=int, default=1)
-    parser.add_argument('--EPSILON', type=float, default=0.1)
-    
+    # adp args
+    parser.add_argument('--ALPHA', type=float, default=0.9, help='Q-Learning rate')
+    parser.add_argument('--GAMMA', type=float, default=0.9, help='Discount factor')
+    parser.add_argument('--LR', type=float, default=0.01, help='NN Learning rate')
+    parser.add_argument('--EPSILON', type=float, default=0.1, help='Policy exploration rate')
+        
     args = parser.parse_args()
 
     LOSSES_PATH = os.path.join(args.DIR, "logs/losses.log")
@@ -55,11 +59,8 @@ if __name__ == "__main__":
     
     player_kwargs = {
         'alpha': args.ALPHA,
-        'magnify': args.MAGNIFY,
         'gamma': args.GAMMA,
         'lr': args.LR,
-        'n_steps': args.N_STEPS, 
-        'epsilon': args.EPSILON,
         'logger': logger,
         'device': device,
         **game_kwargs,
@@ -91,6 +92,8 @@ if __name__ == "__main__":
         player=player,
         player_args=player_kwargs,
         lr_args=lr_kwargs,
-        DIR_PATH=args.DIR,
+        epsilon=args.EPSILON,
+        buffer_size=args.BUFFER_SIZE,
+        dir_path=args.DIR,
     )
             

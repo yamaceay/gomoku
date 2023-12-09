@@ -1,104 +1,14 @@
-import os
-import numpy as np
 from .mcts import sortfn
 from .players import Player
 import torch
 from .gomoku import Gomoku
 from .patterns import PB_DICT, Pattern
-from .zero import AlphaZeroPlayer, AlphaZeroConv
-import logging
-
-INPUT_DIM = 2 * (5 * (len(PB_DICT) - 1) + 1) + 2 * (2 * len(PB_DICT)) + 2
-HIDDEN_DIM = 100
-OUTPUT_DIM = 1
-
-PRE_INPUT_DIM = 128
-PRE_HIDDEN_DIM = 32
-PRE_OUTPUT_DIM = 1
-
-INPUT_CHANNELS = 4
-HIDDEN_CHANNELS = 32
-OUTPUT_CHANNELS = 64
-    
+from .zero import AlphaZeroConv
+from .net import Dense_Net, Conv_Net, Pre_Dense_Net
+from tqdm import tqdm
+        
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-class Net(torch.nn.Module):
-    def __init__(self, **kwargs):
-        self.model_path = kwargs.pop('model_path', None)
-        self.logger = kwargs.pop('logger', logging.getLogger(__name__))
-        self.lr = kwargs.pop('lr', 0.1)
-        self.device = kwargs.pop('device', device)
         
-        super(Net, self).__init__(**kwargs)
-        
-    def compile_model(self, *layers) -> None: 
-        self.model = torch.nn.Sequential(*layers)
-        self.model = self.model.to(self.device)
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
-        
-        self.loss_fn = torch.nn.MSELoss(reduction='mean')
-        
-        try:
-            self.load_model()
-        except Exception as e:
-            self.logger.error(e)
-            self.logger.info('Initializing new model')
-    
-    def forward(self, x) -> torch.Tensor:
-        return self.model(x)
-    
-    def load_model(self, filepath: str = None) -> None:
-        if filepath is None:
-            filepath = self.model_path
-        assert filepath is not None, "Filepath is required"
-        assert os.path.exists(filepath), f"Filepath does not exist: {filepath}"
-        self.model.load_state_dict(torch.load(filepath))
-        
-    def save_model(self, filepath: str = None) -> None:
-        if filepath is None:
-            filepath = self.model_path
-        assert filepath is not None, "Filepath is required"
-        torch.save(self.model.state_dict(), filepath)
-
-class Conv_Net(Net):
-    def __init__(self, **kwargs):
-        self.board_size = (kwargs.pop('M'), kwargs.pop('N'))
-        self.input_channels = kwargs.pop('input_channels', INPUT_CHANNELS)
-        self.hidden_channels = kwargs.pop('hidden_channels', HIDDEN_CHANNELS)
-        self.output_channels = kwargs.pop('output_channels', OUTPUT_CHANNELS)
-        
-        self.output_dim = kwargs.pop('output_dim', OUTPUT_DIM)
-        
-        super(Conv_Net, self).__init__(**kwargs)
-        
-        self.compile_model(
-            torch.nn.Conv2d(self.input_channels, self.hidden_channels, kernel_size=3, padding=1),
-            torch.nn.BatchNorm2d(self.hidden_channels),
-            torch.nn.ReLU(),
-            torch.nn.MaxPool2d(kernel_size=2, stride=2),
-            torch.nn.Conv2d(self.hidden_channels, self.output_channels, kernel_size=3),
-            torch.nn.BatchNorm2d(self.output_channels),
-            torch.nn.ReLU(),
-            torch.nn.MaxPool2d(kernel_size=2),
-            torch.nn.Flatten(),
-            torch.nn.Linear(self.output_channels, self.output_dim),
-            torch.nn.Tanh(),
-        )
-    
-class Dense_Net(Net):
-    def __init__(self, **kwargs):
-        self.input_dim = kwargs.pop('input_dim', INPUT_DIM)
-        self.hidden_dim = kwargs.pop('hidden_dim', HIDDEN_DIM)
-        self.output_dim = kwargs.pop('output_dim', OUTPUT_DIM)
-        
-        super(Dense_Net, self).__init__(**kwargs)
-        
-        self.compile_model(
-            torch.nn.Linear(self.input_dim, self.hidden_dim),
-            torch.nn.Tanh(),
-            torch.nn.Linear(self.hidden_dim, self.output_dim),
-            torch.nn.Tanh(),
-        )
-    
 class ADP_Player(Player):
     def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:  
         actions = state.actions()
@@ -115,93 +25,70 @@ class ADP_Player(Player):
     def __call__(self, state: Gomoku) -> torch.Tensor:
         return self.forward(state)
     
-    def opt(self, *states: list[Gomoku], **kwargs):
-        reward = kwargs.pop('reward', .0)
-        
-        assert len(states) > 0, "At least 1 state is required"
-        
-        V_func = lambda i: self(states[i]).to(self.device) * (self.gamma ** i)
-        [V, *V_next] = list(map(V_func, range(len(states))))
+    def opt(self, s_curr: Gomoku, s_next: Gomoku = None, reward: float = .0) -> torch.Tensor:
+        V = self(s_curr).to(self.device)
+        V_next = torch.tensor([0.])
+        if s_next is not None:
+            V_next = self.gamma * self(s_next)
+        V_next = V_next.to(self.device)
 
-        sum_V_next = sum(V_next) if len(V_next) else torch.tensor([0.]).to(self.device)
-
-        # print("{} + {:.3f} = {:.3f}".format(reward, sum_V_next.cpu().detach().item(), V.cpu().detach().item()))
-        loss = self.alpha * (reward + sum_V_next - V)
+        loss = self.alpha * (reward + V_next - V)
         return loss
     
-    def train_body(self, history: list[Gomoku]):
-        losses = []
-        last_state = history.pop()
-        reward = last_state.score()
-        for i in range(len(history)):
-            low, high = i, min(i + self.n_steps, len(history) - 1)
-            states = history[low:high+1]
-            loss = self.opt(*states, reward=reward)
-            losses += [loss]
+    def train_batch(self, batch: list[str], start: int = 0, disable: bool = True) -> float:
+        mean_losses = []
+        for game_str in tqdm(batch, 
+            desc="Training", 
+            leave=False, 
+            position=1, 
+            disable=disable):
             
-        losses = torch.stack(losses).to(self.device)
-        objective = torch.zeros_like(losses).to(self.device)
-        loss = self.nn.loss_fn(losses, objective)
-        
-        self.nn.optimizer.zero_grad()
-        loss.backward()
-        self.nn.optimizer.step()
-        
-        return loss.cpu().detach().item(), reward
-    
-    def train_by_zero(self, state: Gomoku, **kwargs):
-        epsilon = kwargs.get('epsilon', .1)
-        
-        zero_player = AlphaZeroPlayer(
-            M = state.M, 
-            N = state.N, 
-            K = state.K
-        )
-        
-        history = [state.copy()]
-        if np.random.random() < 0.5:
-            action = zero_player.next_move(state)
-            state.play(action)
-            history += [state.copy()]
+            moves = Pattern.loc_to_move(game_str)
+            if len(moves) <= start:
+                continue
             
-        while not state.fin():
-            action = state.actions()[0]
-            if np.random.random() >= epsilon:
-                action = self.next_move(state)
-            state.play(action)                
-            history += [state.copy()]
-            if state.fin():
-                break
-            action = zero_player.next_move(state)
-            state.play(action)
-            history += [state.copy()]
-        
-        return self.train_body(history)
-    
-    def train(self, state: Gomoku, **kwargs):
-        epsilon = kwargs.get('epsilon', .1)
-        history = [state.copy()]
-        while not state.fin():
-            action = state.actions()[0]
-            if np.random.random() >= epsilon:
-                action = self.next_move(state)
-            state.play(action)
-            history += [state.copy()]
+            history = []
+            game = Gomoku(**self.game_kwargs)
+            for move in moves:
+                game.play(move)
+                history += [game.copy()]
+            history = history[start:]
             
-        return self.train_body(history)
-
+            losses = []
+            reward = history[-1].score()
+            for i in range(len(history) - 1):
+                [s_curr, s_next] = history[i:i+2]
+                if i == len(history) - 2:
+                    s_next = None
+                loss = self.opt(s_curr, s_next, reward=reward)
+                losses += [loss]
+        
+            losses = torch.stack(losses).to(self.device)
+            objective = torch.zeros_like(losses).to(self.device)
+            mean_loss = self.nn.loss_fn(losses, objective)
+            
+            self.nn.optimizer.zero_grad()
+            mean_loss.backward()
+            self.nn.optimizer.step()
+            
+            mean_loss = mean_loss.cpu().detach().item()
+            mean_losses += [mean_loss]
+        
+        return sum(mean_losses) / len(mean_losses)
     
 class ADP_Dense_Player(ADP_Player):
-    def __init__(self, **kwargs):
+    def __init__(self, 
+                 alpha: float = 1,
+                 gamma: float = 0.9,  
+                 device: torch.DeviceObjType = device,
+                 **kwargs,
+                ):
+        
         super(ADP_Dense_Player, self).__init__()
         
-        self.alpha = kwargs.pop('alpha', 1)
-        self.gamma = kwargs.pop('gamma', 0.9)
-        self.magnify = kwargs.pop('magnify', 1)
-        self.n_steps = kwargs.pop('n_steps', 1)
-        self.epsilon = kwargs.pop('epsilon', 0.)
-        
-        self.device = kwargs.get('device', device)
+        self.alpha = alpha
+        self.gamma = gamma
+        self.device = device
         
         self.game_kwargs = {
             'M': kwargs.pop('M'),
@@ -284,16 +171,17 @@ class ADP_Dense_Player(ADP_Player):
         return self.nn(features)
     
 class ADP_Pre_Player(ADP_Player):
-    def __init__(self, **kwargs):
+    def __init__(self, 
+                 alpha: float = 1, 
+                 gamma: float = 0.9, 
+                 device: torch.DeviceObjType = device,
+                 **kwargs,
+                 ):
         super(ADP_Pre_Player, self).__init__()
         
-        self.alpha = kwargs.pop('alpha', 1)
-        self.gamma = kwargs.pop('gamma', 0.9)
-        self.magnify = kwargs.pop('magnify', 1)
-        self.n_steps = kwargs.pop('n_steps', 1)
-        self.epsilon = kwargs.pop('epsilon', 0.)
-
-        self.device = kwargs.get('device', device)
+        self.alpha = alpha
+        self.gamma = gamma
+        self.device = device
         
         self.game_kwargs = {
             'M': kwargs.pop('M'),
@@ -308,11 +196,7 @@ class ADP_Pre_Player(ADP_Player):
             K = self.game_kwargs['K'],
         )
         
-        self.nn = Dense_Net(
-            input_dim = PRE_INPUT_DIM,
-            hidden_dim = PRE_HIDDEN_DIM,
-            output_dim = PRE_OUTPUT_DIM,
-        )
+        self.nn = Pre_Dense_Net(**kwargs)
         
     def extract_features(self, state: Gomoku):
         features = self.conv_nn.forward(state)
@@ -325,17 +209,18 @@ class ADP_Pre_Player(ADP_Player):
         
         features = self.extract_features(state)
         return self.nn(features)
+
 class ADP_Conv_Player(ADP_Player):
-    def __init__(self, **kwargs):
+    def __init__(self, 
+                 alpha: float = 1, 
+                 gamma: float = 0.9, 
+                 device: torch.DeviceObjType = device,
+                 **kwargs):
         super(ADP_Conv_Player, self).__init__()
         
-        self.alpha = kwargs.pop('alpha', 1)
-        self.gamma = kwargs.pop('gamma', 0.9)
-        self.magnify = kwargs.pop('magnify', 1)
-        self.n_steps = kwargs.pop('n_steps', 1)
-        self.epsilon = kwargs.pop('epsilon', 0.)
-
-        self.device = kwargs.get('device', device)
+        self.alpha = alpha
+        self.gamma = gamma
+        self.device = device
         
         self.game_kwargs = {
             'M': kwargs.pop('M'),

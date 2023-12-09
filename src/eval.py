@@ -23,8 +23,8 @@ def comp_models(game_kwargs: dict[int],
     }
     
     trainer_args = {
-        "player1": player2,
-        "epsilon1": epsilon2,
+        "player2": player2,
+        "epsilon2": epsilon2,
     }
     
     game, learner_starts = play_until_end(game_kwargs, **learner_args, **trainer_args)
@@ -62,7 +62,7 @@ def eval_by_zero(game_kwargs: dict[int],
                  epsilon: float = .1):
     len_histories = []
     for _ in tqdm(range(n_test_games), position=1, leave=False, desc="Testing"):
-        win, curr_model_starts, len_history = comp_models(game_kwargs, curr_model, zero_model, epsilon=epsilon)
+        win, curr_model_starts, len_history = comp_models(game_kwargs, curr_model, zero_model, epsilon1=epsilon)
         zero_model.restart()
         curr_model_won = int((win > 0) == curr_model_starts)
         if curr_model_won:
@@ -100,16 +100,19 @@ def train_adp(
             f.write("")
         
     with open(ZERO_RESULTS_PATH, "r") as f:
-        for line in f.readlines():
-            epoch, avg_len_history = line.split(",")
-            epoch = int(epoch)
-            avg_len_history = float(avg_len_history)
-            len_histories += [(avg_len_history, epoch)]
+        if epochs_start > 0:
+            for line in f.readlines():
+                if not line.strip():
+                    continue
+                epoch, avg_len_history = line.split(",")
+                epoch = int(epoch)
+                avg_len_history = float(avg_len_history)
+                len_histories += [(avg_len_history, epoch)]
     max_len_history = max(len_histories, key=lambda x: x[0]) if len(len_histories) else None
 
     adp_model = player(model_path=BEST_MODEL_PATH, **player_args)
     zero_model = None
-    if zero_play:
+    if zero_play or eval:
         zero_model = AlphaZeroPlayer(**game_kwargs)
     
     buffer = deque(maxlen=buffer_size)
@@ -144,7 +147,7 @@ def train_adp(
         new_path = os.path.join(dir_path, "models/epoch_{}.h5".format(last_epoch_in_batch))
         
         if train:
-            loss = adp_model.train_batch(sample, start=0, disable=False)
+            loss = adp_model.train_batch(sample, start=0)
             lr = scheduler.get_last_lr()[-1]
             
             logger.info(f"Epoch: {epoch} to {epoch+epochs_step}, MSE: {loss}, LR: {lr:.5f}")

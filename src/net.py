@@ -101,9 +101,11 @@ class Dense_Net(Net):
         )
         
 class Pre_Dense_Net(Dense_Net):
-    def __init__(self, **kwargs):
-        self.input_dim = kwargs.pop('input_dim', PRE_INPUT_DIM)
-        self.hidden_dim = kwargs.pop('hidden_dim', PRE_HIDDEN_DIM)
-        self.output_dim = kwargs.pop('output_dim', PRE_OUTPUT_DIM)
+    def __init__(self, *args, **kwargs):
+        super(Pre_Dense_Net, self).__init__(
+            input_dim = PRE_INPUT_DIM,
+            hidden_dim = PRE_HIDDEN_DIM,
+            output_dim = PRE_OUTPUT_DIM,
+            *args, **kwargs,
+        )
         
-        super(Pre_Dense_Net, self).__init__(**kwargs)

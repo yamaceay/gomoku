@@ -17,8 +17,8 @@ if __name__ == "__main__":
     parser.add_argument('--START', type=int, help='Start epoch')
     parser.add_argument('--END', type=int, help='End epoch')
     parser.add_argument('--STEP', type=int, help='Epoch step')
-    parser.add_argument('--EVAL', type=bool, default=True, help='Evaluate or not')
-    parser.add_argument('--TRAIN', type=bool, default=True, help='Train or not')
+    parser.add_argument('--NO_EVAL', action='store_true', help='Evaluate or not')
+    parser.add_argument('--NO_TRAIN', action='store_true', help='Train or not')
     
     # training
     parser.add_argument('--ZERO_PLAY', type=bool, default=False, help='Learn by playing against Zero')
@@ -83,8 +83,8 @@ if __name__ == "__main__":
         epochs_start=args.START,
         epochs_end=args.END,
         epochs_step=args.STEP,
-        eval=args.EVAL,
-        train=args.TRAIN,
+        eval=not args.NO_EVAL,
+        train=not args.NO_TRAIN,
         zero_play=args.ZERO_PLAY,
         n_test_games=args.N_TEST_GAMES,
         select_best=args.SELECT_BEST,

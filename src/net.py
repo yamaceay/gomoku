@@ -37,6 +37,7 @@ class Net(torch.nn.Module):
     def compile_model(self, *layers) -> None: 
         self.model = torch.nn.Sequential(*layers)
         self.model = self.model.to(self.device())
+        
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
         
         self.loss_fn = torch.nn.MSELoss(reduction='mean')

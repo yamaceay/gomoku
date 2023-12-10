@@ -40,7 +40,7 @@ class ADP_Player(Player):
         for game_str, reward in tqdm(batch, 
             desc="Training", 
             leave=False, 
-            position=1, 
+            position=2, 
             disable=disable):
             
             moves = Pattern.loc_to_move(game_str)
@@ -61,6 +61,8 @@ class ADP_Player(Player):
                     V_next = torch.tensor([0.]).to(self.device)
                 loss = self.alpha * (reward + self.gamma * V_next - V_curr)
                 losses += [loss]
+        
+        print(losses, len(losses))
         
         losses = torch.stack(losses).to(self.device)
         objective = torch.zeros_like(losses).to(self.device)

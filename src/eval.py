@@ -1,6 +1,7 @@
 from tqdm import tqdm
 from .zero import AlphaZeroPlayer
 from .adp import ADP_Player
+from .mcts_adp import UCT_Zero_Player
 from .players import Player
 from .gomoku import Gomoku
 from .data import collect_play_data, play_until_end
@@ -59,6 +60,24 @@ def tournament(game_kwargs, models: list[Player], n_test_games: int, start_ind: 
                 n_wins, l_history = n_wins / n_test_games, l_history / n_test_games
                 yield (i, j, n_wins, l_history)
 
+def eval_by_uct(game_kwargs: dict[str, int],
+                curr_model: ADP_Player,
+                best_model: ADP_Player,
+                n_test_games: int,
+                iterations: int = 10000,
+                epsilon: float = .1) -> list[tuple[bool, bool]]:
+    
+    curr_uct_model = UCT_Zero_Player(adp_model=curr_model, iterations=iterations)
+    best_uct_model = UCT_Zero_Player(adp_model=best_model, iterations=iterations)
+    
+    results = []
+    for _ in tqdm(range(n_test_games), position=1, leave=False, desc="Testing"):
+        win, curr_model_starts, _ = comp_models(game_kwargs, curr_uct_model, best_uct_model, epsilon1=epsilon)
+        curr_model_won = int((win > 0) == curr_model_starts)
+        results += [(curr_model_won, curr_model_starts)]
+    
+    return results
+
 def eval_by_zero(game_kwargs: dict[str, int], 
                  curr_model: ADP_Player, 
                  zero_model: AlphaZeroPlayer, 
@@ -78,13 +97,14 @@ def eval_by_zero(game_kwargs: dict[str, int],
  
 class EvolutionStrategy:
     def __init__(self, dir_path: str, logger) -> tuple[int, float]:
+        self.logger = logger
         self.dir_path = dir_path
         self.logger = logger
         
         self.best_model_path = os.path.join(self.dir_path, "models/best.h5")
-        self.results_path = os.path.join(self.dir_path, "logs/zero_results.log")
+        self.results_path = os.path.join(self.dir_path, "logs/mcts_results.log")
         
-        self.max_len_history = None
+        self.max_win = None
         if not os.path.exists(self.results_path):
             with open(self.results_path, "w") as f:
                 f.write("")
@@ -94,25 +114,29 @@ class EvolutionStrategy:
             lines = [line.strip().split(",") for line in lines]
             lines = [(int(line[0]), float(line[1])) for line in lines]
             if len(lines):
-                self.max_len_history = max(lines, key=lambda x: x[1])
+                self.max_win = max(lines, key=lambda x: x[1])
     
-    def select_best(self, adp_model: ADP_Player, path: str, new_len_history: tuple[int, float], select_best: bool = False):
-        with open(self.results_path, "a") as f:
-            f.write("{},{}\n".format(*new_len_history))
+    def select_best(self, adp_model: ADP_Player, epoch: int, new_win_data: list[tuple[bool, bool]], select_best: bool = False):
+        new_win_ratio = sum(map(lambda x: x[0], new_win_data)) / len(new_win_data)
         
-            if select_best:
-                self.max_len_history = max(self.max_len_history, new_len_history, key=lambda x: x[1])
-                if self.max_len_history == new_len_history:
-                    adp_model.nn.save_model(self.best_model_path)
-                    self.logger.info("{} is saved as the strongest model".format(path))
-                    
-                else:
-                    old_path = self.get_model_path(self.max_len_history[0])
-                    adp_model.nn.load_model(old_path)
-                    self.logger.info("{} is loaded as the strongest model".format(old_path))
-            else:
+        with open(self.results_path, "a") as f:
+            f.write("{},{}\n".format((epoch, new_win_ratio)))
+        
+        path = self.get_model_path(epoch)
+        if select_best:
+            self.max_win = max(self.max_win, new_win_ratio, key=lambda x: x[1])
+            if self.max_win == new_win_ratio:
                 adp_model.nn.save_model(self.best_model_path)
-                self.logger.info("{} is saved as the latest model".format(path))
+                self.logger.info("{} is saved as the strongest model".format(path))
+                
+            else:
+                old_path = self.get_model_path(self.max_win[0])
+                adp_model.nn.load_model(old_path)
+                self.logger.info("{} is loaded as the strongest model".format(old_path))
+        else:
+            adp_model.nn.save_model(self.best_model_path)
+            self.logger.info("{} is saved as the latest model".format(path))
+            
         return adp_model
       
     def get_model_path(self, epoch: int) -> str:
@@ -133,6 +157,7 @@ def train_adp(
     train: bool = True,
     zero_play: bool = False,
     select_best: bool = False,
+    eval_iterations: int = 2500,
     lr_args: dict = {},
     n_test_games: int = 0, 
     buffer_size: int = 1024,
@@ -142,10 +167,10 @@ def train_adp(
 ):
     logger = player_args.get("logger", logging.getLogger(__name__))
     
-    history_eval = EvolutionStrategy(dir_path, logger)
+    evo_strategy = EvolutionStrategy(dir_path, logger)
     
     adp_model = player(
-        model_path=history_eval.best_model_path, 
+        model_path=evo_strategy.best_model_path, 
         game_kwargs=game_kwargs, 
         **player_args
     )
@@ -182,7 +207,6 @@ def train_adp(
         sample = random.sample(buffer, min(batch_size, len(buffer)))
         
         last_epoch_in_batch = epoch + epochs_step
-        new_path = os.path.join(dir_path, "models/epoch_{}.h5".format(last_epoch_in_batch))
         
         if train:
             loss = adp_model.train_batch(sample, start=0)
@@ -191,6 +215,8 @@ def train_adp(
             logger.info(f"Epoch: {epoch} to {epoch+epochs_step}, MSE: {loss}, LR: {lr:.5f}")
             
             scheduler.step()
+            
+            new_path = os.path.join(dir_path, "models/epoch_{}.h5".format(last_epoch_in_batch))
             adp_model.nn.save_model(new_path)
             
         if eval:
@@ -200,17 +226,18 @@ def train_adp(
                 **player_args
             )
             
-            avg_len_history = eval_by_zero(
+            win_data = eval_by_uct(
                 game_kwargs=game_kwargs,
                 curr_model=curr_model,
-                zero_model=zero_model,
+                best_model=adp_model,
                 n_test_games=n_test_games,
+                iterations=eval_iterations,
                 epsilon=epsilon,
             )
             
-            history_eval.select_best(
+            evo_strategy.select_best(
                 adp_model=adp_model, 
-                path=new_path, 
-                new_len_history=(last_epoch_in_batch, avg_len_history), 
+                epoch=last_epoch_in_batch, 
+                new_win_data=win_data, 
                 select_best=select_best,
             )

@@ -49,12 +49,13 @@ def collect_play_data(
     for _ in tqdm(range(n_games), 
                   position=1, 
                   leave=False, 
-                  desc="Collecting play data"
-                  ):
+                  desc="Collecting play data",
+                  disable=True):
         
         game, _ = play_until_end(game, **learner_args, **trainer_args)
         for transformation in game.transformations:
             feature = game.history_str(*transformation)
             label = game.score()
             play_data += [(feature, label)]
+    
     return play_data

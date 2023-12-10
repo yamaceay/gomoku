@@ -16,6 +16,7 @@ class Gomoku:
         self._adjacents = set()
         self._history = ""
         self._winner = 0
+        self._legal_actions = set([(x, y) for x in range(self.M) for y in range(self.N)])
     
     def copy(self):
         return copy.deepcopy(self)
@@ -38,18 +39,12 @@ class Gomoku:
         return 0, self.no_move()
 
     def actions(self) -> list[tuple[int, int]]:
-        moves = [
-            (x, y) 
-            for x in range(self.M) 
-            for y in range(self.N)
-            if self._is_legal((x, y))
-        ]
+        moves = self._legal_actions
         if self.ADJ and len(self._history):
-            move_set = set(Pattern.move_to_loc(move) for move in moves)
-            move_set = self._adjacents.intersection(move_set)
-            if not len(move_set):
+            moves = self._adjacents.intersection(moves)
+            if not len(moves):
                 return []
-            moves = list(Pattern.loc_to_move(",".join(move_set)))
+        moves = list(moves)
         random.shuffle(moves)
         return moves
         
@@ -60,7 +55,7 @@ class Gomoku:
         return self._winner
 
     def no_move(self) -> bool:
-        return bool(np.where(self.board == 0, 1, 0).sum() == 0)
+        return len(self._legal_actions) == 0
         
     @property
     def last_move(self) -> tuple[int, int]:
@@ -172,6 +167,7 @@ class Gomoku:
     def _step(self, move: tuple[int, int]) -> None:
         x, y = move
         self.board[x, y] = self.player
+        self._legal_actions.remove(move)
         lengths = set(map(len, PB_DICT))
         for dx, dy in self._directions:
             for length in sorted(lengths):
@@ -191,7 +187,7 @@ class Gomoku:
                     new_x, new_y = x + i * dx, y + i * dy
                     if not (0 <= new_x < self.M and 0 <= new_y < self.N):
                         continue
-                    self._adjacents.add(Pattern.move_to_loc((new_x, new_y)))
+                    self._adjacents.add((new_x, new_y))
         
         if not len(self._history):
             self._history = Pattern.move_to_loc(move)
@@ -271,25 +267,3 @@ class Gomoku:
             output += " ".join(row) + "\n"
             
         return output
-    
-if __name__ == "__main__":
-    
-    game_kwargs = {
-        'M': 8,
-        'N': 8,
-        'K': 5,
-        'ADJ': 2,
-    }
-    
-    game = Gomoku(**game_kwargs)
-    
-    history = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0)]
-    game.play(*history)
-    print(game)
-    
-    print(game.history_str(True, True, True))
-    rotated_history = game.history(True, True, True)
-    
-    new_game = Gomoku(**game_kwargs)
-    new_game.play(*rotated_history)
-    print(new_game)

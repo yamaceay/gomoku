@@ -1,14 +1,10 @@
 from typing import Callable
-from collections import deque
 
 from .players import Player
 from .gomoku import Gomoku
 from .mcts import Node, Tree, uct_score
 from .patterns import sortfn
 from .adp import ADP_Player
-from .data import collect_play_data
-import random
-from tqdm import tqdm
 
 class UCT_Zero_Player(Player):
     def __init__(self, 
@@ -22,63 +18,40 @@ class UCT_Zero_Player(Player):
         self.policy_kwargs = policy_kwargs
         self.tree_kwargs = tree_kwargs
         self.adp = adp_model
-
-    # def train(self, 
-    #               game_kwargs: dict[str, int],
-    #               buffer_size: int = 1000,
-    #               batch_size: int = 200,
-    #               iterations: int = 25,
-    #               epsilon: float = .1):
-    #     losses = []
-    #     buffer = deque(maxlen=buffer_size)
-    #     game = Gomoku(**game_kwargs)
-        
-    #     learner_args = {
-    #         "player1": self.adp,
-    #         "epsilon1": epsilon,
-    #     }
-        
-    #     with tqdm(desc="Training", leave=False, position=1) as pbar:
-    #         while not game.fin():
-    #             self.tree = Tree(game, **self.tree_kwargs)
-                
-    #             for _ in range(iterations):
-    #                 node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
-    #                 if not node.is_fully_expanded() and not node.is_terminal():
-    #                     node = self.tree.expand(node)
-    #                 game, _ = play_until_end(node.state, **learner_args)
-    #                 buffer.extend(collect_play_data(game))
-    #                 self.tree.backpropagate(node, game.score())
-                
-    #             batch = random.sample(buffer, min(batch_size, len(buffer)))
-                
-    #             loss = self.adp.train_batch(batch, disable=False)
-    #             losses += [loss]
-    #             pbar.set_postfix(loss=loss)
-    #             pbar.update()
-        
-    #     return losses
     
-    def expand(self, node: Node) -> Node:
+    def expand(self, node: Node) -> tuple[Node, float]:
+        all_actions = node.state.actions()
+        other_actions = [
+            child.state.last_move
+            for child in node.children
+        ]
+        actions = set(all_actions) - set(other_actions)
+        assert len(actions), "No action"
+        
         new_state = node.state.copy()
-        action = self.adp.next_move(new_state)
-        new_state.play(action)
-        new_node = Node(new_state, parent=node)
-        node.children.append(new_node)
-        return new_node
+        probs_actions = self.adp.next_move_probs(new_state)
+        for reward, action in probs_actions:
+            if action in actions:
+                new_state.play(action)
+                new_node = Node(new_state, parent=node)
+                node.children.append(new_node)
+                return new_node, reward
+            
+        raise Exception("No action")
         
     def simulate(self, node: Node) -> float:
         return self.adp(node.state).cpu().detach().item()
 
     def rewards_actions(self, game: Gomoku):
         self.tree = Tree(game, **self.tree_kwargs)
-        first_player = self.tree.root.state.player
+        first_player = game.player
         
         for _ in range(self.iterations):
             node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
             if not node.is_fully_expanded() and not node.is_terminal():
-                node = self.expand(node)
-            value = self.simulate(node)
+                node, value = self.expand(node)
+            else:
+                value = self.simulate(node)
             self.tree.backpropagate(node, value)
         
         get_reward = lambda child: uct_score(self.tree.root, child, C=0) * first_player
@@ -88,9 +61,7 @@ class UCT_Zero_Player(Player):
         return sortfn(rewards_actions, key=lambda x: x[0])
     
 if __name__ == '__main__':
-    from .adp import ADP_Pre_Player
-    
-    buffer = deque(maxlen=1000)
+    from .adp import ADP_Dense_Player, ADP_Pre_Player
     
     game_kwargs = {
         "M": 8,
@@ -99,7 +70,19 @@ if __name__ == '__main__':
         "ADJ": 2,
     }
     
+    # adp = ADP_Dense_Player(model_path="_dens2/models/epoch_1000.h5", game_kwargs=game_kwargs)
     adp = ADP_Pre_Player(game_kwargs=game_kwargs)
+    
+    uct_adp = UCT_Zero_Player(adp, iterations=400)
+    
+    game = Gomoku(**game_kwargs)
+    while not game.fin():
+        action = uct_adp.next_move(game)
+        game.play(action)
+        print(game)
+        
+    # results = eval_by_uct(game_kwargs, adp, adp, n_test_games=3, iterations=200, epsilon=.1)
+    # print(results)
     
     # uct = UCT_Player(iterations=2000, policy=uct_score)
     # zero = AlphaZeroPlayer(game_kwargs)

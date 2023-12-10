@@ -1,2 +1,28 @@
 [2023-12-10 16:32:58,791] Filepath does not exist: _dens/models/best.h5
 [2023-12-10 16:32:58,791] Initializing new model
+[2023-12-10 22:50:55,231] Filepath does not exist: _dens/models/best.h5
+[2023-12-10 22:50:55,231] Initializing new model
+[2023-12-10 22:50:59,095] Epoch: 0 to 5, MSE: 0.8436577320098877, LR: 0.01000
+[2023-12-11 00:20:25,394] Filepath does not exist: _dens/models/best.h5
+[2023-12-11 00:20:25,394] Initializing new model
+[2023-12-11 00:20:30,527] Epoch: 0 to 5, MSE: 0.7771992087364197, LR: 0.01000
+[2023-12-11 00:22:05,045] Filepath does not exist: _dens/models/best.h5
+[2023-12-11 00:22:05,045] Initializing new model
+[2023-12-11 00:23:53,733] Filepath does not exist: _dens/models/best.h5
+[2023-12-11 00:23:53,733] Initializing new model
+[2023-12-11 00:24:01,090] Filepath does not exist: _dens/models/best.h5
+[2023-12-11 00:24:01,090] Initializing new model
+[2023-12-11 00:26:51,424] Filepath does not exist: _dens/models/best.h5
+[2023-12-11 00:26:51,424] Initializing new model
+[2023-12-11 00:27:30,237] Filepath does not exist: _dens/models/best.h5
+[2023-12-11 00:27:30,237] Initializing new model
+[2023-12-11 00:27:45,139] Filepath does not exist: _dens/models/best.h5
+[2023-12-11 00:27:45,139] Initializing new model
+[2023-12-11 00:28:26,683] Filepath does not exist: _dens/models/best.h5
+[2023-12-11 00:28:26,683] Initializing new model
+[2023-12-11 00:28:58,179] Epoch: 0 to 50, MSE: 0.8257007002830505, LR: 0.01000
+[2023-12-11 00:29:39,713] Epoch: 50 to 100, MSE: 0.7566693425178528, LR: 0.00995
+[2023-12-11 00:31:01,069] Epoch: 100 to 150, MSE: 0.7212569117546082, LR: 0.00990
+[2023-12-11 00:33:10,782] Filepath does not exist: _dens/models/best.h5
+[2023-12-11 00:33:10,782] Initializing new model
+[2023-12-11 00:33:37,141] Epoch: 0 to 50, MSE: 0.8299457430839539, LR: 0.01000

@@ -7,6 +7,6 @@
 
 apptainer run --nv gomoku.sif python -m fit \
     --DIR="_dens" --PLAYER="pre" \ 
-    --START=0 --END=1000 --STEP=25 \
-    --BATCH_SIZE=100 \ 
+    --START=0 --END=50 --STEP=5 \
+    --BATCH_SIZE=250 \ 
     --LR=0.01 --LR_DECAY=0.995

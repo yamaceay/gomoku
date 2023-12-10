@@ -2,7 +2,7 @@ from typing import Callable
 import numpy as np
 from .patterns import PB_DICT, sortfn
 from .gomoku import Gomoku
-from .players import Player
+from .players import Player, RandomPlayer
 
 class Node:
     def __init__(self, state: Gomoku, parent=None):
@@ -98,9 +98,9 @@ class Tree:
 
     def simulate(self, node: Node) -> float:
         state = node.state.copy()
+        player = RandomPlayer()
         while not state.fin():
-            state_actions = state.actions()
-            action = state_actions[np.random.randint(0, len(state_actions))]
+            action = player.next_move(state)
             state.play(action)
         return state.score()
     

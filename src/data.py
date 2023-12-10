@@ -2,83 +2,54 @@ from .gomoku import Gomoku
 from .players import Player
 from tqdm import tqdm
 import random
-    
-def collect_selfplay_data(
-    player: Player, 
-    game_kwargs: dict[int], 
-    n_games: int = 1, 
-    epsilon: float = .1) -> list[str]:
-    
-    selfplay_data = []
-    for _ in tqdm(range(n_games), 
-                  position=1, 
-                  leave=False, 
-                  desc="Collecting self-play data"
-                  ):
-        game = Gomoku(**game_kwargs)
-        while not game.fin():
-            action = game.actions()[0]
-            if random.random() >= epsilon:
-                action = player.next_move(game)
-            game.play(action)
-        for transformation in game.transformations:
-            selfplay_data += [game.history_str(*transformation)]
-    return selfplay_data
 
 def play_until_end(
-    game_kwargs: dict[int], 
+    game: Gomoku, 
     player1: Player, 
-    player2: Player,
+    player2: Player = None,
     epsilon1: float = .0,
     epsilon2: float = .0,
     ) -> tuple[Gomoku, bool]:
     
-    game = Gomoku(**game_kwargs)
+    new_game = game.copy()
+    
+    if player2 is None:
+        while not new_game.fin():
+            action = player1.next_move(new_game, epsilon=epsilon1)
+            new_game.play(action)
+        return new_game, True    
+    
     player2_starts = random.random() < .5
     if player2_starts:
-        action = game.actions()[0]
-        if random.random() >= epsilon2:
-            action = player2.next_move(game)
-        game.play(action)
+        action = player2.next_move(new_game, epsilon=epsilon2)
+        new_game.play(action)
     
-    while not game.fin():
-        action = game.actions()[0]
-        if random.random() >= epsilon1:
-            action = player1.next_move(game)
-        game.play(action)
-        if game.fin():
+    while not new_game.fin():
+        action = player1.next_move(new_game, epsilon=epsilon1)
+        new_game.play(action)
+        if new_game.fin():
             break
-        action = game.actions()[0]
-        if random.random() >= epsilon2:
-            action = player2.next_move(game)
-        game.play(action)
+        action = player2.next_move(new_game, epsilon=epsilon2)
+        new_game.play(action)
 
-    return game, not player2_starts
+    return new_game, not player2_starts
 
+    
 def collect_play_data(
-    game_kwargs: dict[int], 
-    learner: Player,
-    trainer: Player, 
+    game: Gomoku,
     n_games: int = 1, 
-    epsilon: float = .1) -> list[str]:
+    learner_args: dict[str, Player | float] = {},
+    trainer_args: dict[str, Player | float] = {},
+    ) -> list[str]:
     
-    learner_args = {
-        "player1": learner,
-        "epsilon1": epsilon,
-    }
-    
-    trainer_args = {
-        "player1": trainer,
-        "epsilon1": .0,
-    }
-        
-    play_data = []        
+    play_data = []
     for _ in tqdm(range(n_games), 
                   position=1, 
-                  leave=False,
+                  leave=False, 
                   desc="Collecting play data"
                   ):
-        game, _ = play_until_end(game_kwargs, **learner_args, **trainer_args)
-        play_data += [game.history_str()]
-    
+        
+        game, _ = play_until_end(game, **learner_args, **trainer_args)
+        for transformation in game.transformations:
+            play_data += [game.history_str(*transformation)]
     return play_data

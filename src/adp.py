@@ -56,6 +56,7 @@ class ADP_Player(Player):
             history = history[start:]
             
             reward = history[-1].cpu().detach().item()
+            
             for i in range(len(history) - 1):
                 [V_curr, V_next] = history[i:i+2]
                 if i == len(history) - 2:

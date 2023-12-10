@@ -71,7 +71,7 @@ class AlphaZeroPlayer(Player):
         new_move = (int(x), int(y))
         return [(1., new_move)]
      
-    def next_move(self, game: Gomoku, _: bool = True) -> tuple[int, int]:
+    def next_move(self, game: Gomoku, epsilon: float = 0.) -> tuple[int, int]:
         prob_action = self.next_move_probs(game)
         return prob_action[0][1]
     

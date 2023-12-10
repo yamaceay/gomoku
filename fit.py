@@ -19,8 +19,8 @@ if __name__ == "__main__":
     
     # training
     parser.add_argument('--BATCH_SIZE', type=int, help='Batch size')
-    parser.add_argument('--ZERO_PLAY', type=bool, default=False, help='Learn by playing against Zero')
-    parser.add_argument('--SELECT_BEST', type=bool, default=False, help='Select best model or not')
+    parser.add_argument('--ZERO_PLAY', action='store_true', help='Learn by playing against Zero')
+    parser.add_argument('--SELECT_BEST', action='store_true', help='Select best model or not')
     parser.add_argument('--LR_DECAY', type=float, default=0.99, help='Learning rate decay')
     parser.add_argument('--N_TEST_GAMES', type=int, default=7, help='Number of games to play against Zero')
     parser.add_argument('--BUFFER_SIZE', type=int, default=1024, help='Buffer size')

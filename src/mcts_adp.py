@@ -3,7 +3,6 @@ from .gomoku import Gomoku
 from .mcts import Node, Tree, uct_score
 from .patterns import sortfn
 from .adp import ADP_Player
-import numpy as np
 
 class UCT_Zero_Player(Player):
     def __init__(self, adp_model: ADP_Player, iterations=10000, policy=uct_score, policy_kwargs={}, tree_kwargs={}):
@@ -11,16 +10,12 @@ class UCT_Zero_Player(Player):
         self.policy = policy
         self.policy_kwargs = policy_kwargs
         self.tree_kwargs = tree_kwargs
-        self.adp_model = adp_model
+        self.adp = adp_model
         
     def simulate(self, node: Node) -> float:
         state = node.state.copy()
         while not state.fin():
-            probs = self.adp_model(state)
-            probs = probs.detach().numpy()
-            probs = probs.reshape(-1)
-            probs = probs / probs.sum()
-            action = np.random.choice(state.actions(), p=probs)
+            action = self.adp.next_move_probs(state, best=False)
             state.play(action)
         return state.score()
 

@@ -2,6 +2,7 @@ from .gomoku import Gomoku
 from .patterns import sortfn
 import numpy as np
 
+
 class Player:
     def rewards_actions(self, _: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         raise NotImplementedError
@@ -17,10 +18,10 @@ class Player:
         probs /= probs.sum()
         return list(zip(probs, actions))
     
-    def next_move(self, game: Gomoku, best: bool = True) -> tuple[int, int]:
+    def next_move(self, game: Gomoku, epsilon: float = 0.) -> tuple[int, int]:
         probs_actions = self.next_move_probs(game)
         # print([f"{a}: {p:.2f}" for p, a in probs_actions])
-        if best:
+        if np.random.random() >= epsilon:
             return probs_actions[0][1]
         
         probs, actions = zip(*probs_actions)

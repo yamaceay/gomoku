@@ -2,7 +2,8 @@ from tqdm import tqdm
 from .zero import AlphaZeroPlayer
 from .adp import ADP_Player
 from .players import Player
-from .data import collect_selfplay_data, collect_play_data, play_until_end
+from .gomoku import Gomoku
+from .data import collect_play_data, play_until_end
 
 import torch
 from collections import deque
@@ -27,8 +28,10 @@ def comp_models(game_kwargs: dict[int],
         "epsilon2": epsilon2,
     }
     
+    game = Gomoku(**game_kwargs)
+    
     with torch.no_grad():
-        game, learner_starts = play_until_end(game_kwargs, **learner_args, **trainer_args)
+        game, learner_starts = play_until_end(game, **learner_args, **trainer_args)
     
     return game.score(), learner_starts, len(game.history())
 
@@ -72,6 +75,48 @@ def eval_by_zero(game_kwargs: dict[int],
         len_histories += [len_history]
     avg_len_history = sum(len_histories) / len(len_histories)
     return avg_len_history
+ 
+class EvolutionStrategy:
+    def __init__(self, dir_path: str, logger) -> tuple[int, float]:
+        self.dir_path = dir_path
+        self.logger = logger
+        
+        self.best_model_path = os.path.join(self.dir_path, "models/best.h5")
+        self.results_path = os.path.join(self.dir_path, "logs/zero_results.log")
+        
+        self.max_len_history = None
+        if not os.path.exists(self.results_path):
+            with open(self.results_path, "w") as f:
+                f.write("")
+        else:
+            with open(self.results_path, "r") as f:
+                lines = f.readlines()
+            lines = [line.strip().split(",") for line in lines]
+            lines = [(int(line[0]), float(line[1])) for line in lines]
+            if len(lines):
+                self.max_len_history = max(lines, key=lambda x: x[1])
+    
+    def write(self, adp_model: ADP_Player, path: str, new_len_history: tuple[int, float], select_best: bool = False):
+        with open(self.results_path, "a") as f:
+            f.write("{},{}\n".format(*new_len_history))
+        
+            if select_best:
+                self.max_len_history = max(self.max_len_history, new_len_history, key=lambda x: x[1])
+                if self.max_len_history == new_len_history:
+                    adp_model.nn.save_model(self.best_model_path)
+                    self.logger.info("{} is saved as the strongest model".format(path))
+                    
+                else:
+                    old_path = self.get_model_path(self.max_len_history[0])
+                    adp_model.nn.load_model(old_path)
+                    self.logger.info("{} is loaded as the strongest model".format(old_path))
+            else:
+                adp_model.nn.save_model(self.best_model_path)
+                self.logger.info("{} is saved as the latest model".format(path))
+        return adp_model
+      
+    def get_model_path(self, epoch: int) -> str:
+        return os.path.join(self.dir_path, "models/epoch_{}.h5".format(epoch))
       
 def train_adp(
     dir_path: str,
@@ -86,7 +131,7 @@ def train_adp(
     epochs_start: int = 0, 
     eval: bool = True, 
     train: bool = True,
-    zero_play: bool = True,
+    zero_play: bool = False,
     select_best: bool = False,
     lr_args: dict = {},
     n_test_games: int = 0, 
@@ -97,27 +142,10 @@ def train_adp(
 ):
     logger = player_args.get("logger", logging.getLogger(__name__))
     
-    BEST_MODEL_PATH = os.path.join(dir_path, "models/best.h5")
-    ZERO_RESULTS_PATH = os.path.join(dir_path, "logs/zero_results.log")
+    history_eval = EvolutionStrategy(dir_path, logger)
     
-    len_histories = []
-    if not os.path.exists(ZERO_RESULTS_PATH):
-        with open(ZERO_RESULTS_PATH, "w") as f:
-            f.write("")
-        
-    with open(ZERO_RESULTS_PATH, "r") as f:
-        if epochs_start > 0:
-            for line in f.readlines():
-                if not line.strip():
-                    continue
-                epoch, avg_len_history = line.split(",")
-                epoch = int(epoch)
-                avg_len_history = float(avg_len_history)
-                len_histories += [(avg_len_history, epoch)]
-    max_len_history = max(len_histories, key=lambda x: x[0]) if len(len_histories) else None
-
     adp_model = player(
-        model_path=BEST_MODEL_PATH, 
+        model_path=history_eval.best_model_path, 
         game_kwargs=game_kwargs, 
         **player_args
     )
@@ -129,26 +157,29 @@ def train_adp(
     buffer = deque(maxlen=buffer_size)
     scheduler = lr_scheduler.ExponentialLR(adp_model.nn.optimizer, gamma=lr_args['lr_decay'])
     
+    game = Gomoku(**game_kwargs)
+    
     for epoch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
         play_data = None
+        
+        learner_args = {
+            "player1": adp_model,
+            "epsilon1": epsilon,
+        }
+        
+        trainer_args = {}
         if zero_play:
-            play_data = [
-                data[0] for data in 
-                collect_play_data(
-                    game_kwargs=game_kwargs, 
-                    learner=adp_model,
-                    trainer=zero_model,
-                    n_games=epochs_step, 
-                    epsilon=epsilon,
-                )
-            ]
-        else:
-            play_data = collect_selfplay_data(
-                player=adp_model, 
-                game_kwargs=game_kwargs, 
-                n_games=epochs_step, 
-                epsilon=epsilon,
-            )
+            trainer_args = {
+                "player2": zero_model,
+                "epsilon2": .0,
+            }
+            
+        play_data = collect_play_data(
+            game=game, 
+            learner_args=learner_args,
+            trainer_args=trainer_args,
+            n_games=epochs_step,
+        )
         
         buffer.extend(play_data)
         
@@ -181,22 +212,9 @@ def train_adp(
                 epsilon=epsilon,
             )
             
-            new_len_history = (avg_len_history, last_epoch_in_batch)
-            
-            with open(ZERO_RESULTS_PATH, "a") as f:
-                f.write("{},{}\n".format(new_len_history[1], new_len_history[0]))
-            
-            if train:
-                if select_best:
-                    if max_len_history is None or max_len_history[0] < new_len_history[0]:
-                        max_len_history = new_len_history
-                        adp_model.nn.save_model(BEST_MODEL_PATH)
-                        logger.info("{} is saved as the strongest model".format(new_path))
-                        
-                    else:
-                        old_path = os.path.join(dir_path, "models/epoch_{}.h5".format(max_len_history[1]))
-                        adp_model.nn.load_model(old_path)
-                        logger.info("{} is loaded as the strongest model".format(old_path))
-                else:
-                    adp_model.nn.save_model(BEST_MODEL_PATH)
-                    logger.info("{} is saved as the latest model".format(new_path))
+            history_eval.write(
+                adp_model=adp_model, 
+                path=new_path, 
+                new_len_history=(last_epoch_in_batch, avg_len_history), 
+                select_best=select_best,
+            )

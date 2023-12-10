@@ -1,19 +1,4 @@
-[2023-12-10 00:48:30,649] Filepath does not exist: _dens/models/best.h5
-[2023-12-10 00:48:30,649] Initializing new model
-[2023-12-10 00:48:56,990] Epoch: 0 to 10, MSE: 0.89347203373909, LR: 0.01000
-[2023-12-10 00:50:33,601] Filepath does not exist: _dens/models/best.h5
-[2023-12-10 00:50:33,602] Initializing new model
-[2023-12-10 00:50:58,475] Epoch: 0 to 10, MSE: 0.8638295948505401, LR: 0.01000
-[2023-12-10 00:51:20,170] Epoch: 10 to 20, MSE: 0.7985118389129638, LR: 0.00995
-[2023-12-10 00:51:31,084] Epoch: 20 to 30, MSE: 0.7483341813087463, LR: 0.00990
-[2023-12-10 00:51:56,078] Epoch: 30 to 40, MSE: 0.6503000915050506, LR: 0.00985
-[2023-12-10 00:52:26,100] Epoch: 40 to 50, MSE: 0.7441735029220581, LR: 0.00980
-[2023-12-10 00:52:54,396] Epoch: 50 to 60, MSE: 0.797433054447174, LR: 0.00975
-[2023-12-10 00:53:22,793] Epoch: 60 to 70, MSE: 0.8600818991661072, LR: 0.00970
-[2023-12-10 00:53:47,699] Epoch: 70 to 80, MSE: 0.7545813381671905, LR: 0.00966
-[2023-12-10 00:54:10,845] Epoch: 80 to 90, MSE: 0.7266325652599335, LR: 0.00961
-[2023-12-10 00:54:39,324] Epoch: 90 to 100, MSE: 0.8378404915332794, LR: 0.00956
-[2023-12-10 01:00:54,477] Filepath does not exist: _dens/models/best.h5
-[2023-12-10 01:00:54,477] Initializing new model
-[2023-12-10 01:02:47,786] _dens/models/epoch_10.h5 is saved as the latest model
-[2023-12-10 01:05:36,763] _dens/models/epoch_10.h5 is saved as the latest model
+[2023-12-10 13:38:44,757] Epoch: 0 to 25, MSE: 0.8562908846139908, LR: 0.01000
+[2023-12-10 13:40:09,424] _dens/models/epoch_25.h5 is saved as the latest model
+[2023-12-10 13:41:13,643] Epoch: 25 to 50, MSE: 0.8125971180200576, LR: 0.00995
+[2023-12-10 13:42:34,772] _dens/models/epoch_50.h5 is saved as the latest model

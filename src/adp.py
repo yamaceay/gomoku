@@ -4,12 +4,22 @@ import torch
 from .gomoku import Gomoku
 from .patterns import PB_DICT, Pattern
 from .zero import AlphaZeroConv
-from .net import Dense_Net, Conv_Net, Pre_Dense_Net
+from .net import Net, Dense_Net, Conv_Net, Pre_Dense_Net
 from tqdm import tqdm
         
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        
 class ADP_Player(Player):
+    def __init__(self, 
+                 nn: Net,
+                 game_kwargs: dict[int], 
+                 alpha: float = 0.9, 
+                 gamma: float = 0.9):
+        
+        self.nn = nn
+        self.device = self.nn.device()
+        self.game_kwargs = game_kwargs
+        self.alpha = alpha
+        self.gamma = gamma
+        
     def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:  
         actions = state.actions()
         assert len(actions), "No moves available"
@@ -78,26 +88,18 @@ class ADP_Player(Player):
     
 class ADP_Dense_Player(ADP_Player):
     def __init__(self, 
-                 alpha: float = 1,
-                 gamma: float = 0.9,  
-                 device: torch.DeviceObjType = device,
-                 **kwargs,
-                ):
+                 game_kwargs: dict[int],
+                 alpha: float = 0.9, 
+                 gamma: float = 0.9,
+                 **kwargs):
         
-        super(ADP_Dense_Player, self).__init__()
-        
-        self.alpha = alpha
-        self.gamma = gamma
-        self.device = device
-        
-        self.game_kwargs = {
-            'M': kwargs.pop('M'),
-            'N': kwargs.pop('N'),
-            'K': kwargs.pop('K'),
-            'ADJ': kwargs.pop('ADJ', 0),
-        }
-        
-        self.nn = Dense_Net(**kwargs)
+        super(ADP_Dense_Player, self).__init__(
+            nn=Dense_Net(**kwargs),
+            game_kwargs=game_kwargs,
+            alpha=alpha,
+            gamma=gamma,
+        )
+
         
     def extract_values(self, state: Gomoku):
         assert len(state._line_cache), "Line cache is empty"
@@ -172,31 +174,24 @@ class ADP_Dense_Player(ADP_Player):
     
 class ADP_Pre_Player(ADP_Player):
     def __init__(self, 
+                 game_kwargs: dict[int],
                  alpha: float = 1, 
                  gamma: float = 0.9, 
-                 device: torch.DeviceObjType = device,
                  **kwargs,
                  ):
-        super(ADP_Pre_Player, self).__init__()
-        
-        self.alpha = alpha
-        self.gamma = gamma
-        self.device = device
-        
-        self.game_kwargs = {
-            'M': kwargs.pop('M'),
-            'N': kwargs.pop('N'),
-            'K': kwargs.pop('K'),
-            'ADJ': kwargs.pop('ADJ', 0),
-        }
         
         self.conv_nn = AlphaZeroConv(
-            M = self.game_kwargs['M'],
-            N = self.game_kwargs['N'],
-            K = self.game_kwargs['K'],
+            M = game_kwargs['M'],
+            N = game_kwargs['N'],
+            K = game_kwargs['K'],
         )
         
-        self.nn = Pre_Dense_Net(**kwargs)
+        super(ADP_Pre_Player, self).__init__(
+            nn=Pre_Dense_Net(**kwargs),
+            game_kwargs=game_kwargs,
+            alpha=alpha,
+            gamma=gamma,
+        )
         
     def extract_features(self, state: Gomoku):
         features = self.conv_nn.forward(state)
@@ -212,27 +207,21 @@ class ADP_Pre_Player(ADP_Player):
 
 class ADP_Conv_Player(ADP_Player):
     def __init__(self, 
+                 game_kwargs: dict[int],
                  alpha: float = 1, 
                  gamma: float = 0.9, 
-                 device: torch.DeviceObjType = device,
                  **kwargs):
-        super(ADP_Conv_Player, self).__init__()
         
-        self.alpha = alpha
-        self.gamma = gamma
-        self.device = device
-        
-        self.game_kwargs = {
-            'M': kwargs.pop('M'),
-            'N': kwargs.pop('N'),
-            'K': kwargs.pop('K'),
-            'ADJ': kwargs.pop('ADJ', 0),
-        }
-        
-        self.nn = Conv_Net(
-            M = self.game_kwargs['M'],
-            N = self.game_kwargs['N'], 
-            **kwargs
+        super(ADP_Conv_Player, self).__init__(
+            nn=Conv_Net(
+                M = game_kwargs['M'],
+                N = game_kwargs['N'], 
+                **kwargs
+            ),
+            game_kwargs=game_kwargs,
+            alpha=alpha,
+            gamma=gamma,
+            **kwargs,
         )
     
     def forward(self, state: Gomoku):

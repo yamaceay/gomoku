@@ -74,21 +74,26 @@ def eval_by_zero(game_kwargs: dict[int],
     return avg_len_history
       
 def train_adp(
+    dir_path: str,
+    player: ADP_Player,
+    
     epochs_end: int, 
     epochs_step: int,
-    game_kwargs, 
-    player: ADP_Player,
+    game_kwargs: dict[int], 
+    
+    batch_size: int,
+    
     epochs_start: int = 0, 
-    n_test_games: int = 0, 
-    select_best: bool = False,
     eval: bool = True, 
     train: bool = True,
     zero_play: bool = True,
-    player_args: dict = {},
+    select_best: bool = False,
     lr_args: dict = {},
+    n_test_games: int = 0, 
+    buffer_size: int = 1024,
+    
+    player_args: dict = {},
     epsilon: float = .1,
-    buffer_size: int = 1000,
-    dir_path: str = None,
 ):
     logger = player_args.get("logger", logging.getLogger(__name__))
     
@@ -111,10 +116,15 @@ def train_adp(
                 len_histories += [(avg_len_history, epoch)]
     max_len_history = max(len_histories, key=lambda x: x[0]) if len(len_histories) else None
 
-    adp_model = player(model_path=BEST_MODEL_PATH, **player_args)
+    adp_model = player(
+        model_path=BEST_MODEL_PATH, 
+        game_kwargs=game_kwargs, 
+        **player_args
+    )
+    
     zero_model = None
     if zero_play or eval:
-        zero_model = AlphaZeroPlayer(**game_kwargs)
+        zero_model = AlphaZeroPlayer(game_kwargs)
     
     buffer = deque(maxlen=buffer_size)
     scheduler = lr_scheduler.ExponentialLR(adp_model.nn.optimizer, gamma=lr_args['lr_decay'])
@@ -142,7 +152,7 @@ def train_adp(
         
         buffer.extend(play_data)
         
-        sample = random.sample(buffer, epochs_step)
+        sample = random.sample(buffer, min(batch_size, len(buffer)))
         
         last_epoch_in_batch = epoch + epochs_step
         new_path = os.path.join(dir_path, "models/epoch_{}.h5".format(last_epoch_in_batch))
@@ -157,7 +167,12 @@ def train_adp(
             adp_model.nn.save_model(new_path)
             
         if eval:
-            curr_model = player(model_path=new_path, **player_args)
+            curr_model = player(
+                model_path=new_path, 
+                game_kwargs=game_kwargs,
+                **player_args
+            )
+            
             avg_len_history = eval_by_zero(
                 game_kwargs=game_kwargs,
                 curr_model=curr_model,

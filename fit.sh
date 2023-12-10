@@ -6,6 +6,7 @@
 #SBATCH --output=logs/job-%j.out
 
 apptainer run --nv gomoku.sif python -m fit \
-    --START=0 --END=1000 --STEP=100 \ 
-    --DIR=_dens --PLAYER=pre \ 
+    --DIR="_dens" --PLAYER="pre" \ 
+    --START=0 --END=1000 --STEP=25 \
+    --BATCH_SIZE=100 \ 
     --LR=0.01 --LR_DECAY=0.995

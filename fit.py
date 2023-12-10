@@ -1,9 +1,6 @@
 import logging
 import os
 from src import train_adp, ADP_Dense_Player, ADP_Pre_Player, ADP_Conv_Player
-import torch
-
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 if __name__ == "__main__":
     import argparse
@@ -11,7 +8,7 @@ if __name__ == "__main__":
 
     # model
     parser.add_argument('--DIR', type=str, help='Directory path')
-    parser.add_argument('--PLAYER', type=str, default='dense', help='Player type')
+    parser.add_argument('--PLAYER', type=str, help='Player type')
 
     # epochs 
     parser.add_argument('--START', type=int, help='Start epoch')
@@ -21,11 +18,12 @@ if __name__ == "__main__":
     parser.add_argument('--NO_TRAIN', action='store_true', help='Train or not')
     
     # training
+    parser.add_argument('--BATCH_SIZE', type=int, help='Batch size')
     parser.add_argument('--ZERO_PLAY', type=bool, default=False, help='Learn by playing against Zero')
     parser.add_argument('--SELECT_BEST', type=bool, default=False, help='Select best model or not')
     parser.add_argument('--LR_DECAY', type=float, default=0.99, help='Learning rate decay')
     parser.add_argument('--N_TEST_GAMES', type=int, default=7, help='Number of games to play against Zero')
-    parser.add_argument('--BUFFER_SIZE', type=int, default=1000, help='Buffer size')
+    parser.add_argument('--BUFFER_SIZE', type=int, default=1024, help='Buffer size')
     
     # game
     parser.add_argument('--M', type=int, default=8, help='Board width')
@@ -62,8 +60,6 @@ if __name__ == "__main__":
         'gamma': args.GAMMA,
         'lr': args.LR,
         'logger': logger,
-        'device': device,
-        **game_kwargs,
     }
     
     lr_kwargs = {
@@ -80,20 +76,25 @@ if __name__ == "__main__":
     player = player_types.get(args.PLAYER)
     
     train_adp(
+        dir_path=args.DIR,
+        player=player,
+        
         epochs_start=args.START,
         epochs_end=args.END,
         epochs_step=args.STEP,
         eval=not args.NO_EVAL,
         train=not args.NO_TRAIN,
+        
+        batch_size=args.BATCH_SIZE,
         zero_play=args.ZERO_PLAY,
-        n_test_games=args.N_TEST_GAMES,
         select_best=args.SELECT_BEST,
-        game_kwargs=game_kwargs, 
-        player=player,
-        player_args=player_kwargs,
         lr_args=lr_kwargs,
-        epsilon=args.EPSILON,
+        n_test_games=args.N_TEST_GAMES,
         buffer_size=args.BUFFER_SIZE,
-        dir_path=args.DIR,
+        
+        game_kwargs=game_kwargs,
+         
+        player_args=player_kwargs,
+        epsilon=args.EPSILON,
     )
             

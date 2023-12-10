@@ -15,25 +15,28 @@ INPUT_CHANNELS = 4
 HIDDEN_CHANNELS = 32
 OUTPUT_CHANNELS = 64
     
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class Net(torch.nn.Module):
     def __init__(self, 
                  model_path: str = None, 
                  logger: logging.Logger = logging.getLogger(__name__),
                  lr: float = 0.1,
-                 device: torch.DeviceObjType = device,
                  **kwargs):
 
         self.model_path = model_path
         self.logger = logger
         self.lr = lr
-        self.device = device
         
         super(Net, self).__init__(**kwargs)
+    
+    @staticmethod
+    def device() -> torch.DeviceObjType:
+        if torch.cuda.is_available():
+            return torch.device("cuda")
+        return torch.device("cpu")
         
     def compile_model(self, *layers) -> None: 
         self.model = torch.nn.Sequential(*layers)
-        self.model = self.model.to(self.device)
+        self.model = self.model.to(self.device())
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
         
         self.loss_fn = torch.nn.MSELoss(reduction='mean')
@@ -63,14 +66,13 @@ class Net(torch.nn.Module):
 class Conv_Net(Net):
     def __init__(self, M: int, N: int, **kwargs):
         self.board_size = (M, N)
-        self.input_channels = kwargs.pop('input_channels', INPUT_CHANNELS)
-        self.hidden_channels = kwargs.pop('hidden_channels', HIDDEN_CHANNELS)
-        self.output_channels = kwargs.pop('output_channels', OUTPUT_CHANNELS)
-        
-        self.output_dim = kwargs.pop('output_dim', OUTPUT_DIM)
+        self.input_channels = INPUT_CHANNELS
+        self.hidden_channels = HIDDEN_CHANNELS
+        self.output_channels = OUTPUT_CHANNELS
+        self.output_dim = OUTPUT_DIM
         
         super(Conv_Net, self).__init__(**kwargs)
-        
+                
         self.compile_model(
             torch.nn.Conv2d(self.input_channels, self.hidden_channels, kernel_size=3, padding=1),
             torch.nn.BatchNorm2d(self.hidden_channels),
@@ -84,12 +86,12 @@ class Conv_Net(Net):
             torch.nn.Linear(self.output_channels, self.output_dim),
             torch.nn.Tanh(),
         )
-    
+        
 class Dense_Net(Net):
     def __init__(self, **kwargs):
-        self.input_dim = kwargs.pop('input_dim', INPUT_DIM)
-        self.hidden_dim = kwargs.pop('hidden_dim', HIDDEN_DIM)
-        self.output_dim = kwargs.pop('output_dim', OUTPUT_DIM)
+        self.input_dim = INPUT_DIM
+        self.hidden_dim = HIDDEN_DIM
+        self.output_dim = OUTPUT_DIM
         
         super(Dense_Net, self).__init__(**kwargs)
         
@@ -100,12 +102,20 @@ class Dense_Net(Net):
             torch.nn.Tanh(),
         )
         
-class Pre_Dense_Net(Dense_Net):
-    def __init__(self, *args, **kwargs):
-        super(Pre_Dense_Net, self).__init__(
-            input_dim = PRE_INPUT_DIM,
-            hidden_dim = PRE_HIDDEN_DIM,
-            output_dim = PRE_OUTPUT_DIM,
-            *args, **kwargs,
+        
+class Pre_Dense_Net(Net):
+    def __init__(self, **kwargs):
+        self.input_dim = PRE_INPUT_DIM
+        self.hidden_dim = PRE_HIDDEN_DIM
+        self.output_dim = PRE_OUTPUT_DIM
+        
+        super(Pre_Dense_Net, self).__init__(**kwargs)
+        
+        self.compile_model(
+            torch.nn.Linear(self.input_dim, self.hidden_dim),
+            torch.nn.Tanh(),
+            torch.nn.Linear(self.hidden_dim, self.output_dim),
+            torch.nn.Tanh(),
         )
+        
         

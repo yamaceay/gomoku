@@ -8,10 +8,6 @@ import os
 
 ZERO_DIR_PATH = '_azero/models'
 
-# import torch
-# from .policy_value_net import Net, PolicyValueNet
-# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 class AlphaZeroConv:
     def __init__(self, M: int, N: int, K: int):
         self.M = M
@@ -35,11 +31,15 @@ class AlphaZeroConv:
         return self.pre_nn.policy_value_fn_frozen_conv(state)
 
 class AlphaZeroPlayer(Player):
-    def __init__(self, M: int, N: int, K: int, **kwargs):
+    def __init__(self, game_kwargs: dict[int], **kwargs):
+        self.M = game_kwargs['M']
+        self.N = game_kwargs['N']
+        self.K = game_kwargs['K']
+        
         c_puct = kwargs.get('c_puct', 5)
         n_playout = kwargs.get('n_playout', 1000)
         
-        model_file = f'best_{M}_{N}_{K}'
+        model_file = f'best_{self.M}_{self.N}_{self.K}'
         model_file = os.path.join(ZERO_DIR_PATH, model_file)
         
         try:
@@ -48,14 +48,14 @@ class AlphaZeroPlayer(Player):
             policy_param = pickle.load(open(model_file, 'rb'),
                                         encoding='bytes')  # To support python3
             
-        self.best_policy = PolicyValueNetNumpy(M, N, policy_param)
+        self.best_policy = PolicyValueNetNumpy(self.M, self.N, policy_param)
         self.player = ZeroPlayer(
             self.best_policy.policy_value_fn,
             c_puct=c_puct,
             n_playout=n_playout,
         )
         
-        self.board = Board(M=M, N=N, K=K)
+        self.board = Board(**game_kwargs)
         self.start_player = 0
         self.restart()
     

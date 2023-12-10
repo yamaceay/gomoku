@@ -1,11 +1,8 @@
 from .gomoku import Gomoku
 from .players import Player
 from tqdm import tqdm
-from collections import deque
 import torch
 import random
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
 def collect_selfplay_data(
     player: Player, 

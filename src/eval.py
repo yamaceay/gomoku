@@ -96,7 +96,7 @@ class EvolutionStrategy:
             if len(lines):
                 self.max_len_history = max(lines, key=lambda x: x[1])
     
-    def write(self, adp_model: ADP_Player, path: str, new_len_history: tuple[int, float], select_best: bool = False):
+    def select_best(self, adp_model: ADP_Player, path: str, new_len_history: tuple[int, float], select_best: bool = False):
         with open(self.results_path, "a") as f:
             f.write("{},{}\n".format(*new_len_history))
         
@@ -212,7 +212,7 @@ def train_adp(
                 epsilon=epsilon,
             )
             
-            history_eval.write(
+            history_eval.select_best(
                 adp_model=adp_model, 
                 path=new_path, 
                 new_len_history=(last_epoch_in_batch, avg_len_history), 

@@ -62,8 +62,6 @@ class ADP_Player(Player):
                 loss = self.alpha * (reward + self.gamma * V_next - V_curr)
                 losses += [loss]
         
-        print(losses, len(losses))
-        
         losses = torch.stack(losses).to(self.device)
         objective = torch.zeros_like(losses).to(self.device)
         mean_loss = self.nn.loss_fn(losses, objective)

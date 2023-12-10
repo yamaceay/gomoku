@@ -25,13 +25,13 @@ player: Player = None
 
 players = {
     '_RANDOM': RandomPlayer(),
-    '_ADP_v1': ADP_Dense_Player(model_path="_dens2/models/epoch_250.h5", **adp_kwargs, **game_kwargs),
-    '_ADP_v2': ADP_Dense_Player(model_path="_dens2/models/epoch_500.h5", **adp_kwargs, **game_kwargs),
-    '_ADP_v3': ADP_Dense_Player(model_path="_dens2/models/epoch_750.h5", **adp_kwargs, **game_kwargs),
-    '_ADP_v4': ADP_Dense_Player(model_path="_dens2/models/epoch_1000.h5", **adp_kwargs, **game_kwargs),
+    '_ADP_v1': ADP_Dense_Player(model_path="_dens2/models/epoch_250.h5", game_kwargs=game_kwargs, **adp_kwargs),
+    '_ADP_v2': ADP_Dense_Player(model_path="_dens2/models/epoch_500.h5", game_kwargs=game_kwargs, **adp_kwargs),
+    '_ADP_v3': ADP_Dense_Player(model_path="_dens2/models/epoch_750.h5", game_kwargs=game_kwargs, **adp_kwargs),
+    '_ADP_v4': ADP_Dense_Player(model_path="_dens2/models/epoch_1000.h5", game_kwargs=game_kwargs, **adp_kwargs),
+    '_UCT_100': UCT_Player(iterations=100, policy=uct_score),
     '_UCT_1k': UCT_Player(iterations=1000, policy=uct_score),
-    '_UCT_10k': UCT_Player(iterations=10000, policy=uct_score),
-    '_ALPHAZERO': AlphaZeroPlayer(**game_kwargs),
+    '_ALPHAZERO': AlphaZeroPlayer(game_kwargs=game_kwargs),
 }
 
 @app.route('/')
@@ -52,11 +52,11 @@ def make_move():
     move = tuple(move)
     score, game_over = game.play(move)
     move = None
-    probs = []
+    probs_actions = []
     
     if not game_over:
-        probs = player.next_move_probs(game)
-        probs = [(float(reward), list(action)) for reward, action in probs]
+        probs_actions = player.next_move_probs(game)
+        probs_actions = [(float(prob), list(action)) for prob, action in probs_actions]
         move = player.next_move(game)
         score, game_over = game.play(move)
 
@@ -64,7 +64,7 @@ def make_move():
         score=score, 
         game_over=game_over, 
         move=move,
-        probs=probs
+        probs=probs_actions,
     )
 
 if __name__ == '__main__':

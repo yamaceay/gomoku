@@ -59,10 +59,7 @@ class AlphaZeroPlayer(Player):
         self.start_player = 0
         self.restart()
     
-    def next_move_probs(self, _: Gomoku) -> list[tuple[float, tuple[int, int]]]:
-        raise NotImplementedError
-     
-    def next_move(self, game: Gomoku) -> tuple[int, int]:
+    def next_move_probs(self, game: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         n_moves = len(self.board.states)
         history = game.history()
         for location in history[n_moves:]:
@@ -72,7 +69,11 @@ class AlphaZeroPlayer(Player):
         move = self.player.next_move(self.board)
         [x, y] = self.board.move_to_location(move)
         new_move = (int(x), int(y))
-        return new_move
+        return [(1., new_move)]
+     
+    def next_move(self, game: Gomoku, _: bool = True) -> tuple[int, int]:
+        prob_action = self.next_move_probs(game)
+        return prob_action[0][1]
     
     def restart(self):
         self.board.init_board(start_player=self.start_player)

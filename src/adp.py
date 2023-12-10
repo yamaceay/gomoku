@@ -20,7 +20,7 @@ class ADP_Player(Player):
         self.alpha = alpha
         self.gamma = gamma
         
-    def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:  
+    def rewards_actions(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:  
         actions = state.actions()
         assert len(actions), "No moves available"
         

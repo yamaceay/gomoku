@@ -1,6 +1,8 @@
+from typing import Callable
 import numpy as np
 from .patterns import PB_DICT, sortfn
 from .gomoku import Gomoku
+from .players import Player
 
 class Node:
     def __init__(self, state: Gomoku, parent=None):
@@ -30,9 +32,7 @@ def uct_score(parent: Node, child: Node, **kwargs) -> float:
     exploration = np.sqrt(2 * np.log(parent.n) / child.n)
     return exploitation + C * exploration   
 
-def pb_score(parent: Node, child: Node, **kwargs) -> float:
-    decay = kwargs.get('decay', 0.9)
-    
+def pb_score(parent: Node, child: Node, decay: float) -> float:
     move = child.state.last_move
     pb_parent = parent.state.find_patterns(move)
     pb_child = child.state.find_patterns(move)
@@ -41,29 +41,35 @@ def pb_score(parent: Node, child: Node, **kwargs) -> float:
     for pattern in pb_parent | pb_child:
         pattern_score = PB_DICT[pattern](decay)
         
-        parent_x, parent_o = pb_parent.get(pattern, [0, 0])
-        child_x, child_o = pb_child.get(pattern, [0, 0])
+        [parent_x, parent_o] = pb_parent.get(pattern, [0, 0])
+        [child_x, child_o] = pb_child.get(pattern, [0, 0])
         
         pb_value += (child_x - parent_x) * pattern_score
         pb_value += (child_o - parent_o) * pattern_score
+        
     pb_value *= -child.state.player
     pb_value /= 100000
     
     return pb_value
     
-def uct_pb_score(parent: Node, child: Node, **kwargs) -> float:
-    C_PB = kwargs.get('C_PB', 5)
-    ucb = uct_score(parent, child, **kwargs)
-    pbs = pb_score(parent, child, **kwargs)
+def uct_pb_score(
+    parent: Node, 
+    child: Node, 
+    C: float = 1,
+    C_PB: float = 5, 
+    decay: float = 0.9) -> float:
+    
+    ucb = uct_score(parent, child, C=C)
+    pbs = pb_score(parent, child, decay=decay)
     return ucb + C_PB * pbs
 
 class Tree:
-    def __init__(self, state: Gomoku, **kwargs):
+    def __init__(self, state: Gomoku, decay: float = 0.9):
         self.state = state.copy()
         self.root = Node(self.state)
-        self.decay = kwargs.get('decay', 0.9)
+        self.decay = decay
 
-    def select(self, policy=uct_score, policy_kwargs={}) -> Node:
+    def select(self, policy: Callable = uct_score, policy_kwargs: dict = {}) -> Node:
         node = self.root
         while not node.is_terminal() and node.is_fully_expanded():
             assert len(node.children), "No children"
@@ -94,7 +100,6 @@ class Tree:
         state = node.state.copy()
         while not state.fin():
             state_actions = state.actions()
-            assert len(state_actions), "No action"
             action = state_actions[np.random.randint(0, len(state_actions))]
             state.play(action)
         return state.score()
@@ -106,3 +111,39 @@ class Tree:
             node.Q += reward
             reward *= -self.decay
             node = node.parent
+            
+class UCT_Player(Player):
+    def __init__(self, iterations=10000, policy=uct_score, policy_kwargs={}, tree_kwargs={}):
+        self.iterations = iterations
+        self.policy = policy
+        self.policy_kwargs = policy_kwargs
+        self.tree_kwargs = tree_kwargs
+
+    def simulate(self, node: Node) -> float:
+        return self.tree.simulate(node)
+
+    def rewards_actions(self, game: Gomoku):
+        self.tree = Tree(game, **self.tree_kwargs)
+        first_player = self.tree.root.state.player
+        
+        for _ in range(self.iterations):
+            node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
+            if not node.is_fully_expanded() and not node.is_terminal():
+                node = self.tree.expand(node)
+            value = self.simulate(node)
+            self.tree.backpropagate(node, value)
+        
+        get_reward = lambda child: uct_score(self.tree.root, child, C=0) * first_player
+        get_action = lambda child: child.state.last_move 
+        get_reward_action = lambda child: (get_reward(child), get_action(child))
+        rewards_actions = map(get_reward_action, self.tree.root.children)
+        return sortfn(rewards_actions, key=lambda x: x[0])
+    
+if __name__ == "__main__":
+    game = Gomoku(M=5, N=5, K=4, ADJ=2)
+    player = UCT_Player(iterations=1000)
+    
+    while not game.fin():
+        move = player.next_move(game)
+        game.play(move)
+        print(game)

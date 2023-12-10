@@ -38,8 +38,8 @@ def play_until_end(
 def collect_play_data(
     game: Gomoku,
     n_games: int = 1, 
-    learner_args: dict[str, Player | float] = {},
-    trainer_args: dict[str, Player | float] = {},
+    learner_args: dict[str] = {},
+    trainer_args: dict[str] = {},
     ) -> list[str]:
     
     play_data = []

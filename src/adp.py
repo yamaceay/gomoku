@@ -10,7 +10,7 @@ from tqdm import tqdm
 class ADP_Player(Player):
     def __init__(self, 
                  nn: Net,
-                 game_kwargs: dict[int], 
+                 game_kwargs: dict[str, int], 
                  alpha: float = 0.9, 
                  gamma: float = 0.9):
         
@@ -76,7 +76,7 @@ class ADP_Player(Player):
     
 class ADP_Dense_Player(ADP_Player):
     def __init__(self, 
-                 game_kwargs: dict[int],
+                 game_kwargs: dict[str, int],
                  alpha: float = 0.9, 
                  gamma: float = 0.9,
                  **kwargs):
@@ -162,7 +162,7 @@ class ADP_Dense_Player(ADP_Player):
     
 class ADP_Pre_Player(ADP_Player):
     def __init__(self, 
-                 game_kwargs: dict[int],
+                 game_kwargs: dict[str, int],
                  alpha: float = 1, 
                  gamma: float = 0.9, 
                  **kwargs,
@@ -195,7 +195,7 @@ class ADP_Pre_Player(ADP_Player):
 
 class ADP_Conv_Player(ADP_Player):
     def __init__(self, 
-                 game_kwargs: dict[int],
+                 game_kwargs: dict[str, int],
                  alpha: float = 1, 
                  gamma: float = 0.9, 
                  **kwargs):

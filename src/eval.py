@@ -12,7 +12,7 @@ import os
 import logging
 import random
 
-def comp_models(game_kwargs: dict[int],
+def comp_models(game_kwargs: dict[str, int],
     player1: Player,
     player2: Player,
     epsilon1: float = .0,
@@ -59,7 +59,7 @@ def tournament(game_kwargs, models: list[Player], n_test_games: int, start_ind: 
                 n_wins, l_history = n_wins / n_test_games, l_history / n_test_games
                 yield (i, j, n_wins, l_history)
 
-def eval_by_zero(game_kwargs: dict[int], 
+def eval_by_zero(game_kwargs: dict[str, int], 
                  curr_model: ADP_Player, 
                  zero_model: AlphaZeroPlayer, 
                  n_test_games: int, 
@@ -124,7 +124,7 @@ def train_adp(
     
     epochs_end: int, 
     epochs_step: int,
-    game_kwargs: dict[int], 
+    game_kwargs: dict[str, int], 
     
     batch_size: int,
     

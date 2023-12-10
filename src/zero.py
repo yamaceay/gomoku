@@ -31,7 +31,7 @@ class AlphaZeroConv:
         return self.pre_nn.policy_value_fn_frozen_conv(state)
 
 class AlphaZeroPlayer(Player):
-    def __init__(self, game_kwargs: dict[int], **kwargs):
+    def __init__(self, game_kwargs: dict[str, int], **kwargs):
         self.M = game_kwargs['M']
         self.N = game_kwargs['N']
         self.K = game_kwargs['K']

@@ -2,9 +2,9 @@ from tqdm import tqdm
 from .zero import AlphaZeroPlayer
 from .adp import ADP_Player
 from .players import Player
-from .gomoku import Gomoku
 from .data import collect_selfplay_data, collect_play_data, play_until_end
 
+import torch
 from collections import deque
 from torch.optim import lr_scheduler
 import os
@@ -27,7 +27,8 @@ def comp_models(game_kwargs: dict[int],
         "epsilon2": epsilon2,
     }
     
-    game, learner_starts = play_until_end(game_kwargs, **learner_args, **trainer_args)
+    with torch.no_grad():
+        game, learner_starts = play_until_end(game_kwargs, **learner_args, **trainer_args)
     
     return game.score(), learner_starts, len(game.history())
 
@@ -170,16 +171,17 @@ def train_adp(
             with open(ZERO_RESULTS_PATH, "a") as f:
                 f.write("{},{}\n".format(new_len_history[1], new_len_history[0]))
             
-            if select_best:
-                if max_len_history is None or max_len_history[0] < new_len_history[0]:
-                    max_len_history = new_len_history
-                    adp_model.nn.save_model(BEST_MODEL_PATH)
-                    logger.info("{} is saved as the strongest model".format(new_path))
-                    
+            if train:
+                if select_best:
+                    if max_len_history is None or max_len_history[0] < new_len_history[0]:
+                        max_len_history = new_len_history
+                        adp_model.nn.save_model(BEST_MODEL_PATH)
+                        logger.info("{} is saved as the strongest model".format(new_path))
+                        
+                    else:
+                        old_path = os.path.join(dir_path, "models/epoch_{}.h5".format(max_len_history[1]))
+                        adp_model.nn.load_model(old_path)
+                        logger.info("{} is loaded as the strongest model".format(old_path))
                 else:
-                    old_path = os.path.join(dir_path, "models/epoch_{}.h5".format(max_len_history[1]))
-                    adp_model.nn.load_model(old_path)
-                    logger.info("{} is loaded as the strongest model".format(old_path))
-            else:
-                adp_model.nn.save_model(BEST_MODEL_PATH)
-                logger.info("{} is saved as the latest model".format(new_path))
+                    adp_model.nn.save_model(BEST_MODEL_PATH)
+                    logger.info("{} is saved as the latest model".format(new_path))

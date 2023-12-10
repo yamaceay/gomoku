@@ -19,7 +19,6 @@ adp_kwargs = {
     'alpha': 0.9,
     'gamma': 0.9,
     'lr': 0.01,
-    'epsilon': 0.1,
 }
 
 player: Player = None

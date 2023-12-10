@@ -13,3 +13,7 @@
 [2023-12-10 00:53:47,699] Epoch: 70 to 80, MSE: 0.7545813381671905, LR: 0.00966
 [2023-12-10 00:54:10,845] Epoch: 80 to 90, MSE: 0.7266325652599335, LR: 0.00961
 [2023-12-10 00:54:39,324] Epoch: 90 to 100, MSE: 0.8378404915332794, LR: 0.00956
+[2023-12-10 01:00:54,477] Filepath does not exist: _dens/models/best.h5
+[2023-12-10 01:00:54,477] Initializing new model
+[2023-12-10 01:02:47,786] _dens/models/epoch_10.h5 is saved as the latest model
+[2023-12-10 01:05:36,763] _dens/models/epoch_10.h5 is saved as the latest model

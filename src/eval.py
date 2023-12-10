@@ -160,8 +160,6 @@ def train_adp(
     game = Gomoku(**game_kwargs)
     
     for epoch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
-        play_data = None
-        
         learner_args = {
             "player1": adp_model,
             "epsilon1": epsilon,
@@ -173,15 +171,13 @@ def train_adp(
                 "player2": zero_model,
                 "epsilon2": .0,
             }
-            
-        play_data = collect_play_data(
+        
+        buffer.extend(collect_play_data(
             game=game, 
             learner_args=learner_args,
             trainer_args=trainer_args,
             n_games=epochs_step,
-        )
-        
-        buffer.extend(play_data)
+        ))
         
         sample = random.sample(buffer, min(batch_size, len(buffer)))
         

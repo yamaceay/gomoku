@@ -35,9 +35,9 @@ class ADP_Player(Player):
     def __call__(self, state: Gomoku) -> torch.Tensor:
         return self.forward(state)
     
-    def train_batch(self, batch: list[str], start: int = 0, disable: bool = True) -> float:
+    def train_batch(self, batch: list[tuple[str, float]], start: int = 0, disable: bool = True) -> float:
         losses = []
-        for game_str in tqdm(batch, 
+        for game_str, reward in tqdm(batch, 
             desc="Training", 
             leave=False, 
             position=1, 
@@ -47,15 +47,13 @@ class ADP_Player(Player):
             if len(moves) <= start:
                 continue
             
-            history = []
             game = Gomoku(**self.game_kwargs)
+            history = [self(game).to(self.device)]
             for move in moves:
                 game.play(move)
                 state = self(game).to(self.device)
                 history += [state]
             history = history[start:]
-            
-            reward = history[-1].cpu().detach().item()
             
             for i in range(len(history) - 1):
                 [V_curr, V_next] = history[i:i+2]

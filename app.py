@@ -31,7 +31,7 @@ players = {
     '_ADP_v4': ADP_Dense_Player(model_path="_dens2/models/epoch_1000.h5", game_kwargs=game_kwargs, **adp_kwargs),
     '_UCT_100': UCT_Player(iterations=100, policy=uct_score),
     '_UCT_1k': UCT_Player(iterations=1000, policy=uct_score),
-    '_ALPHAZERO': AlphaZeroPlayer(game_kwargs=game_kwargs),
+    '_ALPHAZERO': AlphaZeroPlayer(game_kwargs=game_kwargs, epsilon=.1),
 }
 
 @app.route('/')

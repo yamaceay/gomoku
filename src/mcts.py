@@ -11,6 +11,7 @@ class Node:
         self.children: list[Node] = []
         self.n: int = 0
         self.Q: float = .0
+        self.depth: int = 0 if parent is None else parent.depth + 1
 
     def is_fully_expanded(self) -> bool:
         moves = self.state.actions()
@@ -122,6 +123,9 @@ class UCT_Player(Player):
     def simulate(self, node: Node) -> float:
         return self.tree.simulate(node)
 
+    def expand(self, node: Node) -> Node:
+        return self.tree.expand(node)
+
     def rewards_actions(self, game: Gomoku):
         self.tree = Tree(game, **self.tree_kwargs)
         first_player = self.tree.root.state.player
@@ -129,7 +133,7 @@ class UCT_Player(Player):
         for _ in range(self.iterations):
             node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
             if not node.is_fully_expanded() and not node.is_terminal():
-                node = self.tree.expand(node)
+                node = self.expand(node)
             value = self.simulate(node)
             self.tree.backpropagate(node, value)
         

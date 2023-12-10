@@ -38,6 +38,7 @@ class AlphaZeroPlayer(Player):
         
         c_puct = kwargs.get('c_puct', 5)
         n_playout = kwargs.get('n_playout', 1000)
+        epsilon = kwargs.get('epsilon', 0.25)
         
         model_file = f'best_{self.M}_{self.N}_{self.K}'
         model_file = os.path.join(ZERO_DIR_PATH, model_file)
@@ -57,6 +58,7 @@ class AlphaZeroPlayer(Player):
         
         self.board = Board(**game_kwargs)
         self.start_player = 0
+        self.epsilon = epsilon
         self.restart()
     
     def next_move_probs(self, game: Gomoku) -> list[tuple[float, tuple[int, int]]]:
@@ -66,14 +68,10 @@ class AlphaZeroPlayer(Player):
             move = self.board.location_to_move(location)
             self.board.move(move)
             
-        move = self.player.next_move(self.board)
+        move = self.player.next_move(self.board, temp=self.epsilon)
         [x, y] = self.board.move_to_location(move)
         new_move = (int(x), int(y))
         return [(1., new_move)]
-     
-    def next_move(self, game: Gomoku, epsilon: float = 0.) -> tuple[int, int]:
-        prob_action = self.next_move_probs(game)
-        return prob_action[0][1]
     
     def restart(self):
         self.board.init_board(start_player=self.start_player)

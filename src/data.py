@@ -5,12 +5,15 @@ import random
 
 def play_until_end(
     game: Gomoku, 
-    player1: Player, 
+    player1: Player = None, 
     player2: Player = None,
     epsilon1: float = .0,
     epsilon2: float = .0,
     ) -> tuple[Gomoku, bool]:
     
+    if game.fin() or (player1 is None and player2 is None):
+        return game, True
+        
     new_game = game.copy()
     
     if player2 is None:
@@ -40,7 +43,7 @@ def collect_play_data(
     n_games: int = 1, 
     learner_args: dict[str] = {},
     trainer_args: dict[str] = {},
-    ) -> list[str]:
+    ) -> list[tuple[str, float]]:
     
     play_data = []
     for _ in tqdm(range(n_games), 
@@ -51,5 +54,7 @@ def collect_play_data(
         
         game, _ = play_until_end(game, **learner_args, **trainer_args)
         for transformation in game.transformations:
-            play_data += [game.history_str(*transformation)]
+            feature = game.history_str(*transformation)
+            label = game.score()
+            play_data += [(feature, label)]
     return play_data

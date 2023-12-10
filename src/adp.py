@@ -35,18 +35,8 @@ class ADP_Player(Player):
     def __call__(self, state: Gomoku) -> torch.Tensor:
         return self.forward(state)
     
-    def opt(self, s_curr: Gomoku, s_next: Gomoku = None, reward: float = .0) -> torch.Tensor:
-        V = self(s_curr).to(self.device)
-        V_next = torch.tensor([0.])
-        if s_next is not None:
-            V_next = self.gamma * self(s_next)
-        V_next = V_next.to(self.device)
-
-        loss = self.alpha * (reward + V_next - V)
-        return loss
-    
     def train_batch(self, batch: list[str], start: int = 0, disable: bool = True) -> float:
-        mean_losses = []
+        losses = []
         for game_str in tqdm(batch, 
             desc="Training", 
             leave=False, 
@@ -61,30 +51,27 @@ class ADP_Player(Player):
             game = Gomoku(**self.game_kwargs)
             for move in moves:
                 game.play(move)
-                history += [game.copy()]
+                state = self(game).to(self.device)
+                history += [state]
             history = history[start:]
             
-            losses = []
-            reward = history[-1].score()
+            reward = history[-1].cpu().detach().item()
             for i in range(len(history) - 1):
-                [s_curr, s_next] = history[i:i+2]
+                [V_curr, V_next] = history[i:i+2]
                 if i == len(history) - 2:
-                    s_next = None
-                loss = self.opt(s_curr, s_next, reward=reward)
+                    V_next = torch.tensor([0.]).to(self.device)
+                loss = self.alpha * (reward + self.gamma * V_next - V_curr)
                 losses += [loss]
         
-            losses = torch.stack(losses).to(self.device)
-            objective = torch.zeros_like(losses).to(self.device)
-            mean_loss = self.nn.loss_fn(losses, objective)
-            
-            self.nn.optimizer.zero_grad()
-            mean_loss.backward()
-            self.nn.optimizer.step()
-            
-            mean_loss = mean_loss.cpu().detach().item()
-            mean_losses += [mean_loss]
+        losses = torch.stack(losses).to(self.device)
+        objective = torch.zeros_like(losses).to(self.device)
+        mean_loss = self.nn.loss_fn(losses, objective)
         
-        return sum(mean_losses) / len(mean_losses)
+        self.nn.optimizer.zero_grad()
+        mean_loss.backward()
+        self.nn.optimizer.step()
+            
+        return mean_loss.cpu().detach().item()
     
 class ADP_Dense_Player(ADP_Player):
     def __init__(self, 

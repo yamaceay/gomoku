@@ -1,4 +1,0 @@
-[2023-12-10 13:38:44,757] Epoch: 0 to 25, MSE: 0.8562908846139908, LR: 0.01000
-[2023-12-10 13:40:09,424] _dens/models/epoch_25.h5 is saved as the latest model
-[2023-12-10 13:41:13,643] Epoch: 25 to 50, MSE: 0.8125971180200576, LR: 0.00995
-[2023-12-10 13:42:34,772] _dens/models/epoch_50.h5 is saved as the latest model

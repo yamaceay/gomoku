@@ -1,7 +1,6 @@
 from .gomoku import Gomoku
 from .players import Player
 from tqdm import tqdm
-import torch
 import random
     
 def collect_selfplay_data(

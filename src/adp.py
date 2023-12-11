@@ -36,7 +36,7 @@ class ADP_Player(Player):
         return self.forward(state)
     
     def train_batch(self, batch: list[tuple[str, float]], start: int = 0, disable: bool = True) -> float:
-        losses = []
+        mean_losses = []
         for game_str, reward in tqdm(batch, 
             desc="Training", 
             leave=False, 
@@ -55,6 +55,7 @@ class ADP_Player(Player):
                 history += [state]
             history = history[start:]
             
+            losses = []
             for i in range(len(history) - 1):
                 [V_curr, V_next] = history[i:i+2]
                 if i == len(history) - 2:
@@ -62,15 +63,18 @@ class ADP_Player(Player):
                 loss = self.alpha * (reward + self.gamma * V_next - V_curr)
                 losses += [loss]
         
-        losses = torch.stack(losses).to(self.device)
-        objective = torch.zeros_like(losses).to(self.device)
-        mean_loss = self.nn.loss_fn(losses, objective)
+            losses = torch.stack(losses).to(self.device)
+            objective = torch.zeros_like(losses).to(self.device)
+            mean_loss = self.nn.loss_fn(losses, objective)
         
-        self.nn.optimizer.zero_grad()
-        mean_loss.backward()
-        self.nn.optimizer.step()
+            self.nn.optimizer.zero_grad()
+            mean_loss.backward()
+            self.nn.optimizer.step()
             
-        return mean_loss.cpu().detach().item()
+            mean_loss = mean_loss.cpu().detach().item()
+            mean_losses += [mean_loss]
+
+        return sum(mean_losses) / len(mean_losses)
     
 class ADP_Dense_Player(ADP_Player):
     def __init__(self, 

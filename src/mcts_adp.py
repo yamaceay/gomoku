@@ -1,6 +1,7 @@
 from typing import Callable
+import random
 
-from .players import Player
+from .players import Player, RandomPlayer
 from .gomoku import Gomoku
 from .mcts import Node, Tree, uct_score
 from .patterns import sortfn
@@ -9,6 +10,8 @@ from .adp import ADP_Player
 class UCT_Zero_Player(Player):
     def __init__(self, 
                  adp_model: ADP_Player, 
+                 max_depth: int = 10,
+                 epsilon: float = .25,
                  iterations: int = 10000, 
                  policy: Callable = uct_score, 
                  policy_kwargs: dict[str] = {}, 
@@ -18,29 +21,35 @@ class UCT_Zero_Player(Player):
         self.policy_kwargs = policy_kwargs
         self.tree_kwargs = tree_kwargs
         self.adp = adp_model
+        self.max_depth = max_depth
+        self.epsilon = epsilon
     
-    def expand(self, node: Node) -> tuple[Node, float]:
+    def expand(self, node: Node) -> Node:
         all_actions = node.state.actions()
         other_actions = [
             child.state.last_move
             for child in node.children
         ]
-        actions = set(all_actions) - set(other_actions)
+        actions = list(set(all_actions) - set(other_actions))
         assert len(actions), "No action"
         
+        action = random.choice(actions)
         new_state = node.state.copy()
-        probs_actions = self.adp.next_move_probs(new_state)
-        for reward, action in probs_actions:
-            if action in actions:
-                new_state.play(action)
-                new_node = Node(new_state, parent=node)
-                node.children.append(new_node)
-                return new_node, reward
+        new_state.play(action)
+        new_node = Node(new_state, parent=node)
+        node.children.append(new_node)
+        return new_node
             
         raise Exception("No action")
         
     def simulate(self, node: Node) -> float:
-        return self.adp(node.state).cpu().detach().item()
+        game = node.state.copy()
+        for i in range(self.max_depth):
+            if game.fin():
+                break
+            action = RandomPlayer().next_move(game)
+            game.play(action)
+        return self.adp(game).cpu().detach().item()
 
     def rewards_actions(self, game: Gomoku):
         self.tree = Tree(game, **self.tree_kwargs)
@@ -49,9 +58,8 @@ class UCT_Zero_Player(Player):
         for _ in range(self.iterations):
             node = self.tree.select(policy=self.policy, policy_kwargs=self.policy_kwargs)
             if not node.is_fully_expanded() and not node.is_terminal():
-                node, value = self.expand(node)
-            else:
-                value = self.simulate(node)
+                node = self.expand(node)
+            value = self.simulate(node)
             self.tree.backpropagate(node, value)
         
         get_reward = lambda child: uct_score(self.tree.root, child, C=0) * first_player
@@ -71,13 +79,16 @@ if __name__ == '__main__':
     }
     
     # adp = ADP_Dense_Player(model_path="_dens2/models/epoch_1000.h5", game_kwargs=game_kwargs)
-    adp = ADP_Pre_Player(game_kwargs=game_kwargs)
+    adp = ADP_Dense_Player(model_path="_dens/models/epoch_1000.h5", game_kwargs=game_kwargs)
     
-    uct_adp = UCT_Zero_Player(adp, iterations=400)
+    uct_adp = UCT_Zero_Player(adp, iterations=200, policy_kwargs={"C": .1})
     
     game = Gomoku(**game_kwargs)
     while not game.fin():
-        action = uct_adp.next_move(game)
+        rewards_actions = uct_adp.rewards_actions(game)
+        print("\n".join([f"{a} {r:.4f}" for r, a in rewards_actions]))
+
+        action = uct_adp.next_move(game, epsilon=.25)
         game.play(action)
         print(game)
         

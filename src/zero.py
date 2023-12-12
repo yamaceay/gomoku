@@ -38,7 +38,7 @@ class AlphaZeroPlayer(Player):
         
         c_puct = kwargs.get('c_puct', 5)
         n_playout = kwargs.get('n_playout', 1000)
-        epsilon = kwargs.get('epsilon', 0.25)
+        epsilon = kwargs.get('epsilon', 0.)
         
         model_file = f'best_{self.M}_{self.N}_{self.K}'
         model_file = os.path.join(ZERO_DIR_PATH, model_file)

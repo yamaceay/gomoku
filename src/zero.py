@@ -68,7 +68,10 @@ class AlphaZeroPlayer(Player):
             move = self.board.location_to_move(location)
             self.board.move(move)
             
-        move = self.player.next_move(self.board, temp=self.epsilon)
+        kwargs = {}
+        if self.epsilon != .0:
+            kwargs["temp"] = self.epsilon
+        move = self.player.next_move(self.board, **kwargs)
         [x, y] = self.board.move_to_location(move)
         new_move = (int(x), int(y))
         return [(1., new_move)]

@@ -52,10 +52,10 @@ def collect_play_data(
                   desc="Collecting play data",
                   disable=True):
         
-        game, _ = play_until_end(game, **learner_args, **trainer_args)
+        new_game, _ = play_until_end(game, **learner_args, **trainer_args)
         for transformation in game.transformations:
-            feature = game.history_str(*transformation)
-            label = game.score()
+            feature = new_game.history_str(*transformation)
+            label = new_game.score()
             play_data += [(feature, label)]
     
     return play_data

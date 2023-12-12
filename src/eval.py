@@ -12,6 +12,7 @@ from torch.optim import lr_scheduler
 import os
 import logging
 import random
+import math
 
 def comp_models(game_kwargs: dict[str, int],
     player1: Player,
@@ -163,7 +164,7 @@ def train_adp(
     buffer_size: int = 1024,
     
     player_args: dict = {},
-    epsilon: float = .1,
+    epsilon: float = .25,
 ):
     logger = player_args.get("logger", logging.getLogger(__name__))
     
@@ -203,18 +204,24 @@ def train_adp(
             trainer_args=trainer_args,
             n_games=epochs_step,
         ))
-        
-        sample = random.sample(buffer, min(batch_size, len(buffer)))
+
+        max_batch_size = min(epochs_step * 8, len(buffer))
+        sample = random.sample(buffer, max_batch_size)
         
         last_epoch_in_batch = epoch + epochs_step
         
         if train:
-            loss = adp_model.train_batch(sample, start=0)
-            lr = scheduler.get_last_lr()[-1]
+            n_batches = int(math.ceil(max_batch_size / batch_size)) 
+            for i in range(n_batches):
+                batch = sample[i::n_batches]
+                loss = adp_model.train_batch(sample, start=0)
+                lr = scheduler.get_last_lr()[-1]
+                
+                completed_ratio = (i + 1) / n_batches
+
+                logger.info(f"Epoch: {epoch} to {epoch+epochs_step}, Batch: {completed_ratio * 100 :.3f}, MSE: {loss:.5f}, LR: {lr:.5f}")
             
-            logger.info(f"Epoch: {epoch} to {epoch+epochs_step}, MSE: {loss}, LR: {lr:.5f}")
-            
-            scheduler.step()
+                scheduler.step()
             
             new_path = os.path.join(dir_path, "models/epoch_{}.h5".format(last_epoch_in_batch))
             adp_model.nn.save_model(new_path)

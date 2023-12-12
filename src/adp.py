@@ -37,6 +37,7 @@ class ADP_Player(Player):
     
     def train_batch(self, batch: list[tuple[str, float]], start: int = 0, disable: bool = True) -> float:
         mean_losses = []
+        mean_rewards = 0
         for game_str, reward in tqdm(batch, 
             desc="Training", 
             leave=False, 
@@ -46,7 +47,8 @@ class ADP_Player(Player):
             moves = Pattern.loc_to_move(game_str)
             if len(moves) <= start:
                 continue
-            
+
+            mean_rewards += reward
             game = Gomoku(**self.game_kwargs)
             history = [self(game).to(self.device)]
             for move in moves:
@@ -74,6 +76,7 @@ class ADP_Player(Player):
             mean_loss = mean_loss.cpu().detach().item()
             mean_losses += [mean_loss]
 
+        print("Win Ratio:", mean_rewards / len(mean_losses))
         return sum(mean_losses) / len(mean_losses)
     
 class ADP_Dense_Player(ADP_Player):
@@ -205,13 +208,12 @@ class ADP_Conv_Player(ADP_Player):
         super(ADP_Conv_Player, self).__init__(
             nn=Conv_Net(
                 M = game_kwargs['M'],
-                N = game_kwargs['N'], 
+                N = game_kwargs['N'],
                 **kwargs
             ),
             game_kwargs=game_kwargs,
             alpha=alpha,
-            gamma=gamma,
-            **kwargs,
+            gamma=gamma
         )
     
     def forward(self, state: Gomoku):

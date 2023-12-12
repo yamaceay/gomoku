@@ -118,5 +118,3 @@ class Pre_Dense_Net(Net):
             torch.nn.Linear(self.hidden_dim, self.output_dim),
             torch.nn.Tanh(),
         )
-        
-        

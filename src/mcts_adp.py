@@ -69,7 +69,7 @@ class UCT_Zero_Player(Player):
         return sortfn(rewards_actions, key=lambda x: x[0])
     
 if __name__ == '__main__':
-    from .adp import ADP_Dense_Player, ADP_Pre_Player
+    from .adp import ADP_Dense_Player, ADP_Conv_Player, ADP_Pre_Player
     
     game_kwargs = {
         "M": 8,
@@ -78,8 +78,7 @@ if __name__ == '__main__':
         "ADJ": 2,
     }
     
-    # adp = ADP_Dense_Player(model_path="_dens2/models/epoch_1000.h5", game_kwargs=game_kwargs)
-    adp = ADP_Dense_Player(model_path="_dens/models/epoch_1000.h5", game_kwargs=game_kwargs)
+    adp = ADP_Dense_Player(model_path="_dens2/models/epoch_1010.h5", game_kwargs=game_kwargs)
     
     uct_adp = UCT_Zero_Player(adp, iterations=200, policy_kwargs={"C": .1})
     

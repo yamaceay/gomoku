@@ -58,10 +58,7 @@ class Net(torch.nn.Module):
         assert os.path.exists(filepath), f"Filepath does not exist: {filepath}"
         self.model.load_state_dict(torch.load(filepath))
         
-    def save_model(self, filepath: str = None) -> None:
-        if filepath is None:
-            filepath = self.model_path
-        assert filepath is not None, "Filepath is required"
+    def save_model(self, filepath: str) -> None:
         torch.save(self.model.state_dict(), filepath)
 
 class Conv_Net(Net):

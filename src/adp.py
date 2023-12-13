@@ -35,9 +35,8 @@ class ADP_Player(Player):
     def __call__(self, state: Gomoku) -> torch.Tensor:
         return self.forward(state)
     
-    def train_batch(self, batch: list[tuple[str, float]], start: int = 0, disable: bool = True) -> float:
+    def train_batch(self, batch: list[tuple[str, float]], start: int = 0, disable: bool = False) -> float:
         mean_losses = []
-        mean_rewards = 0
         for game_str, reward in tqdm(batch, 
             desc="Training", 
             leave=False, 
@@ -48,7 +47,6 @@ class ADP_Player(Player):
             if len(moves) <= start:
                 continue
 
-            mean_rewards += reward
             game = Gomoku(**self.game_kwargs)
             history = [self(game).to(self.device)]
             for move in moves:
@@ -76,7 +74,6 @@ class ADP_Player(Player):
             mean_loss = mean_loss.cpu().detach().item()
             mean_losses += [mean_loss]
 
-        print("Win Ratio:", mean_rewards / len(mean_losses))
         return sum(mean_losses) / len(mean_losses)
     
 class ADP_Dense_Player(ADP_Player):

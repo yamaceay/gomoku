@@ -195,10 +195,14 @@ def train_adp(
     for epoch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Epochs"):
         learner_args = {
             "player1": adp_model,
-            "epsilon1": epsilon,
+            "epsilon1": 1.,
         }
         
-        trainer_args = {}
+        trainer_args = {
+            "player2": adp_model,
+            "epsilon2": 0.
+        }
+
         if zero_play:
             trainer_args = {
                 "player2": zero_model,

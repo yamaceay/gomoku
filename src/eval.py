@@ -226,8 +226,8 @@ def train_adp(
             pbar = tqdm(range(n_batches), position=1, leave=False, desc="Batches")
             for i in pbar:
                 batch = sample[i::n_batches]
-                mean_reward = sum([y for x, y in batch]) / len(batch)
-                loss = adp_model.train_batch(sample, start=0)
+                mean_reward = sum([y for _, y in batch]) / len(batch)
+                loss = adp_model.train_batch(batch, start=0)
                 lr = scheduler.get_last_lr()[-1]
                 
                 completed_ratio = (i + 1) / n_batches

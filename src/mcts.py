@@ -65,10 +65,10 @@ def uct_pb_score(
     return ucb + C_PB * pbs
 
 class Tree:
-    def __init__(self, state: Gomoku, decay: float = 0.9):
+    def __init__(self, state: Gomoku, gamma: float = 0.9):
         self.state = state.copy()
         self.root = Node(self.state)
-        self.decay = decay
+        self.gamma = gamma
 
     def select(self, policy: Callable = uct_score, policy_kwargs: dict = {}) -> Node:
         node = self.root
@@ -110,7 +110,7 @@ class Tree:
         while node is not None:
             node.n += 1
             node.Q += reward
-            reward *= -self.decay
+            reward *= -self.gamma
             node = node.parent
             
 class UCT_Player(Player):

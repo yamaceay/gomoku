@@ -13,6 +13,7 @@ import os
 import logging
 import random
 import math
+import shutil
 
 def comp_models(game_kwargs: dict[str, int],
     player1: Player,
@@ -97,12 +98,18 @@ def eval_by_zero(game_kwargs: dict[str, int],
     return avg_len_history
  
 class EvolutionStrategy:
-    def __init__(self, dir_path: str, logger) -> tuple[int, float]:
+    def __init__(self, dir_path: str, logger, epoch: int = 0) -> tuple[int, float]:
         self.logger = logger
         self.dir_path = dir_path
         self.logger = logger
+        self.latest_model_path = self.get_model_path(epoch)
         
         self.best_model_path = os.path.join(self.dir_path, "models/best.h5")
+        if not os.path.exists(self.best_model_path):
+            if os.path.exists(self.latest_model_path):
+                shutil.copy(self.latest_model_path, self.best_model_path)
+                logger.info("No best model, so use the latest model {} instead".format(self.latest_model_path))
+
         self.results_path = os.path.join(self.dir_path, "logs/mcts_results.log")
         
         self.max_win = None
@@ -168,7 +175,7 @@ def train_adp(
 ):
     logger = player_args.get("logger", logging.getLogger(__name__))
     
-    evo_strategy = EvolutionStrategy(dir_path, logger)
+    evo_strategy = EvolutionStrategy(dir_path, logger, epochs_start)
     
     adp_model = player(
         model_path=evo_strategy.best_model_path, 
@@ -185,7 +192,7 @@ def train_adp(
     
     game = Gomoku(**game_kwargs)
     
-    for epoch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Batches"):
+    for epoch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Epochs"):
         learner_args = {
             "player1": adp_model,
             "epsilon1": epsilon,
@@ -212,18 +219,22 @@ def train_adp(
         
         if train:
             n_batches = int(math.ceil(max_batch_size / batch_size)) 
-            for i in range(n_batches):
+            pbar = tqdm(range(n_batches), position=1, leave=False, desc="Batches")
+            for i in pbar:
                 batch = sample[i::n_batches]
+                mean_reward = sum([y for x, y in batch]) / len(batch)
                 loss = adp_model.train_batch(sample, start=0)
                 lr = scheduler.get_last_lr()[-1]
                 
                 completed_ratio = (i + 1) / n_batches
-
-                logger.info(f"Epoch: {epoch} to {epoch+epochs_step}, Batch: {completed_ratio * 100 :.3f}, MSE: {loss:.5f}, LR: {lr:.5f}")
+                pbar.set_postfix({"MSE": "{:.5f}".format(loss), "LR": "{:.5f}".format(lr)})
+                
+                logger.info(f"Epoch: {epoch} to {epoch+epochs_step}, Batch: {completed_ratio * 100 :.2f}%, Mean Reward: {mean_reward:.2f}, MSE: {loss:.5f}, LR: {lr:.5f}")
             
                 scheduler.step()
             
-            new_path = os.path.join(dir_path, "models/epoch_{}.h5".format(last_epoch_in_batch))
+            pbar.close()
+            new_path = evo_strategy.get_model_path(last_epoch_in_batch)
             adp_model.nn.save_model(new_path)
             
         if eval:

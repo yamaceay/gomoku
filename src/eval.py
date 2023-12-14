@@ -32,6 +32,10 @@ def comp_models(game_kwargs: dict[str, int],
         round_kwargs["epsilon2"] = epsilon2
     
     game = Gomoku(**game_kwargs)
+    player1_play_only = isinstance(player1, ADP_Player) and player1.play_only
+    player2_play_only = isinstance(player2, ADP_Player) and player2.play_only
+    if player1_play_only and player2_play_only:
+        game.set_play_only()
     
     with torch.no_grad():
         game, learner_starts = play_until_end(game, **round_kwargs)
@@ -66,11 +70,13 @@ def eval_by_uct(game_kwargs: dict[str, int],
                 curr_model: ADP_Player,
                 best_model: ADP_Player,
                 n_test_games: int,
-                iterations: int = 10000,
+                iterations: int = 200,
+                max_depth: int = 8,
+                sim_is_random: bool = False,
                 epsilon: float = .1) -> list[tuple[bool, bool]]:
     
-    curr_uct_model = UCT_Zero_Player(adp_model=curr_model, iterations=iterations)
-    best_uct_model = UCT_Zero_Player(adp_model=best_model, iterations=iterations)
+    curr_uct_model = UCT_Zero_Player(adp_model=curr_model, iterations=iterations, max_depth=max_depth, sim_is_random=sim_is_random)
+    best_uct_model = UCT_Zero_Player(adp_model=best_model, iterations=iterations, max_depth=max_depth, sim_is_random=sim_is_random)
     
     results = []
     for _ in tqdm(range(n_test_games), position=1, leave=False, desc="Testing"):
@@ -151,8 +157,8 @@ class EvolutionStrategy:
         return os.path.join(self.dir_path, "models/epoch_{}.h5".format(epoch))
       
 def train_adp(
-    dir_path: str,
     player: ADP_Player,
+    dir_path: str,
     
     epochs_end: int, 
     epochs_step: int,
@@ -166,8 +172,11 @@ def train_adp(
     zero_play: bool = False,
     select_best: bool = False,
     eval_iterations: int = 2500,
+    eval_max_depth: int = 8,
+    eval_sim_is_random: bool = False,
+    eval_n_games: int = 3, 
+    
     lr_args: dict = {},
-    n_test_games: int = 0, 
     buffer_size: int = 1024,
     
     player_args: dict = {},
@@ -191,7 +200,9 @@ def train_adp(
     scheduler = lr_scheduler.ExponentialLR(adp_model.nn.optimizer, gamma=lr_args['lr_decay'])
     
     game = Gomoku(**game_kwargs) 
-    if isinstance(player, ADP_Dense_Player):
+    
+    assert isinstance(adp_model, ADP_Player)
+    if adp_model.play_only:
         game.set_play_only()
     
     for epoch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Epochs"):
@@ -202,13 +213,11 @@ def train_adp(
         
         trainer_args = {
             "player": adp_model,
-            "epsilon": 0.
         }
 
         if zero_play:
             trainer_args = {
-                "player2": zero_model,
-                "epsilon2": .0,
+                "player": zero_model,
             }
         
         buffer.extend(collect_play_data(
@@ -254,8 +263,10 @@ def train_adp(
                 game_kwargs=game_kwargs,
                 curr_model=curr_model,
                 best_model=adp_model,
-                n_test_games=n_test_games,
+                n_test_games=eval_n_games,
                 iterations=eval_iterations,
+                sim_is_random=eval_sim_is_random,
+                max_depth=eval_max_depth,
                 epsilon=epsilon,
             )
             

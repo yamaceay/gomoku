@@ -24,7 +24,11 @@ if __name__ == "__main__":
     parser.add_argument('--LR_DECAY', type=float, default=0.99, help='Learning rate decay')
     parser.add_argument('--N_TEST_GAMES', type=int, default=7, help='Number of games to play against Zero')
     parser.add_argument('--BUFFER_SIZE', type=int, default=10000, help='Buffer size')
+    
+    # eval
     parser.add_argument('--EVAL_ITERATIONS', type=int, default=200, help='Number of iterations to evaluate')
+    parser.add_argument("--EVAL_MAX_DEPTH", type=int, default=10, help="Maximum simulation depth during evaluation")
+    parser.add_argument("--EVAL_SIM_IS_RANDOM", action="store_true", help="Whether to simulate randomly or using ADP during evaluation")
     
     # game
     parser.add_argument('--M', type=int, default=8, help='Board width')
@@ -90,9 +94,12 @@ if __name__ == "__main__":
         zero_play=args.ZERO_PLAY,
         select_best=args.SELECT_BEST,
         lr_args=lr_kwargs,
-        n_test_games=args.N_TEST_GAMES,
+        eval_n_games=args.N_TEST_GAMES,
         buffer_size=args.BUFFER_SIZE,
+        
         eval_iterations=args.EVAL_ITERATIONS,
+        eval_max_depth=args.EVAL_MAX_DEPTH,
+        eval_sim_is_random=args.EVAL_SIM_IS_RANDOM,
         
         game_kwargs=game_kwargs,
          

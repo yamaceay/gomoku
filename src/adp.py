@@ -12,13 +12,15 @@ class ADP_Player(Player):
                  nn: Net,
                  game_kwargs: dict[str, int], 
                  alpha: float = 0.9, 
-                 gamma: float = 0.9):
+                 gamma: float = 0.9,
+                 play_only: bool = True):
         
         self.nn = nn
         self.device = self.nn.device()
         self.game_kwargs = game_kwargs
         self.alpha = alpha
         self.gamma = gamma
+        self.play_only = play_only
         
     def rewards_actions(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:  
         actions = state.actions()
@@ -48,12 +50,17 @@ class ADP_Player(Player):
                 continue
 
             game = Gomoku(**self.game_kwargs)
+            if self.play_only:
+                game.set_play_only()
+                
             history = [self(game).to(self.device)]
             for move in moves:
                 game.play(move)
                 state = self(game).to(self.device)
                 history += [state]
             history = history[start:]
+            
+            print(game.get_line_cache(length=5))
             
             losses = []
             for i in range(len(history) - 1):
@@ -88,6 +95,7 @@ class ADP_Dense_Player(ADP_Player):
             game_kwargs=game_kwargs,
             alpha=alpha,
             gamma=gamma,
+            play_only=False,
         )
 
         
@@ -210,7 +218,7 @@ class ADP_Conv_Player(ADP_Player):
             ),
             game_kwargs=game_kwargs,
             alpha=alpha,
-            gamma=gamma
+            gamma=gamma,
         )
     
     def forward(self, state: Gomoku):

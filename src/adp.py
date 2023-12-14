@@ -60,8 +60,6 @@ class ADP_Player(Player):
                 history += [state]
             history = history[start:]
             
-            print(game.get_line_cache(length=5))
-            
             losses = []
             for i in range(len(history) - 1):
                 [V_curr, V_next] = history[i:i+2]

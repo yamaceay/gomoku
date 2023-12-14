@@ -45,6 +45,16 @@ def collect_play_data(
     trainer_args: dict[str] = {},
     ) -> list[tuple[str, float]]:
     
+    round_kwargs = {}
+    if "player" in learner_args:
+        round_kwargs["player1"] = learner_args["player"]
+    if "player" in trainer_args:
+        round_kwargs["player2"] = trainer_args["player"]
+    if "epsilon" in learner_args:
+        round_kwargs["epsilon1"] = learner_args["epsilon"]
+    if "epsilon" in trainer_args:
+        round_kwargs["epsilon2"] = trainer_args["epsilon"]
+        
     play_data = []
     for _ in tqdm(range(n_games), 
                   position=1, 
@@ -52,7 +62,7 @@ def collect_play_data(
                   desc="Collecting play data",
                   disable=True):
         
-        new_game, _ = play_until_end(game, **learner_args, **trainer_args)
+        new_game, _ = play_until_end(game, **round_kwargs)
         for transformation in game.transformations:
             feature = new_game.history_str(*transformation)
             label = new_game.score()

@@ -142,12 +142,3 @@ class UCT_Player(Player):
         get_reward_action = lambda child: (get_reward(child), get_action(child))
         rewards_actions = map(get_reward_action, self.tree.root.children)
         return sortfn(rewards_actions, key=lambda x: x[0])
-    
-if __name__ == "__main__":
-    game = Gomoku(M=5, N=5, K=4, ADJ=2)
-    player = UCT_Player(iterations=1000)
-    
-    while not game.fin():
-        move = player.next_move(game)
-        game.play(move)
-        print(game)

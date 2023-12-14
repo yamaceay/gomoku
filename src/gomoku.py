@@ -4,20 +4,23 @@ import copy
 from .patterns import PB_DICT, Pattern
 
 class Gomoku:
-    def __init__(self, M: int, N: int, K: int, ADJ: int = 0, play_only: bool = False):
+    def __init__(self, M: int, N: int, K: int, ADJ: int = 0):
         self.M = M
         self.N = N
         self.K = K
         self.ADJ = ADJ
         self.player = 1
-        self.play_only = play_only
         
+        self.play_only = False
         self.board = np.zeros((self.M, self.N), dtype=np.int8)
         self._line_cache = {len(pattern): {} for pattern in PB_DICT}
         self._adjacents = set()
         self._history = ""
         self._winner = 0
         self._legal_actions = set([(x, y) for x in range(self.M) for y in range(self.N)])
+    
+    def set_play_only(self) -> None:
+        self.play_only = True
     
     def copy(self):
         return copy.deepcopy(self)

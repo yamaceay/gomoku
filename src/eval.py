@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from .zero import AlphaZeroPlayer
-from .adp import ADP_Player
+from .adp import ADP_Player, ADP_Dense_Player
 from .mcts_adp import UCT_Zero_Player
 from .players import Player
 from .gomoku import Gomoku
@@ -18,23 +18,23 @@ import shutil
 def comp_models(game_kwargs: dict[str, int],
     player1: Player,
     player2: Player,
-    epsilon1: float = .0,
-    epsilon2: float = .0) -> list[tuple[str, bool]]:
+    epsilon1: float = None,
+    epsilon2: float = None) -> list[tuple[str, bool]]:
         
-    learner_args = {
-        "player1": player1,
-        "epsilon1": epsilon1,
-    }
-    
-    trainer_args = {
-        "player2": player2,
-        "epsilon2": epsilon2,
-    }
+    round_kwargs = {}
+    if player1 is not None:
+        round_kwargs["player1"] = player1
+    if player2 is not None:
+        round_kwargs["player2"] = player2
+    if epsilon1 is not None:
+        round_kwargs["epsilon1"] = epsilon1
+    if epsilon2 is not None:
+        round_kwargs["epsilon2"] = epsilon2
     
     game = Gomoku(**game_kwargs)
     
     with torch.no_grad():
-        game, learner_starts = play_until_end(game, **learner_args, **trainer_args)
+        game, learner_starts = play_until_end(game, **round_kwargs)
     
     return game.score(), learner_starts, len(game.history())
 
@@ -179,7 +179,7 @@ def train_adp(
     
     adp_model = player(
         model_path=evo_strategy.best_model_path, 
-        game_kwargs=game_kwargs, 
+        game_kwargs=game_kwargs,
         **player_args
     )
     
@@ -190,17 +190,19 @@ def train_adp(
     buffer = deque(maxlen=buffer_size)
     scheduler = lr_scheduler.ExponentialLR(adp_model.nn.optimizer, gamma=lr_args['lr_decay'])
     
-    game = Gomoku(**game_kwargs)
+    game = Gomoku(**game_kwargs) 
+    if isinstance(player, ADP_Dense_Player):
+        game.set_play_only()
     
     for epoch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Epochs"):
         learner_args = {
-            "player1": adp_model,
-            "epsilon1": 1.,
+            "player": adp_model,
+            "epsilon": 1.,
         }
         
         trainer_args = {
-            "player2": adp_model,
-            "epsilon2": 0.
+            "player": adp_model,
+            "epsilon": 0.
         }
 
         if zero_play:

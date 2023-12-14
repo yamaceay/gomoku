@@ -34,7 +34,7 @@ if __name__ == "__main__":
     parser.add_argument('--M', type=int, default=8, help='Board width')
     parser.add_argument('--N', type=int, default=8, help='Board height')
     parser.add_argument('--K', type=int, default=5, help='Number of stones to align')
-    parser.add_argument('--ADJ', type=int, default=2, help='Number of adjacent stones to consider')
+    parser.add_argument('--ADJ', type=int, default=0, help='Number of adjacent stones to consider')
     
     # adp args
     parser.add_argument('--ALPHA', type=float, default=0.9, help='Q-Learning rate')
@@ -57,8 +57,9 @@ if __name__ == "__main__":
         'M': args.M,
         'N': args.N,
         'K': args.K,
-        'ADJ': args.ADJ,
     }
+    if args.ADJ > 0:
+        game_kwargs['ADJ'] = args.ADJ
     
     player_kwargs = {
         'alpha': args.ALPHA,

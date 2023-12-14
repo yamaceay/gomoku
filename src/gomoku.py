@@ -4,12 +4,13 @@ import copy
 from .patterns import PB_DICT, Pattern
 
 class Gomoku:
-    def __init__(self, M: int, N: int, K: int, ADJ: int = 0):
+    def __init__(self, M: int, N: int, K: int, ADJ: int = 0, play_only: bool = False):
         self.M = M
         self.N = N
         self.K = K
         self.ADJ = ADJ
         self.player = 1
+        self.play_only = play_only
         
         self.board = np.zeros((self.M, self.N), dtype=np.int8)
         self._line_cache = {len(pattern): {} for pattern in PB_DICT}
@@ -168,26 +169,28 @@ class Gomoku:
         x, y = move
         self.board[x, y] = self.player
         self._legal_actions.remove(move)
-        lengths = set(map(len, PB_DICT))
-        for dx, dy in self._directions:
-            for length in sorted(lengths):
-                for i in range(length):
-                    new_x, new_y = x - i * dx, y - i * dy
-                    if not (0 <= new_x < self.M and 0 <= new_y < self.N):
-                        continue
-                    position, direction = (new_x, new_y), (dx, dy)
-                    indices, values = self._try_get_line(length, position, direction)
-                    if not len(indices) or all([v == 0 for v in values]):
-                        continue
-                    indices_loc, values_loc = Pattern.move_to_loc(*indices), Pattern.dir_to_loc(*values)
-                    self.update_line_cache(length, position, direction, indices_loc, values_loc)
+        if not self.play_only:
+            lengths = set(map(len, PB_DICT))
+            for dx, dy in self._directions:
+                for length in sorted(lengths):
+                    for i in range(length):
+                        new_x, new_y = x - i * dx, y - i * dy
+                        if not (0 <= new_x < self.M and 0 <= new_y < self.N):
+                            continue
+                        position, direction = (new_x, new_y), (dx, dy)
+                        indices, values = self._try_get_line(length, position, direction)
+                        if not len(indices) or all([v == 0 for v in values]):
+                            continue
+                        indices_loc, values_loc = Pattern.move_to_loc(*indices), Pattern.dir_to_loc(*values)
+                        self.update_line_cache(length, position, direction, indices_loc, values_loc)
         if self.ADJ:
             for (dx, dy) in self._directions:
                 for i in range(-self.ADJ, self.ADJ + 1):
-                    new_x, new_y = x + i * dx, y + i * dy
-                    if not (0 <= new_x < self.M and 0 <= new_y < self.N):
-                        continue
-                    self._adjacents.add((new_x, new_y))
+                    for j in range(-self.ADJ, self.ADJ + 1):
+                        new_x, new_y = x + i * dx, y + j * dy
+                        if not (0 <= new_x < self.M and 0 <= new_y < self.N):
+                            continue
+                        self._adjacents.add((new_x, new_y))
         
         if not len(self._history):
             self._history = Pattern.move_to_loc(move)

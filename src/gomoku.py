@@ -171,8 +171,8 @@ class Gomoku:
         lengths = set(map(len, PB_DICT))
         for dx, dy in self._directions:
             for length in sorted(lengths):
-                for i in range(1 - length, length):
-                    new_x, new_y = x + i * dx, y + i * dy
+                for i in range(length):
+                    new_x, new_y = x - i * dx, y - i * dy
                     if not (0 <= new_x < self.M and 0 <= new_y < self.N):
                         continue
                     position, direction = (new_x, new_y), (dx, dy)

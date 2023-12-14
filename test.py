@@ -1,7 +1,7 @@
 import os
 import argparse
 import numpy as np
-from src import Gomoku, UCT_Zero_Player, ADP_Dense_Player, ADP_Conv_Player, ADP_Pre_Player
+from src import Gomoku, AlphaZeroPlayer, UCT_Zero_Player, ADP_Dense_Player, ADP_Conv_Player, ADP_Pre_Player
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -32,7 +32,8 @@ if __name__ == '__main__':
     model_path = os.path.join(args.DIR, "models/epoch_{}.h5".format(args.EPOCH))
 
     adp_model = player(model_path=model_path, game_kwargs=game_kwargs)
-    
+    zero = AlphaZeroPlayer(game_kwargs)
+
     uct_adp = UCT_Zero_Player(
             adp_model=adp_model, 
             iterations=args.ITERATIONS, 
@@ -43,6 +44,12 @@ if __name__ == '__main__':
     
     game = Gomoku(**game_kwargs)
     while not game.fin():
+        action = zero.next_move(game)
+        game.play(action)
+        print(game)
+        if game.fin():
+            break
+
         probs_actions = uct_adp.next_move_probs(game)
         print("\n".join([f"{a} {p:.4f}" for p, a in probs_actions]))
         
@@ -54,6 +61,9 @@ if __name__ == '__main__':
             action = actions[0]
         game.play(action)
         print(game)
+
+        if game.fin():
+            break
         
     # results = eval_by_uct(game_kwargs, adp, adp, n_test_games=3, iterations=200, epsilon=.1)
     # print(results)

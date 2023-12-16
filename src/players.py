@@ -14,7 +14,7 @@ class Player:
         
         rewards, actions = zip(*rewards_actions)
         rewards = np.array(rewards)
-        probs = np.exp(rewards)
+        probs = np.exp(rewards - np.max(rewards))
         probs /= probs.sum()
         return list(zip(probs, actions))
     

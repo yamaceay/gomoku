@@ -1,4 +1,5 @@
 import numpy as np
+from functools import lru_cache
 import random
 import copy
 from .patterns import PB_DICT, Pattern
@@ -13,11 +14,29 @@ class Gomoku:
         
         self.play_only = False
         self.board = np.zeros((self.M, self.N), dtype=np.int8)
+        self.last_move = None
+        
         self._line_cache = {len(pattern): {} for pattern in PB_DICT}
         self._adjacents = set()
         self._history = ""
         self._winner = 0
         self._legal_actions = set([(x, y) for x in range(self.M) for y in range(self.N)])
+        self._directions = [
+            (0, 1), 
+            (1, 1), 
+            (1, 0), 
+            (1, -1)
+        ]
+        self._transformations = [
+            (False, False, False),
+            (False, False, True),
+            (False, True, False),
+            (False, True, True),
+            (True, False, False),
+            (True, False, True),
+            (True, True, False),
+            (True, True, True)
+        ]
     
     def set_play_only(self) -> None:
         self.play_only = True
@@ -60,14 +79,8 @@ class Gomoku:
 
     def no_move(self) -> bool:
         return len(self._legal_actions) == 0
-        
-    @property
-    def last_move(self) -> tuple[int, int]:
-        history = self.history()
-        if not len(history):
-            return None
-        return history[-1]
 
+    @lru_cache(maxsize=None)
     def history(self, rot: bool = False, lrf: bool = False, udf: bool = False) -> list[tuple[int, int]]:
         if not len(self._history):
             return []
@@ -78,13 +91,10 @@ class Gomoku:
     def history_str(self, *args, **kwargs) -> str:
         return Pattern.move_to_loc(*self.history(*args, **kwargs))
     
-    @property
-    def transformations(self) -> list[tuple[bool, bool, bool]]:
+    def history_str_aug(self) -> list[str]:
         return [
-            (rot, lrf, udf)
-            for rot in [False, True]
-            for lrf in [False, True]
-            for udf in [False, True]
+            self.history_str(*transformation)
+            for transformation in self._transformations
         ]
     
     def find_patterns(self, move: tuple[int, int]) -> float:
@@ -137,6 +147,7 @@ class Gomoku:
             self._line_cache[length][position_loc] = {}
         self._line_cache[length][position_loc][direction_loc] = [indices, values]
     
+    @lru_cache(maxsize=None)
     def get_line_cache(self,
                        length: int = None,
                        position: tuple[int, int] = None,
@@ -172,6 +183,7 @@ class Gomoku:
         x, y = move
         self.board[x, y] = self.player
         self._legal_actions.remove(move)
+        self.last_move = move
         if not self.play_only:
             lengths = set(map(len, PB_DICT))
             for dx, dy in self._directions:
@@ -204,10 +216,6 @@ class Gomoku:
         assert isinstance(move, (tuple, list)), "Move must be a tuple of integers, got: {}".format(move)
         x, y = move
         return 0 <= x < self.M and 0 <= y < self.N and self.board[x, y] == 0
-
-    @property
-    def _directions(self) -> list[tuple[int, int]]:
-        return [(0, 1), (1, 1), (1, 0), (1, -1)]
 
     def _is_win(self, position: tuple[int, int]) -> bool:
         for direction in self._directions:

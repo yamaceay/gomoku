@@ -3,10 +3,33 @@ import random
 
 from .players import Player, RandomPlayer
 from .gomoku import Gomoku
-from .mcts import Node, Tree, uct_score
+from .mcts import Node, Tree, uct_score, UCT_Player
 from .patterns import sortfn
 from .adp import ADP_Player
 
+class UCT_Tang_Player(Player):
+    def __init__(self, 
+                 adp_model: ADP_Player,
+                 uct_model: UCT_Player,
+                 k: int = 5,
+                 C_ADP: int = 1):
+        self.adp = adp_model
+        self.uct = uct_model
+        self.k = k
+        self.C_ADP = C_ADP
+        
+    def next_move_probs(self, game: Gomoku):
+        adp_probs = self.adp.next_move_probs(game)
+        total_probs = []
+        for adp_prob, action in adp_probs[:self.k]:
+            game_copy = game.copy()
+            game_copy.play(action)
+            self.uct.rewards_actions(game_copy)
+            uct_root = self.uct.tree.root
+            mcts_prob = uct_root.Q / uct_root.n
+            total_probs += [mcts_prob + self.C_ADP * adp_prob]
+        return sortfn(total_probs)
+    
 class UCT_Zero_Player(Player):
     def __init__(self, 
                  adp_model: ADP_Player, 

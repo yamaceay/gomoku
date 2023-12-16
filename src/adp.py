@@ -104,10 +104,11 @@ class ADP_Dense_Player(ADP_Player):
         for length in state.get_line_cache():
             for position in state.get_line_cache(length):
                 for direction in state.get_line_cache(length, position):
-                    values = state.get_line_cache(length, position, direction)
-                    if position == state.last_move:
-                        affected_value_list[length] += [values]
-                    value_list[length] += [values]
+                    for values in state.get_line_cache(length, position, direction):
+                        if position == state.last_move:
+                            affected_value_list[length] += [values]
+                        value_list[length] += [values]
+                        break
         return value_list, affected_value_list, None  
     
     def extract_feature(self, values: list[str], pattern: str) -> tuple[int, int]:
@@ -226,23 +227,3 @@ class ADP_Conv_Player(ADP_Player):
         
         features = torch.FloatTensor(state.to_zero_input()).to(self.device)
         return self.nn(features.unsqueeze(0)).squeeze(0)
-    
-if __name__ == "__main__":
-    from .data import play_until_end
-    
-    game_kwargs = {
-        'M': 8,
-        'N': 8,
-        'K': 5,
-        'ADJ': 2,
-    }
-    
-    player = ADP_Dense_Player(game_kwargs=game_kwargs)
-    
-    for _ in tqdm(range(1000)):
-        game = Gomoku(**game_kwargs)
-        
-        game, _ = play_until_end(
-            game, 
-            player,
-        )

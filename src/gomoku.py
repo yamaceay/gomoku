@@ -1,5 +1,4 @@
 import numpy as np
-from functools import lru_cache
 import random
 import copy
 from .patterns import PB_DICT, Pattern
@@ -80,7 +79,6 @@ class Gomoku:
     def no_move(self) -> bool:
         return len(self._legal_actions) == 0
 
-    @lru_cache(maxsize=None)
     def history(self, rot: bool = False, lrf: bool = False, udf: bool = False) -> list[tuple[int, int]]:
         if not len(self._history):
             return []
@@ -101,8 +99,9 @@ class Gomoku:
         value_list = {len(pattern): [] for pattern in PB_DICT}
         for length in self.get_line_cache():
             for direction in self.get_line_cache(length, move):
-                values = self.get_line_cache(length, move, direction)
-                value_list[length] += [values]
+                for values in self.get_line_cache(length, move, direction):
+                    value_list[length] += [values]
+                    break
         
         score_list = {}
         for pattern in PB_DICT:
@@ -147,27 +146,28 @@ class Gomoku:
             self._line_cache[length][position_loc] = {}
         self._line_cache[length][position_loc][direction_loc] = [indices, values]
     
-    @lru_cache(maxsize=None)
     def get_line_cache(self,
                        length: int = None,
                        position: tuple[int, int] = None,
                        direction: tuple[int, int] = None) -> list[tuple[int, int]]:
         if length is None:
-            return list(self._line_cache)
+            for l in self._line_cache:
+                yield l
         elif position is None:
-            return list(map(Pattern.loc_to_move_one, self._line_cache[length]))
+            for p in map(Pattern.loc_to_move_one, self._line_cache[length]):
+                yield p
         else:
             position_loc = Pattern.move_to_loc(position)
+            assert position_loc in self._line_cache[length], "Position {} not in line cache".format(position_loc)
             if direction is None:
-                if position_loc in self._line_cache[length]:
-                    return list(map(Pattern.loc_to_dir, self._line_cache[length][position_loc]))
+                for d in map(Pattern.loc_to_dir, self._line_cache[length][position_loc]):
+                    yield d
             else:
                 direction_loc = Pattern.dir_to_loc(*direction)
-                if position_loc in self._line_cache[length]:
-                    if direction_loc in self._line_cache[length][position_loc]:
-                        _, values_loc = self._line_cache[length][position_loc][direction_loc]
-                        return values_loc
-        return []
+                assert direction_loc in self._line_cache[length][position_loc], "Direction {} not in line cache".format(direction_loc)
+                _, values_loc = self._line_cache[length][position_loc][direction_loc]
+                yield values_loc
+                return
         
     def _move_forward(self, move: tuple[int, int], rot: bool = False, lrf: bool = False, udf: bool = False) -> tuple[int, int]:
         x, y = move

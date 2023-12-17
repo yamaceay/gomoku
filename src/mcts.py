@@ -1,6 +1,6 @@
 from typing import Callable
 import numpy as np
-from .patterns import PB_DICT, sortfn
+from .patterns import PB_DICT, sortfn, pb_heuristic
 from .gomoku import Gomoku
 from .players import Player, RandomPlayer
 
@@ -33,23 +33,36 @@ def uct_score(parent: Node, child: Node, **kwargs) -> float:
     exploration = np.sqrt(2 * np.log(parent.n) / child.n)
     return exploitation + C * exploration   
 
-def pb_score(parent: Node, child: Node, decay: float) -> float:
+def pb_fn(game: Gomoku) -> float:
+    pb_curr = game.find_patterns()
+    
+    pb_value = 0
+    for pattern in pb_curr:
+        pattern_score = pb_heuristic(PB_DICT[pattern])
+        [curr_x, curr_o] = pb_curr.get(pattern, [0, 0])
+        pb_value += (curr_x - curr_o) * pattern_score
+    
+    pb_value *= -game.player
+    return pb_value
+
+def pb_score(parent: Node, child: Node) -> float:
     move = child.state.last_move
     pb_parent = parent.state.find_patterns(move)
     pb_child = child.state.find_patterns(move)
         
     pb_value = 0
     for pattern in pb_parent | pb_child:
-        pattern_score = PB_DICT[pattern](decay)
+        pattern_score = pb_heuristic(PB_DICT[pattern])
         
         [parent_x, parent_o] = pb_parent.get(pattern, [0, 0])
         [child_x, child_o] = pb_child.get(pattern, [0, 0])
         
-        pb_value += (child_x - parent_x) * pattern_score
-        pb_value += (child_o - parent_o) * pattern_score
+        child_score = child_x - child_o
+        parent_score = parent_x - parent_o
+        
+        pb_value += (child_score - parent_score) * pattern_score
         
     pb_value *= -child.state.player
-    pb_value /= 100000
     
     return pb_value
     
@@ -57,18 +70,23 @@ def uct_pb_score(
     parent: Node, 
     child: Node, 
     C: float = 1,
-    C_PB: float = 5, 
-    decay: float = 0.9) -> float:
+    C_PB: float = 5) -> float:
     
     ucb = uct_score(parent, child, C=C)
-    pbs = pb_score(parent, child, decay=decay)
+    pbs = pb_score(parent, child)
     return ucb + C_PB * pbs
 
 class Tree:
-    def __init__(self, state: Gomoku, gamma: float = 0.9):
+    def __init__(self, 
+                 state: Gomoku, 
+                 gamma: float = 0.9,
+                 value_fn: Callable = None,
+                 max_depth: int = None):
         self.state = state.copy()
         self.root = Node(self.state)
         self.gamma = gamma
+        self.value_fn = value_fn
+        self.max_depth = max_depth if max_depth is not None else state.M * state.N
 
     def select(self, policy: Callable = uct_score, policy_kwargs: dict = {}) -> Node:
         node = self.root
@@ -100,10 +118,12 @@ class Tree:
     def simulate(self, node: Node) -> float:
         state = node.state.copy()
         player = RandomPlayer()
-        while not state.fin():
+        for _ in range(self.max_depth):
+            if state.fin():
+                return state.score()
             action = player.next_move(state)
             state.play(action)
-        return state.score()
+        return self.value_fn(state)
     
     def backpropagate(self, node: Node, reward: float):
         reward *= -node.state.player
@@ -114,7 +134,11 @@ class Tree:
             node = node.parent
             
 class UCT_Player(Player):
-    def __init__(self, iterations=10000, policy=uct_score, policy_kwargs={}, tree_kwargs={}):
+    def __init__(self, 
+                 iterations=10000, 
+                 policy=uct_score, 
+                 policy_kwargs={},
+                 tree_kwargs={}):
         self.iterations = iterations
         self.policy = policy
         self.policy_kwargs = policy_kwargs
@@ -142,3 +166,29 @@ class UCT_Player(Player):
         get_reward_action = lambda child: (get_reward(child), get_action(child))
         rewards_actions = map(get_reward_action, self.tree.root.children)
         return sortfn(rewards_actions, key=lambda x: x[0])
+
+if __name__ == '__main__':
+    uct = UCT_Player(
+        iterations=10000, 
+        policy=uct_score,
+        policy_kwargs={
+            "C": 1,
+        },
+        tree_kwargs={
+            "max_depth": 10,
+            "value_fn": pb_fn,
+        }
+    )
+    
+    game_kwargs = {
+        "M": 8,
+        "N": 8,
+        "K": 5,
+        "ADJ": 2,
+    }
+    
+    game = Gomoku(**game_kwargs)
+    while not game.fin():
+        action = uct.next_move(game)
+        game.play(action)
+        print(game)

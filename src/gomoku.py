@@ -95,13 +95,15 @@ class Gomoku:
             for transformation in self._transformations
         ]
     
-    def find_patterns(self, move: tuple[int, int]) -> float:
+    def find_patterns(self, move: tuple[int, int] = None) -> float:
         value_list = {len(pattern): [] for pattern in PB_DICT}
         for length in self.get_line_cache():
-            for direction in self.get_line_cache(length, move):
-                for values in self.get_line_cache(length, move, direction):
-                    value_list[length] += [values]
-                    break
+            moves = [move] if move is not None else self.get_line_cache(length)
+            for move in moves:
+                for direction in self.get_line_cache(length, move):
+                    for values in self.get_line_cache(length, move, direction):
+                        value_list[length] += [values]
+                        break
         
         score_list = {}
         for pattern in PB_DICT:

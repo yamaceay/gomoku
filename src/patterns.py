@@ -1,3 +1,6 @@
+DECAY = 0.9
+BASIS = 10
+
 class Pattern:
     @staticmethod
     def dir_to_loc(*val: int) -> str:
@@ -48,44 +51,73 @@ class Pattern:
         return 'x' if c == 1 else 'o' if c == -1 else '-'
 
 PB_DICT = {
-    '-oooo-': lambda _: 10 ** 4, # p = 4, d = 0
-    'x-ooo-x': lambda decay: 10 ** 3 * decay ** 3, # p = 3, d = 3  
-    'x-ooo--': lambda decay: 10 ** 3 * decay ** 1, # p = 3, d = 1
-    '--ooo--': lambda _: 10 ** 3, # p = 3, d = 0
-    '--ooo-o': lambda _: 10 ** 3, # p = 3, d = 0
-    'o-ooo-o': lambda _: 10 ** 4, # p = 4, d = 0
-    'x-ooo-o': lambda decay: 10 ** 3 * decay ** 1, # p = 3, d = 1
-    '--oo--': lambda _: 10 ** 2, # p = 2, d = 0
-    'x-oo--': lambda decay: 10 ** 2 * decay ** 1, # p = 2, d = 1
-    'xoo-o--': lambda decay: 10 ** 2 * decay ** 2, # p = 2, d = 2
-    'xo-oo--': lambda decay: 10 ** 2 * decay ** 2, # p = 2, d = 2
-    'xo-oo-x': lambda decay: 10 ** 2 * decay ** 3, # p = 2, d = 3
-    'xoo-o-x': lambda decay: 10 ** 2 * decay ** 3, # p = 2, d = 3
-    'xooo--':  lambda _: 10 ** 2, # p = 2, d = 0
-    'xoo---': lambda _: 10 ** 0, # p = 0, d = 0
-    'xoooo-': lambda _: 10 ** 3, # p = 3, d = 0
-    '-oo-o-': lambda decay: 10 ** 3 * decay ** 1, # p = 3, d = 1
-    'xooo-o-': lambda decay: 10 ** 3 * decay ** 1, # p = 3, d = 1
-    'xoo-oo-': lambda decay: 10 ** 3 * decay ** 1, # p = 3, d = 1
-    'xooo-ox': lambda decay: 10 ** 3 * decay ** 3, # p = 3, d = 3
-    'xoo-oox': lambda decay: 10 ** 3 * decay ** 3, # p = 3, d = 3
-    'xooo-oo': lambda decay: 10 ** 3 * decay ** 1, # p = 3, d = 1
-    '-o-o-o-': lambda decay: 10 ** 3 * decay ** 2, # p = 3, d = 2
-    'xo-o-ox': lambda decay: 10 ** 3 * decay ** 6, # p = 3, d = 6
-    'xo-o-o-': lambda decay: 10 ** 3 * decay ** 4, # p = 3, d = 4
-    '--o-o--': lambda decay: 10 ** 2 * decay ** 2, # p = 2, d = 2
-    'x-o-o--': lambda decay: 10 ** 2 * decay ** 4, # p = 2, d = 4
-    'x-o-o-x': lambda decay: 10 ** 2 * decay ** 6, # p = 2, d = 6
-    '--o--': lambda _: 10 ** 0, # p = 0, d = 0
+    '-oooo-': (4, 0),
+    'x-ooo-x': (3, 3),
+    'x-ooo--': (3, 1),
+    '--ooo--': (3, 0),
+    '--ooo-o': (3, 0),
+    'o-ooo-o': (4, 0),
+    'x-ooo-o': (3, 1),
+    '--oo--': (2, 0),
+    'x-oo--': (2, 1),
+    'xoo-o--': (2, 2),
+    'xo-oo--': (2, 2),
+    'xo-oo-x': (2, 3),
+    'xoo-o-x': (2, 3),
+    'xooo--':  (2, 0),
+    'xoo---': (0, 0),
+    'xoooo-': (3, 0),
+    '-oo-o-': (3, 1),
+    'xooo-o-': (3, 1),
+    'xoo-oo-': (3, 1),
+    'xooo-ox': (3, 3),
+    'xoo-oox': (3, 3),
+    'xooo-oo': (3, 1),
+    '-o-o-o-': (3, 2),
+    'xo-o-ox': (3, 6),
+    'xo-o-o-': (3, 4),
+    '--o-o--': (2, 2),
+    'x-o-o--': (2, 4),
+    'x-o-o-x': (2, 6),
+    '--o--': (0, 0),
 }
 
-# WIN_ENCODE = [
-#     '-oooo',
-#     'o-ooo',
-#     'oo-oo',
-# ]
+def pb_heuristic(pb: tuple[int, int]) -> float:
+    return BASIS ** (pb[0] - 5) * DECAY ** pb[1]
 
 def sortfn(items: list, key = None) -> list:
     if key is None:
         return list(reversed(sorted(items)))
     return list(reversed(sorted(items, key=key)))
+
+if __name__ == "__main__":
+    import numpy as np
+    features, labels = [], []
+    for pattern, y in PB_DICT.items():
+        xs = list(map(Pattern._lti, pattern))
+        if len(xs) < 7:
+            xs += [1] * (7 - len(xs))
+        features += [xs]
+        labels += [list(y)]
+        
+    features = np.array(features)
+    labels = np.array(labels)
+    
+    from sklearn.neural_network import MLPClassifier
+    classifiers = [MLPClassifier(max_iter=10000) for _ in range(2)]
+    for i, classifier in enumerate(classifiers):
+        classifier.fit(features, labels[:, i])
+
+    avg_true = 0
+    for feature, label in zip(features, labels):
+        pred = np.array([classifier.predict([feature])[0] for classifier in classifiers])
+        if np.all(pred == label):
+            avg_true += 1
+        else:
+            print(f"Predicted: {pred}, Actual: {label}")
+    
+    print(f"Accuracy: {avg_true / len(features)}")
+    for classifier in classifiers:
+        print(classifier.coefs_)
+        print(classifier.intercepts_)
+        print()

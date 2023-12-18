@@ -50,7 +50,7 @@ class Pattern:
     def _itl(c: str) -> str: 
         return 'x' if c == 1 else 'o' if c == -1 else '-'
 
-PB_DICT = {
+PB_DICT_5 = {
     '-oooo-': (4, 0),
     'x-ooo-x': (3, 3),
     'x-ooo--': (3, 1),
@@ -90,34 +90,56 @@ def sortfn(items: list, key = None) -> list:
         return list(reversed(sorted(items)))
     return list(reversed(sorted(items, key=key)))
 
-if __name__ == "__main__":
-    import numpy as np
-    features, labels = [], []
-    for pattern, y in PB_DICT.items():
-        xs = list(map(Pattern._lti, pattern))
-        if len(xs) < 7:
-            xs += [1] * (7 - len(xs))
-        features += [xs]
-        labels += [list(y)]
-        
-    features = np.array(features)
-    labels = np.array(labels)
-    
-    from sklearn.neural_network import MLPClassifier
-    classifiers = [MLPClassifier(max_iter=10000) for _ in range(2)]
-    for i, classifier in enumerate(classifiers):
-        classifier.fit(features, labels[:, i])
+def calculate_exponents(pattern: str) -> tuple[int, int]:
+    # Count the number of 'o' characters
+    basis_exp = pattern.count('o')
 
-    avg_true = 0
-    for feature, label in zip(features, labels):
-        pred = np.array([classifier.predict([feature])[0] for classifier in classifiers])
-        if np.all(pred == label):
-            avg_true += 1
-        else:
-            print(f"Predicted: {pred}, Actual: {label}")
+    # Find the position of the first and last 'o' or 'x' character
+    first_char = min(i if (i := pattern.find('o')) != -1 else len(pattern), 
+                     i if (i := pattern.find('x')) != -1 else len(pattern))
+    last_char = max(i if (i := pattern.rfind('o')) != -1 else -1, 
+                     i if (i := pattern.rfind('x')) != -1 else -1)
+
+    # Calculate decay_exp based on the number of '-' characters before the first 'o' or 'x' and after the last 'o' or 'x'
+    decay_exp = pattern[:first_char].count('-') + pattern[last_char+1:].count('-')
+
+    return basis_exp, decay_exp
+
+if __name__ == "__main__":
+    for x, y in PB_DICT_5.items():
+        fx = calculate_exponents(x)
+        if y[0] != fx[0]:
+            print(f"Input: {x}, Type: Basis, Expected: {y[0]}, Output: {fx[0]}")
+        if y[1] != fx[1]:
+            print(f"Input: {x}, Type: Decay, Expected: {y[1]}, Output: {fx[1]}")
     
-    print(f"Accuracy: {avg_true / len(features)}")
-    for classifier in classifiers:
-        print(classifier.coefs_)
-        print(classifier.intercepts_)
-        print()
+    # import numpy as np
+    # features, labels = [], []
+    # for pattern, y in PB_DICT_5.items():
+    #     xs = list(map(Pattern._lti, pattern))
+    #     if len(xs) < 7:
+    #         xs += [1] * (7 - len(xs))
+    #     features += [xs]
+    #     labels += [list(y)]
+        
+    # features = np.array(features)
+    # labels = np.array(labels)
+    
+    # from sklearn.neural_network import MLPClassifier
+    # classifiers = [MLPClassifier(max_iter=10000) for _ in range(2)]
+    # for i, classifier in enumerate(classifiers):
+    #     classifier.fit(features, labels[:, i])
+
+    # avg_true = 0
+    # for feature, label in zip(features, labels):
+    #     pred = np.array([classifier.predict([feature])[0] for classifier in classifiers])
+    #     if np.all(pred == label):
+    #         avg_true += 1
+    #     else:
+    #         print(f"Predicted: {pred}, Actual: {label}")
+    
+    # print(f"Accuracy: {avg_true / len(features)}")
+    # for classifier in classifiers:
+    #     print(classifier.coefs_)
+    #     print(classifier.intercepts_)
+    #     print()

@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import copy
-from .patterns import PB_DICT, Pattern
+from .patterns import PB_DICT_5, Pattern
 
 class Gomoku:
     def __init__(self, M: int, N: int, K: int, ADJ: int = 0):
@@ -15,7 +15,7 @@ class Gomoku:
         self.board = np.zeros((self.M, self.N), dtype=np.int8)
         self.last_move = None
         
-        self._line_cache = {len(pattern): {} for pattern in PB_DICT}
+        self._line_cache = {len(pattern): {} for pattern in PB_DICT_5}
         self._adjacents = set()
         self._history = ""
         self._winner = 0
@@ -96,7 +96,7 @@ class Gomoku:
         ]
     
     def find_patterns(self, move: tuple[int, int] = None) -> float:
-        value_list = {len(pattern): [] for pattern in PB_DICT}
+        value_list = {len(pattern): [] for pattern in PB_DICT_5}
         for length in self.get_line_cache():
             moves = [move] if move is not None else self.get_line_cache(length)
             for move in moves:
@@ -106,7 +106,7 @@ class Gomoku:
                         break
         
         score_list = {}
-        for pattern in PB_DICT:
+        for pattern in PB_DICT_5:
             pattern_o = pattern
             pattern_x = Pattern.revp(pattern_o)
             for value in value_list[len(pattern)]:
@@ -187,7 +187,7 @@ class Gomoku:
         self._legal_actions.remove(move)
         self.last_move = move
         if not self.play_only:
-            lengths = set(map(len, PB_DICT))
+            lengths = set(map(len, PB_DICT_5))
             for dx, dy in self._directions:
                 for length in sorted(lengths):
                     for i in range(length):

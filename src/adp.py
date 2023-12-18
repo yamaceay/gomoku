@@ -2,7 +2,7 @@ from .mcts import sortfn
 from .players import Player
 import torch
 from .gomoku import Gomoku
-from .patterns import PB_DICT, Pattern
+from .patterns import PB_DICT_5, Pattern
 from .zero import AlphaZeroConv
 from .net import Net, Dense_Net, Conv_Net, Pre_Dense_Net
 from tqdm import tqdm
@@ -99,8 +99,8 @@ class ADP_Dense_Player(ADP_Player):
         
     def extract_values(self, state: Gomoku):
         assert len(state._line_cache), "Line cache is empty"
-        value_list = {len(pattern): [] for pattern in PB_DICT}
-        affected_value_list = {len(pattern): [] for pattern in PB_DICT}
+        value_list = {len(pattern): [] for pattern in PB_DICT_5}
+        affected_value_list = {len(pattern): [] for pattern in PB_DICT_5}
         for length in state.get_line_cache():
             for position in state.get_line_cache(length):
                 for direction in state.get_line_cache(length, position):
@@ -136,7 +136,7 @@ class ADP_Dense_Player(ADP_Player):
             occurred[1] = 1
         occurrences = []
         
-        for pattern in PB_DICT:
+        for pattern in PB_DICT_5:
             values = value_list[len(pattern)]
             counts += self.extract_feature(values, pattern)
             

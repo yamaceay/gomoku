@@ -1,9 +1,9 @@
 import os
 import torch
-from .patterns import PB_DICT
+from .patterns import PB_DICT_5
 import logging
 
-INPUT_DIM = 2 * (5 * (len(PB_DICT) - 1) + 1) + 2 * (2 * len(PB_DICT)) + 2
+INPUT_DIM = 2 * (5 * (len(PB_DICT_5) - 1) + 1) + 2 * (2 * len(PB_DICT_5)) + 2
 HIDDEN_DIM = 100
 OUTPUT_DIM = 1
 

@@ -1,7 +1,7 @@
 from tqdm import tqdm
 from .zero import AlphaZeroPlayer
 from .adp import ADP_Player, ADP_Dense_Player
-from .mcts_adp import UCT_Zero_Player
+# from .mcts_adp import UCT_Zero_Player
 from .players import Player
 from .gomoku import Gomoku
 from .data import collect_play_data, play_until_end
@@ -66,25 +66,25 @@ def tournament(game_kwargs, models: list[Player], n_test_games: int, start_ind: 
                 n_wins, l_history = n_wins / n_test_games, l_history / n_test_games
                 yield (i, j, n_wins, l_history)
 
-def eval_by_uct(game_kwargs: dict[str, int],
-                curr_model: ADP_Player,
-                best_model: ADP_Player,
-                n_test_games: int,
-                iterations: int = 200,
-                max_depth: int = 8,
-                sim_is_random: bool = False,
-                epsilon: float = .1) -> list[tuple[bool, bool]]:
+# def eval_by_uct(game_kwargs: dict[str, int],
+#                 curr_model: ADP_Player,
+#                 best_model: ADP_Player,
+#                 n_test_games: int,
+#                 iterations: int = 200,
+#                 max_depth: int = 8,
+#                 sim_is_random: bool = False,
+#                 epsilon: float = .1) -> list[tuple[bool, bool]]:
     
-    curr_uct_model = UCT_Zero_Player(adp_model=curr_model, iterations=iterations, max_depth=max_depth, sim_is_random=sim_is_random)
-    best_uct_model = UCT_Zero_Player(adp_model=best_model, iterations=iterations, max_depth=max_depth, sim_is_random=sim_is_random)
+#     curr_uct_model = UCT_Zero_Player(adp_model=curr_model, iterations=iterations, max_depth=max_depth, sim_is_random=sim_is_random)
+#     best_uct_model = UCT_Zero_Player(adp_model=best_model, iterations=iterations, max_depth=max_depth, sim_is_random=sim_is_random)
     
-    results = []
-    for _ in tqdm(range(n_test_games), position=1, leave=False, desc="Testing"):
-        win, curr_model_starts, _ = comp_models(game_kwargs, curr_uct_model, best_uct_model, epsilon1=epsilon)
-        curr_model_won = int((win > 0) == curr_model_starts)
-        results += [(curr_model_won, curr_model_starts)]
+#     results = []
+#     for _ in tqdm(range(n_test_games), position=1, leave=False, desc="Testing"):
+#         win, curr_model_starts, _ = comp_models(game_kwargs, curr_uct_model, best_uct_model, epsilon1=epsilon)
+#         curr_model_won = int((win > 0) == curr_model_starts)
+#         results += [(curr_model_won, curr_model_starts)]
     
-    return results
+#     return results
 
 def eval_by_zero(game_kwargs: dict[str, int], 
                  curr_model: ADP_Player, 
@@ -255,26 +255,27 @@ def train_adp(
                 adp_model.nn.save_model(new_path)
             
         if eval:
-            curr_model = player(
-                model_path=new_path, 
-                game_kwargs=game_kwargs,
-                **player_args
-            )
+            pass
+            # curr_model = player(
+            #     model_path=new_path, 
+            #     game_kwargs=game_kwargs,
+            #     **player_args
+            # )
             
-            win_data = eval_by_uct(
-                game_kwargs=game_kwargs,
-                curr_model=curr_model,
-                best_model=adp_model,
-                n_test_games=eval_n_games,
-                iterations=eval_iterations,
-                sim_is_random=eval_sim_is_random,
-                max_depth=eval_max_depth,
-                epsilon=epsilon,
-            )
+            # win_data = eval_by_uct(
+            #     game_kwargs=game_kwargs,
+            #     curr_model=curr_model,
+            #     best_model=adp_model,
+            #     n_test_games=eval_n_games,
+            #     iterations=eval_iterations,
+            #     sim_is_random=eval_sim_is_random,
+            #     max_depth=eval_max_depth,
+            #     epsilon=epsilon,
+            # )
             
-            evo_strategy.select_best(
-                adp_model=adp_model, 
-                epoch=last_epoch_in_batch, 
-                new_win_data=win_data, 
-                select_best=select_best,
-            )
+            # evo_strategy.select_best(
+            #     adp_model=adp_model, 
+            #     epoch=last_epoch_in_batch, 
+            #     new_win_data=win_data, 
+            #     select_best=select_best,
+            # )

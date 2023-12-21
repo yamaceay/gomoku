@@ -1,4 +1,4 @@
-from .mcts import sortfn
+from .patterns import sortfn
 from .players import Player
 import torch
 from .gomoku import Gomoku

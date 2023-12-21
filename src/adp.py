@@ -97,7 +97,7 @@ class ADP_Dense_Player(ADP_Player):
         )
 
         
-    def extract_values(self, state: Gomoku):
+    def extract_values(self, state: Gomoku) -> tuple[dict, dict, torch.Tensor]:
         assert len(state._line_cache), "Line cache is empty"
         value_list = {len(pattern): [] for pattern in PB_DICT_5}
         affected_value_list = {len(pattern): [] for pattern in PB_DICT_5}
@@ -111,7 +111,7 @@ class ADP_Dense_Player(ADP_Player):
                         break
         return value_list, affected_value_list, None  
     
-    def extract_feature(self, values: list[str], pattern: str) -> tuple[int, int]:
+    def to_feature(self, values: list[str], pattern: str) -> tuple[int, int]:
         first_count, second_count = 0, 0
     
         pattern_o, pattern_x = pattern, Pattern.revp(pattern)
@@ -127,7 +127,7 @@ class ADP_Dense_Player(ADP_Player):
                     second_count += 1
         return [first_count, second_count]
     
-    def extract_features(self, state: Gomoku, value_list: dict, affected_value_list: dict):        
+    def patterns_to_features(self, state: Gomoku, value_list: dict, affected_value_list: dict) -> torch.Tensor:        
         counts = []
         not_occurred, occurred = [0, 0], [0, 0]
         if state.player == 1:
@@ -138,10 +138,10 @@ class ADP_Dense_Player(ADP_Player):
         
         for pattern in PB_DICT_5:
             values = value_list[len(pattern)]
-            counts += self.extract_feature(values, pattern)
+            counts += self.to_feature(values, pattern)
             
             affected_values = affected_value_list[len(pattern)]
-            affected_new_counts = self.extract_feature(affected_values, pattern)
+            affected_new_counts = self.to_feature(affected_values, pattern)
             
             occurrences += occurred if affected_new_counts[0] > 0 else not_occurred
             occurrences += occurred if affected_new_counts[1] > 0 else not_occurred
@@ -157,16 +157,22 @@ class ADP_Dense_Player(ADP_Player):
         features += [int(state.player == 1), int(state.player == -1)]
         return torch.FloatTensor(features).to(self.device)
     
-    def forward(self, state: Gomoku):
+    def extract_features(self, state: Gomoku) -> tuple[torch.Tensor, torch.Tensor]:
         if state.fin():
             reward = state.score()
-            return torch.FloatTensor([reward]).to(self.device)
+            return None, torch.FloatTensor([reward]).to(self.device)
         
         value_list, affected_value_list, end_result = self.extract_values(state)
         if end_result is not None:
-            return torch.FloatTensor([end_result]).to(self.device)
+            return None, end_result
+        
+        features = self.patterns_to_features(state, value_list, affected_value_list)
+        return features, None
     
-        features = self.extract_features(state, value_list, affected_value_list)
+    def forward(self, state: Gomoku) -> torch.Tensor:
+        features, reward = self.extract_features(state)
+        if features is None:
+            return reward
         return self.nn(features)
     
 class ADP_Pre_Player(ADP_Player):

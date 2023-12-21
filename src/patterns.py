@@ -90,28 +90,28 @@ def sortfn(items: list, key = None) -> list:
         return list(reversed(sorted(items)))
     return list(reversed(sorted(items, key=key)))
 
-def calculate_exponents(pattern: str) -> tuple[int, int]:
-    # Count the number of 'o' characters
-    basis_exp = pattern.count('o')
+# def calculate_exponents(pattern: str) -> tuple[int, int]:
+#     # Count the number of 'o' characters
+#     basis_exp = pattern.count('o')
 
-    # Find the position of the first and last 'o' or 'x' character
-    first_char = min(i if (i := pattern.find('o')) != -1 else len(pattern), 
-                     i if (i := pattern.find('x')) != -1 else len(pattern))
-    last_char = max(i if (i := pattern.rfind('o')) != -1 else -1, 
-                     i if (i := pattern.rfind('x')) != -1 else -1)
+#     # Find the position of the first and last 'o' or 'x' character
+#     first_char = min(i if (i := pattern.find('o')) != -1 else len(pattern), 
+#                      i if (i := pattern.find('x')) != -1 else len(pattern))
+#     last_char = max(i if (i := pattern.rfind('o')) != -1 else -1, 
+#                      i if (i := pattern.rfind('x')) != -1 else -1)
 
-    # Calculate decay_exp based on the number of '-' characters before the first 'o' or 'x' and after the last 'o' or 'x'
-    decay_exp = pattern[:first_char].count('-') + pattern[last_char+1:].count('-')
+#     # Calculate decay_exp based on the number of '-' characters before the first 'o' or 'x' and after the last 'o' or 'x'
+#     decay_exp = pattern[:first_char].count('-') + pattern[last_char+1:].count('-')
 
-    return basis_exp, decay_exp
+#     return basis_exp, decay_exp
 
-if __name__ == "__main__":
-    for x, y in PB_DICT_5.items():
-        fx = calculate_exponents(x)
-        if y[0] != fx[0]:
-            print(f"Input: {x}, Type: Basis, Expected: {y[0]}, Output: {fx[0]}")
-        if y[1] != fx[1]:
-            print(f"Input: {x}, Type: Decay, Expected: {y[1]}, Output: {fx[1]}")
+# if __name__ == "__main__":
+#     for x, y in PB_DICT_5.items():
+#         fx = calculate_exponents(x)
+#         if y[0] != fx[0]:
+#             print(f"Input: {x}, Type: Basis, Expected: {y[0]}, Output: {fx[0]}")
+#         if y[1] != fx[1]:
+#             print(f"Input: {x}, Type: Decay, Expected: {y[1]}, Output: {fx[1]}")
     
     # import numpy as np
     # features, labels = [], []

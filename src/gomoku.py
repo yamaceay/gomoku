@@ -190,7 +190,7 @@ class Gomoku:
             lengths = set(map(len, PB_DICT_5))
             for dx, dy in self._directions:
                 for length in sorted(lengths):
-                    for i in range(length):
+                    for i in range(1 - length, length):
                         new_x, new_y = x - i * dx, y - i * dy
                         if not (0 <= new_x < self.M and 0 <= new_y < self.N):
                             continue
@@ -200,6 +200,14 @@ class Gomoku:
                             continue
                         indices_loc, values_loc = Pattern.move_to_loc(*indices), Pattern.dir_to_loc(*values)
                         self.update_line_cache(length, position, direction, indices_loc, values_loc)
+        
+        # for length in self.get_line_cache():
+        #     for position in self.get_line_cache(length):
+        #         for direction in self.get_line_cache(length, position):
+        #             for values in self.get_line_cache(length, position, direction):
+        #                 indices, old_values = self._try_get_line(length, position, direction)
+        #                 old_values = Pattern.dir_to_loc(*old_values)
+        #                 assert old_values == values, "Line cache is corrupted at {}-{}-{}: {}, {}, {}, {}, {}".format(length, position, direction, old_values, values, self, self.last_move, Pattern.move_to_loc(*indices))
         if self.ADJ:
             for (dx, dy) in self._directions:
                 for i in range(-self.ADJ, self.ADJ + 1):
@@ -233,12 +241,13 @@ class Gomoku:
         for i in range(length):
             new_x, new_y = x + i * dx, y + i * dy
             indices += [(new_x, new_y)]
-            try:
-                if bound:
-                    return [], []
-                values += [self.board[new_x, new_y]]
-            except:
+            if 0 <= new_x < self.M and 0 <= new_y < self.N:
+                value = self.board[new_x, new_y]
+                values += [value]
+            elif not bound:
                 bound = True
+            else:
+                return [], []
         return indices, values
 
     def _is_win_line(self, position: tuple[int, int], direction: tuple[int, int]) -> bool:

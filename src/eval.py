@@ -167,6 +167,7 @@ def train_adp(
     batch_size: int,
     
     epochs_start: int = 0, 
+    checkpoint: int = 50,
     eval: bool = True, 
     train: bool = True,
     zero_play: bool = False,
@@ -250,7 +251,8 @@ def train_adp(
             
             pbar.close()
             new_path = evo_strategy.get_model_path(last_epoch_in_batch)
-            adp_model.nn.save_model(new_path)
+            if last_epoch_in_batch % checkpoint == 0:
+                adp_model.nn.save_model(new_path)
             
         if eval:
             curr_model = player(

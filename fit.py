@@ -14,6 +14,7 @@ if __name__ == "__main__":
     parser.add_argument('--START', type=int, help='Start epoch')
     parser.add_argument('--END', type=int, help='End epoch')
     parser.add_argument('--STEP', type=int, help='Epoch step')
+    parser.add_argument('--CHECKPOINT', type=int, default=50, help='Checkpoint epoch')
     parser.add_argument('--NO_EVAL', action='store_true', help='Evaluate or not')
     parser.add_argument('--NO_TRAIN', action='store_true', help='Train or not')
     
@@ -90,6 +91,7 @@ if __name__ == "__main__":
         epochs_step=args.STEP,
         eval=not args.NO_EVAL,
         train=not args.NO_TRAIN,
+        checkpoint=args.CHECKPOINT,
         
         batch_size=args.BATCH_SIZE,
         zero_play=args.ZERO_PLAY,

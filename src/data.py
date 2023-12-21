@@ -63,7 +63,7 @@ def collect_play_data(
                   disable=True):
         
         new_game, _ = play_until_end(game, **round_kwargs)
-        for feature in game.history_str_aug():
+        for feature in new_game.history_str_aug():
             label = new_game.score()
             play_data += [(feature, label)]
     

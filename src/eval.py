@@ -62,14 +62,15 @@ def tournament(game_kwargs, models: list[tuple[Player, float] | Player], n_test_
                     
                     model_i = models[i]
                     if isinstance(model_i, tuple) and len(model_i) == 2:
-                        model_i, epsilon_i = models[i]
+                        model_i, epsilon_i = model_i
                         player_kwargs["epsilon1"] = epsilon_i
                     
                     model_j = models[j]
                     if isinstance(model_j, tuple) and len(model_j) == 2:
-                        model_j, epsilon_j = models[j]
+                        model_j, epsilon_j = model_j
                         player_kwargs["epsilon2"] = epsilon_j
                     
+                    assert isinstance(model_i, Player)
                     win, starts, len_history = comp_models(
                         game_kwargs, 
                         models[i], 

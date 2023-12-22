@@ -42,7 +42,7 @@ def comp_models(game_kwargs: dict[str, int],
     
     return game.score(), learner_starts, len(game.history())
 
-def tournament(game_kwargs, models: list[Player], n_test_games: int, start_ind: int = 0) -> list[tuple[int, int, int, int]]:
+def tournament(game_kwargs, models: list[tuple[Player, float] | Player], n_test_games: int, start_ind: int = 0) -> list[tuple[int, int, int, int]]:
     total_ind = 0
     with tqdm(
         total=n_test_games * len(models) * (len(models) - 1) // 2, 
@@ -58,7 +58,24 @@ def tournament(game_kwargs, models: list[Player], n_test_games: int, start_ind: 
                     continue
                 n_wins, l_history = 0, 0
                 for _ in range(n_test_games):
-                    win, starts, len_history = comp_models(game_kwargs, models[i], models[j])
+                    player_kwargs = {}
+                    
+                    model_i = models[i]
+                    if isinstance(model_i, tuple) and len(model_i) == 2:
+                        model_i, epsilon_i = models[i]
+                        player_kwargs["epsilon1"] = epsilon_i
+                    
+                    model_j = models[j]
+                    if isinstance(model_j, tuple) and len(model_j) == 2:
+                        model_j, epsilon_j = models[j]
+                        player_kwargs["epsilon2"] = epsilon_j
+                    
+                    win, starts, len_history = comp_models(
+                        game_kwargs, 
+                        models[i], 
+                        models[j], 
+                        **player_kwargs)
+                    
                     n_wins += (win > 0) == starts
                     l_history += len_history
                     bar.update(1)

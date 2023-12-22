@@ -47,14 +47,23 @@ class Tree(object):
                  max_depth: int = 1000,
                  gamma: float = 1.0,
                  value_fn: ADP_Player = None,
+                 play_random: bool = True,
+                 play_epsilon: float = 0.0,
                  ):
+        
         self.root = Node()
-        self.value_fn = value_fn
         self.prior_fn = prior_fn
         self.policy_kwargs = policy_kwargs
         self.iterations = iterations
-        self.max_depth = max_depth
         self.gamma = gamma
+        
+        self.value_fn = value_fn
+        self.max_depth = max_depth
+        self.play_random = play_random
+        self.play_epsilon = play_epsilon
+        
+        if not self.play_random:
+            assert self.value_fn is not None, "Must provide value_fn if not playing random"
 
     def iterate(self, state: Gomoku):
         node = self.root
@@ -73,8 +82,9 @@ class Tree(object):
         for _ in range(self.max_depth):
             if state.fin():
                 break
-            actions = state.actions()
-            action = actions[0]
+            action = state.actions()[0]
+            if not self.play_random:
+                action = self.value_fn.next_move(state, self.play_epsilon)
             state.play(action)
         
         score = state.score()
@@ -106,6 +116,8 @@ class UCT_Player(Player):
                  iterations: int = 2000, 
                  max_depth: int = 1000,
                  value_fn: ADP_Player = None,
+                 play_random: bool = True,
+                 play_epsilon: float = 0.0,
                  ):
         self.tree = Tree(
             value_fn=value_fn,
@@ -113,6 +125,8 @@ class UCT_Player(Player):
             policy_kwargs=policy_kwargs, 
             iterations=iterations,
             max_depth=max_depth,
+            play_random=play_random,
+            play_epsilon=play_epsilon,
         )
         self.history = []
 
@@ -152,9 +166,9 @@ if __name__ == '__main__':
     adp = ADP_Conv_Player(game_kwargs=game_kwargs)
     
     uct = UCT_Player(
-        value_fn=adp,
-        policy_kwargs={'C': 5}, 
         iterations=5000,
+        policy_kwargs={'C': 5},
+        value_fn=adp,
     )
     
     while not game.fin():

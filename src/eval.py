@@ -247,7 +247,7 @@ def train_adp(
                 
                 logger.info(f"Epoch: {epoch} to {epoch+epochs_step}, Batch: {completed_ratio * 100 :.2f}%, Mean Reward: {mean_reward:.2f}, MSE: {loss:.5f}, LR: {lr:.5f}")
             
-                scheduler.step()
+            scheduler.step()
             
             pbar.close()
             new_path = evo_strategy.get_model_path(last_epoch_in_batch)

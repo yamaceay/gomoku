@@ -137,7 +137,7 @@ class UCT_Player(Player):
         return move_probs
 
 if __name__ == '__main__':    
-    from .adp import ADP_Dense_Player
+    from .adp import ADP_Conv_Player
     game_kwargs = {
         "M": 8,
         "N": 8,
@@ -147,7 +147,7 @@ if __name__ == '__main__':
     game = Gomoku(**game_kwargs)
     game.set_play_only()
     
-    adp = ADP_Dense_Player(game_kwargs=game_kwargs)
+    adp = ADP_Conv_Player(game_kwargs=game_kwargs)
     
     uct = UCT_Player(
         value_fn=adp,
@@ -159,18 +159,3 @@ if __name__ == '__main__':
         action = uct.next_move(game)
         game.play(action)
         print(game)
-        # uct.set_player_ind(game.current_player)
-        # end, winner = game.game_end()
-        # if end:
-        #     print(winner)
-        #     break
-        # print(uct)
-        # game.move(action)
-        # game_copy.play(tuple(game.move_to_location(action)))
-        # print(game_copy)
-    
-    # game = Gomoku(**game_kwargs)
-    # while not game.fin():
-    #     action = uct.next_move(game)
-    #     game.play(action)
-    #     print(game)

@@ -70,11 +70,10 @@ def tournament(game_kwargs, models: list[tuple[Player, float] | Player], n_test_
                         model_j, epsilon_j = model_j
                         player_kwargs["epsilon2"] = epsilon_j
                     
-                    assert isinstance(model_i, Player)
                     win, starts, len_history = comp_models(
                         game_kwargs, 
-                        models[i], 
-                        models[j], 
+                        model_i, 
+                        model_j, 
                         **player_kwargs)
                     
                     n_wins += (win > 0) == starts

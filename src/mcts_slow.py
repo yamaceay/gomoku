@@ -1,6 +1,6 @@
 # from typing import Callable
 # import numpy as np
-# from .patterns import PB_DICT_5, sortfn, pb_heuristic
+# from .patterns import PB_DICT_5, sortfn, pb_heuristic, Pattern
 # from .gomoku import Gomoku
 # from .players import Player, RandomPlayer
 
@@ -32,18 +32,6 @@
 #     exploitation = child.Q / child.n
 #     exploration = np.sqrt(2 * np.log(parent.n) / child.n)
 #     return exploitation + C * exploration   
-
-# def pb_fn(game: Gomoku) -> float:
-#     pb_curr = game.find_patterns()
-    
-#     pb_value = 0
-#     for pattern in pb_curr:
-#         pattern_score = pb_heuristic(PB_DICT_5[pattern])
-#         [curr_x, curr_o] = pb_curr.get(pattern, [0, 0])
-#         pb_value += (curr_x - curr_o) * pattern_score
-    
-#     pb_value *= -game.player
-#     return pb_value
 
 # def pb_score(parent: Node, child: Node) -> float:
 #     move = child.state.last_move

@@ -41,12 +41,12 @@ class Node(object):
 
 class Tree(object):
     def __init__(self, 
-                 value_fn: ADP_Player,
                  prior_fn: Callable, 
                  iterations: int = 10000, 
                  policy_kwargs: dict = {}, 
                  max_depth: int = 1000,
                  gamma: float = 1.0,
+                 value_fn: ADP_Player = None,
                  ):
         self.root = Node()
         self.value_fn = value_fn
@@ -77,8 +77,10 @@ class Tree(object):
             action = actions[0]
             state.play(action)
         
-        score = self.value_fn(state)
-        score = score.cpu().detach().item()
+        score = state.score()
+        if self.value_fn is not None:
+            score = self.value_fn(state)
+            score = score.cpu().detach().item()
         score *= player
         return score
     
@@ -99,11 +101,11 @@ class Tree(object):
 
 class UCT_Player(Player):
     def __init__(self, 
-                 value_fn: ADP_Player,
                  prior_fn: Callable = uniform_prior, 
                  policy_kwargs: dict = {}, 
                  iterations: int = 2000, 
-                 max_depth: int = 1000
+                 max_depth: int = 1000,
+                 value_fn: ADP_Player = None,
                  ):
         self.tree = Tree(
             value_fn=value_fn,

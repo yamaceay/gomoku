@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import copy
-from .patterns import PB_DICT_5, Pattern
+from .patterns import PB_DICT_5, Pattern, pb_heuristic
 
 class Gomoku:
     def __init__(self, M: int, N: int, K: int, ADJ: int = 0):
@@ -97,36 +97,6 @@ class Gomoku:
             for transformation in self._transformations
         ]
     
-    def find_patterns(self, move: tuple[int, int] = None) -> float:
-        value_list = {len(pattern): [] for pattern in PB_DICT_5}
-        for length in self.get_line_cache():
-            moves = [move] if move is not None else self.get_line_cache(length)
-            for move in moves:
-                for direction in self.get_line_cache(length, move):
-                    for values in self.get_line_cache(length, move, direction):
-                        value_list[length] += [values]
-                        break
-        
-        score_list = {}
-        for pattern in PB_DICT_5:
-            pattern_o = pattern
-            pattern_x = Pattern.revp(pattern_o)
-            for value in value_list[len(pattern)]:
-                len_diff = len(pattern) - len(value)
-                assert 0 <= len_diff <= 1, "Length difference of pattern vs. line: {}".format(len_diff)
-                add_bound = len_diff > 0
-                if value == pattern_x[:len(value)]:
-                    if not add_bound or pattern_x[len(value)] == 'o':
-                        if pattern not in score_list:
-                            score_list[pattern] = [0, 0]
-                        score_list[pattern][0] += 1
-                if value == pattern_o[:len(value)]:
-                    if not add_bound or pattern_o[len(value)] == 'x':
-                        if pattern not in score_list:
-                            score_list[pattern] = [0, 0]
-                        score_list[pattern][1] += 1
-        return score_list
-    
     def to_zero_input(self) -> np.ndarray:
         size = (self.M, self.N)
         states = np.zeros((4, *size), dtype=np.float32)
@@ -171,7 +141,6 @@ class Gomoku:
                 assert direction_loc in self._line_cache[length][position_loc], "Direction {} not in line cache".format(direction_loc)
                 _, values_loc = self._line_cache[length][position_loc][direction_loc]
                 yield values_loc
-                return
         
     def _move_forward(self, move: tuple[int, int], rot: bool = False, lrf: bool = False, udf: bool = False) -> tuple[int, int]:
         x, y = move
@@ -210,6 +179,7 @@ class Gomoku:
         #                 indices, old_values = self._try_get_line(length, position, direction)
         #                 old_values = Pattern.dir_to_loc(*old_values)
         #                 assert old_values == values, "Line cache is corrupted at {}-{}-{}: {}, {}, {}, {}, {}".format(length, position, direction, old_values, values, self, self.last_move, Pattern.move_to_loc(*indices))
+        
         if self.ADJ:
             for (dx, dy) in self._directions:
                 for i in range(-self.ADJ, self.ADJ + 1):
@@ -294,3 +264,46 @@ class Gomoku:
             output += " ".join(row) + "\n"
             
         return output
+    
+def find_patterns(game: Gomoku, position: tuple[int, int] = None) -> float:
+    value_list = {len(pattern): [] for pattern in PB_DICT_5}
+    for length in game.get_line_cache():
+        for move in game.get_line_cache(length):
+            if position is not None and move != position:
+                continue
+            for direction in game.get_line_cache(length, move):
+                for values in game.get_line_cache(length, move, direction):
+                    value_list[length] += [values]
+                    break
+    
+    score_list = {}
+    for pattern in PB_DICT_5:
+        pattern_o = pattern
+        pattern_x = Pattern.revp(pattern_o)
+        for value in value_list[len(pattern)]:
+            len_diff = len(pattern) - len(value)
+            assert 0 <= len_diff <= 1, "Length difference of pattern vs. line: {}".format(len_diff)
+            add_bound = len_diff > 0
+            if value == pattern_x[:len(value)]:
+                if not add_bound or pattern_x[len(value)] == 'o':
+                    if pattern not in score_list:
+                        score_list[pattern] = [0, 0]
+                    score_list[pattern][0] += 1
+            if value == pattern_o[:len(value)]:
+                if not add_bound or pattern_o[len(value)] == 'x':
+                    if pattern not in score_list:
+                        score_list[pattern] = [0, 0]
+                    score_list[pattern][1] += 1
+    return score_list
+
+def pb_fn(game: Gomoku) -> float:
+    pb_curr = find_patterns(game)
+    
+    pb_value = 0
+    for pattern in pb_curr:
+        pattern_score = pb_heuristic(PB_DICT_5[pattern])
+        [curr_x, curr_o] = pb_curr.get(pattern, [0, 0])
+        pb_value += (curr_x - curr_o) * pattern_score
+    
+    pb_value *= -game.player
+    return pb_value

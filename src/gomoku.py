@@ -87,6 +87,8 @@ class Gomoku:
         return list(map(transform_fn, moves))
     
     def history_str(self, *args, **kwargs) -> str:
+        if not len(self._history):
+            return ""
         return Pattern.move_to_loc(*self.history(*args, **kwargs))
     
     def history_str_aug(self) -> list[str]:

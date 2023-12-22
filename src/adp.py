@@ -32,7 +32,7 @@ class ADP_Player(Player):
             state_new.play(action)
             value = self(state_new).cpu().detach().item()
             rewards_actions.append((value, action))
-        return sortfn(rewards_actions, key=lambda x: x[0])
+        return sortfn(rewards_actions)
     
     def __call__(self, state: Gomoku) -> torch.Tensor:
         return self.forward(state)

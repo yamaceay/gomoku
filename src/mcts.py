@@ -1,47 +1,38 @@
 import numpy as np
-import copy
 from .gomoku import Gomoku
 from typing import Callable
+from .adp import ADP_Player
+from .players import Player
+from .patterns import sortfn, Pattern
 
-def prior_fn(board: Gomoku):
-    actions = board.actions()
-    action_probs = np.ones(len(actions))/len(actions)
-    return zip(actions, action_probs)
+def uniform_prior(state: Gomoku):
+    actions = state.actions()
+    probs = np.ones(len(actions))/len(actions)
+    return zip(probs, actions)
 
 class Node(object):
-    def __init__(self, parent, p: float = 1.0, gamma: float = 1.0):
+    def __init__(self, parent = None, p: float = 1.0):
         self.parent = parent
         self.children = {}
         self.n = 0
         self.Q = 0
         self.p = p
-        
-        self.gamma = gamma
 
-    def expand(self, action_priors):
-        for action, prob in action_priors:
+    def expand(self, probs_actions: list[tuple[float, tuple[int, int]]]):
+        for prob, action in probs_actions:
             if action not in self.children:
                 self.children[action] = Node(self, prob)
 
     def select(self, C: float = 5):
         return max(self.children.items(),
-                   key=lambda act_node: act_node[1].get_value(C))
+                   key=lambda act_node: act_node[1].ucb_score(C))
 
-    def update(self, reward):
-        self.n += 1
-        self.Q += self.gamma * (reward - self.Q) / self.n
-
-    def update_recursive(self, reward):
-        if self.parent:
-            self.parent.update_recursive(-reward)
-        self.update(reward)
-
-    def get_value(self, C: float = 5):
+    def ucb_score(self, C: float = 5):
         exploitation_term = self.Q
         exploration_term = self.p * np.sqrt(self.parent.n) / (1 + self.n)
         return exploitation_term + C * exploration_term
 
-    def is_leaf(self):
+    def is_terminal(self):
         return self.children == {}
 
     def is_root(self):
@@ -49,70 +40,104 @@ class Node(object):
 
 
 class Tree(object):
-    def __init__(self, prior_fn: Callable, iterations: int = 10000, policy_kwargs: dict = {}, depth: int = 1000):
-        self.root = Node(None, 1.0)
+    def __init__(self, 
+                 value_fn: ADP_Player,
+                 prior_fn: Callable, 
+                 iterations: int = 10000, 
+                 policy_kwargs: dict = {}, 
+                 max_depth: int = 1000,
+                 gamma: float = 1.0,
+                 ):
+        self.root = Node()
+        self.value_fn = value_fn
         self.prior_fn = prior_fn
         self.policy_kwargs = policy_kwargs
         self.iterations = iterations
-        self.depth = depth
+        self.max_depth = max_depth
+        self.gamma = gamma
 
-    def _playout(self, state: Gomoku):
+    def iterate(self, state: Gomoku):
         node = self.root
-        while not node.is_leaf():
+        while not node.is_terminal():
             action, node = node.select(**self.policy_kwargs)
             state.play(action)
 
-        action_probs = self.prior_fn(state)
+        probs_actions = self.prior_fn(state)
         if not state.fin():
-            node.expand(action_probs)
-        reward = self._evaluate_rollout(state)
-        node.update_recursive(-reward)
+            node.expand(probs_actions)
+        reward = self.rollout(state)
+        self.backpropagate(node, -reward)
 
-    def _evaluate_rollout(self, state: Gomoku):
+    def rollout(self, state: Gomoku):
         player = state.player
-        for i in range(self.depth):
+        for _ in range(self.max_depth):
             if state.fin():
                 break
             actions = state.actions()
             action = actions[0]
             state.play(action)
-        else:
-            print("WARNING: rollout reached move limit")
-        return state.score() * player
+        
+        score = self.value_fn(state)
+        score = score.cpu().detach().item()
+        score *= player
+        return score
+    
+    def backpropagate(self, node: Node, reward: float):
+        while node is not None:
+            node.n += 1
+            node.Q += self.gamma * (reward - node.Q) / node.n
+            reward = -reward
+            node = node.parent
 
-    def get_move(self, state: Gomoku):
-        for n in range(self.iterations):
-            state_copy = copy.deepcopy(state)
-            self._playout(state_copy)
-        return max(self.root.children.items(),
-                   key=lambda act_node: act_node[1].n)[0]
+    def get_move_probs(self, state: Gomoku):
+        for _ in range(self.iterations):
+            self.iterate(state.copy())
+        actions, probs = zip(*[(act, node.n) for act, node in self.root.children.items()])
+        probs = np.exp(probs - np.max(probs))
+        probs /= np.sum(probs)
+        return sortfn(zip(probs, actions))
 
-    def update_with_move(self, last_move):
-        if last_move in self.root.children:
-            self.root = self.root.children[last_move]
-            self.root.parent = None
-        else:
-            self.root = Node(None, 1.0)
-
-
-class UCT_Player(object):
-    def __init__(self, prior_fn: Callable, policy_kwargs: dict = {}, iterations: int = 2000, depth: int = 1000):
-        self.mcts = Tree(
+class UCT_Player(Player):
+    def __init__(self, 
+                 value_fn: ADP_Player,
+                 prior_fn: Callable = uniform_prior, 
+                 policy_kwargs: dict = {}, 
+                 iterations: int = 2000, 
+                 max_depth: int = 1000
+                 ):
+        self.tree = Tree(
+            value_fn=value_fn,
             prior_fn=prior_fn, 
             policy_kwargs=policy_kwargs, 
             iterations=iterations,
-            depth=depth,
+            max_depth=max_depth,
         )
+        self.history = []
 
-    def next_move(self, board: Gomoku):
-        if not board.fin():
-            move = self.mcts.get_move(board)
-            self.mcts.update_with_move(-1)
-            return move
-        else:
-            print("WARNING: the board is full")
+    def update_history(self, state: Gomoku) -> bool:
+        prev_history = self.history
+        self.history = state.history()
+        if len(self.history) > len(prev_history):
+            for h1, h2 in zip(prev_history, self.history):
+                if h1 != h2:
+                    self.tree.root = Node()
+                    return False
+            rest_history = self.history[len(prev_history):]
+            for move in rest_history:
+                if move not in self.tree.root.children:
+                    self.tree.root = Node()
+                    return False
+                self.tree.root = self.tree.root.children[move]
+                self.tree.root.parent = None
+        return True
+
+    def next_move_probs(self, state: Gomoku):
+        self.update_history(state)
+        move_probs = self.tree.get_move_probs(state)
+        return move_probs
 
 if __name__ == '__main__':    
+    from .adp import ADP_Dense_Player
     game_kwargs = {
         "M": 8,
         "N": 8,
@@ -122,8 +147,10 @@ if __name__ == '__main__':
     game = Gomoku(**game_kwargs)
     game.set_play_only()
     
+    adp = ADP_Dense_Player(game_kwargs=game_kwargs)
+    
     uct = UCT_Player(
-        prior_fn=prior_fn,
+        value_fn=adp,
         policy_kwargs={'C': 5}, 
         iterations=5000,
     )

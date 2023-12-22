@@ -34,5 +34,5 @@ class RandomPlayer(Player):
         probs = np.random.random(len(moves))
         probs /= probs.sum()
         rewards_actions = [(probs[i], moves[i]) for i in range(len(moves))]
-        rewards_actions = sortfn(rewards_actions, lambda x: x[0])
+        rewards_actions = sortfn(rewards_actions)
         return rewards_actions

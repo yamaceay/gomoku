@@ -1,9 +1,7 @@
-from typing import Callable
-import random
-
-from .players import Player, RandomPlayer
+import numpy as np
+from .players import Player
 from .gomoku import Gomoku
-from .mcts import Node, Tree, UCT_Player
+from .mcts import UCT_Player
 from .patterns import sortfn
 from .adp import ADP_Player
 
@@ -19,15 +17,26 @@ class UCT_Tang_Player(Player):
         self.C_ADP = C_ADP
         
     def next_move_probs(self, game: Gomoku):
-        adp_probs = self.adp.next_move_probs(game)
-        total_probs = []
-        for adp_prob, action in adp_probs[:self.k]:
+        adp_probs, actions = zip(*self.adp.next_move_probs(game))
+        actions = actions[:self.k]
+        
+        mcts_probs = []
+        for action in actions:
             game_copy = game.copy()
             game_copy.play(action)
-            self.uct.rewards_actions(game_copy)
-            uct_root = self.uct.tree.root
-            mcts_prob = uct_root.Q / uct_root.n
-            total_probs += [mcts_prob + self.C_ADP * adp_prob]
+            uct = self.uct.copy()
+            uct.next_move_probs(game_copy)
+            mcts_probs += [uct.tree.root.n]
+        
+        mcts_probs = np.array(mcts_probs)
+        mcts_probs = np.exp(mcts_probs - np.max(mcts_probs))
+        mcts_probs /= np.sum(mcts_probs)
+        
+        total_probs = [
+            (mcts_probs[i] + self.C_ADP * adp_probs[i], actions[i])
+            for i in range(self.k)
+        ]
+        
         return sortfn(total_probs)
     
 # class UCT_Zero_Player(Player):

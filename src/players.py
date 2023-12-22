@@ -1,9 +1,13 @@
+import copy
 from .gomoku import Gomoku
 from .patterns import sortfn
 import numpy as np
 
 
 class Player:
+    def copy(self):
+        return copy.deepcopy(self)
+    
     def rewards_actions(self, _: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         raise NotImplementedError
     

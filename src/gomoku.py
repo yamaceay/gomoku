@@ -98,8 +98,7 @@ class Gomoku:
         ]
     
     def to_zero_input(self) -> np.ndarray:
-        size = (self.M, self.N)
-        states = np.zeros((4, *size), dtype=np.float32)
+        states = np.zeros((4, self.M, self.N), dtype=np.float32)
         states[0] = np.asarray(self.board == 1, dtype=np.float32)
         states[1] = np.asarray(self.board == -1, dtype=np.float32)
         if self.last_move is not None:

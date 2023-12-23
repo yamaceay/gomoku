@@ -147,13 +147,16 @@ class UCT_Player(Player):
         move_probs = self.tree.get_move_probs(state, temp=self.temp)
         return move_probs
     
-    def next_move(self, state: Gomoku, epsilon: float = .0) -> tuple[int, int]:
+    def next_move(self, state: Gomoku, epsilon: float = .0, probs: bool = False) -> tuple[int, int] | list[tuple[float, tuple[int, int]]]:
         probs_actions = self.next_move_probs(state)
         probs, actions = zip(*probs_actions)
         if epsilon != .0:
             probs += epsilon * (self.noise(len(probs)) - probs)
         action_i = np.random.choice(list(range(len(actions))), p=probs)
-        return actions[action_i]
+        action = actions[action_i]
+        if probs:
+            return action, zip(probs, actions)
+        return action
 
 if __name__ == '__main__':    
     game_kwargs = {

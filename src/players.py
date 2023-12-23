@@ -22,7 +22,7 @@ class Player:
         probs /= probs.sum()
         return list(zip(probs, actions))
     
-    def next_move(self, game: Gomoku, epsilon: float = 0.) -> tuple[int, int]:
+    def next_move(self, game: Gomoku, epsilon: float = 0., probs: bool = False) -> tuple[int, int] | list[tuple[float, tuple[int, int]]]:
         probs_actions = self.next_move_probs(game)
         # print([f"{a}: {p:.2f}" for p, a in probs_actions])
         if np.random.random() >= epsilon:
@@ -30,7 +30,10 @@ class Player:
         
         probs, actions = zip(*probs_actions)
         action_i = np.random.choice(len(actions), p=probs)
-        return actions[action_i]
+        action = actions[action_i]
+        if probs: 
+            return action, probs_actions
+        return action
 
 class RandomPlayer(Player):
     def rewards_actions(self, game: Gomoku) -> list[tuple[float, tuple[int, int]]]:

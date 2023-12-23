@@ -51,6 +51,7 @@ class Tree(object):
                  policy_kwargs: dict = {}, 
                  max_depth: int = 1000,
                  gamma: float = 1.0,
+                 noise: Callable = lambda x: np.random.dirichlet([.03] * x),
                  ):
         
         self.root = Node()
@@ -61,6 +62,7 @@ class Tree(object):
         self.prior_fn = prior_fn
         self.policy_value_fn = policy_value_fn
         self.max_depth = max_depth
+        self.noise = noise
 
     def iterate(self, state: Gomoku):
         node = self.root
@@ -101,8 +103,7 @@ class Tree(object):
             self.iterate(state.copy())
         actions, probs = zip(*[(act, node.n) for act, node in self.root.children.items()])
         if temp != 0:
-            noise = np.random.dirichlet([0.03] * len(probs))
-            probs += temp * (noise - probs)
+            probs += temp * (self.noise(len(probs)) - probs)
         probs = softmax(probs)
         return sortfn(zip(probs, actions))
 
@@ -115,13 +116,17 @@ class UCT_Player(Player):
                  max_depth: int = 1000,
                  temp: float = .001,
                  ):
+        
+        self.noise = lambda x: np.random.dirichlet(0.3*np.ones(x))
         self.tree = Tree(
             policy_value_fn=policy_value_fn,
             prior_fn=prior_fn, 
             policy_kwargs=policy_kwargs, 
             iterations=iterations,
             max_depth=max_depth,
+            noise=self.noise,
         )
+        
         self.temp = temp
         self.history = []
 
@@ -142,10 +147,19 @@ class UCT_Player(Player):
                 self.tree.root.parent = None
         return True
 
-    def next_move_probs(self, state: Gomoku):
+    def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         self.update_history(state)
         move_probs = self.tree.get_move_probs(state, temp=self.temp)
         return move_probs
+    
+    def next_move(self, state: Gomoku, epsilon: float = .0) -> tuple[int, int]:
+        probs_actions = self.next_move_probs(state)
+        probs, actions = zip(*probs_actions)
+        if epsilon != .0:
+            probs += epsilon * (self.noise(len(probs)) - probs)
+        print(probs, actions)
+        action_i = np.random.choice(list(range(len(actions))), p=probs)
+        return actions[action_i]
 
 if __name__ == '__main__':    
     game_kwargs = {
@@ -160,7 +174,6 @@ if __name__ == '__main__':
     uct = UCT_Player(
         iterations=5000,
         policy_kwargs={'C': 5},
-        temp=1.0,
     )
     
     while not game.fin():

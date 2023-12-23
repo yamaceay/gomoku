@@ -4,7 +4,9 @@ import numpy as np
 from collections import defaultdict, deque
 from .game import Board, Game
 from .mcts import UCT_Player
-from .policy_value_net_pytorch import PolicyValueNet
+from .policy_value_net import PolicyValueNet
+from .data import collect_self_play_data_zero, extend_play_data, play_until_end
+from .gomoku import Gomoku
 
 class TrainPipeline():
     def __init__(self, 
@@ -34,7 +36,6 @@ class TrainPipeline():
         self.board = Board(M=self.M,
                            N=self.N,
                            K=self.K)
-        self.game: Game = Game(self.board)
         # training params
         self.lr = lr
         self.lr_multiplier = lr_multiplier  # adaptively adjust the learning rate based on KL
@@ -63,37 +64,13 @@ class TrainPipeline():
                                       policy_kwargs={'C': 5},
                                       iterations=self.n_playout)
 
-    def get_equi_data(self, play_data):
-        """augment the data set by rotation and flipping
-        play_data: [(state, mcts_prob, winner_z), ..., ...]
-        """
-        extend_data = []
-        for state, mcts_prob, winner in play_data:
-            for i in [1, 2, 3, 4]:
-                # rotate counterclockwise
-                equi_state = np.array([np.rot90(s, i) for s in state])
-                equi_mcts_prob = np.rot90(np.flipud(
-                    mcts_prob.reshape(self.N, self.M)), i)
-                extend_data.append((equi_state,
-                                    np.flipud(equi_mcts_prob).flatten(),
-                                    winner))
-                # flip horizontally
-                equi_state = np.array([np.fliplr(s) for s in equi_state])
-                equi_mcts_prob = np.fliplr(equi_mcts_prob)
-                extend_data.append((equi_state,
-                                    np.flipud(equi_mcts_prob).flatten(),
-                                    winner))
-        return extend_data
-
     def collect_selfplay_data(self, n_games=1):
         """collect self-play data for training"""
+        game = Gomoku(M=self.M, N=self.N, K=self.K)
         for i in range(n_games):
-            winner, play_data = self.game.start_self_play(self.mcts_player,
-                                                          temp=self.epsilon)
-            play_data = list(play_data)[:]
+            play_data = collect_self_play_data_zero(game, 1, self.mcts_player, self.epsilon)
+            play_data = extend_play_data(play_data)
             self.episode_len = len(play_data)
-            # augment the data
-            play_data = self.get_equi_data(play_data)
             self.data_buffer.extend(play_data)
 
     def policy_update(self):
@@ -153,16 +130,21 @@ class TrainPipeline():
         pure_mcts_player = UCT_Player(policy_kwargs={'C': 5},
                                      iterations=self.pure_mcts_playout_num)
         win_cnt = defaultdict(int)
+        game = Gomoku(M=self.M, N=self.N, K=self.K)
+        avg_curr_starts = .0
         for i in range(n_games):
-            winner = self.game.start_play(current_mcts_player,
-                                          pure_mcts_player,
-                                          start_player=i % 2,
-                                          is_shown=0)
+            end_game, curr_starts = play_until_end(
+                game, 
+                current_mcts_player, 
+                pure_mcts_player)
+            winner = end_game.score()
             win_cnt[winner] += 1
+            avg_curr_starts += curr_starts
         win_ratio = 1.0*(win_cnt[1] + 0.5*win_cnt[-1]) / n_games
-        print("num_playouts:{}, win: {}, lose: {}, tie:{}".format(
+        avg_curr_starts /= n_games
+        print("num_playouts: {}, win: {}, lose: {}, tie: {}, first_player: {}".format(
                 self.pure_mcts_playout_num,
-                win_cnt[1], win_cnt[2], win_cnt[-1]))
+                win_cnt[1], win_cnt[-1], win_cnt[0], avg_curr_starts))
         return win_ratio
 
     def run(self):

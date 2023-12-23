@@ -3,6 +3,7 @@ from .gomoku import Gomoku
 from typing import Callable
 from .players import Player
 from .patterns import sortfn
+from operator import itemgetter
 
 def uniform_prior(state: Gomoku):
     actions = state.actions()
@@ -85,7 +86,6 @@ class Tree(object):
         while not state.fin():
             action = state.actions()[0]
             state.play(action)
-        
         return state.score() * player
     
     def backpropagate(self, node: Node, reward: float):
@@ -95,14 +95,21 @@ class Tree(object):
             reward = -reward
             node = node.parent
 
-    def get_move_probs(self, state: Gomoku, temp: float = .001):
+    def get_move_probs(self, 
+                       state: Gomoku, 
+                       temp: float = .001, 
+                       sort_key: Callable = itemgetter(0),
+                       ) -> list[tuple[float, tuple[int, int]]]:
         for _ in range(self.iterations):
             self.iterate(state.copy())
+        
         actions, probs = zip(*[(act, node.n) for act, node in self.root.children.items()])
+            
         if temp != 0:
             probs += temp * (self.noise(len(probs)) - probs)
         probs = softmax(probs)
-        return sortfn(zip(probs, actions))
+        
+        return sortfn(zip(probs, actions), key=sort_key)
 
 class UCT_Player(Player):
     def __init__(self, 
@@ -147,33 +154,27 @@ class UCT_Player(Player):
         move_probs = self.tree.get_move_probs(state, temp=self.temp)
         return move_probs
     
-    def next_move(self, state: Gomoku, epsilon: float = .0, probs: bool = False) -> tuple[int, int] | list[tuple[float, tuple[int, int]]]:
+    def next_move(self, state: Gomoku, epsilon: float = .0, get_probs: bool = False) -> tuple[int, int] | list[tuple[float, tuple[int, int]]]:
         probs_actions = self.next_move_probs(state)
         probs, actions = zip(*probs_actions)
         if epsilon != .0:
             probs += epsilon * (self.noise(len(probs)) - probs)
         action_i = np.random.choice(list(range(len(actions))), p=probs)
         action = actions[action_i]
-        if probs:
+        if get_probs:
             return action, zip(probs, actions)
         return action
-
-if __name__ == '__main__':    
-    game_kwargs = {
-        "M": 8,
-        "N": 8,
-        "K": 5,
-    }
     
-    game = Gomoku(**game_kwargs)
-    game.set_play_only()
-    
-    uct = UCT_Player(
-        iterations=5000,
-        policy_kwargs={'C': 5},
-    )
-    
-    while not game.fin():
-        action = uct.next_move(game)
-        game.play(action)
-        print(game)
+    def next_move_data(self, state: Gomoku, epsilon: float = .0) -> tuple[int, int, list[tuple[float, tuple[int, int]]]]:
+        self.update_history(state)
+        probs_actions = self.tree.get_move_probs(state, temp=self.temp, sort_key=itemgetter(1))
+        probs, actions = zip(*probs_actions)
+        if epsilon != .0:
+            probs += epsilon * (self.noise(len(probs)) - probs)
+        action_i = np.random.choice(list(range(len(actions))), p=probs)
+        action = actions[action_i]
+        
+        probs_dict = {(x, y): .0 for x in range(state.M) for y in range(state.N)}
+        probs_dict.update(dict(zip(actions, probs)))
+        probs = np.array([probs_dict[(x, y)] for x in range(state.M) for y in range(state.N)])
+        return action, probs

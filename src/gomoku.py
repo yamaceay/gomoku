@@ -140,6 +140,14 @@ class Gomoku:
                 assert direction_loc in self._line_cache[length][position_loc], "Direction {} not in line cache".format(direction_loc)
                 _, values_loc = self._line_cache[length][position_loc][direction_loc]
                 yield values_loc
+       
+    @staticmethod
+    def move_to_idx(self, move: tuple[int, int]) -> int:
+        return move[0] * self.N + move[1]
+    
+    @staticmethod
+    def idx_to_move(self, idx: int) -> tuple[int, int]:
+        return idx // self.N, idx % self.N
         
     def _move_forward(self, move: tuple[int, int], rot: bool = False, lrf: bool = False, udf: bool = False) -> tuple[int, int]:
         x, y = move

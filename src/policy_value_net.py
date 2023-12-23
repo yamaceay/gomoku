@@ -12,6 +12,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from torch.autograd import Variable
 import numpy as np
+from .patterns import sortfn
 
 
 def set_learning_rate(optimizer, lr):
@@ -93,14 +94,14 @@ class PolicyValueNet():
             act_probs = np.exp(log_act_probs.data.numpy())
             return act_probs, value.data.numpy()
 
-    def policy_value_fn(self, board):
+    def policy_value_fn(self, state):
         """
         input: board
         output: a list of (action, probability) tuples for each available
         action and the score of the board state
         """
-        legal_positions = board.availables
-        current_state = np.ascontiguousarray(board.current_state().reshape(
+        legal_positions = [a[0] * state.N + a[1] for a in state.actions()]
+        current_state = np.ascontiguousarray(state.to_zero_input().reshape(
                 -1, 4, self.board_width, self.board_height))
         if self.use_gpu:
             log_act_probs, value = self.policy_value_net(
@@ -110,9 +111,9 @@ class PolicyValueNet():
             log_act_probs, value = self.policy_value_net(
                     Variable(torch.from_numpy(current_state)).float())
             act_probs = np.exp(log_act_probs.data.numpy().flatten())
-        act_probs = zip(legal_positions, act_probs[legal_positions])
+        act_probs = zip(act_probs[legal_positions], state.actions())
         value = value.data[0][0]
-        return act_probs, value
+        return sortfn(act_probs), value
 
     def train_step(self, state_batch, mcts_probs, winner_batch, lr):
         """perform a training step"""
@@ -145,9 +146,9 @@ class PolicyValueNet():
         entropy = -torch.mean(
                 torch.sum(torch.exp(log_act_probs) * log_act_probs, 1)
                 )
-        return loss.data[0], entropy.data[0]
+        # return loss.data[0], entropy.data[0]
         #for pytorch version >= 0.5 please use the following line instead.
-        #return loss.item(), entropy.item()
+        return loss.item(), entropy.item()
 
     def get_policy_param(self):
         net_params = self.policy_value_net.state_dict()

@@ -42,20 +42,24 @@ class Node(object):
     def is_root(self):
         return self.parent is None
 
-
 class Tree(object):
     def __init__(self, 
-                 prior_fn: Callable, 
+                 prior_fn: Callable = uniform_prior,
+                 policy_value_fn: Callable = None,
                  iterations: int = 10000, 
                  policy_kwargs: dict = {}, 
                  gamma: float = 1.0,
+                 noise: Callable = lambda x: np.random.dirichlet([.03] * x),
                  ):
         
         self.root = Node()
-        self.prior_fn = prior_fn
         self.policy_kwargs = policy_kwargs
         self.iterations = iterations
         self.gamma = gamma
+        
+        self.prior_fn = prior_fn
+        self.policy_value_fn = policy_value_fn
+        self.noise = noise
 
     def iterate(self, state: Gomoku):
         node = self.root
@@ -63,12 +67,19 @@ class Tree(object):
             action, node = node.select(**self.policy_kwargs)
             state.play(action)
 
-        probs_actions = self.prior_fn(state)
-        if not state.fin():
-            node.expand(probs_actions)
-        reward = self.rollout(state)
+        if self.policy_value_fn is not None:
+            probs_actions, reward = self.policy_value_fn(state)
+            if not state.fin():
+                node.expand(probs_actions)
+            else:
+                reward = state.score()
+        else:
+            probs_actions = self.prior_fn(state)
+            if not state.fin():
+                node.expand(probs_actions)
+            reward = self.rollout(state)
         self.backpropagate(node, -reward)
-
+    
     def rollout(self, state: Gomoku):
         player = state.player
         while not state.fin():
@@ -84,27 +95,35 @@ class Tree(object):
             reward = -reward
             node = node.parent
 
-    def get_move_probs(self, state: Gomoku):
+    def get_move_probs(self, state: Gomoku, temp: float = .001):
         for _ in range(self.iterations):
             self.iterate(state.copy())
         actions, probs = zip(*[(act, node.n) for act, node in self.root.children.items()])
+        if temp != 0:
+            probs += temp * (self.noise(len(probs)) - probs)
         probs = softmax(probs)
         return sortfn(zip(probs, actions))
 
 class UCT_Player(Player):
     def __init__(self, 
+                 policy_value_fn: Callable = None,
                  prior_fn: Callable = uniform_prior, 
                  policy_kwargs: dict = {}, 
                  iterations: int = 2000, 
-                 temp: float = 0.001,
+                 temp: float = .001,
                  ):
+        
+        self.noise = lambda x: np.random.dirichlet(0.3*np.ones(x))
         self.tree = Tree(
+            policy_value_fn=policy_value_fn,
             prior_fn=prior_fn, 
             policy_kwargs=policy_kwargs, 
             iterations=iterations,
+            noise=self.noise,
         )
-        self.history = []
+        
         self.temp = temp
+        self.history = []
 
     def update_history(self, state: Gomoku) -> bool:
         prev_history = self.history
@@ -123,10 +142,18 @@ class UCT_Player(Player):
                 self.tree.root.parent = None
         return True
 
-    def next_move_probs(self, state: Gomoku):
+    def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         self.update_history(state)
-        move_probs = self.tree.get_move_probs(state, self.temp)
+        move_probs = self.tree.get_move_probs(state, temp=self.temp)
         return move_probs
+    
+    def next_move(self, state: Gomoku, epsilon: float = .0) -> tuple[int, int]:
+        probs_actions = self.next_move_probs(state)
+        probs, actions = zip(*probs_actions)
+        if epsilon != .0:
+            probs += epsilon * (self.noise(len(probs)) - probs)
+        action_i = np.random.choice(list(range(len(actions))), p=probs)
+        return actions[action_i]
 
 if __name__ == '__main__':    
     game_kwargs = {

@@ -3,10 +3,8 @@ import random
 import numpy as np
 from collections import defaultdict, deque
 from .game import Board, Game
-from .mcts_pure import MCTSPlayer as MCTS_Pure
-from .mcts_alphaZero import MCTSPlayer
+from .mcts import UCT_Player
 from .policy_value_net_pytorch import PolicyValueNet
-
 
 class TrainPipeline():
     def __init__(self, 
@@ -16,7 +14,8 @@ class TrainPipeline():
                  init_model: str = None,
                  lr: float = 2e-3,
                  lr_multiplier: float = 1.0,
-                 temp: float = 1.0,
+                 temp: float = .001,
+                 epsilon: float = .25,
                  n_playout: int = 400,
                  c_puct: float = 5,
                  buffer_size: int = 10000,
@@ -40,6 +39,7 @@ class TrainPipeline():
         self.lr = lr
         self.lr_multiplier = lr_multiplier  # adaptively adjust the learning rate based on KL
         self.temp = temp  # the temperature param
+        self.epsilon = epsilon # the epsilon greedy param for self-play policy
         self.n_playout = n_playout  # num of simulations for each move
         self.c_puct = c_puct
         self.buffer_size = buffer_size
@@ -59,10 +59,9 @@ class TrainPipeline():
         self.policy_value_net = PolicyValueNet(self.M,
                                                 self.N,
                                                 model_file=init_model)
-        self.mcts_player = MCTSPlayer(self.policy_value_net.policy_value_fn,
-                                      c_puct=self.c_puct,
-                                      n_playout=self.n_playout,
-                                      is_selfplay=1)
+        self.mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn,
+                                      policy_kwargs={'C': 5},
+                                      iterations=self.n_playout)
 
     def get_equi_data(self, play_data):
         """augment the data set by rotation and flipping
@@ -90,7 +89,7 @@ class TrainPipeline():
         """collect self-play data for training"""
         for i in range(n_games):
             winner, play_data = self.game.start_self_play(self.mcts_player,
-                                                          temp=self.temp)
+                                                          temp=self.epsilon)
             play_data = list(play_data)[:]
             self.episode_len = len(play_data)
             # augment the data
@@ -148,11 +147,11 @@ class TrainPipeline():
         Evaluate the trained policy by playing against the pure MCTS player
         Note: this is only for monitoring the progress of training
         """
-        current_mcts_player = MCTSPlayer(self.policy_value_net.policy_value_fn,
-                                         c_puct=self.c_puct,
-                                         n_playout=self.n_playout)
-        pure_mcts_player = MCTS_Pure(c_puct=5,
-                                     n_playout=self.pure_mcts_playout_num)
+        current_mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn,
+                                         policy_kwargs={'C': 5},
+                                         iterations=self.n_playout)
+        pure_mcts_player = UCT_Player(policy_kwargs={'C': 5},
+                                     iterations=self.pure_mcts_playout_num)
         win_cnt = defaultdict(int)
         for i in range(n_games):
             winner = self.game.start_play(current_mcts_player,

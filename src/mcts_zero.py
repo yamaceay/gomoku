@@ -157,7 +157,6 @@ class UCT_Player(Player):
         probs, actions = zip(*probs_actions)
         if epsilon != .0:
             probs += epsilon * (self.noise(len(probs)) - probs)
-        print(probs, actions)
         action_i = np.random.choice(list(range(len(actions))), p=probs)
         return actions[action_i]
 

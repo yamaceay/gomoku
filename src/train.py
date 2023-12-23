@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-An implementation of the training pipeline of AlphaZero for Gomoku
-
-@author: Junxiao Song
-"""
-
 from __future__ import print_function
 import random
 import numpy as np
@@ -12,49 +5,60 @@ from collections import defaultdict, deque
 from .game import Board, Game
 from .mcts_pure import MCTSPlayer as MCTS_Pure
 from .mcts_alphaZero import MCTSPlayer
-from .policy_value_net import PolicyValueNet  # Theano and Lasagne
-# from policy_value_net_pytorch import PolicyValueNet  # Pytorch
-# from policy_value_net_tensorflow import PolicyValueNet # Tensorflow
-# from policy_value_net_keras import PolicyValueNet # Keras
+from .policy_value_net_pytorch import PolicyValueNet
 
 
 class TrainPipeline():
-    def __init__(self, init_model=None):
+    def __init__(self, 
+                 M: int = 6,
+                 N: int = 6,
+                 K: int = 4,
+                 init_model: str = None,
+                 lr: float = 2e-3,
+                 lr_multiplier: float = 1.0,
+                 temp: float = 1.0,
+                 n_playout: int = 400,
+                 c_puct: float = 5,
+                 buffer_size: int = 10000,
+                 batch_size: int = 512,
+                 play_batch_size: int = 1,
+                 epochs: int = 5,
+                 kl_targ: float = 0.02,
+                 check_freq: int = 50,
+                 game_batch_num: int = 1500,
+                 pure_mcts_playout_num: int = 1000,
+                 ):
         # params of the board and the game
-        self.board_width = 6
-        self.board_height = 6
-        self.n_in_row = 4
-        self.board = Board(width=self.board_width,
-                           height=self.board_height,
-                           n_in_row=self.n_in_row)
+        self.M = M
+        self.N = N
+        self.K = K
+        self.board = Board(M=self.M,
+                           N=self.N,
+                           K=self.K)
         self.game: Game = Game(self.board)
         # training params
-        self.learn_rate = 2e-3
-        self.lr_multiplier = 1.0  # adaptively adjust the learning rate based on KL
-        self.temp = 1.0  # the temperature param
-        self.n_playout = 400  # num of simulations for each move
-        self.c_puct = 5
-        self.buffer_size = 10000
-        self.batch_size = 512  # mini-batch size for training
+        self.lr = lr
+        self.lr_multiplier = lr_multiplier  # adaptively adjust the learning rate based on KL
+        self.temp = temp  # the temperature param
+        self.n_playout = n_playout  # num of simulations for each move
+        self.c_puct = c_puct
+        self.buffer_size = buffer_size
+        self.batch_size = batch_size  # mini-batch size for training
         self.data_buffer = deque(maxlen=self.buffer_size)
-        self.play_batch_size = 1
-        self.epochs = 5  # num of train_steps for each update
-        self.kl_targ = 0.02
-        self.check_freq = 50
-        self.game_batch_num = 1500
+        self.play_batch_size = play_batch_size
+        self.epochs = epochs  # num of train_steps for each update
+        self.kl_targ = kl_targ
+        self.check_freq = check_freq
+        self.game_batch_num = game_batch_num
         self.best_win_ratio = 0.0
+        self.model_file = init_model
         # num of simulations used for the pure mcts, which is used as
         # the opponent to evaluate the trained policy
-        self.pure_mcts_playout_num = 1000
-        if init_model:
-            # start training from an initial policy-value net
-            self.policy_value_net = PolicyValueNet(self.board_width,
-                                                   self.board_height,
-                                                   model_file=init_model)
-        else:
-            # start training from a new policy-value net
-            self.policy_value_net = PolicyValueNet(self.board_width,
-                                                   self.board_height)
+        self.pure_mcts_playout_num = pure_mcts_playout_num
+        # start training from an initial policy-value net
+        self.policy_value_net = PolicyValueNet(self.M,
+                                                self.N,
+                                                model_file=init_model)
         self.mcts_player = MCTSPlayer(self.policy_value_net.policy_value_fn,
                                       c_puct=self.c_puct,
                                       n_playout=self.n_playout,
@@ -65,12 +69,12 @@ class TrainPipeline():
         play_data: [(state, mcts_prob, winner_z), ..., ...]
         """
         extend_data = []
-        for state, mcts_porb, winner in play_data:
+        for state, mcts_prob, winner in play_data:
             for i in [1, 2, 3, 4]:
                 # rotate counterclockwise
                 equi_state = np.array([np.rot90(s, i) for s in state])
                 equi_mcts_prob = np.rot90(np.flipud(
-                    mcts_porb.reshape(self.board_height, self.board_width)), i)
+                    mcts_prob.reshape(self.N, self.M)), i)
                 extend_data.append((equi_state,
                                     np.flipud(equi_mcts_prob).flatten(),
                                     winner))
@@ -105,7 +109,7 @@ class TrainPipeline():
                     state_batch,
                     mcts_probs_batch,
                     winner_batch,
-                    self.learn_rate*self.lr_multiplier)
+                    self.lr*self.lr_multiplier)
             new_probs, new_v = self.policy_value_net.policy_value(state_batch)
             kl = np.mean(np.sum(old_probs * (
                     np.log(old_probs + 1e-10) - np.log(new_probs + 1e-10)),

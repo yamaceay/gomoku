@@ -100,7 +100,8 @@ class PolicyValueNet():
         output: a list of (action, probability) tuples for each available
         action and the score of the board state
         """
-        legal_positions = [a[0] * state.N + a[1] for a in state.actions()]
+        actions = sorted(state.actions())
+        legal_positions = [a[0] * state.N + a[1] for a in actions]
         current_state = np.ascontiguousarray(state.to_zero_input().reshape(
                 -1, 4, self.board_width, self.board_height))
         if self.use_gpu:
@@ -111,9 +112,14 @@ class PolicyValueNet():
             log_act_probs, value = self.policy_value_net(
                     Variable(torch.from_numpy(current_state)).float())
             act_probs = np.exp(log_act_probs.data.numpy().flatten())
-        act_probs = zip(act_probs[legal_positions], state.actions())
+        act_probs = zip(legal_positions, act_probs[legal_positions])
         value = value.data[0][0]
-        return sortfn(act_probs), value
+        return act_probs, value
+    
+    def policy_value_fn_sorted(self, state):
+        act_probs, value = self.policy_value_fn(state)
+        act_probs = sortfn([(p, (a // state.N, a % state.N)) for a, p in act_probs])
+        return act_probs, value
 
     def train_step(self, state_batch, mcts_probs, winner_batch, lr):
         """perform a training step"""

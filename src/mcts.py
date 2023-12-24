@@ -147,6 +147,9 @@ class UCT_Player(Player):
                     return False
                 self.tree.root = self.tree.root.children[move]
                 self.tree.root.parent = None
+        else:
+            self.tree.root = Node()
+            return False
         return True
 
     def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:

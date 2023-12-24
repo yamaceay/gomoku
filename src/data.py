@@ -143,6 +143,9 @@ def extend_play_data(
     return extend_data
 
 if __name__ == '__main__':
+    from .policy_value_net import PolicyValueNet
+    
+    
     game_kwargs = {
         "M": 8,
         "N": 8,
@@ -152,11 +155,18 @@ if __name__ == '__main__':
     game = Gomoku(**game_kwargs)
     game.set_play_only()
     
+    net = PolicyValueNet(game_kwargs["M"], game_kwargs["N"])
+    
+    
     uct = UCT_Player(
         policy_kwargs={"C": 5},
-        iterations=5000,
+        iterations=400,
         temp=.001,
     )
     
-    data = collect_self_play_data_zero(game, player=uct, epsilon=0.25)
-    data = extend_play_data(data)
+    uct2 = UCT_Player(
+        policy_value_fn=net.policy_value_fn_sorted,
+        policy_kwargs={"C": 5},
+        iterations=400,
+        temp=.001,
+    )

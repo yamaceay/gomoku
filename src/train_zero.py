@@ -60,13 +60,14 @@ class TrainPipeline():
         self.policy_value_net = PolicyValueNet(self.M,
                                                 self.N,
                                                 model_file=init_model)
-        self.mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn,
+        self.mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                       policy_kwargs={'C': 5},
                                       iterations=self.n_playout)
 
     def collect_selfplay_data(self, n_games=1):
         """collect self-play data for training"""
         game = Gomoku(M=self.M, N=self.N, K=self.K)
+        game.set_play_only()
         for i in range(n_games):
             play_data = collect_self_play_data_zero(game, 1, self.mcts_player, self.epsilon)
             play_data = extend_play_data(play_data)
@@ -124,13 +125,14 @@ class TrainPipeline():
         Evaluate the trained policy by playing against the pure MCTS player
         Note: this is only for monitoring the progress of training
         """
-        current_mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn,
+        current_mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                          policy_kwargs={'C': 5},
                                          iterations=self.n_playout)
         pure_mcts_player = UCT_Player(policy_kwargs={'C': 5},
                                      iterations=self.pure_mcts_playout_num)
         win_cnt = defaultdict(int)
         game = Gomoku(M=self.M, N=self.N, K=self.K)
+        game.set_play_only()
         avg_curr_starts = .0
         for i in range(n_games):
             end_game, curr_starts = play_until_end(

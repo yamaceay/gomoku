@@ -135,7 +135,7 @@ class UCT_Player(Player):
     def update_history(self, state: Gomoku) -> bool:
         prev_history = self.history
         self.history = state.history()
-        if len(self.history) > len(prev_history):
+        if len(self.history) >= len(prev_history):
             for h1, h2 in zip(prev_history, self.history):
                 if h1 != h2:
                     self.tree.root = Node()

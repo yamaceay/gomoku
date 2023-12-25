@@ -103,7 +103,6 @@ class TrainPipeline():
         elif kl < self.kl_targ / 2 and self.lr_multiplier < 10:
             self.lr_multiplier *= 1.5
         
-        print(winner_batch, len(self.data_buffer))
         explained_var_old = (1 -
                             np.var(np.array(winner_batch) - old_v.flatten()) /
                             np.var(np.array(winner_batch)))

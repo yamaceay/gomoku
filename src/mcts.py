@@ -185,12 +185,46 @@ class UCT_Player(Player):
         return action, probs_dict
     
 if __name__ == "__main__":
-    uct = UCT_Player(policy_kwargs={'C': 5}, iterations=5000)
-    game = Gomoku(8, 8, 5)
-    game.set_play_only()
+    import torch
+    from .policy_value_net import PolicyValueNet
+    from collections import defaultdict
+    from .data import play_until_end
     
-    while not game.fin():
-        action, probs = uct.next_move(game, get_probs=True)
-        game.play(action)
-        print(game)
-        print(list(probs))
+    game_kwargs = dict(M=6, N=6, K=4)
+    init_model = "./current_policy.model"
+    temp = .001
+    n_playout = 400
+    c_puct = 5
+    pure_mcts_playout_num = 1000
+    policy_value_net = PolicyValueNet(game_kwargs['M'],
+                                      game_kwargs['N'],
+                                      model_file=init_model,
+                                      use_gpu=torch.cuda.is_available())
+    current_mcts_player = UCT_Player(policy_value_fn=policy_value_net.policy_value_fn_sorted,
+                                      policy_kwargs={'C': 5},
+                                      iterations=n_playout,
+                                      temp=temp)
+    pure_mcts_player = UCT_Player(policy_kwargs={'C': 5},
+                                  iterations=pure_mcts_playout_num,
+                                  temp=temp)
+
+    n_games = 10
+    game = Gomoku(**game_kwargs)
+    game.set_play_only()
+    avg_curr_starts = .0
+    win_cnt = defaultdict(int)
+    for i in range(n_games):
+        end_game, curr_starts = play_until_end(
+            game, 
+            current_mcts_player, 
+            pure_mcts_player)
+        winner = end_game.score()
+        if not curr_starts:
+            winner = -winner
+        win_cnt[winner] += 1
+        avg_curr_starts += curr_starts
+    win_ratio = (1.0*win_cnt[1] + 0.5*win_cnt[0]) / n_games
+    avg_curr_starts /= n_games
+    print("num_playouts: {}, win: {}, lose: {}, tie: {}, first_player: {}".format(
+            pure_mcts_playout_num,
+            win_cnt[1], win_cnt[-1], win_cnt[0], avg_curr_starts))

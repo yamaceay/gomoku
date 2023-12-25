@@ -98,7 +98,6 @@ class Tree(object):
     def get_move_probs(self, 
                        state: Gomoku, 
                        temp: float = .001, 
-                       sort_key: Callable = itemgetter(0),
                        ) -> list[tuple[float, tuple[int, int]]]:
         for _ in range(self.iterations):
             self.iterate(state.copy())
@@ -108,7 +107,7 @@ class Tree(object):
         probs = np.log(1.0 / temp * np.array(probs) + 1e-10)
         probs = softmax(probs)
         
-        return sortfn(zip(probs, actions), key=sort_key)
+        return zip(probs, actions)
 
 class UCT_Player(Player):
     def __init__(self, 
@@ -154,6 +153,7 @@ class UCT_Player(Player):
     def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         self.update_history(state)
         move_probs = self.tree.get_move_probs(state, temp=self.temp)
+        move_probs = sortfn(move_probs)
         return move_probs
     
     def next_move(self, state: Gomoku, epsilon: float = .0, get_probs: bool = False) -> tuple[int, int] | list[tuple[float, tuple[int, int]]]:
@@ -169,14 +169,14 @@ class UCT_Player(Player):
     
     def next_move_data(self, state: Gomoku, epsilon: float = .0) -> tuple[int, int, list[tuple[float, tuple[int, int]]]]:
         self.update_history(state)
-        probs_actions = self.tree.get_move_probs(state, temp=self.temp, sort_key=itemgetter(1))
-        probs, actions = zip(*probs_actions)
+        probs_actions = self.tree.get_move_probs(state, temp=self.temp)
+        probs, actions = zip(*sorted(probs_actions, key=itemgetter(1)))
+        action_indices = [a[0] * state.N + a[1] for a in actions]
+        probs_dict = np.zeros(state.M * state.N)
+        probs_dict[action_indices] = np.array(probs)
         if epsilon != .0:
             probs += epsilon * (self.noise(len(probs)) - probs)
         action_i = np.random.choice(list(range(len(actions))), p=probs)
         action = actions[action_i]
         
-        probs_dict = {(x, y): .0 for x in range(state.M) for y in range(state.N)}
-        probs_dict.update(dict(zip(actions, probs)))
-        probs = np.array([probs_dict[(x, y)] for x in range(state.M) for y in range(state.N)])
-        return action, probs
+        return action, probs_dict

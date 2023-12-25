@@ -1,3 +1,4 @@
+from typing import Callable
 DECAY = 0.9
 BASIS = 10
 
@@ -85,10 +86,14 @@ PB_DICT_5 = {
 def pb_heuristic(pb: tuple[int, int]) -> float:
     return BASIS ** (pb[0] - 5) * DECAY ** pb[1]
 
-def sortfn(items: list, key = None) -> list:
+def sortfn(items: list, key: Callable = None, reverse: bool = True) -> list:
+    sorted_args = {}
     if key is None:
-        return list(reversed(sorted(items)))
-    return list(reversed(sorted(items, key=key)))
+        sorted_args.update(dict(key=key))
+    sorted_list = sorted(items, **sorted_args)
+    if reverse:
+        sorted_list = reversed(sorted_list)
+    return list(sorted_list)
 
 # def calculate_exponents(pattern: str) -> tuple[int, int]:
 #     # Count the number of 'o' characters

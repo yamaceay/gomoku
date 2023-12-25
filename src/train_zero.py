@@ -59,7 +59,8 @@ class TrainPipeline():
         # start training from an initial policy-value net
         self.policy_value_net = PolicyValueNet(self.M,
                                                 self.N,
-                                                model_file=init_model)
+                                                model_file=init_model,
+                                                use_gpu=True)
         self.mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                       policy_kwargs={'C': 5},
                                       iterations=self.n_playout)

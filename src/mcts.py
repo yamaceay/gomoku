@@ -97,15 +97,18 @@ class Tree(object):
 
     def get_move_probs(self, 
                        state: Gomoku, 
-                       temp: float = .001, 
+                       temp: float, 
                        ) -> list[tuple[float, tuple[int, int]]]:
         for _ in range(self.iterations):
             self.iterate(state.copy())
         
         actions, probs = zip(*[(act, node.n) for act, node in self.root.children.items()])
+        probs = np.array(probs) 
+        
+        if self.policy_value_fn is not None:
+            probs = np.log(probs + 1e-10)
             
-        probs = np.log(1.0 / temp * np.array(probs) + 1e-10)
-        probs = softmax(probs)
+        probs = softmax(probs / temp)
         
         return zip(probs, actions)
 
@@ -180,3 +183,14 @@ class UCT_Player(Player):
         action = actions[action_i]
         
         return action, probs_dict
+    
+if __name__ == "__main__":
+    uct = UCT_Player(policy_kwargs={'C': 5}, iterations=5000)
+    game = Gomoku(8, 8, 5)
+    game.set_play_only()
+    
+    while not game.fin():
+        action, probs = uct.next_move(game, get_probs=True)
+        game.play(action)
+        print(game)
+        print(list(probs))

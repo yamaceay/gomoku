@@ -64,7 +64,8 @@ class TrainPipeline():
                                                 use_gpu=torch.cuda.is_available())
         self.mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                       policy_kwargs={'C': 5},
-                                      iterations=self.n_playout)
+                                      iterations=self.n_playout,
+                                      temp=temp)
 
     def collect_selfplay_data(self, n_games=1):
         """collect self-play data for training"""
@@ -73,7 +74,7 @@ class TrainPipeline():
         for i in range(n_games):
             play_data = collect_self_play_data_zero(game, 1, self.mcts_player, self.epsilon)
             play_data = extend_play_data(play_data)
-            self.episode_len = len(play_data)
+            self.episode_len = len(play_data) // 8
             self.data_buffer.extend(play_data)
 
     def policy_update(self):
@@ -101,13 +102,15 @@ class TrainPipeline():
             self.lr_multiplier /= 1.5
         elif kl < self.kl_targ / 2 and self.lr_multiplier < 10:
             self.lr_multiplier *= 1.5
-
+        
+        print(winner_batch, len(self.data_buffer))
         explained_var_old = (1 -
-                             np.var(np.array(winner_batch) - old_v.flatten()) /
-                             np.var(np.array(winner_batch)))
+                            np.var(np.array(winner_batch) - old_v.flatten()) /
+                            np.var(np.array(winner_batch)))
         explained_var_new = (1 -
-                             np.var(np.array(winner_batch) - new_v.flatten()) /
-                             np.var(np.array(winner_batch)))
+                            np.var(np.array(winner_batch) - new_v.flatten()) /
+                            np.var(np.array(winner_batch)))
+            
         print(("kl:{:.5f},"
                "lr_multiplier:{:.3f},"
                "loss:{},"
@@ -146,7 +149,7 @@ class TrainPipeline():
                 winner = -winner
             win_cnt[winner] += 1
             avg_curr_starts += curr_starts
-        win_ratio = 1.0*(win_cnt[1] + 0.5*win_cnt[0]) / n_games
+        win_ratio = (1.0*win_cnt[1] + 0.5*win_cnt[0]) / n_games
         avg_curr_starts /= n_games
         print("num_playouts: {}, win: {}, lose: {}, tie: {}, first_player: {}".format(
                 self.pure_mcts_playout_num,

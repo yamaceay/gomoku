@@ -83,6 +83,7 @@ class PolicyValueNet():
         input: a batch of states
         output: a batch of action probabilities and state values
         """
+        state_batch = np.ascontiguousarray(state_batch)
         if self.use_gpu:
             state_batch = Variable(torch.FloatTensor(state_batch).cuda())
             log_act_probs, value = self.policy_value_net(state_batch)

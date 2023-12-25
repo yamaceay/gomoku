@@ -6,7 +6,7 @@ from .game import Board, Game
 from .mcts_pure import MCTSPlayer as MCTS_Pure
 from .mcts_alphaZero import MCTSPlayer
 from .policy_value_net_pytorch import PolicyValueNet
-
+import torch
 
 class TrainPipeline():
     def __init__(self, 
@@ -58,7 +58,8 @@ class TrainPipeline():
         # start training from an initial policy-value net
         self.policy_value_net = PolicyValueNet(self.M,
                                                 self.N,
-                                                model_file=init_model)
+                                                model_file=init_model,
+                                                use_gpu=torch.cuda.is_available())
         self.mcts_player = MCTSPlayer(self.policy_value_net.policy_value_fn,
                                       c_puct=self.c_puct,
                                       n_playout=self.n_playout,
@@ -123,6 +124,7 @@ class TrainPipeline():
         elif kl < self.kl_targ / 2 and self.lr_multiplier < 10:
             self.lr_multiplier *= 1.5
 
+        print(winner_batch, len(self.data_buffer))
         explained_var_old = (1 -
                              np.var(np.array(winner_batch) - old_v.flatten()) /
                              np.var(np.array(winner_batch)))
@@ -195,5 +197,6 @@ class TrainPipeline():
 
 
 if __name__ == '__main__':
-    training_pipeline = TrainPipeline(init_model="./current_policy.model")
+    # training_pipeline = TrainPipeline(init_model="./current_policy.model")
+    training_pipeline = TrainPipeline()
     training_pipeline.run()

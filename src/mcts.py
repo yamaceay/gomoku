@@ -105,9 +105,7 @@ class Tree(object):
         
         actions, probs = zip(*[(act, node.n) for act, node in self.root.children.items()])
             
-        if temp != 0:
-            probs += temp * (self.noise(len(probs)) - probs)
-        probs = np.log(probs)
+        probs = np.log(1 / temp * probs + 1e-10)
         probs = softmax(probs)
         
         return sortfn(zip(probs, actions), key=sort_key)

@@ -131,9 +131,11 @@ class TrainPipeline():
         """
         current_mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                          policy_kwargs={'C': 5},
-                                         iterations=self.n_playout)
+                                         iterations=self.n_playout,
+                                         temp=self.temp)
         pure_mcts_player = UCT_Player(policy_kwargs={'C': 5},
-                                     iterations=self.pure_mcts_playout_num)
+                                     iterations=self.pure_mcts_playout_num,
+                                     temp=self.temp)
         win_cnt = defaultdict(int)
         game = Gomoku(M=self.M, N=self.N, K=self.K)
         game.set_play_only()

@@ -105,7 +105,7 @@ class Tree(object):
         
         actions, probs = zip(*[(act, node.n) for act, node in self.root.children.items()])
             
-        probs = np.log(1 / temp * probs + 1e-10)
+        probs = np.log(1.0 / temp * np.array(probs) + 1e-10)
         probs = softmax(probs)
         
         return sortfn(zip(probs, actions), key=sort_key)

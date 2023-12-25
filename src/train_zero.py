@@ -7,6 +7,7 @@ from .mcts import UCT_Player
 from .policy_value_net import PolicyValueNet
 from .data import collect_self_play_data_zero, extend_play_data, play_until_end
 from .gomoku import Gomoku
+import torch
 
 class TrainPipeline():
     def __init__(self, 
@@ -60,7 +61,7 @@ class TrainPipeline():
         self.policy_value_net = PolicyValueNet(self.M,
                                                 self.N,
                                                 model_file=init_model,
-                                                use_gpu=True)
+                                                use_gpu=torch.cuda.is_available())
         self.mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                       policy_kwargs={'C': 5},
                                       iterations=self.n_playout)
@@ -181,5 +182,5 @@ class TrainPipeline():
 
 
 if __name__ == '__main__':
-    training_pipeline = TrainPipeline(init_model="./current_policy.model")
+    training_pipeline = TrainPipeline()
     training_pipeline.run()

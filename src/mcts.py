@@ -221,6 +221,16 @@ if __name__ == "__main__":
         winner = end_game.score()
         if not curr_starts:
             winner = -winner
+        new_game = Gomoku(**game_kwargs)
+        history = end_game.history()
+        if curr_starts:
+            new_game.play(history.pop(0))
+        for i in range(len(history)):
+            move = history[i]
+            if i % 2 == 1:
+                action, probs = current_mcts_player.next_move(new_game, get_probs=True)
+                print("Output: {}, Probs: {}, Board: {}".format(action, list(probs), new_game))
+            new_game.play(move)
         win_cnt[winner] += 1
         avg_curr_starts += curr_starts
     win_ratio = (1.0*win_cnt[1] + 0.5*win_cnt[0]) / n_games

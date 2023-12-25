@@ -140,6 +140,8 @@ class TrainPipeline():
                 current_mcts_player, 
                 pure_mcts_player)
             winner = end_game.score()
+            if not curr_starts:
+                winner = -winner
             win_cnt[winner] += 1
             avg_curr_starts += curr_starts
         win_ratio = 1.0*(win_cnt[1] + 0.5*win_cnt[-1]) / n_games

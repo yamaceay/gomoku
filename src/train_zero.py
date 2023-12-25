@@ -145,7 +145,7 @@ class TrainPipeline():
                 winner = -winner
             win_cnt[winner] += 1
             avg_curr_starts += curr_starts
-        win_ratio = 1.0*(win_cnt[1] + 0.5*win_cnt[-1]) / n_games
+        win_ratio = 1.0*(win_cnt[1] + 0.5*win_cnt[0]) / n_games
         avg_curr_starts /= n_games
         print("num_playouts: {}, win: {}, lose: {}, tie: {}, first_player: {}".format(
                 self.pure_mcts_playout_num,

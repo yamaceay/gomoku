@@ -978,3 +978,2086 @@
 [2023-12-26 21:51:56,986] kl: 0.02821, lrMultiplier: 0.088, loss: 1.98346, entropy: 1.16784, explVarOld: 0.116, explVarNew: 0.129
 [2023-12-26 21:52:01,736] batch: 482, lenEpisode: 13
 [2023-12-26 21:52:02,784] kl: 0.02215, lrMultiplier: 0.088, loss: 1.85843, entropy: 1.13178, explVarOld: 0.182, explVarNew: 0.195
+[2023-12-26 21:52:07,048] batch: 483, lenEpisode: 11
+[2023-12-26 21:52:07,977] kl: 0.02085, lrMultiplier: 0.088, loss: 1.99918, entropy: 1.18679, explVarOld: 0.168, explVarNew: 0.176
+[2023-12-26 21:52:11,217] batch: 484, lenEpisode: 7
+[2023-12-26 21:52:12,175] kl: 0.02495, lrMultiplier: 0.088, loss: 1.97276, entropy: 1.20434, explVarOld: 0.150, explVarNew: 0.157
+[2023-12-26 21:52:17,442] batch: 485, lenEpisode: 15
+[2023-12-26 21:52:18,361] kl: 0.02405, lrMultiplier: 0.088, loss: 1.83844, entropy: 1.12150, explVarOld: 0.181, explVarNew: 0.193
+[2023-12-26 21:52:21,871] batch: 486, lenEpisode: 8
+[2023-12-26 21:52:22,766] kl: 0.02298, lrMultiplier: 0.088, loss: 2.03990, entropy: 1.17769, explVarOld: 0.164, explVarNew: 0.172
+[2023-12-26 21:52:27,650] batch: 487, lenEpisode: 13
+[2023-12-26 21:52:28,545] kl: 0.02623, lrMultiplier: 0.088, loss: 1.97040, entropy: 1.12548, explVarOld: 0.082, explVarNew: 0.090
+[2023-12-26 21:52:33,605] batch: 488, lenEpisode: 13
+[2023-12-26 21:52:34,499] kl: 0.04916, lrMultiplier: 0.088, loss: 1.93537, entropy: 1.16742, explVarOld: 0.079, explVarNew: 0.118
+[2023-12-26 21:52:38,897] batch: 489, lenEpisode: 11
+[2023-12-26 21:52:39,801] kl: 0.01175, lrMultiplier: 0.088, loss: 1.90726, entropy: 1.13874, explVarOld: 0.144, explVarNew: 0.147
+[2023-12-26 21:52:43,768] batch: 490, lenEpisode: 9
+[2023-12-26 21:52:44,759] kl: 0.02851, lrMultiplier: 0.088, loss: 1.95954, entropy: 1.13563, explVarOld: 0.147, explVarNew: 0.158
+[2023-12-26 21:52:48,085] batch: 491, lenEpisode: 8
+[2023-12-26 21:52:49,003] kl: 0.01931, lrMultiplier: 0.088, loss: 1.93898, entropy: 1.12039, explVarOld: 0.160, explVarNew: 0.173
+[2023-12-26 21:52:56,945] batch: 492, lenEpisode: 23
+[2023-12-26 21:52:57,865] kl: 0.01023, lrMultiplier: 0.088, loss: 1.89862, entropy: 1.19200, explVarOld: 0.131, explVarNew: 0.148
+[2023-12-26 21:53:01,944] batch: 493, lenEpisode: 13
+[2023-12-26 21:53:02,900] kl: 0.02075, lrMultiplier: 0.088, loss: 1.95666, entropy: 1.10935, explVarOld: 0.125, explVarNew: 0.146
+[2023-12-26 21:53:06,271] batch: 494, lenEpisode: 10
+[2023-12-26 21:53:07,180] kl: 0.00723, lrMultiplier: 0.132, loss: 1.86659, entropy: 1.07854, explVarOld: 0.151, explVarNew: 0.151
+[2023-12-26 21:53:12,630] batch: 495, lenEpisode: 15
+[2023-12-26 21:53:13,535] kl: 0.04373, lrMultiplier: 0.088, loss: 2.06716, entropy: 1.17945, explVarOld: 0.095, explVarNew: 0.118
+[2023-12-26 21:53:18,156] batch: 496, lenEpisode: 10
+[2023-12-26 21:53:19,062] kl: 0.01818, lrMultiplier: 0.088, loss: 1.92146, entropy: 1.12652, explVarOld: 0.121, explVarNew: 0.125
+[2023-12-26 21:53:24,278] batch: 497, lenEpisode: 15
+[2023-12-26 21:53:25,173] kl: 0.02677, lrMultiplier: 0.088, loss: 1.96159, entropy: 1.20650, explVarOld: 0.164, explVarNew: 0.176
+[2023-12-26 21:53:29,943] batch: 498, lenEpisode: 12
+[2023-12-26 21:53:30,852] kl: 0.01682, lrMultiplier: 0.088, loss: 1.98757, entropy: 1.18657, explVarOld: 0.139, explVarNew: 0.148
+[2023-12-26 21:53:34,143] batch: 499, lenEpisode: 9
+[2023-12-26 21:53:35,044] kl: 0.02122, lrMultiplier: 0.088, loss: 1.87792, entropy: 1.09783, explVarOld: 0.113, explVarNew: 0.126
+[2023-12-26 21:53:40,249] batch: 500, lenEpisode: 14
+[2023-12-26 21:53:41,178] kl: 0.00844, lrMultiplier: 0.132, loss: 1.95868, entropy: 1.12511, explVarOld: 0.115, explVarNew: 0.120
+[2023-12-26 21:53:41,178] evalBatch: 500
+[2023-12-26 21:54:15,937] BEST POLICY!!!!!!!
+[2023-12-26 21:54:15,938] numPlayouts: 1000, win: 5, lose: 5, tie: 0, avgCurrStarted: 0.5
+[2023-12-26 21:54:21,301] batch: 501, lenEpisode: 14
+[2023-12-26 21:54:22,201] kl: 0.02691, lrMultiplier: 0.132, loss: 1.92212, entropy: 1.13215, explVarOld: 0.162, explVarNew: 0.179
+[2023-12-26 21:54:27,199] batch: 502, lenEpisode: 13
+[2023-12-26 21:54:28,117] kl: 0.03026, lrMultiplier: 0.132, loss: 1.89611, entropy: 1.14746, explVarOld: 0.147, explVarNew: 0.161
+[2023-12-26 21:54:32,413] batch: 503, lenEpisode: 14
+[2023-12-26 21:54:33,365] kl: 0.01964, lrMultiplier: 0.132, loss: 1.92433, entropy: 1.19085, explVarOld: 0.183, explVarNew: 0.202
+[2023-12-26 21:54:37,335] batch: 504, lenEpisode: 11
+[2023-12-26 21:54:38,242] kl: 0.07183, lrMultiplier: 0.088, loss: 1.86001, entropy: 1.13628, explVarOld: 0.142, explVarNew: 0.161
+[2023-12-26 21:54:41,976] batch: 505, lenEpisode: 9
+[2023-12-26 21:54:42,928] kl: 0.02334, lrMultiplier: 0.088, loss: 1.83674, entropy: 1.06581, explVarOld: 0.146, explVarNew: 0.155
+[2023-12-26 21:54:46,939] batch: 506, lenEpisode: 11
+[2023-12-26 21:54:47,889] kl: 0.02442, lrMultiplier: 0.088, loss: 1.96762, entropy: 1.11121, explVarOld: 0.121, explVarNew: 0.127
+[2023-12-26 21:54:51,327] batch: 507, lenEpisode: 9
+[2023-12-26 21:54:52,234] kl: 0.02322, lrMultiplier: 0.088, loss: 1.96078, entropy: 1.13811, explVarOld: 0.145, explVarNew: 0.164
+[2023-12-26 21:54:58,991] batch: 508, lenEpisode: 19
+[2023-12-26 21:54:59,890] kl: 0.02358, lrMultiplier: 0.088, loss: 1.89270, entropy: 1.14646, explVarOld: 0.156, explVarNew: 0.164
+[2023-12-26 21:55:04,908] batch: 509, lenEpisode: 17
+[2023-12-26 21:55:05,827] kl: 0.02253, lrMultiplier: 0.088, loss: 1.97764, entropy: 1.18829, explVarOld: 0.146, explVarNew: 0.153
+[2023-12-26 21:55:11,204] batch: 510, lenEpisode: 14
+[2023-12-26 21:55:12,184] kl: 0.01655, lrMultiplier: 0.088, loss: 1.93951, entropy: 1.11805, explVarOld: 0.116, explVarNew: 0.121
+[2023-12-26 21:55:18,636] batch: 511, lenEpisode: 22
+[2023-12-26 21:55:19,550] kl: 0.01500, lrMultiplier: 0.088, loss: 1.99909, entropy: 1.17593, explVarOld: 0.134, explVarNew: 0.143
+[2023-12-26 21:55:23,550] batch: 512, lenEpisode: 10
+[2023-12-26 21:55:24,457] kl: 0.01287, lrMultiplier: 0.088, loss: 1.90079, entropy: 1.10418, explVarOld: 0.130, explVarNew: 0.147
+[2023-12-26 21:55:29,980] batch: 513, lenEpisode: 15
+[2023-12-26 21:55:30,887] kl: 0.01589, lrMultiplier: 0.088, loss: 1.88236, entropy: 1.13164, explVarOld: 0.162, explVarNew: 0.178
+[2023-12-26 21:55:35,788] batch: 514, lenEpisode: 13
+[2023-12-26 21:55:36,691] kl: 0.02829, lrMultiplier: 0.088, loss: 1.93214, entropy: 1.19913, explVarOld: 0.154, explVarNew: 0.158
+[2023-12-26 21:55:40,033] batch: 515, lenEpisode: 10
+[2023-12-26 21:55:40,943] kl: 0.01816, lrMultiplier: 0.088, loss: 1.99955, entropy: 1.12762, explVarOld: 0.164, explVarNew: 0.171
+[2023-12-26 21:55:47,025] batch: 516, lenEpisode: 18
+[2023-12-26 21:55:47,928] kl: 0.01633, lrMultiplier: 0.088, loss: 1.88328, entropy: 1.20987, explVarOld: 0.149, explVarNew: 0.188
+[2023-12-26 21:55:51,844] batch: 517, lenEpisode: 10
+[2023-12-26 21:55:52,744] kl: 0.02290, lrMultiplier: 0.088, loss: 2.02780, entropy: 1.24529, explVarOld: 0.155, explVarNew: 0.164
+[2023-12-26 21:55:57,522] batch: 518, lenEpisode: 14
+[2023-12-26 21:55:58,429] kl: 0.02230, lrMultiplier: 0.088, loss: 1.90283, entropy: 1.19693, explVarOld: 0.160, explVarNew: 0.178
+[2023-12-26 21:56:02,511] batch: 519, lenEpisode: 10
+[2023-12-26 21:56:03,431] kl: 0.02441, lrMultiplier: 0.088, loss: 1.85035, entropy: 1.07273, explVarOld: 0.154, explVarNew: 0.158
+[2023-12-26 21:56:08,094] batch: 520, lenEpisode: 13
+[2023-12-26 21:56:08,993] kl: 0.02326, lrMultiplier: 0.088, loss: 2.07659, entropy: 1.20585, explVarOld: 0.170, explVarNew: 0.179
+[2023-12-26 21:56:14,634] batch: 521, lenEpisode: 19
+[2023-12-26 21:56:15,537] kl: 0.02253, lrMultiplier: 0.088, loss: 1.97458, entropy: 1.15874, explVarOld: 0.129, explVarNew: 0.131
+[2023-12-26 21:56:20,896] batch: 522, lenEpisode: 16
+[2023-12-26 21:56:21,783] kl: 0.03593, lrMultiplier: 0.088, loss: 1.94501, entropy: 1.22026, explVarOld: 0.174, explVarNew: 0.187
+[2023-12-26 21:56:25,129] batch: 523, lenEpisode: 8
+[2023-12-26 21:56:26,045] kl: 0.00649, lrMultiplier: 0.132, loss: 1.90748, entropy: 1.12290, explVarOld: 0.196, explVarNew: 0.206
+[2023-12-26 21:56:31,068] batch: 524, lenEpisode: 14
+[2023-12-26 21:56:31,989] kl: 0.05717, lrMultiplier: 0.088, loss: 1.81949, entropy: 1.18228, explVarOld: 0.194, explVarNew: 0.204
+[2023-12-26 21:56:36,758] batch: 525, lenEpisode: 13
+[2023-12-26 21:56:37,693] kl: 0.01887, lrMultiplier: 0.088, loss: 2.07633, entropy: 1.26873, explVarOld: 0.161, explVarNew: 0.178
+[2023-12-26 21:56:43,750] batch: 526, lenEpisode: 19
+[2023-12-26 21:56:44,678] kl: 0.03227, lrMultiplier: 0.088, loss: 2.07739, entropy: 1.27516, explVarOld: 0.154, explVarNew: 0.161
+[2023-12-26 21:56:47,376] batch: 527, lenEpisode: 7
+[2023-12-26 21:56:48,275] kl: 0.01438, lrMultiplier: 0.088, loss: 1.91777, entropy: 1.16853, explVarOld: 0.130, explVarNew: 0.140
+[2023-12-26 21:56:52,881] batch: 528, lenEpisode: 13
+[2023-12-26 21:56:53,783] kl: 0.02488, lrMultiplier: 0.088, loss: 1.97741, entropy: 1.23877, explVarOld: 0.171, explVarNew: 0.179
+[2023-12-26 21:56:58,820] batch: 529, lenEpisode: 15
+[2023-12-26 21:56:59,718] kl: 0.01145, lrMultiplier: 0.088, loss: 1.93027, entropy: 1.26717, explVarOld: 0.188, explVarNew: 0.195
+[2023-12-26 21:57:05,646] batch: 530, lenEpisode: 17
+[2023-12-26 21:57:06,579] kl: 0.01748, lrMultiplier: 0.088, loss: 2.00252, entropy: 1.27803, explVarOld: 0.111, explVarNew: 0.120
+[2023-12-26 21:57:10,200] batch: 531, lenEpisode: 9
+[2023-12-26 21:57:11,191] kl: 0.03388, lrMultiplier: 0.088, loss: 1.99097, entropy: 1.16440, explVarOld: 0.149, explVarNew: 0.155
+[2023-12-26 21:57:15,397] batch: 532, lenEpisode: 10
+[2023-12-26 21:57:16,323] kl: 0.01881, lrMultiplier: 0.088, loss: 1.97782, entropy: 1.18386, explVarOld: 0.167, explVarNew: 0.184
+[2023-12-26 21:57:21,096] batch: 533, lenEpisode: 12
+[2023-12-26 21:57:22,003] kl: 0.02440, lrMultiplier: 0.088, loss: 1.84333, entropy: 1.20927, explVarOld: 0.168, explVarNew: 0.180
+[2023-12-26 21:57:26,850] batch: 534, lenEpisode: 12
+[2023-12-26 21:57:27,774] kl: 0.01962, lrMultiplier: 0.088, loss: 2.08391, entropy: 1.21982, explVarOld: 0.147, explVarNew: 0.158
+[2023-12-26 21:57:35,041] batch: 535, lenEpisode: 19
+[2023-12-26 21:57:35,941] kl: 0.01446, lrMultiplier: 0.088, loss: 2.12809, entropy: 1.18986, explVarOld: 0.060, explVarNew: 0.075
+[2023-12-26 21:57:41,146] batch: 536, lenEpisode: 15
+[2023-12-26 21:57:42,141] kl: 0.01621, lrMultiplier: 0.088, loss: 1.92470, entropy: 1.21116, explVarOld: 0.151, explVarNew: 0.158
+[2023-12-26 21:57:45,886] batch: 537, lenEpisode: 10
+[2023-12-26 21:57:46,812] kl: 0.00831, lrMultiplier: 0.132, loss: 2.12468, entropy: 1.26205, explVarOld: 0.092, explVarNew: 0.112
+[2023-12-26 21:57:53,414] batch: 538, lenEpisode: 18
+[2023-12-26 21:57:54,572] kl: 0.03564, lrMultiplier: 0.132, loss: 2.07263, entropy: 1.26551, explVarOld: 0.149, explVarNew: 0.175
+[2023-12-26 21:57:57,144] batch: 539, lenEpisode: 8
+[2023-12-26 21:57:58,084] kl: 0.01530, lrMultiplier: 0.132, loss: 1.98379, entropy: 1.25318, explVarOld: 0.168, explVarNew: 0.188
+[2023-12-26 21:58:01,745] batch: 540, lenEpisode: 11
+[2023-12-26 21:58:02,724] kl: 0.03498, lrMultiplier: 0.132, loss: 1.97368, entropy: 1.28635, explVarOld: 0.157, explVarNew: 0.165
+[2023-12-26 21:58:07,957] batch: 541, lenEpisode: 14
+[2023-12-26 21:58:08,869] kl: 0.04606, lrMultiplier: 0.088, loss: 2.00112, entropy: 1.16536, explVarOld: 0.109, explVarNew: 0.126
+[2023-12-26 21:58:14,219] batch: 542, lenEpisode: 13
+[2023-12-26 21:58:15,137] kl: 0.02505, lrMultiplier: 0.088, loss: 1.98447, entropy: 1.15760, explVarOld: 0.103, explVarNew: 0.114
+[2023-12-26 21:58:19,549] batch: 543, lenEpisode: 11
+[2023-12-26 21:58:20,461] kl: 0.02775, lrMultiplier: 0.088, loss: 2.08159, entropy: 1.22809, explVarOld: 0.093, explVarNew: 0.119
+[2023-12-26 21:58:25,007] batch: 544, lenEpisode: 13
+[2023-12-26 21:58:25,934] kl: 0.01905, lrMultiplier: 0.088, loss: 1.96796, entropy: 1.21268, explVarOld: 0.147, explVarNew: 0.148
+[2023-12-26 21:58:30,926] batch: 545, lenEpisode: 12
+[2023-12-26 21:58:31,856] kl: 0.04269, lrMultiplier: 0.088, loss: 2.08201, entropy: 1.24284, explVarOld: 0.130, explVarNew: 0.144
+[2023-12-26 21:58:36,765] batch: 546, lenEpisode: 14
+[2023-12-26 21:58:37,658] kl: 0.01728, lrMultiplier: 0.088, loss: 1.97431, entropy: 1.17676, explVarOld: 0.099, explVarNew: 0.110
+[2023-12-26 21:58:41,067] batch: 547, lenEpisode: 9
+[2023-12-26 21:58:41,970] kl: 0.02510, lrMultiplier: 0.088, loss: 1.98473, entropy: 1.18970, explVarOld: 0.069, explVarNew: 0.075
+[2023-12-26 21:58:44,979] batch: 548, lenEpisode: 8
+[2023-12-26 21:58:45,886] kl: 0.01219, lrMultiplier: 0.088, loss: 2.02084, entropy: 1.19129, explVarOld: 0.138, explVarNew: 0.148
+[2023-12-26 21:58:51,754] batch: 549, lenEpisode: 19
+[2023-12-26 21:58:52,658] kl: 0.02371, lrMultiplier: 0.088, loss: 2.04111, entropy: 1.17650, explVarOld: 0.117, explVarNew: 0.127
+[2023-12-26 21:58:58,555] batch: 550, lenEpisode: 16
+[2023-12-26 21:58:59,454] kl: 0.01470, lrMultiplier: 0.088, loss: 2.07403, entropy: 1.26056, explVarOld: 0.098, explVarNew: 0.109
+[2023-12-26 21:58:59,454] evalBatch: 550
+[2023-12-26 21:59:31,367] numPlayouts: 1000, win: 3, lose: 7, tie: 0, avgCurrStarted: 0.4
+[2023-12-26 21:59:36,672] batch: 551, lenEpisode: 13
+[2023-12-26 21:59:37,567] kl: 0.02293, lrMultiplier: 0.088, loss: 1.99134, entropy: 1.22879, explVarOld: 0.119, explVarNew: 0.123
+[2023-12-26 21:59:42,652] batch: 552, lenEpisode: 13
+[2023-12-26 21:59:43,640] kl: 0.02122, lrMultiplier: 0.088, loss: 2.02085, entropy: 1.20846, explVarOld: 0.146, explVarNew: 0.153
+[2023-12-26 21:59:47,846] batch: 553, lenEpisode: 11
+[2023-12-26 21:59:48,872] kl: 0.01540, lrMultiplier: 0.088, loss: 1.97299, entropy: 1.24415, explVarOld: 0.179, explVarNew: 0.189
+[2023-12-26 21:59:54,135] batch: 554, lenEpisode: 12
+[2023-12-26 21:59:55,057] kl: 0.01108, lrMultiplier: 0.088, loss: 2.01793, entropy: 1.21665, explVarOld: 0.095, explVarNew: 0.099
+[2023-12-26 21:59:59,939] batch: 555, lenEpisode: 12
+[2023-12-26 22:00:00,886] kl: 0.02817, lrMultiplier: 0.088, loss: 2.06415, entropy: 1.24907, explVarOld: 0.101, explVarNew: 0.128
+[2023-12-26 22:00:06,412] batch: 556, lenEpisode: 14
+[2023-12-26 22:00:07,320] kl: 0.01199, lrMultiplier: 0.088, loss: 2.03715, entropy: 1.17899, explVarOld: 0.122, explVarNew: 0.129
+[2023-12-26 22:00:13,109] batch: 557, lenEpisode: 15
+[2023-12-26 22:00:14,305] kl: 0.01482, lrMultiplier: 0.088, loss: 1.97299, entropy: 1.25822, explVarOld: 0.155, explVarNew: 0.163
+[2023-12-26 22:00:22,358] batch: 558, lenEpisode: 21
+[2023-12-26 22:00:23,376] kl: 0.01274, lrMultiplier: 0.088, loss: 2.06318, entropy: 1.26487, explVarOld: 0.106, explVarNew: 0.108
+[2023-12-26 22:00:28,978] batch: 559, lenEpisode: 15
+[2023-12-26 22:00:29,893] kl: 0.01929, lrMultiplier: 0.088, loss: 2.00282, entropy: 1.25208, explVarOld: 0.156, explVarNew: 0.161
+[2023-12-26 22:00:35,238] batch: 560, lenEpisode: 12
+[2023-12-26 22:00:36,288] kl: 0.02406, lrMultiplier: 0.088, loss: 2.02262, entropy: 1.24714, explVarOld: 0.106, explVarNew: 0.117
+[2023-12-26 22:00:42,676] batch: 561, lenEpisode: 18
+[2023-12-26 22:00:43,597] kl: 0.02398, lrMultiplier: 0.088, loss: 2.04824, entropy: 1.21656, explVarOld: 0.073, explVarNew: 0.084
+[2023-12-26 22:00:48,146] batch: 562, lenEpisode: 11
+[2023-12-26 22:00:49,237] kl: 0.02066, lrMultiplier: 0.088, loss: 2.03958, entropy: 1.35137, explVarOld: 0.159, explVarNew: 0.179
+[2023-12-26 22:00:54,586] batch: 563, lenEpisode: 12
+[2023-12-26 22:00:55,537] kl: 0.01815, lrMultiplier: 0.088, loss: 2.00731, entropy: 1.24233, explVarOld: 0.133, explVarNew: 0.139
+[2023-12-26 22:01:01,193] batch: 564, lenEpisode: 14
+[2023-12-26 22:01:02,097] kl: 0.02689, lrMultiplier: 0.088, loss: 2.08765, entropy: 1.28278, explVarOld: 0.130, explVarNew: 0.147
+[2023-12-26 22:01:07,110] batch: 565, lenEpisode: 11
+[2023-12-26 22:01:08,459] kl: 0.01161, lrMultiplier: 0.088, loss: 1.98492, entropy: 1.32466, explVarOld: 0.167, explVarNew: 0.177
+[2023-12-26 22:01:15,688] batch: 566, lenEpisode: 18
+[2023-12-26 22:01:16,601] kl: 0.02759, lrMultiplier: 0.088, loss: 1.97816, entropy: 1.16891, explVarOld: 0.114, explVarNew: 0.126
+[2023-12-26 22:01:21,304] batch: 567, lenEpisode: 13
+[2023-12-26 22:01:22,229] kl: 0.02709, lrMultiplier: 0.088, loss: 2.04681, entropy: 1.26943, explVarOld: 0.119, explVarNew: 0.137
+[2023-12-26 22:01:25,703] batch: 568, lenEpisode: 10
+[2023-12-26 22:01:26,610] kl: 0.01499, lrMultiplier: 0.088, loss: 2.10690, entropy: 1.23450, explVarOld: 0.092, explVarNew: 0.098
+[2023-12-26 22:01:29,900] batch: 569, lenEpisode: 9
+[2023-12-26 22:01:30,808] kl: 0.02572, lrMultiplier: 0.088, loss: 2.11454, entropy: 1.36145, explVarOld: 0.136, explVarNew: 0.152
+[2023-12-26 22:01:35,814] batch: 570, lenEpisode: 13
+[2023-12-26 22:01:36,757] kl: 0.01160, lrMultiplier: 0.088, loss: 2.01893, entropy: 1.26673, explVarOld: 0.145, explVarNew: 0.149
+[2023-12-26 22:01:40,388] batch: 571, lenEpisode: 8
+[2023-12-26 22:01:41,316] kl: 0.03725, lrMultiplier: 0.088, loss: 2.09630, entropy: 1.29028, explVarOld: 0.092, explVarNew: 0.100
+[2023-12-26 22:01:46,253] batch: 572, lenEpisode: 13
+[2023-12-26 22:01:47,152] kl: 0.01504, lrMultiplier: 0.088, loss: 1.96950, entropy: 1.25950, explVarOld: 0.096, explVarNew: 0.102
+[2023-12-26 22:01:52,964] batch: 573, lenEpisode: 15
+[2023-12-26 22:01:53,941] kl: 0.02861, lrMultiplier: 0.088, loss: 2.00313, entropy: 1.25451, explVarOld: 0.128, explVarNew: 0.136
+[2023-12-26 22:02:00,974] batch: 574, lenEpisode: 17
+[2023-12-26 22:02:01,911] kl: 0.01781, lrMultiplier: 0.088, loss: 2.02862, entropy: 1.23622, explVarOld: 0.103, explVarNew: 0.109
+[2023-12-26 22:02:07,724] batch: 575, lenEpisode: 13
+[2023-12-26 22:02:08,660] kl: 0.01995, lrMultiplier: 0.088, loss: 1.95023, entropy: 1.16263, explVarOld: 0.127, explVarNew: 0.135
+[2023-12-26 22:02:14,615] batch: 576, lenEpisode: 13
+[2023-12-26 22:02:15,535] kl: 0.03298, lrMultiplier: 0.088, loss: 2.13686, entropy: 1.25465, explVarOld: 0.048, explVarNew: 0.059
+[2023-12-26 22:02:20,770] batch: 577, lenEpisode: 15
+[2023-12-26 22:02:21,693] kl: 0.02048, lrMultiplier: 0.088, loss: 2.03392, entropy: 1.22274, explVarOld: 0.078, explVarNew: 0.090
+[2023-12-26 22:02:25,712] batch: 578, lenEpisode: 13
+[2023-12-26 22:02:26,723] kl: 0.02331, lrMultiplier: 0.088, loss: 1.97927, entropy: 1.18229, explVarOld: 0.085, explVarNew: 0.102
+[2023-12-26 22:02:29,703] batch: 579, lenEpisode: 8
+[2023-12-26 22:02:30,603] kl: 0.02543, lrMultiplier: 0.088, loss: 2.06166, entropy: 1.29277, explVarOld: 0.097, explVarNew: 0.107
+[2023-12-26 22:02:34,062] batch: 580, lenEpisode: 8
+[2023-12-26 22:02:34,988] kl: 0.02434, lrMultiplier: 0.088, loss: 2.11145, entropy: 1.28470, explVarOld: 0.044, explVarNew: 0.051
+[2023-12-26 22:02:37,494] batch: 581, lenEpisode: 7
+[2023-12-26 22:02:38,407] kl: 0.01825, lrMultiplier: 0.088, loss: 1.95825, entropy: 1.19463, explVarOld: 0.126, explVarNew: 0.137
+[2023-12-26 22:02:44,902] batch: 582, lenEpisode: 19
+[2023-12-26 22:02:46,057] kl: 0.02172, lrMultiplier: 0.088, loss: 2.09121, entropy: 1.29335, explVarOld: 0.103, explVarNew: 0.110
+[2023-12-26 22:02:50,866] batch: 583, lenEpisode: 12
+[2023-12-26 22:02:51,769] kl: 0.01567, lrMultiplier: 0.088, loss: 2.01390, entropy: 1.21333, explVarOld: 0.112, explVarNew: 0.120
+[2023-12-26 22:02:56,856] batch: 584, lenEpisode: 16
+[2023-12-26 22:02:57,779] kl: 0.01572, lrMultiplier: 0.088, loss: 2.07051, entropy: 1.20199, explVarOld: 0.073, explVarNew: 0.083
+[2023-12-26 22:03:03,112] batch: 585, lenEpisode: 15
+[2023-12-26 22:03:04,021] kl: 0.01726, lrMultiplier: 0.088, loss: 2.10351, entropy: 1.26746, explVarOld: 0.087, explVarNew: 0.097
+[2023-12-26 22:03:08,133] batch: 586, lenEpisode: 11
+[2023-12-26 22:03:09,046] kl: 0.00873, lrMultiplier: 0.132, loss: 2.06447, entropy: 1.26027, explVarOld: 0.127, explVarNew: 0.139
+[2023-12-26 22:03:16,915] batch: 587, lenEpisode: 22
+[2023-12-26 22:03:17,821] kl: 0.07546, lrMultiplier: 0.088, loss: 2.07739, entropy: 1.18977, explVarOld: 0.073, explVarNew: 0.088
+[2023-12-26 22:03:22,283] batch: 588, lenEpisode: 11
+[2023-12-26 22:03:23,206] kl: 0.05059, lrMultiplier: 0.088, loss: 2.00071, entropy: 1.22174, explVarOld: 0.106, explVarNew: 0.118
+[2023-12-26 22:03:28,766] batch: 589, lenEpisode: 15
+[2023-12-26 22:03:29,689] kl: 0.04599, lrMultiplier: 0.088, loss: 2.06594, entropy: 1.33069, explVarOld: 0.115, explVarNew: 0.121
+[2023-12-26 22:03:32,497] batch: 590, lenEpisode: 8
+[2023-12-26 22:03:33,435] kl: 0.07429, lrMultiplier: 0.088, loss: 2.10542, entropy: 1.29914, explVarOld: 0.129, explVarNew: 0.132
+[2023-12-26 22:03:36,145] batch: 591, lenEpisode: 9
+[2023-12-26 22:03:37,064] kl: 0.02016, lrMultiplier: 0.088, loss: 2.18798, entropy: 1.24228, explVarOld: 0.092, explVarNew: 0.101
+[2023-12-26 22:03:42,484] batch: 592, lenEpisode: 16
+[2023-12-26 22:03:43,379] kl: 0.08910, lrMultiplier: 0.088, loss: 2.05462, entropy: 1.26853, explVarOld: 0.122, explVarNew: 0.131
+[2023-12-26 22:03:46,486] batch: 593, lenEpisode: 8
+[2023-12-26 22:03:47,437] kl: 0.01245, lrMultiplier: 0.088, loss: 2.11692, entropy: 1.27887, explVarOld: 0.080, explVarNew: 0.088
+[2023-12-26 22:03:53,785] batch: 594, lenEpisode: 16
+[2023-12-26 22:03:54,741] kl: 0.03911, lrMultiplier: 0.088, loss: 2.14166, entropy: 1.25062, explVarOld: 0.027, explVarNew: 0.038
+[2023-12-26 22:03:57,709] batch: 595, lenEpisode: 8
+[2023-12-26 22:03:58,632] kl: 0.01546, lrMultiplier: 0.088, loss: 2.16635, entropy: 1.31310, explVarOld: 0.107, explVarNew: 0.115
+[2023-12-26 22:04:04,055] batch: 596, lenEpisode: 13
+[2023-12-26 22:04:05,005] kl: 0.01920, lrMultiplier: 0.088, loss: 2.11449, entropy: 1.33424, explVarOld: 0.066, explVarNew: 0.074
+[2023-12-26 22:04:09,584] batch: 597, lenEpisode: 11
+[2023-12-26 22:04:10,568] kl: 0.01223, lrMultiplier: 0.088, loss: 2.21480, entropy: 1.37690, explVarOld: 0.059, explVarNew: 0.064
+[2023-12-26 22:04:15,219] batch: 598, lenEpisode: 11
+[2023-12-26 22:04:16,145] kl: 0.01417, lrMultiplier: 0.088, loss: 2.08405, entropy: 1.29109, explVarOld: 0.076, explVarNew: 0.086
+[2023-12-26 22:04:19,887] batch: 599, lenEpisode: 9
+[2023-12-26 22:04:20,815] kl: 0.03608, lrMultiplier: 0.088, loss: 2.03335, entropy: 1.22136, explVarOld: 0.074, explVarNew: 0.090
+[2023-12-26 22:04:24,481] batch: 600, lenEpisode: 10
+[2023-12-26 22:04:25,412] kl: 0.03241, lrMultiplier: 0.088, loss: 2.12441, entropy: 1.23817, explVarOld: 0.088, explVarNew: 0.099
+[2023-12-26 22:04:25,412] evalBatch: 600
+[2023-12-26 22:05:01,351] numPlayouts: 1000, win: 5, lose: 5, tie: 0, avgCurrStarted: 0.4
+[2023-12-26 22:05:07,444] batch: 601, lenEpisode: 14
+[2023-12-26 22:05:08,406] kl: 0.02669, lrMultiplier: 0.088, loss: 2.09257, entropy: 1.30178, explVarOld: 0.122, explVarNew: 0.131
+[2023-12-26 22:05:13,671] batch: 602, lenEpisode: 13
+[2023-12-26 22:05:14,622] kl: 0.02183, lrMultiplier: 0.088, loss: 2.05019, entropy: 1.23600, explVarOld: 0.097, explVarNew: 0.118
+[2023-12-26 22:05:19,592] batch: 603, lenEpisode: 13
+[2023-12-26 22:05:20,536] kl: 0.02350, lrMultiplier: 0.088, loss: 2.08497, entropy: 1.26989, explVarOld: 0.079, explVarNew: 0.087
+[2023-12-26 22:05:25,937] batch: 604, lenEpisode: 13
+[2023-12-26 22:05:26,874] kl: 0.02931, lrMultiplier: 0.088, loss: 2.29244, entropy: 1.39812, explVarOld: 0.105, explVarNew: 0.111
+[2023-12-26 22:05:31,123] batch: 605, lenEpisode: 11
+[2023-12-26 22:05:32,037] kl: 0.05307, lrMultiplier: 0.088, loss: 2.05811, entropy: 1.27358, explVarOld: 0.070, explVarNew: 0.078
+[2023-12-26 22:05:35,116] batch: 606, lenEpisode: 8
+[2023-12-26 22:05:36,021] kl: 0.01302, lrMultiplier: 0.088, loss: 2.21795, entropy: 1.25719, explVarOld: 0.098, explVarNew: 0.103
+[2023-12-26 22:05:41,824] batch: 607, lenEpisode: 15
+[2023-12-26 22:05:42,779] kl: 0.03435, lrMultiplier: 0.088, loss: 2.01783, entropy: 1.24881, explVarOld: 0.110, explVarNew: 0.118
+[2023-12-26 22:05:48,730] batch: 608, lenEpisode: 16
+[2023-12-26 22:05:49,711] kl: 0.02614, lrMultiplier: 0.088, loss: 2.07135, entropy: 1.32018, explVarOld: 0.137, explVarNew: 0.146
+[2023-12-26 22:05:54,574] batch: 609, lenEpisode: 11
+[2023-12-26 22:05:55,676] kl: 0.02138, lrMultiplier: 0.088, loss: 1.97212, entropy: 1.25934, explVarOld: 0.126, explVarNew: 0.131
+[2023-12-26 22:05:58,833] batch: 610, lenEpisode: 8
+[2023-12-26 22:05:59,923] kl: 0.04026, lrMultiplier: 0.088, loss: 2.03931, entropy: 1.21997, explVarOld: 0.098, explVarNew: 0.110
+[2023-12-26 22:06:05,537] batch: 611, lenEpisode: 13
+[2023-12-26 22:06:06,444] kl: 0.02522, lrMultiplier: 0.088, loss: 2.07742, entropy: 1.23679, explVarOld: 0.109, explVarNew: 0.120
+[2023-12-26 22:06:12,825] batch: 612, lenEpisode: 16
+[2023-12-26 22:06:13,790] kl: 0.03526, lrMultiplier: 0.088, loss: 1.96855, entropy: 1.19108, explVarOld: 0.090, explVarNew: 0.100
+[2023-12-26 22:06:19,389] batch: 613, lenEpisode: 13
+[2023-12-26 22:06:20,330] kl: 0.02995, lrMultiplier: 0.088, loss: 2.02145, entropy: 1.15488, explVarOld: 0.102, explVarNew: 0.114
+[2023-12-26 22:06:23,404] batch: 614, lenEpisode: 8
+[2023-12-26 22:06:24,331] kl: 0.03285, lrMultiplier: 0.088, loss: 2.07059, entropy: 1.20206, explVarOld: 0.127, explVarNew: 0.131
+[2023-12-26 22:06:28,863] batch: 615, lenEpisode: 11
+[2023-12-26 22:06:29,781] kl: 0.03183, lrMultiplier: 0.088, loss: 2.02307, entropy: 1.19249, explVarOld: 0.103, explVarNew: 0.112
+[2023-12-26 22:06:34,425] batch: 616, lenEpisode: 11
+[2023-12-26 22:06:35,347] kl: 0.01307, lrMultiplier: 0.088, loss: 2.06006, entropy: 1.23527, explVarOld: 0.108, explVarNew: 0.115
+[2023-12-26 22:06:40,587] batch: 617, lenEpisode: 15
+[2023-12-26 22:06:41,488] kl: 0.01357, lrMultiplier: 0.088, loss: 2.04004, entropy: 1.24250, explVarOld: 0.084, explVarNew: 0.103
+[2023-12-26 22:06:46,510] batch: 618, lenEpisode: 11
+[2023-12-26 22:06:47,512] kl: 0.02326, lrMultiplier: 0.088, loss: 2.04538, entropy: 1.24817, explVarOld: 0.115, explVarNew: 0.117
+[2023-12-26 22:06:50,436] batch: 619, lenEpisode: 7
+[2023-12-26 22:06:51,357] kl: 0.00956, lrMultiplier: 0.132, loss: 2.05881, entropy: 1.28097, explVarOld: 0.103, explVarNew: 0.109
+[2023-12-26 22:06:55,328] batch: 620, lenEpisode: 12
+[2023-12-26 22:06:56,254] kl: 0.03710, lrMultiplier: 0.132, loss: 2.07068, entropy: 1.25318, explVarOld: 0.108, explVarNew: 0.124
+[2023-12-26 22:06:59,640] batch: 621, lenEpisode: 8
+[2023-12-26 22:07:00,835] kl: 0.02688, lrMultiplier: 0.132, loss: 1.98587, entropy: 1.16502, explVarOld: 0.070, explVarNew: 0.073
+[2023-12-26 22:07:04,760] batch: 622, lenEpisode: 9
+[2023-12-26 22:07:05,893] kl: 0.03870, lrMultiplier: 0.132, loss: 2.05267, entropy: 1.26488, explVarOld: 0.072, explVarNew: 0.093
+[2023-12-26 22:07:12,030] batch: 623, lenEpisode: 15
+[2023-12-26 22:07:13,086] kl: 0.04160, lrMultiplier: 0.088, loss: 2.02983, entropy: 1.24528, explVarOld: 0.078, explVarNew: 0.088
+[2023-12-26 22:07:17,865] batch: 624, lenEpisode: 10
+[2023-12-26 22:07:18,798] kl: 0.01623, lrMultiplier: 0.088, loss: 1.96897, entropy: 1.25705, explVarOld: 0.113, explVarNew: 0.121
+[2023-12-26 22:07:24,442] batch: 625, lenEpisode: 15
+[2023-12-26 22:07:25,373] kl: 0.01794, lrMultiplier: 0.088, loss: 2.05764, entropy: 1.21487, explVarOld: 0.079, explVarNew: 0.076
+[2023-12-26 22:07:28,584] batch: 626, lenEpisode: 8
+[2023-12-26 22:07:29,507] kl: 0.03053, lrMultiplier: 0.088, loss: 1.88950, entropy: 1.15776, explVarOld: 0.128, explVarNew: 0.139
+[2023-12-26 22:07:34,703] batch: 627, lenEpisode: 13
+[2023-12-26 22:07:35,619] kl: 0.01604, lrMultiplier: 0.088, loss: 1.97777, entropy: 1.27108, explVarOld: 0.120, explVarNew: 0.135
+[2023-12-26 22:07:41,748] batch: 628, lenEpisode: 15
+[2023-12-26 22:07:42,690] kl: 0.02212, lrMultiplier: 0.088, loss: 2.14749, entropy: 1.30016, explVarOld: 0.086, explVarNew: 0.089
+[2023-12-26 22:07:47,701] batch: 629, lenEpisode: 12
+[2023-12-26 22:07:48,610] kl: 0.02917, lrMultiplier: 0.088, loss: 1.91641, entropy: 1.22672, explVarOld: 0.121, explVarNew: 0.133
+[2023-12-26 22:07:54,777] batch: 630, lenEpisode: 16
+[2023-12-26 22:07:55,700] kl: 0.02787, lrMultiplier: 0.088, loss: 2.01085, entropy: 1.18037, explVarOld: 0.117, explVarNew: 0.131
+[2023-12-26 22:08:00,879] batch: 631, lenEpisode: 14
+[2023-12-26 22:08:01,837] kl: 0.02760, lrMultiplier: 0.088, loss: 1.95035, entropy: 1.18976, explVarOld: 0.095, explVarNew: 0.098
+[2023-12-26 22:08:04,593] batch: 632, lenEpisode: 7
+[2023-12-26 22:08:05,516] kl: 0.06202, lrMultiplier: 0.088, loss: 1.95918, entropy: 1.21458, explVarOld: 0.118, explVarNew: 0.126
+[2023-12-26 22:08:08,883] batch: 633, lenEpisode: 9
+[2023-12-26 22:08:09,838] kl: 0.01861, lrMultiplier: 0.088, loss: 1.98870, entropy: 1.22956, explVarOld: 0.080, explVarNew: 0.097
+[2023-12-26 22:08:13,881] batch: 634, lenEpisode: 10
+[2023-12-26 22:08:14,818] kl: 0.04628, lrMultiplier: 0.088, loss: 1.88214, entropy: 1.15776, explVarOld: 0.178, explVarNew: 0.188
+[2023-12-26 22:08:18,172] batch: 635, lenEpisode: 8
+[2023-12-26 22:08:19,087] kl: 0.02940, lrMultiplier: 0.088, loss: 1.95167, entropy: 1.16971, explVarOld: 0.104, explVarNew: 0.114
+[2023-12-26 22:08:22,720] batch: 636, lenEpisode: 11
+[2023-12-26 22:08:23,629] kl: 0.02791, lrMultiplier: 0.088, loss: 2.03922, entropy: 1.20472, explVarOld: 0.106, explVarNew: 0.117
+[2023-12-26 22:08:26,786] batch: 637, lenEpisode: 8
+[2023-12-26 22:08:27,704] kl: 0.02898, lrMultiplier: 0.088, loss: 1.85426, entropy: 1.10300, explVarOld: 0.156, explVarNew: 0.167
+[2023-12-26 22:08:33,682] batch: 638, lenEpisode: 13
+[2023-12-26 22:08:34,792] kl: 0.03262, lrMultiplier: 0.088, loss: 1.88492, entropy: 1.09110, explVarOld: 0.126, explVarNew: 0.132
+[2023-12-26 22:08:40,251] batch: 639, lenEpisode: 13
+[2023-12-26 22:08:41,177] kl: 0.00981, lrMultiplier: 0.132, loss: 1.93865, entropy: 1.17301, explVarOld: 0.115, explVarNew: 0.121
+[2023-12-26 22:08:46,057] batch: 640, lenEpisode: 14
+[2023-12-26 22:08:47,018] kl: 0.05283, lrMultiplier: 0.088, loss: 1.85356, entropy: 1.15136, explVarOld: 0.174, explVarNew: 0.187
+[2023-12-26 22:08:51,310] batch: 641, lenEpisode: 11
+[2023-12-26 22:08:52,231] kl: 0.01022, lrMultiplier: 0.088, loss: 1.96850, entropy: 1.18484, explVarOld: 0.115, explVarNew: 0.122
+[2023-12-26 22:08:56,476] batch: 642, lenEpisode: 11
+[2023-12-26 22:08:57,402] kl: 0.02821, lrMultiplier: 0.088, loss: 1.81690, entropy: 1.12829, explVarOld: 0.118, explVarNew: 0.138
+[2023-12-26 22:09:00,432] batch: 643, lenEpisode: 8
+[2023-12-26 22:09:01,355] kl: 0.01841, lrMultiplier: 0.088, loss: 1.82884, entropy: 1.17510, explVarOld: 0.143, explVarNew: 0.150
+[2023-12-26 22:09:07,971] batch: 644, lenEpisode: 17
+[2023-12-26 22:09:08,936] kl: 0.01800, lrMultiplier: 0.088, loss: 1.92440, entropy: 1.18649, explVarOld: 0.113, explVarNew: 0.114
+[2023-12-26 22:09:13,912] batch: 645, lenEpisode: 13
+[2023-12-26 22:09:14,841] kl: 0.01230, lrMultiplier: 0.088, loss: 1.96529, entropy: 1.13930, explVarOld: 0.108, explVarNew: 0.114
+[2023-12-26 22:09:19,037] batch: 646, lenEpisode: 11
+[2023-12-26 22:09:19,980] kl: 0.04769, lrMultiplier: 0.088, loss: 1.85238, entropy: 1.15085, explVarOld: 0.136, explVarNew: 0.152
+[2023-12-26 22:09:25,179] batch: 647, lenEpisode: 13
+[2023-12-26 22:09:26,096] kl: 0.01312, lrMultiplier: 0.088, loss: 1.93543, entropy: 1.17472, explVarOld: 0.165, explVarNew: 0.173
+[2023-12-26 22:09:31,296] batch: 648, lenEpisode: 14
+[2023-12-26 22:09:32,225] kl: 0.02434, lrMultiplier: 0.088, loss: 1.88978, entropy: 1.15093, explVarOld: 0.183, explVarNew: 0.191
+[2023-12-26 22:09:36,390] batch: 649, lenEpisode: 8
+[2023-12-26 22:09:37,449] kl: 0.01212, lrMultiplier: 0.088, loss: 1.82035, entropy: 1.12470, explVarOld: 0.166, explVarNew: 0.175
+[2023-12-26 22:09:40,557] batch: 650, lenEpisode: 8
+[2023-12-26 22:09:41,482] kl: 0.01893, lrMultiplier: 0.088, loss: 1.84833, entropy: 1.15938, explVarOld: 0.113, explVarNew: 0.123
+[2023-12-26 22:09:41,482] evalBatch: 650
+[2023-12-26 22:10:12,606] numPlayouts: 1000, win: 4, lose: 6, tie: 0, avgCurrStarted: 0.3
+[2023-12-26 22:10:16,993] batch: 651, lenEpisode: 11
+[2023-12-26 22:10:17,898] kl: 0.01622, lrMultiplier: 0.088, loss: 1.83265, entropy: 1.10358, explVarOld: 0.150, explVarNew: 0.161
+[2023-12-26 22:10:22,151] batch: 652, lenEpisode: 11
+[2023-12-26 22:10:23,082] kl: 0.01271, lrMultiplier: 0.088, loss: 1.83633, entropy: 1.11802, explVarOld: 0.129, explVarNew: 0.132
+[2023-12-26 22:10:26,795] batch: 653, lenEpisode: 11
+[2023-12-26 22:10:27,704] kl: 0.02436, lrMultiplier: 0.088, loss: 1.79523, entropy: 1.01779, explVarOld: 0.120, explVarNew: 0.126
+[2023-12-26 22:10:33,361] batch: 654, lenEpisode: 13
+[2023-12-26 22:10:34,257] kl: 0.03319, lrMultiplier: 0.088, loss: 1.79184, entropy: 1.11353, explVarOld: 0.177, explVarNew: 0.188
+[2023-12-26 22:10:38,468] batch: 655, lenEpisode: 13
+[2023-12-26 22:10:39,372] kl: 0.02470, lrMultiplier: 0.088, loss: 1.74909, entropy: 1.08990, explVarOld: 0.153, explVarNew: 0.161
+[2023-12-26 22:10:43,880] batch: 656, lenEpisode: 13
+[2023-12-26 22:10:44,785] kl: 0.03874, lrMultiplier: 0.088, loss: 1.87585, entropy: 1.08148, explVarOld: 0.131, explVarNew: 0.134
+[2023-12-26 22:10:48,917] batch: 657, lenEpisode: 11
+[2023-12-26 22:10:49,824] kl: 0.04963, lrMultiplier: 0.088, loss: 1.77277, entropy: 1.09331, explVarOld: 0.121, explVarNew: 0.131
+[2023-12-26 22:10:53,950] batch: 658, lenEpisode: 11
+[2023-12-26 22:10:54,858] kl: 0.01521, lrMultiplier: 0.088, loss: 1.71334, entropy: 1.04065, explVarOld: 0.109, explVarNew: 0.120
+[2023-12-26 22:10:59,330] batch: 659, lenEpisode: 12
+[2023-12-26 22:11:00,228] kl: 0.03300, lrMultiplier: 0.088, loss: 1.70717, entropy: 1.05405, explVarOld: 0.153, explVarNew: 0.160
+[2023-12-26 22:11:06,399] batch: 660, lenEpisode: 17
+[2023-12-26 22:11:07,310] kl: 0.02878, lrMultiplier: 0.088, loss: 1.89143, entropy: 1.04662, explVarOld: 0.129, explVarNew: 0.132
+[2023-12-26 22:11:10,568] batch: 661, lenEpisode: 9
+[2023-12-26 22:11:11,467] kl: 0.02266, lrMultiplier: 0.088, loss: 1.77858, entropy: 1.08812, explVarOld: 0.164, explVarNew: 0.176
+[2023-12-26 22:11:15,692] batch: 662, lenEpisode: 13
+[2023-12-26 22:11:16,602] kl: 0.03278, lrMultiplier: 0.088, loss: 1.74029, entropy: 1.06791, explVarOld: 0.135, explVarNew: 0.141
+[2023-12-26 22:11:20,489] batch: 663, lenEpisode: 10
+[2023-12-26 22:11:21,506] kl: 0.01661, lrMultiplier: 0.088, loss: 1.79703, entropy: 1.08393, explVarOld: 0.151, explVarNew: 0.163
+[2023-12-26 22:11:26,487] batch: 664, lenEpisode: 12
+[2023-12-26 22:11:27,405] kl: 0.02148, lrMultiplier: 0.088, loss: 1.64049, entropy: 1.03057, explVarOld: 0.212, explVarNew: 0.220
+[2023-12-26 22:11:32,795] batch: 665, lenEpisode: 13
+[2023-12-26 22:11:33,718] kl: 0.01846, lrMultiplier: 0.088, loss: 1.80481, entropy: 1.11803, explVarOld: 0.156, explVarNew: 0.171
+[2023-12-26 22:11:39,353] batch: 666, lenEpisode: 15
+[2023-12-26 22:11:40,256] kl: 0.02164, lrMultiplier: 0.088, loss: 1.76794, entropy: 1.08889, explVarOld: 0.114, explVarNew: 0.128
+[2023-12-26 22:11:43,201] batch: 667, lenEpisode: 8
+[2023-12-26 22:11:44,128] kl: 0.02322, lrMultiplier: 0.088, loss: 1.72784, entropy: 1.04143, explVarOld: 0.150, explVarNew: 0.161
+[2023-12-26 22:11:48,317] batch: 668, lenEpisode: 10
+[2023-12-26 22:11:49,224] kl: 0.01597, lrMultiplier: 0.088, loss: 1.69487, entropy: 1.04333, explVarOld: 0.192, explVarNew: 0.201
+[2023-12-26 22:11:51,831] batch: 669, lenEpisode: 7
+[2023-12-26 22:11:52,759] kl: 0.03508, lrMultiplier: 0.088, loss: 1.66095, entropy: 1.01704, explVarOld: 0.132, explVarNew: 0.155
+[2023-12-26 22:11:56,171] batch: 670, lenEpisode: 10
+[2023-12-26 22:11:57,080] kl: 0.01381, lrMultiplier: 0.088, loss: 1.74679, entropy: 1.03825, explVarOld: 0.170, explVarNew: 0.177
+[2023-12-26 22:12:03,184] batch: 671, lenEpisode: 16
+[2023-12-26 22:12:04,081] kl: 0.01731, lrMultiplier: 0.088, loss: 1.77175, entropy: 1.05796, explVarOld: 0.137, explVarNew: 0.143
+[2023-12-26 22:12:10,233] batch: 672, lenEpisode: 18
+[2023-12-26 22:12:11,131] kl: 0.02061, lrMultiplier: 0.088, loss: 1.65304, entropy: 1.01791, explVarOld: 0.146, explVarNew: 0.152
+[2023-12-26 22:12:16,092] batch: 673, lenEpisode: 14
+[2023-12-26 22:12:16,982] kl: 0.01322, lrMultiplier: 0.088, loss: 1.80193, entropy: 1.02189, explVarOld: 0.111, explVarNew: 0.121
+[2023-12-26 22:12:21,411] batch: 674, lenEpisode: 14
+[2023-12-26 22:12:22,337] kl: 0.02065, lrMultiplier: 0.088, loss: 1.83505, entropy: 1.07520, explVarOld: 0.107, explVarNew: 0.115
+[2023-12-26 22:12:25,028] batch: 675, lenEpisode: 7
+[2023-12-26 22:12:25,933] kl: 0.01590, lrMultiplier: 0.088, loss: 1.68646, entropy: 0.99565, explVarOld: 0.140, explVarNew: 0.155
+[2023-12-26 22:12:31,155] batch: 676, lenEpisode: 13
+[2023-12-26 22:12:32,065] kl: 0.02809, lrMultiplier: 0.088, loss: 1.80358, entropy: 0.99816, explVarOld: 0.078, explVarNew: 0.089
+[2023-12-26 22:12:36,045] batch: 677, lenEpisode: 11
+[2023-12-26 22:12:36,948] kl: 0.01269, lrMultiplier: 0.088, loss: 1.76935, entropy: 0.96685, explVarOld: 0.120, explVarNew: 0.127
+[2023-12-26 22:12:40,168] batch: 678, lenEpisode: 10
+[2023-12-26 22:12:41,068] kl: 0.01893, lrMultiplier: 0.088, loss: 1.71033, entropy: 1.01875, explVarOld: 0.085, explVarNew: 0.094
+[2023-12-26 22:12:45,408] batch: 679, lenEpisode: 11
+[2023-12-26 22:12:46,335] kl: 0.02486, lrMultiplier: 0.088, loss: 1.73409, entropy: 1.00803, explVarOld: 0.158, explVarNew: 0.168
+[2023-12-26 22:12:51,608] batch: 680, lenEpisode: 15
+[2023-12-26 22:12:52,503] kl: 0.02209, lrMultiplier: 0.088, loss: 1.66153, entropy: 0.96675, explVarOld: 0.111, explVarNew: 0.117
+[2023-12-26 22:12:58,159] batch: 681, lenEpisode: 19
+[2023-12-26 22:12:59,295] kl: 0.02740, lrMultiplier: 0.088, loss: 1.75249, entropy: 1.05421, explVarOld: 0.109, explVarNew: 0.124
+[2023-12-26 22:13:06,480] batch: 682, lenEpisode: 19
+[2023-12-26 22:13:07,416] kl: 0.02099, lrMultiplier: 0.088, loss: 1.65307, entropy: 1.06372, explVarOld: 0.175, explVarNew: 0.180
+[2023-12-26 22:13:10,664] batch: 683, lenEpisode: 9
+[2023-12-26 22:13:11,569] kl: 0.02817, lrMultiplier: 0.088, loss: 1.75187, entropy: 1.01561, explVarOld: 0.105, explVarNew: 0.108
+[2023-12-26 22:13:15,637] batch: 684, lenEpisode: 11
+[2023-12-26 22:13:16,544] kl: 0.02685, lrMultiplier: 0.088, loss: 1.78125, entropy: 1.00337, explVarOld: 0.124, explVarNew: 0.137
+[2023-12-26 22:13:20,349] batch: 685, lenEpisode: 9
+[2023-12-26 22:13:21,241] kl: 0.02625, lrMultiplier: 0.088, loss: 1.69736, entropy: 1.04837, explVarOld: 0.136, explVarNew: 0.143
+[2023-12-26 22:13:25,121] batch: 686, lenEpisode: 12
+[2023-12-26 22:13:26,033] kl: 0.03165, lrMultiplier: 0.088, loss: 1.71199, entropy: 0.97884, explVarOld: 0.147, explVarNew: 0.162
+[2023-12-26 22:13:31,888] batch: 687, lenEpisode: 15
+[2023-12-26 22:13:32,803] kl: 0.02073, lrMultiplier: 0.088, loss: 1.72479, entropy: 0.94062, explVarOld: 0.098, explVarNew: 0.121
+[2023-12-26 22:13:36,776] batch: 688, lenEpisode: 11
+[2023-12-26 22:13:37,685] kl: 0.04244, lrMultiplier: 0.088, loss: 1.75049, entropy: 1.05210, explVarOld: 0.155, explVarNew: 0.172
+[2023-12-26 22:13:44,042] batch: 689, lenEpisode: 18
+[2023-12-26 22:13:44,945] kl: 0.01818, lrMultiplier: 0.088, loss: 1.64276, entropy: 1.02130, explVarOld: 0.174, explVarNew: 0.181
+[2023-12-26 22:13:49,413] batch: 690, lenEpisode: 13
+[2023-12-26 22:13:50,309] kl: 0.03810, lrMultiplier: 0.088, loss: 1.74582, entropy: 0.99043, explVarOld: 0.151, explVarNew: 0.176
+[2023-12-26 22:13:55,438] batch: 691, lenEpisode: 14
+[2023-12-26 22:13:56,383] kl: 0.02554, lrMultiplier: 0.088, loss: 1.66965, entropy: 1.01696, explVarOld: 0.213, explVarNew: 0.214
+[2023-12-26 22:14:01,743] batch: 692, lenEpisode: 14
+[2023-12-26 22:14:02,681] kl: 0.05190, lrMultiplier: 0.088, loss: 1.65708, entropy: 0.98751, explVarOld: 0.196, explVarNew: 0.205
+[2023-12-26 22:14:10,311] batch: 693, lenEpisode: 21
+[2023-12-26 22:14:11,240] kl: 0.02005, lrMultiplier: 0.088, loss: 1.81966, entropy: 1.03343, explVarOld: 0.072, explVarNew: 0.082
+[2023-12-26 22:14:16,191] batch: 694, lenEpisode: 13
+[2023-12-26 22:14:17,184] kl: 0.04678, lrMultiplier: 0.088, loss: 1.79792, entropy: 1.10112, explVarOld: 0.106, explVarNew: 0.114
+[2023-12-26 22:14:21,139] batch: 695, lenEpisode: 13
+[2023-12-26 22:14:22,409] kl: 0.01624, lrMultiplier: 0.088, loss: 1.74599, entropy: 0.98629, explVarOld: 0.110, explVarNew: 0.121
+[2023-12-26 22:14:26,259] batch: 696, lenEpisode: 10
+[2023-12-26 22:14:27,192] kl: 0.01784, lrMultiplier: 0.088, loss: 1.75060, entropy: 1.01874, explVarOld: 0.105, explVarNew: 0.116
+[2023-12-26 22:14:33,884] batch: 697, lenEpisode: 18
+[2023-12-26 22:14:34,832] kl: 0.01152, lrMultiplier: 0.088, loss: 1.76911, entropy: 1.00761, explVarOld: 0.107, explVarNew: 0.117
+[2023-12-26 22:14:38,490] batch: 698, lenEpisode: 11
+[2023-12-26 22:14:39,455] kl: 0.02099, lrMultiplier: 0.088, loss: 1.68113, entropy: 0.98339, explVarOld: 0.125, explVarNew: 0.135
+[2023-12-26 22:14:44,818] batch: 699, lenEpisode: 14
+[2023-12-26 22:14:45,797] kl: 0.01508, lrMultiplier: 0.088, loss: 1.79060, entropy: 1.00859, explVarOld: 0.090, explVarNew: 0.108
+[2023-12-26 22:14:52,238] batch: 700, lenEpisode: 16
+[2023-12-26 22:14:53,249] kl: 0.02629, lrMultiplier: 0.088, loss: 1.56999, entropy: 0.90651, explVarOld: 0.146, explVarNew: 0.165
+[2023-12-26 22:14:53,249] evalBatch: 700
+[2023-12-26 22:15:27,715] numPlayouts: 1000, win: 3, lose: 7, tie: 0, avgCurrStarted: 0.6
+[2023-12-26 22:15:32,561] batch: 701, lenEpisode: 15
+[2023-12-26 22:15:33,473] kl: 0.01580, lrMultiplier: 0.088, loss: 1.70050, entropy: 0.99084, explVarOld: 0.148, explVarNew: 0.157
+[2023-12-26 22:15:38,545] batch: 702, lenEpisode: 13
+[2023-12-26 22:15:39,473] kl: 0.04095, lrMultiplier: 0.088, loss: 1.69450, entropy: 1.02107, explVarOld: 0.152, explVarNew: 0.158
+[2023-12-26 22:15:44,291] batch: 703, lenEpisode: 13
+[2023-12-26 22:15:45,208] kl: 0.01491, lrMultiplier: 0.088, loss: 1.80504, entropy: 1.00927, explVarOld: 0.112, explVarNew: 0.122
+[2023-12-26 22:15:48,485] batch: 704, lenEpisode: 8
+[2023-12-26 22:15:49,461] kl: 0.02050, lrMultiplier: 0.088, loss: 1.70237, entropy: 0.97411, explVarOld: 0.113, explVarNew: 0.140
+[2023-12-26 22:15:53,780] batch: 705, lenEpisode: 11
+[2023-12-26 22:15:54,742] kl: 0.02498, lrMultiplier: 0.088, loss: 1.65853, entropy: 0.90603, explVarOld: 0.144, explVarNew: 0.151
+[2023-12-26 22:15:59,082] batch: 706, lenEpisode: 13
+[2023-12-26 22:16:00,040] kl: 0.02407, lrMultiplier: 0.088, loss: 1.68350, entropy: 0.91593, explVarOld: 0.088, explVarNew: 0.104
+[2023-12-26 22:16:06,172] batch: 707, lenEpisode: 16
+[2023-12-26 22:16:07,144] kl: 0.04371, lrMultiplier: 0.088, loss: 1.64480, entropy: 0.95137, explVarOld: 0.152, explVarNew: 0.163
+[2023-12-26 22:16:13,265] batch: 708, lenEpisode: 17
+[2023-12-26 22:16:14,248] kl: 0.01107, lrMultiplier: 0.088, loss: 1.69668, entropy: 0.93273, explVarOld: 0.110, explVarNew: 0.119
+[2023-12-26 22:16:17,546] batch: 709, lenEpisode: 11
+[2023-12-26 22:16:18,541] kl: 0.06665, lrMultiplier: 0.088, loss: 1.68492, entropy: 1.03510, explVarOld: 0.178, explVarNew: 0.192
+[2023-12-26 22:16:22,650] batch: 710, lenEpisode: 11
+[2023-12-26 22:16:23,611] kl: 0.01637, lrMultiplier: 0.088, loss: 1.74731, entropy: 1.05712, explVarOld: 0.166, explVarNew: 0.177
+[2023-12-26 22:16:26,334] batch: 711, lenEpisode: 10
+[2023-12-26 22:16:27,284] kl: 0.03312, lrMultiplier: 0.088, loss: 1.70649, entropy: 0.93547, explVarOld: 0.131, explVarNew: 0.138
+[2023-12-26 22:16:31,307] batch: 712, lenEpisode: 11
+[2023-12-26 22:16:32,263] kl: 0.01975, lrMultiplier: 0.088, loss: 1.74155, entropy: 0.97567, explVarOld: 0.149, explVarNew: 0.157
+[2023-12-26 22:16:36,982] batch: 713, lenEpisode: 12
+[2023-12-26 22:16:37,941] kl: 0.01182, lrMultiplier: 0.088, loss: 1.67326, entropy: 0.96975, explVarOld: 0.173, explVarNew: 0.184
+[2023-12-26 22:16:42,296] batch: 714, lenEpisode: 10
+[2023-12-26 22:16:43,256] kl: 0.01815, lrMultiplier: 0.088, loss: 1.71324, entropy: 0.98851, explVarOld: 0.121, explVarNew: 0.128
+[2023-12-26 22:16:46,567] batch: 715, lenEpisode: 10
+[2023-12-26 22:16:47,544] kl: 0.00947, lrMultiplier: 0.132, loss: 1.55683, entropy: 0.86974, explVarOld: 0.192, explVarNew: 0.204
+[2023-12-26 22:16:52,731] batch: 716, lenEpisode: 15
+[2023-12-26 22:16:53,661] kl: 0.04096, lrMultiplier: 0.088, loss: 1.64771, entropy: 1.00490, explVarOld: 0.211, explVarNew: 0.227
+[2023-12-26 22:16:58,610] batch: 717, lenEpisode: 13
+[2023-12-26 22:16:59,558] kl: 0.02355, lrMultiplier: 0.088, loss: 1.75965, entropy: 1.00634, explVarOld: 0.152, explVarNew: 0.163
+[2023-12-26 22:17:03,741] batch: 718, lenEpisode: 10
+[2023-12-26 22:17:04,663] kl: 0.01993, lrMultiplier: 0.088, loss: 1.70957, entropy: 0.99099, explVarOld: 0.137, explVarNew: 0.145
+[2023-12-26 22:17:08,987] batch: 719, lenEpisode: 12
+[2023-12-26 22:17:09,892] kl: 0.03864, lrMultiplier: 0.088, loss: 1.87221, entropy: 0.98043, explVarOld: 0.084, explVarNew: 0.100
+[2023-12-26 22:17:14,558] batch: 720, lenEpisode: 13
+[2023-12-26 22:17:15,501] kl: 0.03219, lrMultiplier: 0.088, loss: 1.80634, entropy: 0.94994, explVarOld: 0.114, explVarNew: 0.121
+[2023-12-26 22:17:19,199] batch: 721, lenEpisode: 10
+[2023-12-26 22:17:20,131] kl: 0.01796, lrMultiplier: 0.088, loss: 1.66249, entropy: 0.99306, explVarOld: 0.181, explVarNew: 0.192
+[2023-12-26 22:17:30,815] batch: 722, lenEpisode: 36
+[2023-12-26 22:17:31,769] kl: 0.03035, lrMultiplier: 0.088, loss: 1.71302, entropy: 0.98599, explVarOld: 0.170, explVarNew: 0.178
+[2023-12-26 22:17:36,954] batch: 723, lenEpisode: 13
+[2023-12-26 22:17:37,979] kl: 0.01052, lrMultiplier: 0.088, loss: 1.65156, entropy: 0.95185, explVarOld: 0.177, explVarNew: 0.195
+[2023-12-26 22:17:43,257] batch: 724, lenEpisode: 12
+[2023-12-26 22:17:44,321] kl: 0.03634, lrMultiplier: 0.088, loss: 1.63476, entropy: 1.01620, explVarOld: 0.179, explVarNew: 0.192
+[2023-12-26 22:17:50,440] batch: 725, lenEpisode: 16
+[2023-12-26 22:17:51,405] kl: 0.01809, lrMultiplier: 0.088, loss: 1.73434, entropy: 1.08222, explVarOld: 0.174, explVarNew: 0.196
+[2023-12-26 22:17:57,684] batch: 726, lenEpisode: 16
+[2023-12-26 22:17:58,696] kl: 0.03221, lrMultiplier: 0.088, loss: 1.83395, entropy: 1.07755, explVarOld: 0.175, explVarNew: 0.192
+[2023-12-26 22:18:03,223] batch: 727, lenEpisode: 13
+[2023-12-26 22:18:04,229] kl: 0.03867, lrMultiplier: 0.088, loss: 1.89163, entropy: 1.04866, explVarOld: 0.094, explVarNew: 0.103
+[2023-12-26 22:18:06,779] batch: 728, lenEpisode: 7
+[2023-12-26 22:18:07,823] kl: 0.01539, lrMultiplier: 0.088, loss: 1.76146, entropy: 1.04178, explVarOld: 0.136, explVarNew: 0.152
+[2023-12-26 22:18:13,412] batch: 729, lenEpisode: 16
+[2023-12-26 22:18:14,431] kl: 0.02115, lrMultiplier: 0.088, loss: 1.72323, entropy: 0.98327, explVarOld: 0.178, explVarNew: 0.185
+[2023-12-26 22:18:16,937] batch: 730, lenEpisode: 7
+[2023-12-26 22:18:17,948] kl: 0.01116, lrMultiplier: 0.088, loss: 1.78740, entropy: 1.01589, explVarOld: 0.174, explVarNew: 0.187
+[2023-12-26 22:18:22,739] batch: 731, lenEpisode: 12
+[2023-12-26 22:18:23,694] kl: 0.02370, lrMultiplier: 0.088, loss: 1.80129, entropy: 1.06196, explVarOld: 0.185, explVarNew: 0.199
+[2023-12-26 22:18:27,230] batch: 732, lenEpisode: 10
+[2023-12-26 22:18:28,187] kl: 0.01499, lrMultiplier: 0.088, loss: 1.76072, entropy: 1.08248, explVarOld: 0.164, explVarNew: 0.176
+[2023-12-26 22:18:33,921] batch: 733, lenEpisode: 16
+[2023-12-26 22:18:34,819] kl: 0.05092, lrMultiplier: 0.088, loss: 1.79527, entropy: 1.00606, explVarOld: 0.164, explVarNew: 0.179
+[2023-12-26 22:18:40,385] batch: 734, lenEpisode: 20
+[2023-12-26 22:18:41,283] kl: 0.02511, lrMultiplier: 0.088, loss: 1.74344, entropy: 0.98172, explVarOld: 0.209, explVarNew: 0.220
+[2023-12-26 22:18:44,429] batch: 735, lenEpisode: 9
+[2023-12-26 22:18:45,330] kl: 0.02871, lrMultiplier: 0.088, loss: 1.76743, entropy: 1.05628, explVarOld: 0.171, explVarNew: 0.183
+[2023-12-26 22:18:48,401] batch: 736, lenEpisode: 8
+[2023-12-26 22:18:49,302] kl: 0.02772, lrMultiplier: 0.088, loss: 1.73048, entropy: 1.06446, explVarOld: 0.202, explVarNew: 0.218
+[2023-12-26 22:18:52,430] batch: 737, lenEpisode: 9
+[2023-12-26 22:18:53,331] kl: 0.04342, lrMultiplier: 0.088, loss: 1.70827, entropy: 1.01321, explVarOld: 0.226, explVarNew: 0.234
+[2023-12-26 22:18:56,005] batch: 738, lenEpisode: 9
+[2023-12-26 22:18:56,927] kl: 0.02695, lrMultiplier: 0.088, loss: 1.83890, entropy: 0.99205, explVarOld: 0.176, explVarNew: 0.187
+[2023-12-26 22:19:01,147] batch: 739, lenEpisode: 11
+[2023-12-26 22:19:02,051] kl: 0.06366, lrMultiplier: 0.088, loss: 1.85369, entropy: 1.11240, explVarOld: 0.198, explVarNew: 0.211
+[2023-12-26 22:19:05,339] batch: 740, lenEpisode: 9
+[2023-12-26 22:19:06,257] kl: 0.04119, lrMultiplier: 0.088, loss: 1.77942, entropy: 1.02669, explVarOld: 0.168, explVarNew: 0.177
+[2023-12-26 22:19:09,708] batch: 741, lenEpisode: 8
+[2023-12-26 22:19:10,644] kl: 0.03400, lrMultiplier: 0.088, loss: 1.76999, entropy: 1.05891, explVarOld: 0.235, explVarNew: 0.244
+[2023-12-26 22:19:14,823] batch: 742, lenEpisode: 11
+[2023-12-26 22:19:15,741] kl: 0.04160, lrMultiplier: 0.088, loss: 1.74551, entropy: 0.99863, explVarOld: 0.249, explVarNew: 0.263
+[2023-12-26 22:19:20,050] batch: 743, lenEpisode: 13
+[2023-12-26 22:19:21,176] kl: 0.01952, lrMultiplier: 0.088, loss: 1.83641, entropy: 1.08428, explVarOld: 0.218, explVarNew: 0.232
+[2023-12-26 22:19:26,928] batch: 744, lenEpisode: 17
+[2023-12-26 22:19:27,864] kl: 0.01909, lrMultiplier: 0.088, loss: 1.86882, entropy: 1.08572, explVarOld: 0.198, explVarNew: 0.210
+[2023-12-26 22:19:34,070] batch: 745, lenEpisode: 17
+[2023-12-26 22:19:34,972] kl: 0.02136, lrMultiplier: 0.088, loss: 1.74730, entropy: 1.12938, explVarOld: 0.245, explVarNew: 0.259
+[2023-12-26 22:19:37,462] batch: 746, lenEpisode: 7
+[2023-12-26 22:19:38,363] kl: 0.01435, lrMultiplier: 0.088, loss: 1.80368, entropy: 1.08507, explVarOld: 0.202, explVarNew: 0.210
+[2023-12-26 22:19:42,421] batch: 747, lenEpisode: 13
+[2023-12-26 22:19:43,328] kl: 0.01808, lrMultiplier: 0.088, loss: 1.79870, entropy: 1.11457, explVarOld: 0.220, explVarNew: 0.231
+[2023-12-26 22:19:47,196] batch: 748, lenEpisode: 12
+[2023-12-26 22:19:48,101] kl: 0.01757, lrMultiplier: 0.088, loss: 1.91712, entropy: 1.16441, explVarOld: 0.174, explVarNew: 0.184
+[2023-12-26 22:19:51,635] batch: 749, lenEpisode: 9
+[2023-12-26 22:19:52,552] kl: 0.02301, lrMultiplier: 0.088, loss: 1.93132, entropy: 1.15267, explVarOld: 0.150, explVarNew: 0.162
+[2023-12-26 22:19:57,604] batch: 750, lenEpisode: 15
+[2023-12-26 22:19:58,512] kl: 0.02251, lrMultiplier: 0.088, loss: 1.89656, entropy: 1.18127, explVarOld: 0.174, explVarNew: 0.193
+[2023-12-26 22:19:58,512] evalBatch: 750
+[2023-12-26 22:20:30,670] BEST POLICY!!!!!!!
+[2023-12-26 22:20:30,671] numPlayouts: 1000, win: 6, lose: 4, tie: 0, avgCurrStarted: 0.6
+[2023-12-26 22:20:33,086] batch: 751, lenEpisode: 7
+[2023-12-26 22:20:34,031] kl: 0.02068, lrMultiplier: 0.088, loss: 1.80163, entropy: 1.16761, explVarOld: 0.202, explVarNew: 0.205
+[2023-12-26 22:20:37,388] batch: 752, lenEpisode: 9
+[2023-12-26 22:20:38,341] kl: 0.01559, lrMultiplier: 0.088, loss: 1.90090, entropy: 1.10926, explVarOld: 0.172, explVarNew: 0.177
+[2023-12-26 22:20:42,346] batch: 753, lenEpisode: 13
+[2023-12-26 22:20:43,245] kl: 0.02127, lrMultiplier: 0.088, loss: 1.77307, entropy: 1.13314, explVarOld: 0.202, explVarNew: 0.216
+[2023-12-26 22:20:46,589] batch: 754, lenEpisode: 9
+[2023-12-26 22:20:47,487] kl: 0.01416, lrMultiplier: 0.088, loss: 1.87293, entropy: 1.22406, explVarOld: 0.220, explVarNew: 0.233
+[2023-12-26 22:20:51,601] batch: 755, lenEpisode: 11
+[2023-12-26 22:20:52,513] kl: 0.02425, lrMultiplier: 0.088, loss: 1.81991, entropy: 1.15170, explVarOld: 0.185, explVarNew: 0.193
+[2023-12-26 22:20:56,776] batch: 756, lenEpisode: 14
+[2023-12-26 22:20:57,681] kl: 0.01130, lrMultiplier: 0.088, loss: 1.78968, entropy: 1.08635, explVarOld: 0.163, explVarNew: 0.185
+[2023-12-26 22:21:01,252] batch: 757, lenEpisode: 10
+[2023-12-26 22:21:02,150] kl: 0.01597, lrMultiplier: 0.088, loss: 1.88579, entropy: 1.12036, explVarOld: 0.150, explVarNew: 0.159
+[2023-12-26 22:21:05,854] batch: 758, lenEpisode: 8
+[2023-12-26 22:21:06,756] kl: 0.00829, lrMultiplier: 0.132, loss: 1.87009, entropy: 1.18974, explVarOld: 0.196, explVarNew: 0.214
+[2023-12-26 22:21:11,149] batch: 759, lenEpisode: 13
+[2023-12-26 22:21:12,066] kl: 0.02574, lrMultiplier: 0.132, loss: 1.81780, entropy: 1.14898, explVarOld: 0.189, explVarNew: 0.202
+[2023-12-26 22:21:16,814] batch: 760, lenEpisode: 15
+[2023-12-26 22:21:17,725] kl: 0.05328, lrMultiplier: 0.088, loss: 1.86734, entropy: 1.17788, explVarOld: 0.205, explVarNew: 0.216
+[2023-12-26 22:21:23,713] batch: 761, lenEpisode: 17
+[2023-12-26 22:21:24,639] kl: 0.01580, lrMultiplier: 0.088, loss: 1.90606, entropy: 1.22943, explVarOld: 0.187, explVarNew: 0.199
+[2023-12-26 22:21:27,604] batch: 762, lenEpisode: 9
+[2023-12-26 22:21:28,570] kl: 0.02543, lrMultiplier: 0.088, loss: 1.80228, entropy: 1.12825, explVarOld: 0.188, explVarNew: 0.197
+[2023-12-26 22:21:31,749] batch: 763, lenEpisode: 9
+[2023-12-26 22:21:32,664] kl: 0.01245, lrMultiplier: 0.088, loss: 1.96089, entropy: 1.16848, explVarOld: 0.151, explVarNew: 0.164
+[2023-12-26 22:21:40,635] batch: 764, lenEpisode: 21
+[2023-12-26 22:21:41,530] kl: 0.02183, lrMultiplier: 0.088, loss: 1.92730, entropy: 1.15095, explVarOld: 0.156, explVarNew: 0.169
+[2023-12-26 22:21:45,626] batch: 765, lenEpisode: 11
+[2023-12-26 22:21:46,522] kl: 0.01136, lrMultiplier: 0.088, loss: 1.88647, entropy: 1.23197, explVarOld: 0.197, explVarNew: 0.211
+[2023-12-26 22:21:50,501] batch: 766, lenEpisode: 11
+[2023-12-26 22:21:51,409] kl: 0.02397, lrMultiplier: 0.088, loss: 1.96528, entropy: 1.25993, explVarOld: 0.214, explVarNew: 0.220
+[2023-12-26 22:21:54,468] batch: 767, lenEpisode: 9
+[2023-12-26 22:21:55,379] kl: 0.03640, lrMultiplier: 0.088, loss: 1.80962, entropy: 1.21980, explVarOld: 0.221, explVarNew: 0.230
+[2023-12-26 22:21:57,545] batch: 768, lenEpisode: 7
+[2023-12-26 22:21:58,449] kl: 0.02644, lrMultiplier: 0.088, loss: 1.81895, entropy: 1.12794, explVarOld: 0.165, explVarNew: 0.180
+[2023-12-26 22:22:04,874] batch: 769, lenEpisode: 21
+[2023-12-26 22:22:05,786] kl: 0.06688, lrMultiplier: 0.088, loss: 1.89380, entropy: 1.18728, explVarOld: 0.192, explVarNew: 0.202
+[2023-12-26 22:22:10,380] batch: 770, lenEpisode: 14
+[2023-12-26 22:22:11,302] kl: 0.01024, lrMultiplier: 0.088, loss: 1.90201, entropy: 1.22957, explVarOld: 0.140, explVarNew: 0.150
+[2023-12-26 22:22:15,254] batch: 771, lenEpisode: 11
+[2023-12-26 22:22:16,171] kl: 0.02999, lrMultiplier: 0.088, loss: 1.94538, entropy: 1.22635, explVarOld: 0.180, explVarNew: 0.191
+[2023-12-26 22:22:19,101] batch: 772, lenEpisode: 8
+[2023-12-26 22:22:20,024] kl: 0.01289, lrMultiplier: 0.088, loss: 1.90006, entropy: 1.20126, explVarOld: 0.207, explVarNew: 0.217
+[2023-12-26 22:22:24,225] batch: 773, lenEpisode: 11
+[2023-12-26 22:22:25,126] kl: 0.01187, lrMultiplier: 0.088, loss: 1.81341, entropy: 1.18173, explVarOld: 0.231, explVarNew: 0.238
+[2023-12-26 22:22:28,594] batch: 774, lenEpisode: 10
+[2023-12-26 22:22:29,501] kl: 0.01395, lrMultiplier: 0.088, loss: 1.83959, entropy: 1.20637, explVarOld: 0.152, explVarNew: 0.174
+[2023-12-26 22:22:34,550] batch: 775, lenEpisode: 15
+[2023-12-26 22:22:35,488] kl: 0.01385, lrMultiplier: 0.088, loss: 1.93228, entropy: 1.23313, explVarOld: 0.211, explVarNew: 0.223
+[2023-12-26 22:22:38,280] batch: 776, lenEpisode: 8
+[2023-12-26 22:22:39,227] kl: 0.01701, lrMultiplier: 0.088, loss: 1.78233, entropy: 1.19421, explVarOld: 0.213, explVarNew: 0.221
+[2023-12-26 22:22:43,246] batch: 777, lenEpisode: 11
+[2023-12-26 22:22:44,194] kl: 0.01949, lrMultiplier: 0.088, loss: 1.77086, entropy: 1.18978, explVarOld: 0.224, explVarNew: 0.238
+[2023-12-26 22:22:46,870] batch: 778, lenEpisode: 8
+[2023-12-26 22:22:47,799] kl: 0.02588, lrMultiplier: 0.088, loss: 1.74669, entropy: 1.20775, explVarOld: 0.241, explVarNew: 0.247
+[2023-12-26 22:22:51,801] batch: 779, lenEpisode: 12
+[2023-12-26 22:22:52,704] kl: 0.01759, lrMultiplier: 0.088, loss: 1.84227, entropy: 1.24949, explVarOld: 0.172, explVarNew: 0.189
+[2023-12-26 22:22:54,903] batch: 780, lenEpisode: 7
+[2023-12-26 22:22:55,805] kl: 0.02777, lrMultiplier: 0.088, loss: 1.93064, entropy: 1.21536, explVarOld: 0.165, explVarNew: 0.182
+[2023-12-26 22:22:59,559] batch: 781, lenEpisode: 11
+[2023-12-26 22:23:00,502] kl: 0.02151, lrMultiplier: 0.088, loss: 1.89323, entropy: 1.18074, explVarOld: 0.180, explVarNew: 0.197
+[2023-12-26 22:23:04,940] batch: 782, lenEpisode: 14
+[2023-12-26 22:23:05,897] kl: 0.02894, lrMultiplier: 0.088, loss: 1.89082, entropy: 1.18215, explVarOld: 0.225, explVarNew: 0.229
+[2023-12-26 22:23:09,714] batch: 783, lenEpisode: 12
+[2023-12-26 22:23:10,655] kl: 0.01844, lrMultiplier: 0.088, loss: 1.81343, entropy: 1.18582, explVarOld: 0.228, explVarNew: 0.238
+[2023-12-26 22:23:14,549] batch: 784, lenEpisode: 9
+[2023-12-26 22:23:15,515] kl: 0.02520, lrMultiplier: 0.088, loss: 1.93061, entropy: 1.16897, explVarOld: 0.132, explVarNew: 0.147
+[2023-12-26 22:23:20,680] batch: 785, lenEpisode: 15
+[2023-12-26 22:23:21,607] kl: 0.02631, lrMultiplier: 0.088, loss: 1.92313, entropy: 1.16945, explVarOld: 0.169, explVarNew: 0.184
+[2023-12-26 22:23:24,352] batch: 786, lenEpisode: 8
+[2023-12-26 22:23:25,255] kl: 0.01851, lrMultiplier: 0.088, loss: 1.88876, entropy: 1.18083, explVarOld: 0.163, explVarNew: 0.177
+[2023-12-26 22:23:29,111] batch: 787, lenEpisode: 12
+[2023-12-26 22:23:30,018] kl: 0.02083, lrMultiplier: 0.088, loss: 1.89872, entropy: 1.18275, explVarOld: 0.173, explVarNew: 0.175
+[2023-12-26 22:23:32,841] batch: 788, lenEpisode: 8
+[2023-12-26 22:23:33,773] kl: 0.01062, lrMultiplier: 0.088, loss: 1.97863, entropy: 1.26508, explVarOld: 0.213, explVarNew: 0.229
+[2023-12-26 22:23:37,110] batch: 789, lenEpisode: 10
+[2023-12-26 22:23:38,273] kl: 0.01524, lrMultiplier: 0.088, loss: 1.88203, entropy: 1.15981, explVarOld: 0.158, explVarNew: 0.170
+[2023-12-26 22:23:47,926] batch: 790, lenEpisode: 36
+[2023-12-26 22:23:48,838] kl: 0.01682, lrMultiplier: 0.088, loss: 1.86551, entropy: 1.21421, explVarOld: 0.198, explVarNew: 0.213
+[2023-12-26 22:23:53,005] batch: 791, lenEpisode: 11
+[2023-12-26 22:23:53,904] kl: 0.00703, lrMultiplier: 0.132, loss: 1.78965, entropy: 1.19171, explVarOld: 0.209, explVarNew: 0.222
+[2023-12-26 22:23:57,828] batch: 792, lenEpisode: 10
+[2023-12-26 22:23:58,904] kl: 0.05007, lrMultiplier: 0.088, loss: 1.86043, entropy: 1.21398, explVarOld: 0.198, explVarNew: 0.213
+[2023-12-26 22:24:01,235] batch: 793, lenEpisode: 7
+[2023-12-26 22:24:02,160] kl: 0.00724, lrMultiplier: 0.132, loss: 1.77604, entropy: 1.18236, explVarOld: 0.226, explVarNew: 0.230
+[2023-12-26 22:24:06,246] batch: 794, lenEpisode: 12
+[2023-12-26 22:24:07,146] kl: 0.05258, lrMultiplier: 0.088, loss: 1.74808, entropy: 1.11087, explVarOld: 0.206, explVarNew: 0.219
+[2023-12-26 22:24:12,787] batch: 795, lenEpisode: 14
+[2023-12-26 22:24:13,898] kl: 0.03057, lrMultiplier: 0.088, loss: 1.90610, entropy: 1.15724, explVarOld: 0.187, explVarNew: 0.197
+[2023-12-26 22:24:18,256] batch: 796, lenEpisode: 14
+[2023-12-26 22:24:19,219] kl: 0.01481, lrMultiplier: 0.088, loss: 1.95065, entropy: 1.23017, explVarOld: 0.213, explVarNew: 0.223
+[2023-12-26 22:24:23,640] batch: 797, lenEpisode: 11
+[2023-12-26 22:24:24,594] kl: 0.01562, lrMultiplier: 0.088, loss: 1.85590, entropy: 1.19995, explVarOld: 0.215, explVarNew: 0.225
+[2023-12-26 22:24:29,374] batch: 798, lenEpisode: 13
+[2023-12-26 22:24:30,576] kl: 0.01300, lrMultiplier: 0.088, loss: 1.71868, entropy: 1.17488, explVarOld: 0.270, explVarNew: 0.276
+[2023-12-26 22:24:33,417] batch: 799, lenEpisode: 8
+[2023-12-26 22:24:34,526] kl: 0.01576, lrMultiplier: 0.088, loss: 1.87534, entropy: 1.18584, explVarOld: 0.234, explVarNew: 0.254
+[2023-12-26 22:24:38,274] batch: 800, lenEpisode: 11
+[2023-12-26 22:24:39,201] kl: 0.02429, lrMultiplier: 0.088, loss: 1.85916, entropy: 1.23160, explVarOld: 0.241, explVarNew: 0.249
+[2023-12-26 22:24:39,201] evalBatch: 800
+[2023-12-26 22:25:11,217] numPlayouts: 1000, win: 4, lose: 6, tie: 0, avgCurrStarted: 0.6
+[2023-12-26 22:25:13,874] batch: 801, lenEpisode: 8
+[2023-12-26 22:25:14,911] kl: 0.01306, lrMultiplier: 0.088, loss: 1.83814, entropy: 1.10854, explVarOld: 0.153, explVarNew: 0.180
+[2023-12-26 22:25:18,033] batch: 802, lenEpisode: 9
+[2023-12-26 22:25:18,932] kl: 0.01986, lrMultiplier: 0.088, loss: 1.89476, entropy: 1.21190, explVarOld: 0.214, explVarNew: 0.219
+[2023-12-26 22:25:25,013] batch: 803, lenEpisode: 17
+[2023-12-26 22:25:25,940] kl: 0.01426, lrMultiplier: 0.088, loss: 1.81187, entropy: 1.18873, explVarOld: 0.181, explVarNew: 0.187
+[2023-12-26 22:25:29,186] batch: 804, lenEpisode: 8
+[2023-12-26 22:25:30,105] kl: 0.01487, lrMultiplier: 0.088, loss: 1.78310, entropy: 1.22620, explVarOld: 0.194, explVarNew: 0.204
+[2023-12-26 22:25:34,915] batch: 805, lenEpisode: 15
+[2023-12-26 22:25:35,836] kl: 0.01969, lrMultiplier: 0.088, loss: 1.80243, entropy: 1.14763, explVarOld: 0.200, explVarNew: 0.209
+[2023-12-26 22:25:40,001] batch: 806, lenEpisode: 11
+[2023-12-26 22:25:40,922] kl: 0.00992, lrMultiplier: 0.132, loss: 1.80912, entropy: 1.18419, explVarOld: 0.164, explVarNew: 0.177
+[2023-12-26 22:25:44,531] batch: 807, lenEpisode: 9
+[2023-12-26 22:25:45,452] kl: 0.04316, lrMultiplier: 0.088, loss: 1.84272, entropy: 1.22714, explVarOld: 0.211, explVarNew: 0.232
+[2023-12-26 22:25:49,911] batch: 808, lenEpisode: 13
+[2023-12-26 22:25:50,843] kl: 0.03356, lrMultiplier: 0.088, loss: 1.79987, entropy: 1.09898, explVarOld: 0.238, explVarNew: 0.242
+[2023-12-26 22:25:54,756] batch: 809, lenEpisode: 14
+[2023-12-26 22:25:55,668] kl: 0.02564, lrMultiplier: 0.088, loss: 1.83866, entropy: 1.16845, explVarOld: 0.252, explVarNew: 0.265
+[2023-12-26 22:25:59,252] batch: 810, lenEpisode: 9
+[2023-12-26 22:26:00,158] kl: 0.01773, lrMultiplier: 0.088, loss: 1.87226, entropy: 1.21018, explVarOld: 0.152, explVarNew: 0.169
+[2023-12-26 22:26:04,714] batch: 811, lenEpisode: 12
+[2023-12-26 22:26:05,628] kl: 0.03548, lrMultiplier: 0.088, loss: 1.78711, entropy: 1.17031, explVarOld: 0.213, explVarNew: 0.224
+[2023-12-26 22:26:07,789] batch: 812, lenEpisode: 7
+[2023-12-26 22:26:08,704] kl: 0.01226, lrMultiplier: 0.088, loss: 1.89953, entropy: 1.15626, explVarOld: 0.175, explVarNew: 0.188
+[2023-12-26 22:26:12,438] batch: 813, lenEpisode: 10
+[2023-12-26 22:26:13,435] kl: 0.02235, lrMultiplier: 0.088, loss: 1.78298, entropy: 1.12570, explVarOld: 0.143, explVarNew: 0.154
+[2023-12-26 22:26:18,756] batch: 814, lenEpisode: 14
+[2023-12-26 22:26:19,754] kl: 0.01654, lrMultiplier: 0.088, loss: 1.86326, entropy: 1.16667, explVarOld: 0.219, explVarNew: 0.229
+[2023-12-26 22:26:21,997] batch: 815, lenEpisode: 7
+[2023-12-26 22:26:22,971] kl: 0.02671, lrMultiplier: 0.088, loss: 1.90615, entropy: 1.19771, explVarOld: 0.193, explVarNew: 0.204
+[2023-12-26 22:26:26,671] batch: 816, lenEpisode: 11
+[2023-12-26 22:26:27,600] kl: 0.01527, lrMultiplier: 0.088, loss: 1.76521, entropy: 1.14912, explVarOld: 0.206, explVarNew: 0.217
+[2023-12-26 22:26:31,298] batch: 817, lenEpisode: 10
+[2023-12-26 22:26:32,496] kl: 0.02273, lrMultiplier: 0.088, loss: 1.86143, entropy: 1.20423, explVarOld: 0.203, explVarNew: 0.207
+[2023-12-26 22:26:36,289] batch: 818, lenEpisode: 10
+[2023-12-26 22:26:37,288] kl: 0.02289, lrMultiplier: 0.088, loss: 2.02926, entropy: 1.24811, explVarOld: 0.123, explVarNew: 0.151
+[2023-12-26 22:26:42,803] batch: 819, lenEpisode: 16
+[2023-12-26 22:26:43,863] kl: 0.01947, lrMultiplier: 0.088, loss: 1.97564, entropy: 1.22245, explVarOld: 0.152, explVarNew: 0.154
+[2023-12-26 22:26:48,563] batch: 820, lenEpisode: 12
+[2023-12-26 22:26:49,618] kl: 0.01690, lrMultiplier: 0.088, loss: 1.92222, entropy: 1.16512, explVarOld: 0.128, explVarNew: 0.144
+[2023-12-26 22:26:56,110] batch: 821, lenEpisode: 18
+[2023-12-26 22:26:57,096] kl: 0.02078, lrMultiplier: 0.088, loss: 1.88467, entropy: 1.22586, explVarOld: 0.143, explVarNew: 0.157
+[2023-12-26 22:27:01,527] batch: 822, lenEpisode: 15
+[2023-12-26 22:27:02,445] kl: 0.01071, lrMultiplier: 0.088, loss: 1.95158, entropy: 1.20858, explVarOld: 0.104, explVarNew: 0.116
+[2023-12-26 22:27:07,910] batch: 823, lenEpisode: 15
+[2023-12-26 22:27:08,935] kl: 0.01751, lrMultiplier: 0.088, loss: 1.91359, entropy: 1.19535, explVarOld: 0.117, explVarNew: 0.128
+[2023-12-26 22:27:13,402] batch: 824, lenEpisode: 16
+[2023-12-26 22:27:14,333] kl: 0.01508, lrMultiplier: 0.088, loss: 1.89767, entropy: 1.21071, explVarOld: 0.122, explVarNew: 0.137
+[2023-12-26 22:27:17,957] batch: 825, lenEpisode: 9
+[2023-12-26 22:27:19,137] kl: 0.02502, lrMultiplier: 0.088, loss: 1.90737, entropy: 1.18654, explVarOld: 0.176, explVarNew: 0.186
+[2023-12-26 22:27:22,579] batch: 826, lenEpisode: 9
+[2023-12-26 22:27:23,493] kl: 0.02481, lrMultiplier: 0.088, loss: 1.94978, entropy: 1.21912, explVarOld: 0.120, explVarNew: 0.131
+[2023-12-26 22:27:25,544] batch: 827, lenEpisode: 7
+[2023-12-26 22:27:26,493] kl: 0.02808, lrMultiplier: 0.088, loss: 1.92667, entropy: 1.18986, explVarOld: 0.165, explVarNew: 0.175
+[2023-12-26 22:27:29,533] batch: 828, lenEpisode: 8
+[2023-12-26 22:27:30,520] kl: 0.01311, lrMultiplier: 0.088, loss: 1.97229, entropy: 1.16646, explVarOld: 0.126, explVarNew: 0.141
+[2023-12-26 22:27:33,748] batch: 829, lenEpisode: 9
+[2023-12-26 22:27:34,710] kl: 0.01398, lrMultiplier: 0.088, loss: 1.84080, entropy: 1.14910, explVarOld: 0.143, explVarNew: 0.147
+[2023-12-26 22:27:37,224] batch: 830, lenEpisode: 7
+[2023-12-26 22:27:38,201] kl: 0.03912, lrMultiplier: 0.088, loss: 1.85856, entropy: 1.13952, explVarOld: 0.167, explVarNew: 0.179
+[2023-12-26 22:27:43,517] batch: 831, lenEpisode: 15
+[2023-12-26 22:27:44,420] kl: 0.01707, lrMultiplier: 0.088, loss: 1.88397, entropy: 1.13381, explVarOld: 0.140, explVarNew: 0.151
+[2023-12-26 22:27:47,051] batch: 832, lenEpisode: 9
+[2023-12-26 22:27:47,979] kl: 0.04076, lrMultiplier: 0.088, loss: 1.88997, entropy: 1.15584, explVarOld: 0.157, explVarNew: 0.169
+[2023-12-26 22:27:51,314] batch: 833, lenEpisode: 12
+[2023-12-26 22:27:52,221] kl: 0.02115, lrMultiplier: 0.088, loss: 1.88325, entropy: 1.18338, explVarOld: 0.139, explVarNew: 0.154
+[2023-12-26 22:27:56,665] batch: 834, lenEpisode: 16
+[2023-12-26 22:27:57,570] kl: 0.02126, lrMultiplier: 0.088, loss: 1.91336, entropy: 1.12866, explVarOld: 0.145, explVarNew: 0.166
+[2023-12-26 22:28:00,256] batch: 835, lenEpisode: 9
+[2023-12-26 22:28:01,179] kl: 0.02277, lrMultiplier: 0.088, loss: 1.85026, entropy: 1.16842, explVarOld: 0.188, explVarNew: 0.193
+[2023-12-26 22:28:05,064] batch: 836, lenEpisode: 13
+[2023-12-26 22:28:05,988] kl: 0.02396, lrMultiplier: 0.088, loss: 1.85249, entropy: 1.12995, explVarOld: 0.150, explVarNew: 0.171
+[2023-12-26 22:28:08,149] batch: 837, lenEpisode: 7
+[2023-12-26 22:28:09,065] kl: 0.02672, lrMultiplier: 0.088, loss: 1.83049, entropy: 1.16475, explVarOld: 0.144, explVarNew: 0.164
+[2023-12-26 22:28:11,884] batch: 838, lenEpisode: 9
+[2023-12-26 22:28:12,791] kl: 0.02120, lrMultiplier: 0.088, loss: 1.80811, entropy: 1.09828, explVarOld: 0.170, explVarNew: 0.182
+[2023-12-26 22:28:18,243] batch: 839, lenEpisode: 14
+[2023-12-26 22:28:19,167] kl: 0.02705, lrMultiplier: 0.088, loss: 1.87656, entropy: 1.18300, explVarOld: 0.177, explVarNew: 0.187
+[2023-12-26 22:28:22,225] batch: 840, lenEpisode: 9
+[2023-12-26 22:28:23,124] kl: 0.02720, lrMultiplier: 0.088, loss: 1.80443, entropy: 1.15583, explVarOld: 0.197, explVarNew: 0.215
+[2023-12-26 22:28:27,132] batch: 841, lenEpisode: 12
+[2023-12-26 22:28:28,029] kl: 0.02317, lrMultiplier: 0.088, loss: 1.88190, entropy: 1.12875, explVarOld: 0.163, explVarNew: 0.179
+[2023-12-26 22:28:30,746] batch: 842, lenEpisode: 9
+[2023-12-26 22:28:31,649] kl: 0.02328, lrMultiplier: 0.088, loss: 1.71280, entropy: 1.07538, explVarOld: 0.189, explVarNew: 0.198
+[2023-12-26 22:28:36,048] batch: 843, lenEpisode: 15
+[2023-12-26 22:28:36,958] kl: 0.03324, lrMultiplier: 0.088, loss: 1.83310, entropy: 1.16519, explVarOld: 0.149, explVarNew: 0.165
+[2023-12-26 22:28:39,943] batch: 844, lenEpisode: 9
+[2023-12-26 22:28:40,847] kl: 0.01908, lrMultiplier: 0.088, loss: 1.86532, entropy: 1.15775, explVarOld: 0.118, explVarNew: 0.127
+[2023-12-26 22:28:44,152] batch: 845, lenEpisode: 9
+[2023-12-26 22:28:45,084] kl: 0.03752, lrMultiplier: 0.088, loss: 1.90624, entropy: 1.19954, explVarOld: 0.145, explVarNew: 0.163
+[2023-12-26 22:28:49,047] batch: 846, lenEpisode: 10
+[2023-12-26 22:28:50,039] kl: 0.00985, lrMultiplier: 0.132, loss: 1.88738, entropy: 1.14975, explVarOld: 0.142, explVarNew: 0.152
+[2023-12-26 22:28:52,226] batch: 847, lenEpisode: 7
+[2023-12-26 22:28:53,147] kl: 0.03601, lrMultiplier: 0.132, loss: 1.84683, entropy: 1.19060, explVarOld: 0.156, explVarNew: 0.180
+[2023-12-26 22:28:56,475] batch: 848, lenEpisode: 10
+[2023-12-26 22:28:57,376] kl: 0.02873, lrMultiplier: 0.132, loss: 1.81311, entropy: 1.19570, explVarOld: 0.181, explVarNew: 0.200
+[2023-12-26 22:29:01,373] batch: 849, lenEpisode: 13
+[2023-12-26 22:29:02,265] kl: 0.02357, lrMultiplier: 0.132, loss: 1.93815, entropy: 1.14757, explVarOld: 0.105, explVarNew: 0.125
+[2023-12-26 22:29:06,812] batch: 850, lenEpisode: 13
+[2023-12-26 22:29:07,717] kl: 0.05348, lrMultiplier: 0.088, loss: 1.76680, entropy: 1.16531, explVarOld: 0.155, explVarNew: 0.165
+[2023-12-26 22:29:07,717] evalBatch: 850
+[2023-12-26 22:29:36,572] numPlayouts: 1000, win: 1, lose: 9, tie: 0, avgCurrStarted: 0.4
+[2023-12-26 22:29:38,938] batch: 851, lenEpisode: 7
+[2023-12-26 22:29:39,854] kl: 0.01069, lrMultiplier: 0.088, loss: 1.92813, entropy: 1.14935, explVarOld: 0.125, explVarNew: 0.136
+[2023-12-26 22:29:43,840] batch: 852, lenEpisode: 12
+[2023-12-26 22:29:44,785] kl: 0.03173, lrMultiplier: 0.088, loss: 1.66751, entropy: 1.10049, explVarOld: 0.223, explVarNew: 0.238
+[2023-12-26 22:29:50,945] batch: 853, lenEpisode: 18
+[2023-12-26 22:29:51,865] kl: 0.02498, lrMultiplier: 0.088, loss: 1.85946, entropy: 1.15230, explVarOld: 0.169, explVarNew: 0.184
+[2023-12-26 22:29:55,941] batch: 854, lenEpisode: 11
+[2023-12-26 22:29:57,062] kl: 0.01893, lrMultiplier: 0.088, loss: 1.79276, entropy: 1.13839, explVarOld: 0.138, explVarNew: 0.149
+[2023-12-26 22:30:00,227] batch: 855, lenEpisode: 10
+[2023-12-26 22:30:01,197] kl: 0.03754, lrMultiplier: 0.088, loss: 1.80377, entropy: 1.12900, explVarOld: 0.139, explVarNew: 0.149
+[2023-12-26 22:30:03,510] batch: 856, lenEpisode: 7
+[2023-12-26 22:30:04,460] kl: 0.03126, lrMultiplier: 0.088, loss: 1.73574, entropy: 1.10183, explVarOld: 0.193, explVarNew: 0.205
+[2023-12-26 22:30:06,772] batch: 857, lenEpisode: 7
+[2023-12-26 22:30:07,683] kl: 0.03420, lrMultiplier: 0.088, loss: 1.82949, entropy: 1.14189, explVarOld: 0.139, explVarNew: 0.148
+[2023-12-26 22:30:13,198] batch: 858, lenEpisode: 15
+[2023-12-26 22:30:14,145] kl: 0.02638, lrMultiplier: 0.088, loss: 1.85192, entropy: 1.17340, explVarOld: 0.116, explVarNew: 0.135
+[2023-12-26 22:30:18,983] batch: 859, lenEpisode: 10
+[2023-12-26 22:30:20,008] kl: 0.05343, lrMultiplier: 0.088, loss: 1.84183, entropy: 1.17287, explVarOld: 0.193, explVarNew: 0.197
+[2023-12-26 22:30:23,620] batch: 860, lenEpisode: 9
+[2023-12-26 22:30:24,551] kl: 0.01637, lrMultiplier: 0.088, loss: 1.88816, entropy: 1.10074, explVarOld: 0.164, explVarNew: 0.171
+[2023-12-26 22:30:26,709] batch: 861, lenEpisode: 7
+[2023-12-26 22:30:27,612] kl: 0.05089, lrMultiplier: 0.088, loss: 1.80476, entropy: 1.14457, explVarOld: 0.196, explVarNew: 0.205
+[2023-12-26 22:30:33,309] batch: 862, lenEpisode: 19
+[2023-12-26 22:30:34,211] kl: 0.01324, lrMultiplier: 0.088, loss: 1.80613, entropy: 1.12636, explVarOld: 0.154, explVarNew: 0.164
+[2023-12-26 22:30:37,629] batch: 863, lenEpisode: 11
+[2023-12-26 22:30:38,542] kl: 0.02840, lrMultiplier: 0.088, loss: 1.96062, entropy: 1.15340, explVarOld: 0.120, explVarNew: 0.141
+[2023-12-26 22:30:41,587] batch: 864, lenEpisode: 9
+[2023-12-26 22:30:42,492] kl: 0.03416, lrMultiplier: 0.088, loss: 1.95865, entropy: 1.17453, explVarOld: 0.128, explVarNew: 0.139
+[2023-12-26 22:30:49,735] batch: 865, lenEpisode: 24
+[2023-12-26 22:30:50,630] kl: 0.03639, lrMultiplier: 0.088, loss: 1.90661, entropy: 1.15428, explVarOld: 0.105, explVarNew: 0.119
+[2023-12-26 22:30:57,301] batch: 866, lenEpisode: 15
+[2023-12-26 22:30:58,212] kl: 0.03156, lrMultiplier: 0.088, loss: 1.86806, entropy: 1.16793, explVarOld: 0.142, explVarNew: 0.154
+[2023-12-26 22:31:01,305] batch: 867, lenEpisode: 9
+[2023-12-26 22:31:02,325] kl: 0.02075, lrMultiplier: 0.088, loss: 1.89696, entropy: 1.19552, explVarOld: 0.183, explVarNew: 0.198
+[2023-12-26 22:31:05,599] batch: 868, lenEpisode: 9
+[2023-12-26 22:31:06,555] kl: 0.05883, lrMultiplier: 0.088, loss: 1.89096, entropy: 1.17763, explVarOld: 0.158, explVarNew: 0.170
+[2023-12-26 22:31:11,566] batch: 869, lenEpisode: 13
+[2023-12-26 22:31:12,488] kl: 0.01812, lrMultiplier: 0.088, loss: 1.87887, entropy: 1.16629, explVarOld: 0.160, explVarNew: 0.177
+[2023-12-26 22:31:18,023] batch: 870, lenEpisode: 16
+[2023-12-26 22:31:18,974] kl: 0.01415, lrMultiplier: 0.088, loss: 1.89074, entropy: 1.15595, explVarOld: 0.124, explVarNew: 0.142
+[2023-12-26 22:31:22,101] batch: 871, lenEpisode: 9
+[2023-12-26 22:31:23,018] kl: 0.03899, lrMultiplier: 0.088, loss: 1.86416, entropy: 1.15509, explVarOld: 0.139, explVarNew: 0.147
+[2023-12-26 22:31:28,229] batch: 872, lenEpisode: 15
+[2023-12-26 22:31:29,154] kl: 0.02878, lrMultiplier: 0.088, loss: 1.93554, entropy: 1.19352, explVarOld: 0.193, explVarNew: 0.211
+[2023-12-26 22:31:34,102] batch: 873, lenEpisode: 15
+[2023-12-26 22:31:35,000] kl: 0.01268, lrMultiplier: 0.088, loss: 1.77270, entropy: 1.19127, explVarOld: 0.193, explVarNew: 0.205
+[2023-12-26 22:31:38,862] batch: 874, lenEpisode: 11
+[2023-12-26 22:31:39,768] kl: 0.02324, lrMultiplier: 0.088, loss: 1.82040, entropy: 1.16180, explVarOld: 0.142, explVarNew: 0.157
+[2023-12-26 22:31:45,638] batch: 875, lenEpisode: 15
+[2023-12-26 22:31:46,687] kl: 0.04795, lrMultiplier: 0.088, loss: 1.95412, entropy: 1.22961, explVarOld: 0.180, explVarNew: 0.191
+[2023-12-26 22:31:48,826] batch: 876, lenEpisode: 7
+[2023-12-26 22:31:49,782] kl: 0.01933, lrMultiplier: 0.088, loss: 1.85040, entropy: 1.18865, explVarOld: 0.152, explVarNew: 0.169
+[2023-12-26 22:31:54,060] batch: 877, lenEpisode: 11
+[2023-12-26 22:31:55,139] kl: 0.03530, lrMultiplier: 0.088, loss: 1.80951, entropy: 1.11201, explVarOld: 0.169, explVarNew: 0.186
+[2023-12-26 22:31:57,979] batch: 878, lenEpisode: 8
+[2023-12-26 22:31:58,994] kl: 0.04994, lrMultiplier: 0.088, loss: 2.00940, entropy: 1.23596, explVarOld: 0.162, explVarNew: 0.171
+[2023-12-26 22:32:02,012] batch: 879, lenEpisode: 7
+[2023-12-26 22:32:03,044] kl: 0.02245, lrMultiplier: 0.088, loss: 1.82364, entropy: 1.15889, explVarOld: 0.177, explVarNew: 0.188
+[2023-12-26 22:32:07,045] batch: 880, lenEpisode: 12
+[2023-12-26 22:32:07,957] kl: 0.02478, lrMultiplier: 0.088, loss: 1.81965, entropy: 1.14018, explVarOld: 0.175, explVarNew: 0.187
+[2023-12-26 22:32:11,668] batch: 881, lenEpisode: 11
+[2023-12-26 22:32:12,603] kl: 0.01411, lrMultiplier: 0.088, loss: 1.88154, entropy: 1.15728, explVarOld: 0.174, explVarNew: 0.191
+[2023-12-26 22:32:19,138] batch: 882, lenEpisode: 20
+[2023-12-26 22:32:20,047] kl: 0.01241, lrMultiplier: 0.088, loss: 1.89166, entropy: 1.18723, explVarOld: 0.140, explVarNew: 0.156
+[2023-12-26 22:32:25,352] batch: 883, lenEpisode: 14
+[2023-12-26 22:32:26,281] kl: 0.01895, lrMultiplier: 0.088, loss: 1.87321, entropy: 1.17369, explVarOld: 0.200, explVarNew: 0.217
+[2023-12-26 22:32:30,157] batch: 884, lenEpisode: 11
+[2023-12-26 22:32:31,060] kl: 0.01576, lrMultiplier: 0.088, loss: 1.80101, entropy: 1.15815, explVarOld: 0.156, explVarNew: 0.181
+[2023-12-26 22:32:36,958] batch: 885, lenEpisode: 17
+[2023-12-26 22:32:37,916] kl: 0.02704, lrMultiplier: 0.088, loss: 1.95687, entropy: 1.19555, explVarOld: 0.158, explVarNew: 0.182
+[2023-12-26 22:32:41,043] batch: 886, lenEpisode: 9
+[2023-12-26 22:32:42,020] kl: 0.02095, lrMultiplier: 0.088, loss: 1.89417, entropy: 1.22238, explVarOld: 0.136, explVarNew: 0.171
+[2023-12-26 22:32:44,655] batch: 887, lenEpisode: 7
+[2023-12-26 22:32:45,569] kl: 0.02993, lrMultiplier: 0.088, loss: 1.91499, entropy: 1.17146, explVarOld: 0.160, explVarNew: 0.174
+[2023-12-26 22:32:48,938] batch: 888, lenEpisode: 9
+[2023-12-26 22:32:49,857] kl: 0.01884, lrMultiplier: 0.088, loss: 1.83316, entropy: 1.14742, explVarOld: 0.162, explVarNew: 0.172
+[2023-12-26 22:32:54,383] batch: 889, lenEpisode: 13
+[2023-12-26 22:32:55,315] kl: 0.03542, lrMultiplier: 0.088, loss: 1.88074, entropy: 1.19083, explVarOld: 0.145, explVarNew: 0.168
+[2023-12-26 22:32:57,870] batch: 890, lenEpisode: 9
+[2023-12-26 22:32:58,805] kl: 0.03387, lrMultiplier: 0.088, loss: 1.89152, entropy: 1.17554, explVarOld: 0.211, explVarNew: 0.222
+[2023-12-26 22:33:04,215] batch: 891, lenEpisode: 15
+[2023-12-26 22:33:05,137] kl: 0.01355, lrMultiplier: 0.088, loss: 1.86136, entropy: 1.14505, explVarOld: 0.135, explVarNew: 0.167
+[2023-12-26 22:33:09,790] batch: 892, lenEpisode: 11
+[2023-12-26 22:33:10,718] kl: 0.02091, lrMultiplier: 0.088, loss: 1.87336, entropy: 1.19737, explVarOld: 0.175, explVarNew: 0.183
+[2023-12-26 22:33:15,960] batch: 893, lenEpisode: 14
+[2023-12-26 22:33:16,898] kl: 0.01777, lrMultiplier: 0.088, loss: 1.76593, entropy: 1.17339, explVarOld: 0.174, explVarNew: 0.194
+[2023-12-26 22:33:20,518] batch: 894, lenEpisode: 10
+[2023-12-26 22:33:21,584] kl: 0.01377, lrMultiplier: 0.088, loss: 1.78475, entropy: 1.18776, explVarOld: 0.195, explVarNew: 0.217
+[2023-12-26 22:33:27,507] batch: 895, lenEpisode: 17
+[2023-12-26 22:33:28,504] kl: 0.01273, lrMultiplier: 0.088, loss: 1.80158, entropy: 1.17350, explVarOld: 0.134, explVarNew: 0.144
+[2023-12-26 22:33:32,056] batch: 896, lenEpisode: 11
+[2023-12-26 22:33:33,238] kl: 0.02119, lrMultiplier: 0.088, loss: 1.73936, entropy: 1.14700, explVarOld: 0.178, explVarNew: 0.201
+[2023-12-26 22:33:45,700] batch: 897, lenEpisode: 36
+[2023-12-26 22:33:46,640] kl: 0.02241, lrMultiplier: 0.088, loss: 1.84024, entropy: 1.17852, explVarOld: 0.144, explVarNew: 0.156
+[2023-12-26 22:33:51,771] batch: 898, lenEpisode: 14
+[2023-12-26 22:33:52,695] kl: 0.01898, lrMultiplier: 0.088, loss: 1.88195, entropy: 1.20855, explVarOld: 0.160, explVarNew: 0.174
+[2023-12-26 22:33:57,737] batch: 899, lenEpisode: 13
+[2023-12-26 22:33:58,753] kl: 0.03229, lrMultiplier: 0.088, loss: 1.66413, entropy: 1.10991, explVarOld: 0.208, explVarNew: 0.221
+[2023-12-26 22:34:02,467] batch: 900, lenEpisode: 11
+[2023-12-26 22:34:03,470] kl: 0.02024, lrMultiplier: 0.088, loss: 1.73155, entropy: 1.15642, explVarOld: 0.201, explVarNew: 0.214
+[2023-12-26 22:34:03,470] evalBatch: 900
+[2023-12-26 22:34:35,536] BEST POLICY!!!!!!!
+[2023-12-26 22:34:35,537] numPlayouts: 1000, win: 7, lose: 3, tie: 0, avgCurrStarted: 0.6
+[2023-12-26 22:34:39,422] batch: 901, lenEpisode: 10
+[2023-12-26 22:34:40,369] kl: 0.03605, lrMultiplier: 0.088, loss: 1.89006, entropy: 1.22558, explVarOld: 0.173, explVarNew: 0.195
+[2023-12-26 22:34:44,640] batch: 902, lenEpisode: 12
+[2023-12-26 22:34:45,610] kl: 0.03416, lrMultiplier: 0.088, loss: 1.81882, entropy: 1.19869, explVarOld: 0.179, explVarNew: 0.196
+[2023-12-26 22:34:49,143] batch: 903, lenEpisode: 10
+[2023-12-26 22:34:50,167] kl: 0.02163, lrMultiplier: 0.088, loss: 1.87225, entropy: 1.16165, explVarOld: 0.129, explVarNew: 0.148
+[2023-12-26 22:34:54,773] batch: 904, lenEpisode: 12
+[2023-12-26 22:34:55,768] kl: 0.03995, lrMultiplier: 0.088, loss: 1.93578, entropy: 1.17680, explVarOld: 0.149, explVarNew: 0.155
+[2023-12-26 22:35:00,341] batch: 905, lenEpisode: 12
+[2023-12-26 22:35:01,328] kl: 0.01343, lrMultiplier: 0.088, loss: 1.86413, entropy: 1.23208, explVarOld: 0.161, explVarNew: 0.178
+[2023-12-26 22:35:09,965] batch: 906, lenEpisode: 20
+[2023-12-26 22:35:10,869] kl: 0.02507, lrMultiplier: 0.088, loss: 1.83793, entropy: 1.22486, explVarOld: 0.196, explVarNew: 0.207
+[2023-12-26 22:35:14,610] batch: 907, lenEpisode: 10
+[2023-12-26 22:35:15,663] kl: 0.01809, lrMultiplier: 0.088, loss: 1.83743, entropy: 1.16449, explVarOld: 0.168, explVarNew: 0.177
+[2023-12-26 22:35:20,321] batch: 908, lenEpisode: 15
+[2023-12-26 22:35:21,295] kl: 0.01914, lrMultiplier: 0.088, loss: 1.87261, entropy: 1.18656, explVarOld: 0.142, explVarNew: 0.154
+[2023-12-26 22:35:27,008] batch: 909, lenEpisode: 15
+[2023-12-26 22:35:28,132] kl: 0.02279, lrMultiplier: 0.088, loss: 1.88543, entropy: 1.20996, explVarOld: 0.183, explVarNew: 0.193
+[2023-12-26 22:35:37,090] batch: 910, lenEpisode: 24
+[2023-12-26 22:35:38,039] kl: 0.01667, lrMultiplier: 0.088, loss: 1.84277, entropy: 1.21199, explVarOld: 0.171, explVarNew: 0.184
+[2023-12-26 22:35:42,583] batch: 911, lenEpisode: 10
+[2023-12-26 22:35:43,622] kl: 0.02074, lrMultiplier: 0.088, loss: 1.81244, entropy: 1.21594, explVarOld: 0.191, explVarNew: 0.217
+[2023-12-26 22:35:47,905] batch: 912, lenEpisode: 12
+[2023-12-26 22:35:48,978] kl: 0.03222, lrMultiplier: 0.088, loss: 1.89252, entropy: 1.19900, explVarOld: 0.164, explVarNew: 0.178
+[2023-12-26 22:35:52,726] batch: 913, lenEpisode: 10
+[2023-12-26 22:35:53,724] kl: 0.01924, lrMultiplier: 0.088, loss: 1.87827, entropy: 1.16249, explVarOld: 0.194, explVarNew: 0.218
+[2023-12-26 22:36:01,329] batch: 914, lenEpisode: 20
+[2023-12-26 22:36:02,299] kl: 0.03658, lrMultiplier: 0.088, loss: 1.85795, entropy: 1.16798, explVarOld: 0.219, explVarNew: 0.235
+[2023-12-26 22:36:06,788] batch: 915, lenEpisode: 11
+[2023-12-26 22:36:07,718] kl: 0.00982, lrMultiplier: 0.132, loss: 1.94565, entropy: 1.18365, explVarOld: 0.207, explVarNew: 0.226
+[2023-12-26 22:36:10,841] batch: 916, lenEpisode: 8
+[2023-12-26 22:36:11,806] kl: 0.05883, lrMultiplier: 0.088, loss: 1.92376, entropy: 1.23661, explVarOld: 0.144, explVarNew: 0.183
+[2023-12-26 22:36:14,939] batch: 917, lenEpisode: 9
+[2023-12-26 22:36:15,921] kl: 0.02285, lrMultiplier: 0.088, loss: 1.93626, entropy: 1.19697, explVarOld: 0.203, explVarNew: 0.212
+[2023-12-26 22:36:19,746] batch: 918, lenEpisode: 10
+[2023-12-26 22:36:20,731] kl: 0.03377, lrMultiplier: 0.088, loss: 1.87404, entropy: 1.22855, explVarOld: 0.176, explVarNew: 0.227
+[2023-12-26 22:36:24,683] batch: 919, lenEpisode: 11
+[2023-12-26 22:36:25,716] kl: 0.03173, lrMultiplier: 0.088, loss: 1.91504, entropy: 1.25929, explVarOld: 0.208, explVarNew: 0.215
+[2023-12-26 22:36:30,146] batch: 920, lenEpisode: 12
+[2023-12-26 22:36:31,116] kl: 0.02509, lrMultiplier: 0.088, loss: 1.83828, entropy: 1.25349, explVarOld: 0.228, explVarNew: 0.255
+[2023-12-26 22:36:34,133] batch: 921, lenEpisode: 9
+[2023-12-26 22:36:35,129] kl: 0.03546, lrMultiplier: 0.088, loss: 1.82024, entropy: 1.25698, explVarOld: 0.225, explVarNew: 0.237
+[2023-12-26 22:36:37,951] batch: 922, lenEpisode: 7
+[2023-12-26 22:36:38,918] kl: 0.02523, lrMultiplier: 0.088, loss: 1.92189, entropy: 1.23423, explVarOld: 0.209, explVarNew: 0.223
+[2023-12-26 22:36:42,113] batch: 923, lenEpisode: 11
+[2023-12-26 22:36:43,106] kl: 0.03111, lrMultiplier: 0.088, loss: 1.82125, entropy: 1.22983, explVarOld: 0.235, explVarNew: 0.257
+[2023-12-26 22:36:47,942] batch: 924, lenEpisode: 12
+[2023-12-26 22:36:48,941] kl: 0.02214, lrMultiplier: 0.088, loss: 1.78308, entropy: 1.18295, explVarOld: 0.201, explVarNew: 0.228
+[2023-12-26 22:36:53,098] batch: 925, lenEpisode: 10
+[2023-12-26 22:36:54,052] kl: 0.04307, lrMultiplier: 0.088, loss: 1.83835, entropy: 1.24412, explVarOld: 0.214, explVarNew: 0.239
+[2023-12-26 22:36:58,525] batch: 926, lenEpisode: 10
+[2023-12-26 22:36:59,440] kl: 0.02262, lrMultiplier: 0.088, loss: 1.83384, entropy: 1.18513, explVarOld: 0.196, explVarNew: 0.218
+[2023-12-26 22:37:03,155] batch: 927, lenEpisode: 9
+[2023-12-26 22:37:04,111] kl: 0.01862, lrMultiplier: 0.088, loss: 1.79767, entropy: 1.16361, explVarOld: 0.241, explVarNew: 0.261
+[2023-12-26 22:37:07,211] batch: 928, lenEpisode: 9
+[2023-12-26 22:37:08,140] kl: 0.02506, lrMultiplier: 0.088, loss: 1.76473, entropy: 1.20184, explVarOld: 0.261, explVarNew: 0.275
+[2023-12-26 22:37:14,688] batch: 929, lenEpisode: 18
+[2023-12-26 22:37:15,702] kl: 0.02320, lrMultiplier: 0.088, loss: 1.75847, entropy: 1.19872, explVarOld: 0.238, explVarNew: 0.259
+[2023-12-26 22:37:19,887] batch: 930, lenEpisode: 12
+[2023-12-26 22:37:20,844] kl: 0.01120, lrMultiplier: 0.088, loss: 1.72705, entropy: 1.21482, explVarOld: 0.266, explVarNew: 0.282
+[2023-12-26 22:37:25,331] batch: 931, lenEpisode: 13
+[2023-12-26 22:37:26,277] kl: 0.02804, lrMultiplier: 0.088, loss: 1.66970, entropy: 1.14799, explVarOld: 0.244, explVarNew: 0.259
+[2023-12-26 22:37:30,209] batch: 932, lenEpisode: 12
+[2023-12-26 22:37:31,249] kl: 0.01731, lrMultiplier: 0.088, loss: 1.85865, entropy: 1.17277, explVarOld: 0.210, explVarNew: 0.228
+[2023-12-26 22:37:37,419] batch: 933, lenEpisode: 16
+[2023-12-26 22:37:38,339] kl: 0.02263, lrMultiplier: 0.088, loss: 1.82732, entropy: 1.22818, explVarOld: 0.229, explVarNew: 0.251
+[2023-12-26 22:37:43,375] batch: 934, lenEpisode: 11
+[2023-12-26 22:37:44,639] kl: 0.03190, lrMultiplier: 0.088, loss: 1.86046, entropy: 1.18448, explVarOld: 0.124, explVarNew: 0.166
+[2023-12-26 22:37:48,974] batch: 935, lenEpisode: 11
+[2023-12-26 22:37:49,946] kl: 0.01406, lrMultiplier: 0.088, loss: 1.81654, entropy: 1.17841, explVarOld: 0.186, explVarNew: 0.220
+[2023-12-26 22:37:55,554] batch: 936, lenEpisode: 13
+[2023-12-26 22:37:56,544] kl: 0.01906, lrMultiplier: 0.088, loss: 1.79329, entropy: 1.17761, explVarOld: 0.176, explVarNew: 0.208
+[2023-12-26 22:38:04,851] batch: 937, lenEpisode: 22
+[2023-12-26 22:38:05,807] kl: 0.06053, lrMultiplier: 0.088, loss: 1.73682, entropy: 1.14014, explVarOld: 0.197, explVarNew: 0.220
+[2023-12-26 22:38:09,862] batch: 938, lenEpisode: 11
+[2023-12-26 22:38:10,826] kl: 0.02112, lrMultiplier: 0.088, loss: 1.75436, entropy: 1.16614, explVarOld: 0.233, explVarNew: 0.251
+[2023-12-26 22:38:20,201] batch: 939, lenEpisode: 22
+[2023-12-26 22:38:21,175] kl: 0.07341, lrMultiplier: 0.088, loss: 1.86612, entropy: 1.24445, explVarOld: 0.220, explVarNew: 0.229
+[2023-12-26 22:38:23,817] batch: 940, lenEpisode: 7
+[2023-12-26 22:38:24,780] kl: 0.05415, lrMultiplier: 0.088, loss: 1.86105, entropy: 1.17879, explVarOld: 0.232, explVarNew: 0.249
+[2023-12-26 22:38:29,895] batch: 941, lenEpisode: 11
+[2023-12-26 22:38:30,856] kl: 0.05859, lrMultiplier: 0.088, loss: 1.75706, entropy: 1.12518, explVarOld: 0.231, explVarNew: 0.248
+[2023-12-26 22:38:34,124] batch: 942, lenEpisode: 9
+[2023-12-26 22:38:35,089] kl: 0.06635, lrMultiplier: 0.088, loss: 1.77624, entropy: 1.19443, explVarOld: 0.267, explVarNew: 0.290
+[2023-12-26 22:38:39,398] batch: 943, lenEpisode: 9
+[2023-12-26 22:38:40,462] kl: 0.02064, lrMultiplier: 0.088, loss: 1.82737, entropy: 1.24586, explVarOld: 0.300, explVarNew: 0.316
+[2023-12-26 22:38:44,455] batch: 944, lenEpisode: 11
+[2023-12-26 22:38:45,408] kl: 0.03618, lrMultiplier: 0.088, loss: 1.78878, entropy: 1.17444, explVarOld: 0.202, explVarNew: 0.225
+[2023-12-26 22:38:49,512] batch: 945, lenEpisode: 10
+[2023-12-26 22:38:50,438] kl: 0.05479, lrMultiplier: 0.088, loss: 1.82277, entropy: 1.19786, explVarOld: 0.262, explVarNew: 0.275
+[2023-12-26 22:38:54,995] batch: 946, lenEpisode: 10
+[2023-12-26 22:38:55,939] kl: 0.00824, lrMultiplier: 0.132, loss: 1.75209, entropy: 1.19525, explVarOld: 0.256, explVarNew: 0.273
+[2023-12-26 22:39:01,738] batch: 947, lenEpisode: 17
+[2023-12-26 22:39:02,687] kl: 0.05667, lrMultiplier: 0.088, loss: 1.75921, entropy: 1.09736, explVarOld: 0.192, explVarNew: 0.223
+[2023-12-26 22:39:07,892] batch: 948, lenEpisode: 13
+[2023-12-26 22:39:08,847] kl: 0.01313, lrMultiplier: 0.088, loss: 1.67805, entropy: 1.15032, explVarOld: 0.266, explVarNew: 0.282
+[2023-12-26 22:39:15,402] batch: 949, lenEpisode: 18
+[2023-12-26 22:39:16,413] kl: 0.02185, lrMultiplier: 0.088, loss: 1.67116, entropy: 1.15153, explVarOld: 0.256, explVarNew: 0.281
+[2023-12-26 22:39:21,087] batch: 950, lenEpisode: 12
+[2023-12-26 22:39:22,066] kl: 0.02640, lrMultiplier: 0.088, loss: 1.74887, entropy: 1.14352, explVarOld: 0.219, explVarNew: 0.231
+[2023-12-26 22:39:22,066] evalBatch: 950
+[2023-12-26 22:39:51,984] BEST POLICY!!!!!!!
+[2023-12-26 22:39:51,984] numPlayouts: 1000, win: 8, lose: 2, tie: 0, avgCurrStarted: 0.8
+[2023-12-26 22:39:56,349] batch: 951, lenEpisode: 9
+[2023-12-26 22:39:57,309] kl: 0.01044, lrMultiplier: 0.088, loss: 1.78488, entropy: 1.11901, explVarOld: 0.203, explVarNew: 0.218
+[2023-12-26 22:40:00,878] batch: 952, lenEpisode: 11
+[2023-12-26 22:40:01,866] kl: 0.03535, lrMultiplier: 0.088, loss: 1.78868, entropy: 1.19751, explVarOld: 0.230, explVarNew: 0.250
+[2023-12-26 22:40:06,237] batch: 953, lenEpisode: 12
+[2023-12-26 22:40:07,241] kl: 0.01492, lrMultiplier: 0.088, loss: 1.71219, entropy: 1.17842, explVarOld: 0.306, explVarNew: 0.320
+[2023-12-26 22:40:09,922] batch: 954, lenEpisode: 7
+[2023-12-26 22:40:10,853] kl: 0.03607, lrMultiplier: 0.088, loss: 1.70225, entropy: 1.14146, explVarOld: 0.254, explVarNew: 0.261
+[2023-12-26 22:40:13,839] batch: 955, lenEpisode: 9
+[2023-12-26 22:40:14,739] kl: 0.00837, lrMultiplier: 0.132, loss: 1.74957, entropy: 1.10263, explVarOld: 0.278, explVarNew: 0.293
+[2023-12-26 22:40:19,892] batch: 956, lenEpisode: 20
+[2023-12-26 22:40:20,795] kl: 0.04027, lrMultiplier: 0.088, loss: 1.71506, entropy: 1.12552, explVarOld: 0.233, explVarNew: 0.263
+[2023-12-26 22:40:27,653] batch: 957, lenEpisode: 16
+[2023-12-26 22:40:28,551] kl: 0.02341, lrMultiplier: 0.088, loss: 1.73396, entropy: 1.17094, explVarOld: 0.242, explVarNew: 0.258
+[2023-12-26 22:40:37,299] batch: 958, lenEpisode: 20
+[2023-12-26 22:40:38,204] kl: 0.02128, lrMultiplier: 0.088, loss: 1.74342, entropy: 1.12469, explVarOld: 0.267, explVarNew: 0.295
+[2023-12-26 22:40:43,132] batch: 959, lenEpisode: 14
+[2023-12-26 22:40:44,057] kl: 0.01578, lrMultiplier: 0.088, loss: 1.69055, entropy: 1.08975, explVarOld: 0.229, explVarNew: 0.250
+[2023-12-26 22:40:49,584] batch: 960, lenEpisode: 15
+[2023-12-26 22:40:50,482] kl: 0.02017, lrMultiplier: 0.088, loss: 1.75526, entropy: 1.12177, explVarOld: 0.234, explVarNew: 0.248
+[2023-12-26 22:40:53,600] batch: 961, lenEpisode: 9
+[2023-12-26 22:40:54,502] kl: 0.01185, lrMultiplier: 0.088, loss: 1.77745, entropy: 1.15695, explVarOld: 0.221, explVarNew: 0.249
+[2023-12-26 22:41:00,866] batch: 962, lenEpisode: 15
+[2023-12-26 22:41:01,763] kl: 0.02699, lrMultiplier: 0.088, loss: 1.79954, entropy: 1.16473, explVarOld: 0.276, explVarNew: 0.291
+[2023-12-26 22:41:05,896] batch: 963, lenEpisode: 12
+[2023-12-26 22:41:06,796] kl: 0.02589, lrMultiplier: 0.088, loss: 1.74879, entropy: 1.14541, explVarOld: 0.218, explVarNew: 0.241
+[2023-12-26 22:41:10,184] batch: 964, lenEpisode: 9
+[2023-12-26 22:41:11,101] kl: 0.02000, lrMultiplier: 0.088, loss: 1.74374, entropy: 1.19289, explVarOld: 0.262, explVarNew: 0.297
+[2023-12-26 22:41:15,087] batch: 965, lenEpisode: 10
+[2023-12-26 22:41:16,034] kl: 0.01887, lrMultiplier: 0.088, loss: 1.82287, entropy: 1.08859, explVarOld: 0.220, explVarNew: 0.246
+[2023-12-26 22:41:18,668] batch: 966, lenEpisode: 7
+[2023-12-26 22:41:19,588] kl: 0.03610, lrMultiplier: 0.088, loss: 1.74443, entropy: 1.16041, explVarOld: 0.246, explVarNew: 0.270
+[2023-12-26 22:41:24,005] batch: 967, lenEpisode: 11
+[2023-12-26 22:41:24,926] kl: 0.01289, lrMultiplier: 0.088, loss: 1.72023, entropy: 1.17244, explVarOld: 0.250, explVarNew: 0.263
+[2023-12-26 22:41:30,823] batch: 968, lenEpisode: 20
+[2023-12-26 22:41:31,776] kl: 0.02395, lrMultiplier: 0.088, loss: 1.82232, entropy: 1.17947, explVarOld: 0.267, explVarNew: 0.286
+[2023-12-26 22:41:36,150] batch: 969, lenEpisode: 9
+[2023-12-26 22:41:37,059] kl: 0.01682, lrMultiplier: 0.088, loss: 1.75396, entropy: 1.10253, explVarOld: 0.232, explVarNew: 0.254
+[2023-12-26 22:41:41,195] batch: 970, lenEpisode: 9
+[2023-12-26 22:41:42,106] kl: 0.02218, lrMultiplier: 0.088, loss: 1.74178, entropy: 1.15178, explVarOld: 0.237, explVarNew: 0.254
+[2023-12-26 22:41:45,591] batch: 971, lenEpisode: 10
+[2023-12-26 22:41:46,573] kl: 0.01636, lrMultiplier: 0.088, loss: 1.87197, entropy: 1.13423, explVarOld: 0.219, explVarNew: 0.238
+[2023-12-26 22:41:51,936] batch: 972, lenEpisode: 11
+[2023-12-26 22:41:52,889] kl: 0.02996, lrMultiplier: 0.088, loss: 1.74136, entropy: 1.13288, explVarOld: 0.283, explVarNew: 0.308
+[2023-12-26 22:41:55,733] batch: 973, lenEpisode: 8
+[2023-12-26 22:41:56,702] kl: 0.02960, lrMultiplier: 0.088, loss: 1.68087, entropy: 1.09221, explVarOld: 0.216, explVarNew: 0.231
+[2023-12-26 22:42:01,640] batch: 974, lenEpisode: 15
+[2023-12-26 22:42:02,593] kl: 0.03527, lrMultiplier: 0.088, loss: 1.58807, entropy: 1.12034, explVarOld: 0.288, explVarNew: 0.307
+[2023-12-26 22:42:06,168] batch: 975, lenEpisode: 11
+[2023-12-26 22:42:07,132] kl: 0.06398, lrMultiplier: 0.088, loss: 1.78204, entropy: 1.14108, explVarOld: 0.212, explVarNew: 0.237
+[2023-12-26 22:42:11,110] batch: 976, lenEpisode: 10
+[2023-12-26 22:42:12,135] kl: 0.06357, lrMultiplier: 0.088, loss: 1.85995, entropy: 1.16180, explVarOld: 0.205, explVarNew: 0.214
+[2023-12-26 22:42:17,171] batch: 977, lenEpisode: 13
+[2023-12-26 22:42:18,133] kl: 0.02473, lrMultiplier: 0.088, loss: 1.80126, entropy: 1.17787, explVarOld: 0.224, explVarNew: 0.240
+[2023-12-26 22:42:23,030] batch: 978, lenEpisode: 11
+[2023-12-26 22:42:24,003] kl: 0.02644, lrMultiplier: 0.088, loss: 1.62844, entropy: 1.06704, explVarOld: 0.244, explVarNew: 0.265
+[2023-12-26 22:42:29,327] batch: 979, lenEpisode: 16
+[2023-12-26 22:42:30,281] kl: 0.02232, lrMultiplier: 0.088, loss: 1.75401, entropy: 1.13434, explVarOld: 0.211, explVarNew: 0.229
+[2023-12-26 22:42:34,751] batch: 980, lenEpisode: 12
+[2023-12-26 22:42:35,707] kl: 0.02556, lrMultiplier: 0.088, loss: 1.77783, entropy: 1.14542, explVarOld: 0.194, explVarNew: 0.239
+[2023-12-26 22:42:38,323] batch: 981, lenEpisode: 7
+[2023-12-26 22:42:39,286] kl: 0.01459, lrMultiplier: 0.088, loss: 1.71862, entropy: 1.11969, explVarOld: 0.201, explVarNew: 0.236
+[2023-12-26 22:42:42,793] batch: 982, lenEpisode: 9
+[2023-12-26 22:42:43,750] kl: 0.01089, lrMultiplier: 0.088, loss: 1.72714, entropy: 1.11962, explVarOld: 0.230, explVarNew: 0.229
+[2023-12-26 22:42:46,827] batch: 983, lenEpisode: 7
+[2023-12-26 22:42:47,856] kl: 0.02320, lrMultiplier: 0.088, loss: 1.78250, entropy: 1.12247, explVarOld: 0.210, explVarNew: 0.231
+[2023-12-26 22:42:52,891] batch: 984, lenEpisode: 13
+[2023-12-26 22:42:53,851] kl: 0.02118, lrMultiplier: 0.088, loss: 1.65643, entropy: 1.09831, explVarOld: 0.270, explVarNew: 0.278
+[2023-12-26 22:42:58,775] batch: 985, lenEpisode: 14
+[2023-12-26 22:42:59,759] kl: 0.01853, lrMultiplier: 0.088, loss: 1.82298, entropy: 1.12135, explVarOld: 0.231, explVarNew: 0.243
+[2023-12-26 22:43:03,823] batch: 986, lenEpisode: 11
+[2023-12-26 22:43:04,732] kl: 0.02590, lrMultiplier: 0.088, loss: 1.81557, entropy: 1.12509, explVarOld: 0.267, explVarNew: 0.294
+[2023-12-26 22:43:07,680] batch: 987, lenEpisode: 7
+[2023-12-26 22:43:08,597] kl: 0.01980, lrMultiplier: 0.088, loss: 1.71111, entropy: 1.10372, explVarOld: 0.211, explVarNew: 0.227
+[2023-12-26 22:43:11,800] batch: 988, lenEpisode: 9
+[2023-12-26 22:43:12,759] kl: 0.02427, lrMultiplier: 0.088, loss: 1.74994, entropy: 1.08429, explVarOld: 0.210, explVarNew: 0.230
+[2023-12-26 22:43:16,812] batch: 989, lenEpisode: 10
+[2023-12-26 22:43:17,720] kl: 0.01900, lrMultiplier: 0.088, loss: 1.71097, entropy: 1.07995, explVarOld: 0.245, explVarNew: 0.260
+[2023-12-26 22:43:26,563] batch: 990, lenEpisode: 21
+[2023-12-26 22:43:27,519] kl: 0.01471, lrMultiplier: 0.088, loss: 1.75164, entropy: 1.07942, explVarOld: 0.196, explVarNew: 0.230
+[2023-12-26 22:43:31,735] batch: 991, lenEpisode: 12
+[2023-12-26 22:43:32,800] kl: 0.01216, lrMultiplier: 0.088, loss: 1.78380, entropy: 1.11198, explVarOld: 0.211, explVarNew: 0.229
+[2023-12-26 22:43:40,820] batch: 992, lenEpisode: 17
+[2023-12-26 22:43:41,767] kl: 0.02603, lrMultiplier: 0.088, loss: 1.63790, entropy: 1.09570, explVarOld: 0.251, explVarNew: 0.270
+[2023-12-26 22:43:48,256] batch: 993, lenEpisode: 18
+[2023-12-26 22:43:49,383] kl: 0.02124, lrMultiplier: 0.088, loss: 1.88726, entropy: 1.10573, explVarOld: 0.123, explVarNew: 0.145
+[2023-12-26 22:43:53,771] batch: 994, lenEpisode: 12
+[2023-12-26 22:43:54,743] kl: 0.03384, lrMultiplier: 0.088, loss: 1.68471, entropy: 1.06018, explVarOld: 0.236, explVarNew: 0.254
+[2023-12-26 22:43:59,152] batch: 995, lenEpisode: 12
+[2023-12-26 22:44:00,123] kl: 0.02991, lrMultiplier: 0.088, loss: 1.85048, entropy: 1.14156, explVarOld: 0.138, explVarNew: 0.175
+[2023-12-26 22:44:06,124] batch: 996, lenEpisode: 15
+[2023-12-26 22:44:07,058] kl: 0.02740, lrMultiplier: 0.088, loss: 1.74978, entropy: 1.11347, explVarOld: 0.189, explVarNew: 0.216
+[2023-12-26 22:44:11,296] batch: 997, lenEpisode: 9
+[2023-12-26 22:44:12,277] kl: 0.03703, lrMultiplier: 0.088, loss: 1.85672, entropy: 1.11964, explVarOld: 0.158, explVarNew: 0.172
+[2023-12-26 22:44:18,743] batch: 998, lenEpisode: 15
+[2023-12-26 22:44:19,652] kl: 0.03880, lrMultiplier: 0.088, loss: 1.80352, entropy: 1.08935, explVarOld: 0.229, explVarNew: 0.245
+[2023-12-26 22:44:26,252] batch: 999, lenEpisode: 15
+[2023-12-26 22:44:27,187] kl: 0.05058, lrMultiplier: 0.088, loss: 1.82236, entropy: 1.10054, explVarOld: 0.197, explVarNew: 0.214
+[2023-12-26 22:44:32,002] batch: 1000, lenEpisode: 13
+[2023-12-26 22:44:32,934] kl: 0.04665, lrMultiplier: 0.088, loss: 1.86448, entropy: 1.10677, explVarOld: 0.164, explVarNew: 0.194
+[2023-12-26 22:44:32,934] evalBatch: 1000
+[2023-12-26 22:45:09,979] numPlayouts: 1000, win: 6, lose: 4, tie: 0, avgCurrStarted: 0.7
+[2023-12-26 22:45:13,261] batch: 1001, lenEpisode: 7
+[2023-12-26 22:45:14,441] kl: 0.02870, lrMultiplier: 0.088, loss: 1.77179, entropy: 1.08518, explVarOld: 0.212, explVarNew: 0.230
+[2023-12-26 22:45:20,467] batch: 1002, lenEpisode: 12
+[2023-12-26 22:45:21,466] kl: 0.03810, lrMultiplier: 0.088, loss: 1.75546, entropy: 1.11007, explVarOld: 0.206, explVarNew: 0.223
+[2023-12-26 22:45:24,933] batch: 1003, lenEpisode: 8
+[2023-12-26 22:45:26,000] kl: 0.03090, lrMultiplier: 0.088, loss: 1.89670, entropy: 1.13699, explVarOld: 0.163, explVarNew: 0.180
+[2023-12-26 22:45:33,447] batch: 1004, lenEpisode: 18
+[2023-12-26 22:45:34,416] kl: 0.04899, lrMultiplier: 0.088, loss: 1.87655, entropy: 1.11122, explVarOld: 0.156, explVarNew: 0.180
+[2023-12-26 22:45:40,294] batch: 1005, lenEpisode: 14
+[2023-12-26 22:45:41,261] kl: 0.04124, lrMultiplier: 0.088, loss: 1.82861, entropy: 1.13651, explVarOld: 0.163, explVarNew: 0.180
+[2023-12-26 22:45:44,760] batch: 1006, lenEpisode: 9
+[2023-12-26 22:45:45,750] kl: 0.08283, lrMultiplier: 0.088, loss: 1.84747, entropy: 1.07092, explVarOld: 0.177, explVarNew: 0.187
+[2023-12-26 22:45:48,609] batch: 1007, lenEpisode: 7
+[2023-12-26 22:45:49,560] kl: 0.06213, lrMultiplier: 0.088, loss: 1.83750, entropy: 1.14027, explVarOld: 0.217, explVarNew: 0.239
+[2023-12-26 22:45:52,755] batch: 1008, lenEpisode: 9
+[2023-12-26 22:45:53,722] kl: 0.03938, lrMultiplier: 0.088, loss: 1.70351, entropy: 1.13352, explVarOld: 0.259, explVarNew: 0.275
+[2023-12-26 22:46:02,697] batch: 1009, lenEpisode: 22
+[2023-12-26 22:46:03,600] kl: 0.02822, lrMultiplier: 0.088, loss: 1.79985, entropy: 1.11584, explVarOld: 0.209, explVarNew: 0.233
+[2023-12-26 22:46:07,498] batch: 1010, lenEpisode: 9
+[2023-12-26 22:46:08,402] kl: 0.02071, lrMultiplier: 0.088, loss: 1.77031, entropy: 1.12899, explVarOld: 0.224, explVarNew: 0.239
+[2023-12-26 22:46:13,564] batch: 1011, lenEpisode: 13
+[2023-12-26 22:46:14,469] kl: 0.01634, lrMultiplier: 0.088, loss: 1.82000, entropy: 1.11132, explVarOld: 0.201, explVarNew: 0.227
+[2023-12-26 22:46:18,577] batch: 1012, lenEpisode: 9
+[2023-12-26 22:46:19,502] kl: 0.01399, lrMultiplier: 0.088, loss: 1.73360, entropy: 1.09180, explVarOld: 0.198, explVarNew: 0.211
+[2023-12-26 22:46:31,189] batch: 1013, lenEpisode: 36
+[2023-12-26 22:46:32,121] kl: 0.03117, lrMultiplier: 0.088, loss: 1.83060, entropy: 1.14009, explVarOld: 0.195, explVarNew: 0.211
+[2023-12-26 22:46:40,839] batch: 1014, lenEpisode: 20
+[2023-12-26 22:46:41,805] kl: 0.01687, lrMultiplier: 0.088, loss: 1.89950, entropy: 1.16144, explVarOld: 0.213, explVarNew: 0.232
+[2023-12-26 22:46:44,795] batch: 1015, lenEpisode: 11
+[2023-12-26 22:46:45,754] kl: 0.02924, lrMultiplier: 0.088, loss: 1.73842, entropy: 1.07579, explVarOld: 0.186, explVarNew: 0.193
+[2023-12-26 22:46:50,281] batch: 1016, lenEpisode: 15
+[2023-12-26 22:46:51,257] kl: 0.02903, lrMultiplier: 0.088, loss: 1.76857, entropy: 1.06546, explVarOld: 0.152, explVarNew: 0.179
+[2023-12-26 22:46:55,433] batch: 1017, lenEpisode: 10
+[2023-12-26 22:46:56,404] kl: 0.02998, lrMultiplier: 0.088, loss: 1.83683, entropy: 1.09695, explVarOld: 0.152, explVarNew: 0.173
+[2023-12-26 22:47:01,223] batch: 1018, lenEpisode: 12
+[2023-12-26 22:47:02,182] kl: 0.02859, lrMultiplier: 0.088, loss: 1.80342, entropy: 1.15600, explVarOld: 0.123, explVarNew: 0.145
+[2023-12-26 22:47:05,033] batch: 1019, lenEpisode: 9
+[2023-12-26 22:47:06,000] kl: 0.02833, lrMultiplier: 0.088, loss: 1.71554, entropy: 1.10026, explVarOld: 0.145, explVarNew: 0.157
+[2023-12-26 22:47:10,231] batch: 1020, lenEpisode: 12
+[2023-12-26 22:47:11,193] kl: 0.02869, lrMultiplier: 0.088, loss: 1.81192, entropy: 1.08306, explVarOld: 0.153, explVarNew: 0.172
+[2023-12-26 22:47:14,598] batch: 1021, lenEpisode: 9
+[2023-12-26 22:47:15,575] kl: 0.02077, lrMultiplier: 0.088, loss: 1.78585, entropy: 1.06255, explVarOld: 0.162, explVarNew: 0.176
+[2023-12-26 22:47:25,523] batch: 1022, lenEpisode: 19
+[2023-12-26 22:47:26,515] kl: 0.03272, lrMultiplier: 0.088, loss: 1.83272, entropy: 1.08836, explVarOld: 0.129, explVarNew: 0.142
+[2023-12-26 22:47:33,942] batch: 1023, lenEpisode: 23
+[2023-12-26 22:47:34,904] kl: 0.01070, lrMultiplier: 0.088, loss: 1.79965, entropy: 1.07795, explVarOld: 0.189, explVarNew: 0.206
+[2023-12-26 22:47:39,834] batch: 1024, lenEpisode: 13
+[2023-12-26 22:47:40,795] kl: 0.02689, lrMultiplier: 0.088, loss: 1.68128, entropy: 1.09599, explVarOld: 0.189, explVarNew: 0.212
+[2023-12-26 22:47:44,229] batch: 1025, lenEpisode: 8
+[2023-12-26 22:47:45,180] kl: 0.02499, lrMultiplier: 0.088, loss: 1.77278, entropy: 1.09155, explVarOld: 0.196, explVarNew: 0.210
+[2023-12-26 22:47:49,838] batch: 1026, lenEpisode: 14
+[2023-12-26 22:47:50,799] kl: 0.02644, lrMultiplier: 0.088, loss: 1.76919, entropy: 1.10777, explVarOld: 0.171, explVarNew: 0.195
+[2023-12-26 22:47:55,687] batch: 1027, lenEpisode: 14
+[2023-12-26 22:47:56,654] kl: 0.03946, lrMultiplier: 0.088, loss: 1.85398, entropy: 1.11668, explVarOld: 0.166, explVarNew: 0.187
+[2023-12-26 22:48:01,380] batch: 1028, lenEpisode: 10
+[2023-12-26 22:48:02,411] kl: 0.03392, lrMultiplier: 0.088, loss: 1.76421, entropy: 1.07068, explVarOld: 0.135, explVarNew: 0.152
+[2023-12-26 22:48:06,851] batch: 1029, lenEpisode: 10
+[2023-12-26 22:48:07,813] kl: 0.03103, lrMultiplier: 0.088, loss: 1.66665, entropy: 1.03725, explVarOld: 0.190, explVarNew: 0.209
+[2023-12-26 22:48:10,387] batch: 1030, lenEpisode: 7
+[2023-12-26 22:48:11,426] kl: 0.02275, lrMultiplier: 0.088, loss: 1.82217, entropy: 1.09734, explVarOld: 0.186, explVarNew: 0.208
+[2023-12-26 22:48:14,478] batch: 1031, lenEpisode: 7
+[2023-12-26 22:48:15,443] kl: 0.03146, lrMultiplier: 0.088, loss: 1.72551, entropy: 1.06770, explVarOld: 0.201, explVarNew: 0.223
+[2023-12-26 22:48:17,884] batch: 1032, lenEpisode: 8
+[2023-12-26 22:48:18,860] kl: 0.04233, lrMultiplier: 0.088, loss: 1.80292, entropy: 1.07234, explVarOld: 0.199, explVarNew: 0.229
+[2023-12-26 22:48:23,222] batch: 1033, lenEpisode: 10
+[2023-12-26 22:48:24,181] kl: 0.01556, lrMultiplier: 0.088, loss: 1.71575, entropy: 1.05908, explVarOld: 0.193, explVarNew: 0.219
+[2023-12-26 22:48:27,999] batch: 1034, lenEpisode: 9
+[2023-12-26 22:48:28,956] kl: 0.03475, lrMultiplier: 0.088, loss: 1.76739, entropy: 1.10522, explVarOld: 0.192, explVarNew: 0.204
+[2023-12-26 22:48:31,874] batch: 1035, lenEpisode: 7
+[2023-12-26 22:48:32,837] kl: 0.01752, lrMultiplier: 0.088, loss: 1.74733, entropy: 1.07957, explVarOld: 0.189, explVarNew: 0.201
+[2023-12-26 22:48:40,227] batch: 1036, lenEpisode: 19
+[2023-12-26 22:48:41,186] kl: 0.03667, lrMultiplier: 0.088, loss: 1.80495, entropy: 1.07137, explVarOld: 0.140, explVarNew: 0.157
+[2023-12-26 22:48:45,681] batch: 1037, lenEpisode: 9
+[2023-12-26 22:48:46,655] kl: 0.02080, lrMultiplier: 0.088, loss: 1.78446, entropy: 1.03985, explVarOld: 0.164, explVarNew: 0.183
+[2023-12-26 22:48:49,450] batch: 1038, lenEpisode: 7
+[2023-12-26 22:48:50,412] kl: 0.03152, lrMultiplier: 0.088, loss: 1.76847, entropy: 1.06637, explVarOld: 0.155, explVarNew: 0.176
+[2023-12-26 22:48:54,005] batch: 1039, lenEpisode: 11
+[2023-12-26 22:48:54,968] kl: 0.02848, lrMultiplier: 0.088, loss: 1.76949, entropy: 1.08908, explVarOld: 0.164, explVarNew: 0.180
+[2023-12-26 22:48:59,035] batch: 1040, lenEpisode: 13
+[2023-12-26 22:48:59,959] kl: 0.03930, lrMultiplier: 0.088, loss: 1.75512, entropy: 1.05251, explVarOld: 0.148, explVarNew: 0.159
+[2023-12-26 22:49:03,011] batch: 1041, lenEpisode: 8
+[2023-12-26 22:49:03,912] kl: 0.01495, lrMultiplier: 0.088, loss: 1.67735, entropy: 1.05829, explVarOld: 0.203, explVarNew: 0.217
+[2023-12-26 22:49:06,730] batch: 1042, lenEpisode: 8
+[2023-12-26 22:49:07,631] kl: 0.03630, lrMultiplier: 0.088, loss: 1.82050, entropy: 1.09547, explVarOld: 0.173, explVarNew: 0.176
+[2023-12-26 22:49:11,683] batch: 1043, lenEpisode: 10
+[2023-12-26 22:49:12,646] kl: 0.01970, lrMultiplier: 0.088, loss: 1.71824, entropy: 1.03603, explVarOld: 0.142, explVarNew: 0.169
+[2023-12-26 22:49:17,733] batch: 1044, lenEpisode: 11
+[2023-12-26 22:49:18,784] kl: 0.02368, lrMultiplier: 0.088, loss: 1.79585, entropy: 1.05798, explVarOld: 0.208, explVarNew: 0.228
+[2023-12-26 22:49:23,113] batch: 1045, lenEpisode: 10
+[2023-12-26 22:49:24,063] kl: 0.03274, lrMultiplier: 0.088, loss: 1.75177, entropy: 1.03711, explVarOld: 0.120, explVarNew: 0.148
+[2023-12-26 22:49:29,078] batch: 1046, lenEpisode: 14
+[2023-12-26 22:49:30,036] kl: 0.03533, lrMultiplier: 0.088, loss: 1.66529, entropy: 1.05909, explVarOld: 0.135, explVarNew: 0.181
+[2023-12-26 22:49:34,269] batch: 1047, lenEpisode: 12
+[2023-12-26 22:49:35,224] kl: 0.01552, lrMultiplier: 0.088, loss: 1.74080, entropy: 1.06913, explVarOld: 0.171, explVarNew: 0.186
+[2023-12-26 22:49:39,665] batch: 1048, lenEpisode: 12
+[2023-12-26 22:49:40,593] kl: 0.02412, lrMultiplier: 0.088, loss: 1.76702, entropy: 1.04217, explVarOld: 0.172, explVarNew: 0.181
+[2023-12-26 22:49:47,967] batch: 1049, lenEpisode: 17
+[2023-12-26 22:49:48,867] kl: 0.01597, lrMultiplier: 0.088, loss: 1.74438, entropy: 1.09146, explVarOld: 0.187, explVarNew: 0.201
+[2023-12-26 22:49:55,487] batch: 1050, lenEpisode: 15
+[2023-12-26 22:49:56,409] kl: 0.01911, lrMultiplier: 0.088, loss: 1.77476, entropy: 1.09163, explVarOld: 0.165, explVarNew: 0.185
+[2023-12-26 22:49:56,409] evalBatch: 1050
+[2023-12-26 22:50:24,537] numPlayouts: 1000, win: 8, lose: 2, tie: 0, avgCurrStarted: 0.7
+[2023-12-26 22:50:29,249] batch: 1051, lenEpisode: 17
+[2023-12-26 22:50:30,143] kl: 0.03568, lrMultiplier: 0.088, loss: 1.70666, entropy: 1.05004, explVarOld: 0.193, explVarNew: 0.227
+[2023-12-26 22:50:33,756] batch: 1052, lenEpisode: 10
+[2023-12-26 22:50:34,707] kl: 0.02142, lrMultiplier: 0.088, loss: 1.69402, entropy: 1.01681, explVarOld: 0.204, explVarNew: 0.220
+[2023-12-26 22:50:39,498] batch: 1053, lenEpisode: 14
+[2023-12-26 22:50:40,425] kl: 0.02963, lrMultiplier: 0.088, loss: 1.73199, entropy: 1.06149, explVarOld: 0.189, explVarNew: 0.212
+[2023-12-26 22:50:52,575] batch: 1054, lenEpisode: 36
+[2023-12-26 22:50:53,500] kl: 0.04058, lrMultiplier: 0.088, loss: 1.80023, entropy: 1.08136, explVarOld: 0.128, explVarNew: 0.166
+[2023-12-26 22:50:55,788] batch: 1055, lenEpisode: 7
+[2023-12-26 22:50:56,727] kl: 0.03534, lrMultiplier: 0.088, loss: 1.76958, entropy: 1.09026, explVarOld: 0.208, explVarNew: 0.222
+[2023-12-26 22:51:00,896] batch: 1056, lenEpisode: 12
+[2023-12-26 22:51:01,797] kl: 0.08146, lrMultiplier: 0.088, loss: 1.79893, entropy: 1.09001, explVarOld: 0.113, explVarNew: 0.144
+[2023-12-26 22:51:07,584] batch: 1057, lenEpisode: 15
+[2023-12-26 22:51:08,482] kl: 0.03201, lrMultiplier: 0.088, loss: 1.76636, entropy: 1.06424, explVarOld: 0.198, explVarNew: 0.228
+[2023-12-26 22:51:10,954] batch: 1058, lenEpisode: 7
+[2023-12-26 22:51:11,870] kl: 0.05411, lrMultiplier: 0.088, loss: 1.79054, entropy: 1.11148, explVarOld: 0.138, explVarNew: 0.163
+[2023-12-26 22:51:16,169] batch: 1059, lenEpisode: 10
+[2023-12-26 22:51:17,082] kl: 0.01924, lrMultiplier: 0.088, loss: 1.75791, entropy: 1.05846, explVarOld: 0.147, explVarNew: 0.169
+[2023-12-26 22:51:24,156] batch: 1060, lenEpisode: 18
+[2023-12-26 22:51:25,062] kl: 0.06258, lrMultiplier: 0.088, loss: 1.76100, entropy: 1.07179, explVarOld: 0.149, explVarNew: 0.163
+[2023-12-26 22:51:31,296] batch: 1061, lenEpisode: 16
+[2023-12-26 22:51:32,191] kl: 0.02129, lrMultiplier: 0.088, loss: 1.68337, entropy: 1.05373, explVarOld: 0.144, explVarNew: 0.166
+[2023-12-26 22:51:36,945] batch: 1062, lenEpisode: 12
+[2023-12-26 22:51:37,842] kl: 0.03683, lrMultiplier: 0.088, loss: 1.78607, entropy: 1.08298, explVarOld: 0.154, explVarNew: 0.181
+[2023-12-26 22:51:43,238] batch: 1063, lenEpisode: 12
+[2023-12-26 22:51:44,136] kl: 0.03210, lrMultiplier: 0.088, loss: 1.69696, entropy: 1.02543, explVarOld: 0.140, explVarNew: 0.154
+[2023-12-26 22:51:51,603] batch: 1064, lenEpisode: 22
+[2023-12-26 22:51:52,564] kl: 0.01545, lrMultiplier: 0.088, loss: 1.71585, entropy: 1.07086, explVarOld: 0.161, explVarNew: 0.168
+[2023-12-26 22:51:55,410] batch: 1065, lenEpisode: 9
+[2023-12-26 22:51:56,308] kl: 0.03198, lrMultiplier: 0.088, loss: 1.78154, entropy: 1.08686, explVarOld: 0.117, explVarNew: 0.151
+[2023-12-26 22:52:00,835] batch: 1066, lenEpisode: 19
+[2023-12-26 22:52:01,730] kl: 0.01216, lrMultiplier: 0.088, loss: 1.76494, entropy: 1.03328, explVarOld: 0.162, explVarNew: 0.174
+[2023-12-26 22:52:06,488] batch: 1067, lenEpisode: 9
+[2023-12-26 22:52:07,400] kl: 0.03811, lrMultiplier: 0.088, loss: 1.68945, entropy: 1.05547, explVarOld: 0.159, explVarNew: 0.183
+[2023-12-26 22:52:12,675] batch: 1068, lenEpisode: 12
+[2023-12-26 22:52:13,600] kl: 0.04330, lrMultiplier: 0.088, loss: 1.68726, entropy: 1.05627, explVarOld: 0.209, explVarNew: 0.229
+[2023-12-26 22:52:16,851] batch: 1069, lenEpisode: 10
+[2023-12-26 22:52:17,763] kl: 0.02688, lrMultiplier: 0.088, loss: 1.70360, entropy: 1.02329, explVarOld: 0.129, explVarNew: 0.145
+[2023-12-26 22:52:25,774] batch: 1070, lenEpisode: 27
+[2023-12-26 22:52:26,687] kl: 0.04163, lrMultiplier: 0.088, loss: 1.74688, entropy: 1.07375, explVarOld: 0.148, explVarNew: 0.171
+[2023-12-26 22:52:31,663] batch: 1071, lenEpisode: 12
+[2023-12-26 22:52:32,570] kl: 0.04183, lrMultiplier: 0.088, loss: 1.75902, entropy: 1.10802, explVarOld: 0.160, explVarNew: 0.191
+[2023-12-26 22:52:39,078] batch: 1072, lenEpisode: 17
+[2023-12-26 22:52:39,981] kl: 0.02143, lrMultiplier: 0.088, loss: 1.80382, entropy: 1.05691, explVarOld: 0.157, explVarNew: 0.177
+[2023-12-26 22:52:42,797] batch: 1073, lenEpisode: 8
+[2023-12-26 22:52:43,725] kl: 0.05383, lrMultiplier: 0.088, loss: 1.71022, entropy: 1.06449, explVarOld: 0.152, explVarNew: 0.165
+[2023-12-26 22:52:51,429] batch: 1074, lenEpisode: 18
+[2023-12-26 22:52:52,348] kl: 0.01881, lrMultiplier: 0.088, loss: 1.81640, entropy: 1.06358, explVarOld: 0.135, explVarNew: 0.147
+[2023-12-26 22:52:55,481] batch: 1075, lenEpisode: 8
+[2023-12-26 22:52:56,433] kl: 0.04608, lrMultiplier: 0.088, loss: 1.65812, entropy: 1.00012, explVarOld: 0.133, explVarNew: 0.163
+[2023-12-26 22:52:58,931] batch: 1076, lenEpisode: 7
+[2023-12-26 22:52:59,841] kl: 0.01696, lrMultiplier: 0.088, loss: 1.73523, entropy: 1.05720, explVarOld: 0.179, explVarNew: 0.200
+[2023-12-26 22:53:06,770] batch: 1077, lenEpisode: 20
+[2023-12-26 22:53:07,703] kl: 0.03856, lrMultiplier: 0.088, loss: 1.80764, entropy: 1.07349, explVarOld: 0.115, explVarNew: 0.144
+[2023-12-26 22:53:10,993] batch: 1078, lenEpisode: 9
+[2023-12-26 22:53:11,897] kl: 0.02261, lrMultiplier: 0.088, loss: 1.78463, entropy: 1.10223, explVarOld: 0.133, explVarNew: 0.152
+[2023-12-26 22:53:15,871] batch: 1079, lenEpisode: 11
+[2023-12-26 22:53:16,785] kl: 0.03698, lrMultiplier: 0.088, loss: 1.78490, entropy: 1.08500, explVarOld: 0.105, explVarNew: 0.136
+[2023-12-26 22:53:23,232] batch: 1080, lenEpisode: 19
+[2023-12-26 22:53:24,208] kl: 0.01839, lrMultiplier: 0.088, loss: 1.76191, entropy: 1.03360, explVarOld: 0.110, explVarNew: 0.129
+[2023-12-26 22:53:29,481] batch: 1081, lenEpisode: 13
+[2023-12-26 22:53:30,407] kl: 0.03045, lrMultiplier: 0.088, loss: 1.88241, entropy: 1.11097, explVarOld: 0.088, explVarNew: 0.124
+[2023-12-26 22:53:35,219] batch: 1082, lenEpisode: 12
+[2023-12-26 22:53:36,146] kl: 0.02346, lrMultiplier: 0.088, loss: 1.89832, entropy: 1.16312, explVarOld: 0.097, explVarNew: 0.123
+[2023-12-26 22:53:40,003] batch: 1083, lenEpisode: 10
+[2023-12-26 22:53:41,040] kl: 0.01838, lrMultiplier: 0.088, loss: 1.76656, entropy: 1.08252, explVarOld: 0.172, explVarNew: 0.201
+[2023-12-26 22:53:44,744] batch: 1084, lenEpisode: 10
+[2023-12-26 22:53:45,676] kl: 0.02346, lrMultiplier: 0.088, loss: 1.77920, entropy: 1.10122, explVarOld: 0.156, explVarNew: 0.168
+[2023-12-26 22:53:50,568] batch: 1085, lenEpisode: 11
+[2023-12-26 22:53:51,485] kl: 0.01871, lrMultiplier: 0.088, loss: 1.84276, entropy: 1.09288, explVarOld: 0.118, explVarNew: 0.131
+[2023-12-26 22:53:57,863] batch: 1086, lenEpisode: 18
+[2023-12-26 22:53:58,777] kl: 0.02923, lrMultiplier: 0.088, loss: 1.87419, entropy: 1.15163, explVarOld: 0.166, explVarNew: 0.188
+[2023-12-26 22:54:02,115] batch: 1087, lenEpisode: 9
+[2023-12-26 22:54:03,020] kl: 0.02223, lrMultiplier: 0.088, loss: 1.74979, entropy: 1.05302, explVarOld: 0.154, explVarNew: 0.169
+[2023-12-26 22:54:08,399] batch: 1088, lenEpisode: 16
+[2023-12-26 22:54:09,312] kl: 0.02073, lrMultiplier: 0.088, loss: 1.75662, entropy: 1.08562, explVarOld: 0.132, explVarNew: 0.142
+[2023-12-26 22:54:14,993] batch: 1089, lenEpisode: 16
+[2023-12-26 22:54:15,907] kl: 0.02660, lrMultiplier: 0.088, loss: 1.80126, entropy: 1.05129, explVarOld: 0.111, explVarNew: 0.125
+[2023-12-26 22:54:18,840] batch: 1090, lenEpisode: 8
+[2023-12-26 22:54:19,741] kl: 0.03990, lrMultiplier: 0.088, loss: 1.70937, entropy: 1.04266, explVarOld: 0.160, explVarNew: 0.182
+[2023-12-26 22:54:23,398] batch: 1091, lenEpisode: 9
+[2023-12-26 22:54:24,297] kl: 0.01308, lrMultiplier: 0.088, loss: 1.79958, entropy: 1.02826, explVarOld: 0.124, explVarNew: 0.139
+[2023-12-26 22:54:28,581] batch: 1092, lenEpisode: 12
+[2023-12-26 22:54:29,478] kl: 0.05927, lrMultiplier: 0.088, loss: 1.62854, entropy: 1.04269, explVarOld: 0.180, explVarNew: 0.211
+[2023-12-26 22:54:32,564] batch: 1093, lenEpisode: 9
+[2023-12-26 22:54:33,466] kl: 0.01461, lrMultiplier: 0.088, loss: 1.76187, entropy: 1.03144, explVarOld: 0.163, explVarNew: 0.176
+[2023-12-26 22:54:36,283] batch: 1094, lenEpisode: 7
+[2023-12-26 22:54:37,195] kl: 0.05149, lrMultiplier: 0.088, loss: 1.80083, entropy: 1.07625, explVarOld: 0.155, explVarNew: 0.177
+[2023-12-26 22:54:41,071] batch: 1095, lenEpisode: 10
+[2023-12-26 22:54:41,990] kl: 0.00926, lrMultiplier: 0.132, loss: 1.74216, entropy: 1.04395, explVarOld: 0.177, explVarNew: 0.192
+[2023-12-26 22:54:46,478] batch: 1096, lenEpisode: 10
+[2023-12-26 22:54:47,372] kl: 0.02385, lrMultiplier: 0.132, loss: 1.72619, entropy: 1.02413, explVarOld: 0.166, explVarNew: 0.208
+[2023-12-26 22:54:50,207] batch: 1097, lenEpisode: 7
+[2023-12-26 22:54:51,120] kl: 0.03200, lrMultiplier: 0.132, loss: 1.74118, entropy: 1.08852, explVarOld: 0.181, explVarNew: 0.200
+[2023-12-26 22:54:53,888] batch: 1098, lenEpisode: 7
+[2023-12-26 22:54:54,800] kl: 0.03662, lrMultiplier: 0.132, loss: 1.61736, entropy: 0.98466, explVarOld: 0.180, explVarNew: 0.222
+[2023-12-26 22:54:59,492] batch: 1099, lenEpisode: 13
+[2023-12-26 22:55:00,421] kl: 0.03842, lrMultiplier: 0.132, loss: 1.71353, entropy: 1.01789, explVarOld: 0.165, explVarNew: 0.188
+[2023-12-26 22:55:03,726] batch: 1100, lenEpisode: 8
+[2023-12-26 22:55:04,806] kl: 0.04310, lrMultiplier: 0.088, loss: 1.71574, entropy: 1.07964, explVarOld: 0.161, explVarNew: 0.196
+[2023-12-26 22:55:04,806] evalBatch: 1100
+[2023-12-26 22:55:36,174] BEST POLICY!!!!!!!
+[2023-12-26 22:55:36,175] numPlayouts: 1000, win: 9, lose: 1, tie: 0, avgCurrStarted: 0.5
+[2023-12-26 22:55:40,230] batch: 1101, lenEpisode: 12
+[2023-12-26 22:55:41,167] kl: 0.01827, lrMultiplier: 0.088, loss: 1.74350, entropy: 1.07125, explVarOld: 0.170, explVarNew: 0.190
+[2023-12-26 22:55:44,217] batch: 1102, lenEpisode: 9
+[2023-12-26 22:55:45,136] kl: 0.02540, lrMultiplier: 0.088, loss: 1.71869, entropy: 1.04200, explVarOld: 0.198, explVarNew: 0.215
+[2023-12-26 22:55:49,915] batch: 1103, lenEpisode: 11
+[2023-12-26 22:55:50,836] kl: 0.04157, lrMultiplier: 0.088, loss: 1.68695, entropy: 0.98441, explVarOld: 0.150, explVarNew: 0.213
+[2023-12-26 22:55:55,287] batch: 1104, lenEpisode: 12
+[2023-12-26 22:55:56,192] kl: 0.01932, lrMultiplier: 0.088, loss: 1.76297, entropy: 1.04318, explVarOld: 0.180, explVarNew: 0.190
+[2023-12-26 22:55:58,610] batch: 1105, lenEpisode: 7
+[2023-12-26 22:55:59,526] kl: 0.04955, lrMultiplier: 0.088, loss: 1.76122, entropy: 1.00313, explVarOld: 0.186, explVarNew: 0.203
+[2023-12-26 22:56:01,779] batch: 1106, lenEpisode: 7
+[2023-12-26 22:56:02,688] kl: 0.04364, lrMultiplier: 0.088, loss: 1.71732, entropy: 1.04662, explVarOld: 0.160, explVarNew: 0.176
+[2023-12-26 22:56:06,111] batch: 1107, lenEpisode: 13
+[2023-12-26 22:56:07,018] kl: 0.03864, lrMultiplier: 0.088, loss: 1.77815, entropy: 1.08190, explVarOld: 0.179, explVarNew: 0.200
+[2023-12-26 22:56:10,900] batch: 1108, lenEpisode: 13
+[2023-12-26 22:56:11,862] kl: 0.02850, lrMultiplier: 0.088, loss: 1.68805, entropy: 1.06065, explVarOld: 0.205, explVarNew: 0.226
+[2023-12-26 22:56:17,288] batch: 1109, lenEpisode: 13
+[2023-12-26 22:56:18,216] kl: 0.02965, lrMultiplier: 0.088, loss: 1.76303, entropy: 1.08670, explVarOld: 0.222, explVarNew: 0.239
+[2023-12-26 22:56:20,725] batch: 1110, lenEpisode: 8
+[2023-12-26 22:56:21,663] kl: 0.03334, lrMultiplier: 0.088, loss: 1.75809, entropy: 1.07328, explVarOld: 0.201, explVarNew: 0.218
+[2023-12-26 22:56:23,935] batch: 1111, lenEpisode: 7
+[2023-12-26 22:56:24,859] kl: 0.02252, lrMultiplier: 0.088, loss: 1.79732, entropy: 1.10878, explVarOld: 0.219, explVarNew: 0.239
+[2023-12-26 22:56:29,822] batch: 1112, lenEpisode: 12
+[2023-12-26 22:56:30,744] kl: 0.03335, lrMultiplier: 0.088, loss: 1.74389, entropy: 1.06182, explVarOld: 0.252, explVarNew: 0.266
+[2023-12-26 22:56:33,098] batch: 1113, lenEpisode: 7
+[2023-12-26 22:56:34,010] kl: 0.04301, lrMultiplier: 0.088, loss: 1.65954, entropy: 1.08177, explVarOld: 0.192, explVarNew: 0.204
+[2023-12-26 22:56:36,786] batch: 1114, lenEpisode: 12
+[2023-12-26 22:56:37,701] kl: 0.02328, lrMultiplier: 0.088, loss: 1.66015, entropy: 1.05413, explVarOld: 0.217, explVarNew: 0.242
+[2023-12-26 22:56:41,541] batch: 1115, lenEpisode: 11
+[2023-12-26 22:56:42,472] kl: 0.02698, lrMultiplier: 0.088, loss: 1.69744, entropy: 1.01167, explVarOld: 0.199, explVarNew: 0.217
+[2023-12-26 22:56:47,301] batch: 1116, lenEpisode: 13
+[2023-12-26 22:56:48,215] kl: 0.02423, lrMultiplier: 0.088, loss: 1.76371, entropy: 1.00233, explVarOld: 0.199, explVarNew: 0.222
+[2023-12-26 22:56:52,941] batch: 1117, lenEpisode: 16
+[2023-12-26 22:56:53,864] kl: 0.03624, lrMultiplier: 0.088, loss: 1.68983, entropy: 1.01004, explVarOld: 0.221, explVarNew: 0.228
+[2023-12-26 22:56:56,322] batch: 1118, lenEpisode: 7
+[2023-12-26 22:56:57,228] kl: 0.02758, lrMultiplier: 0.088, loss: 1.68616, entropy: 1.00864, explVarOld: 0.175, explVarNew: 0.208
+[2023-12-26 22:57:00,483] batch: 1119, lenEpisode: 7
+[2023-12-26 22:57:01,397] kl: 0.03453, lrMultiplier: 0.088, loss: 1.67016, entropy: 1.02304, explVarOld: 0.239, explVarNew: 0.250
+[2023-12-26 22:57:06,274] batch: 1120, lenEpisode: 12
+[2023-12-26 22:57:07,190] kl: 0.03405, lrMultiplier: 0.088, loss: 1.76275, entropy: 1.02917, explVarOld: 0.233, explVarNew: 0.249
+[2023-12-26 22:57:09,549] batch: 1121, lenEpisode: 8
+[2023-12-26 22:57:10,451] kl: 0.02499, lrMultiplier: 0.088, loss: 1.66093, entropy: 0.99567, explVarOld: 0.222, explVarNew: 0.235
+[2023-12-26 22:57:13,675] batch: 1122, lenEpisode: 8
+[2023-12-26 22:57:14,587] kl: 0.02660, lrMultiplier: 0.088, loss: 1.59986, entropy: 0.95277, explVarOld: 0.187, explVarNew: 0.210
+[2023-12-26 22:57:19,234] batch: 1123, lenEpisode: 10
+[2023-12-26 22:57:20,149] kl: 0.01540, lrMultiplier: 0.088, loss: 1.69523, entropy: 1.06598, explVarOld: 0.237, explVarNew: 0.255
+[2023-12-26 22:57:24,535] batch: 1124, lenEpisode: 13
+[2023-12-26 22:57:25,473] kl: 0.02921, lrMultiplier: 0.088, loss: 1.70146, entropy: 0.97268, explVarOld: 0.207, explVarNew: 0.219
+[2023-12-26 22:57:30,138] batch: 1125, lenEpisode: 11
+[2023-12-26 22:57:31,045] kl: 0.02215, lrMultiplier: 0.088, loss: 1.66742, entropy: 0.98561, explVarOld: 0.242, explVarNew: 0.257
+[2023-12-26 22:57:34,313] batch: 1126, lenEpisode: 11
+[2023-12-26 22:57:35,228] kl: 0.01704, lrMultiplier: 0.088, loss: 1.63935, entropy: 1.00284, explVarOld: 0.233, explVarNew: 0.249
+[2023-12-26 22:57:37,328] batch: 1127, lenEpisode: 7
+[2023-12-26 22:57:38,226] kl: 0.01925, lrMultiplier: 0.088, loss: 1.71144, entropy: 0.97204, explVarOld: 0.198, explVarNew: 0.223
+[2023-12-26 22:57:43,646] batch: 1128, lenEpisode: 12
+[2023-12-26 22:57:44,556] kl: 0.03781, lrMultiplier: 0.088, loss: 1.73405, entropy: 1.01852, explVarOld: 0.233, explVarNew: 0.250
+[2023-12-26 22:57:49,924] batch: 1129, lenEpisode: 15
+[2023-12-26 22:57:50,826] kl: 0.01862, lrMultiplier: 0.088, loss: 1.60813, entropy: 0.99998, explVarOld: 0.283, explVarNew: 0.301
+[2023-12-26 22:57:54,119] batch: 1130, lenEpisode: 11
+[2023-12-26 22:57:55,013] kl: 0.04487, lrMultiplier: 0.088, loss: 1.75007, entropy: 1.03280, explVarOld: 0.210, explVarNew: 0.223
+[2023-12-26 22:57:59,170] batch: 1131, lenEpisode: 13
+[2023-12-26 22:58:00,076] kl: 0.01606, lrMultiplier: 0.088, loss: 1.64743, entropy: 0.98781, explVarOld: 0.221, explVarNew: 0.238
+[2023-12-26 22:58:03,684] batch: 1132, lenEpisode: 9
+[2023-12-26 22:58:04,604] kl: 0.04089, lrMultiplier: 0.088, loss: 1.68630, entropy: 1.01318, explVarOld: 0.228, explVarNew: 0.251
+[2023-12-26 22:58:08,592] batch: 1133, lenEpisode: 10
+[2023-12-26 22:58:09,500] kl: 0.01300, lrMultiplier: 0.088, loss: 1.53116, entropy: 0.95233, explVarOld: 0.292, explVarNew: 0.313
+[2023-12-26 22:58:12,253] batch: 1134, lenEpisode: 9
+[2023-12-26 22:58:13,176] kl: 0.02157, lrMultiplier: 0.088, loss: 1.67748, entropy: 0.96666, explVarOld: 0.182, explVarNew: 0.203
+[2023-12-26 22:58:17,275] batch: 1135, lenEpisode: 12
+[2023-12-26 22:58:18,191] kl: 0.02330, lrMultiplier: 0.088, loss: 1.71628, entropy: 0.95610, explVarOld: 0.198, explVarNew: 0.220
+[2023-12-26 22:58:21,401] batch: 1136, lenEpisode: 12
+[2023-12-26 22:58:22,314] kl: 0.03810, lrMultiplier: 0.088, loss: 1.60638, entropy: 0.99553, explVarOld: 0.232, explVarNew: 0.245
+[2023-12-26 22:58:24,635] batch: 1137, lenEpisode: 7
+[2023-12-26 22:58:25,551] kl: 0.02507, lrMultiplier: 0.088, loss: 1.69680, entropy: 0.99658, explVarOld: 0.215, explVarNew: 0.232
+[2023-12-26 22:58:30,998] batch: 1138, lenEpisode: 17
+[2023-12-26 22:58:31,949] kl: 0.05047, lrMultiplier: 0.088, loss: 1.61078, entropy: 0.94822, explVarOld: 0.243, explVarNew: 0.266
+[2023-12-26 22:58:37,196] batch: 1139, lenEpisode: 13
+[2023-12-26 22:58:38,107] kl: 0.02672, lrMultiplier: 0.088, loss: 1.52091, entropy: 0.96190, explVarOld: 0.256, explVarNew: 0.286
+[2023-12-26 22:58:43,831] batch: 1140, lenEpisode: 14
+[2023-12-26 22:58:44,756] kl: 0.05739, lrMultiplier: 0.088, loss: 1.66059, entropy: 1.03285, explVarOld: 0.299, explVarNew: 0.310
+[2023-12-26 22:58:50,235] batch: 1141, lenEpisode: 16
+[2023-12-26 22:58:51,167] kl: 0.04659, lrMultiplier: 0.088, loss: 1.69409, entropy: 1.01906, explVarOld: 0.216, explVarNew: 0.243
+[2023-12-26 22:58:56,783] batch: 1142, lenEpisode: 15
+[2023-12-26 22:58:57,710] kl: 0.03285, lrMultiplier: 0.088, loss: 1.70642, entropy: 1.00525, explVarOld: 0.213, explVarNew: 0.225
+[2023-12-26 22:59:01,364] batch: 1143, lenEpisode: 12
+[2023-12-26 22:59:02,305] kl: 0.07346, lrMultiplier: 0.088, loss: 1.70450, entropy: 1.00823, explVarOld: 0.224, explVarNew: 0.242
+[2023-12-26 22:59:05,529] batch: 1144, lenEpisode: 8
+[2023-12-26 22:59:06,433] kl: 0.01820, lrMultiplier: 0.088, loss: 1.68052, entropy: 1.01548, explVarOld: 0.240, explVarNew: 0.260
+[2023-12-26 22:59:10,198] batch: 1145, lenEpisode: 9
+[2023-12-26 22:59:11,106] kl: 0.05597, lrMultiplier: 0.088, loss: 1.64730, entropy: 0.99375, explVarOld: 0.237, explVarNew: 0.260
+[2023-12-26 22:59:14,899] batch: 1146, lenEpisode: 14
+[2023-12-26 22:59:15,798] kl: 0.03710, lrMultiplier: 0.088, loss: 1.67735, entropy: 0.98868, explVarOld: 0.199, explVarNew: 0.227
+[2023-12-26 22:59:18,401] batch: 1147, lenEpisode: 7
+[2023-12-26 22:59:19,298] kl: 0.02790, lrMultiplier: 0.088, loss: 1.68261, entropy: 1.01453, explVarOld: 0.249, explVarNew: 0.282
+[2023-12-26 22:59:24,341] batch: 1148, lenEpisode: 15
+[2023-12-26 22:59:25,236] kl: 0.02586, lrMultiplier: 0.088, loss: 1.69869, entropy: 1.00732, explVarOld: 0.229, explVarNew: 0.232
+[2023-12-26 22:59:29,300] batch: 1149, lenEpisode: 9
+[2023-12-26 22:59:30,209] kl: 0.02114, lrMultiplier: 0.088, loss: 1.69748, entropy: 0.97625, explVarOld: 0.256, explVarNew: 0.278
+[2023-12-26 22:59:32,896] batch: 1150, lenEpisode: 8
+[2023-12-26 22:59:33,802] kl: 0.02836, lrMultiplier: 0.088, loss: 1.74757, entropy: 1.02744, explVarOld: 0.206, explVarNew: 0.222
+[2023-12-26 22:59:33,802] evalBatch: 1150
+[2023-12-26 23:00:02,444] numPlayouts: 1000, win: 8, lose: 2, tie: 0, avgCurrStarted: 0.5
+[2023-12-26 23:00:09,388] batch: 1151, lenEpisode: 15
+[2023-12-26 23:00:10,287] kl: 0.03058, lrMultiplier: 0.088, loss: 1.72223, entropy: 1.02850, explVarOld: 0.212, explVarNew: 0.236
+[2023-12-26 23:00:18,653] batch: 1152, lenEpisode: 22
+[2023-12-26 23:00:19,548] kl: 0.02631, lrMultiplier: 0.088, loss: 1.66252, entropy: 1.01975, explVarOld: 0.236, explVarNew: 0.249
+[2023-12-26 23:00:24,986] batch: 1153, lenEpisode: 16
+[2023-12-26 23:00:25,892] kl: 0.03353, lrMultiplier: 0.088, loss: 1.63752, entropy: 1.00232, explVarOld: 0.259, explVarNew: 0.286
+[2023-12-26 23:00:28,583] batch: 1154, lenEpisode: 9
+[2023-12-26 23:00:29,501] kl: 0.02828, lrMultiplier: 0.088, loss: 1.70028, entropy: 1.00549, explVarOld: 0.250, explVarNew: 0.266
+[2023-12-26 23:00:32,673] batch: 1155, lenEpisode: 8
+[2023-12-26 23:00:33,585] kl: 0.03611, lrMultiplier: 0.088, loss: 1.64336, entropy: 0.99134, explVarOld: 0.227, explVarNew: 0.247
+[2023-12-26 23:00:38,136] batch: 1156, lenEpisode: 13
+[2023-12-26 23:00:39,038] kl: 0.02235, lrMultiplier: 0.088, loss: 1.58639, entropy: 1.00220, explVarOld: 0.250, explVarNew: 0.266
+[2023-12-26 23:00:42,969] batch: 1157, lenEpisode: 10
+[2023-12-26 23:00:43,866] kl: 0.03471, lrMultiplier: 0.088, loss: 1.65827, entropy: 0.96655, explVarOld: 0.240, explVarNew: 0.247
+[2023-12-26 23:00:46,044] batch: 1158, lenEpisode: 7
+[2023-12-26 23:00:46,936] kl: 0.03127, lrMultiplier: 0.088, loss: 1.67496, entropy: 1.03213, explVarOld: 0.266, explVarNew: 0.282
+[2023-12-26 23:00:49,850] batch: 1159, lenEpisode: 8
+[2023-12-26 23:00:50,747] kl: 0.03084, lrMultiplier: 0.088, loss: 1.60345, entropy: 0.99815, explVarOld: 0.313, explVarNew: 0.326
+[2023-12-26 23:00:55,486] batch: 1160, lenEpisode: 13
+[2023-12-26 23:00:56,380] kl: 0.02769, lrMultiplier: 0.088, loss: 1.62978, entropy: 0.99542, explVarOld: 0.263, explVarNew: 0.284
+[2023-12-26 23:00:59,554] batch: 1161, lenEpisode: 12
+[2023-12-26 23:01:00,493] kl: 0.04069, lrMultiplier: 0.088, loss: 1.66204, entropy: 1.01956, explVarOld: 0.266, explVarNew: 0.281
+[2023-12-26 23:01:04,995] batch: 1162, lenEpisode: 14
+[2023-12-26 23:01:05,883] kl: 0.01758, lrMultiplier: 0.088, loss: 1.67292, entropy: 1.01274, explVarOld: 0.274, explVarNew: 0.294
+[2023-12-26 23:01:07,895] batch: 1163, lenEpisode: 7
+[2023-12-26 23:01:08,798] kl: 0.04614, lrMultiplier: 0.088, loss: 1.63175, entropy: 1.01143, explVarOld: 0.278, explVarNew: 0.299
+[2023-12-26 23:01:14,012] batch: 1164, lenEpisode: 13
+[2023-12-26 23:01:14,924] kl: 0.02308, lrMultiplier: 0.088, loss: 1.68765, entropy: 1.01275, explVarOld: 0.236, explVarNew: 0.254
+[2023-12-26 23:01:17,659] batch: 1165, lenEpisode: 7
+[2023-12-26 23:01:18,595] kl: 0.02940, lrMultiplier: 0.088, loss: 1.70041, entropy: 1.00191, explVarOld: 0.222, explVarNew: 0.240
+[2023-12-26 23:01:24,263] batch: 1166, lenEpisode: 15
+[2023-12-26 23:01:25,170] kl: 0.02801, lrMultiplier: 0.088, loss: 1.62972, entropy: 0.95258, explVarOld: 0.218, explVarNew: 0.236
+[2023-12-26 23:01:28,697] batch: 1167, lenEpisode: 10
+[2023-12-26 23:01:29,599] kl: 0.04390, lrMultiplier: 0.088, loss: 1.69645, entropy: 0.96704, explVarOld: 0.250, explVarNew: 0.260
+[2023-12-26 23:01:32,115] batch: 1168, lenEpisode: 8
+[2023-12-26 23:01:33,045] kl: 0.03692, lrMultiplier: 0.088, loss: 1.58789, entropy: 0.99861, explVarOld: 0.245, explVarNew: 0.256
+[2023-12-26 23:01:37,119] batch: 1169, lenEpisode: 13
+[2023-12-26 23:01:38,013] kl: 0.07812, lrMultiplier: 0.088, loss: 1.61385, entropy: 0.97779, explVarOld: 0.244, explVarNew: 0.257
+[2023-12-26 23:01:44,954] batch: 1170, lenEpisode: 14
+[2023-12-26 23:01:45,911] kl: 0.03094, lrMultiplier: 0.088, loss: 1.64616, entropy: 0.97671, explVarOld: 0.243, explVarNew: 0.282
+[2023-12-26 23:01:48,917] batch: 1171, lenEpisode: 9
+[2023-12-26 23:01:49,882] kl: 0.06197, lrMultiplier: 0.088, loss: 1.62784, entropy: 0.97325, explVarOld: 0.237, explVarNew: 0.247
+[2023-12-26 23:01:53,656] batch: 1172, lenEpisode: 9
+[2023-12-26 23:01:54,557] kl: 0.03943, lrMultiplier: 0.088, loss: 1.56539, entropy: 0.93514, explVarOld: 0.290, explVarNew: 0.304
+[2023-12-26 23:01:57,120] batch: 1173, lenEpisode: 9
+[2023-12-26 23:01:58,023] kl: 0.05017, lrMultiplier: 0.088, loss: 1.65411, entropy: 0.92118, explVarOld: 0.251, explVarNew: 0.273
+[2023-12-26 23:02:00,885] batch: 1174, lenEpisode: 9
+[2023-12-26 23:02:01,819] kl: 0.01753, lrMultiplier: 0.088, loss: 1.57657, entropy: 0.98031, explVarOld: 0.320, explVarNew: 0.333
+[2023-12-26 23:02:06,141] batch: 1175, lenEpisode: 9
+[2023-12-26 23:02:07,046] kl: 0.02632, lrMultiplier: 0.088, loss: 1.45098, entropy: 0.96768, explVarOld: 0.356, explVarNew: 0.374
+[2023-12-26 23:02:10,180] batch: 1176, lenEpisode: 8
+[2023-12-26 23:02:11,093] kl: 0.02237, lrMultiplier: 0.088, loss: 1.54631, entropy: 1.00025, explVarOld: 0.291, explVarNew: 0.320
+[2023-12-26 23:02:16,975] batch: 1177, lenEpisode: 15
+[2023-12-26 23:02:17,885] kl: 0.01968, lrMultiplier: 0.088, loss: 1.67460, entropy: 0.95514, explVarOld: 0.181, explVarNew: 0.234
+[2023-12-26 23:02:21,174] batch: 1178, lenEpisode: 9
+[2023-12-26 23:02:22,091] kl: 0.03161, lrMultiplier: 0.088, loss: 1.59043, entropy: 0.94511, explVarOld: 0.263, explVarNew: 0.281
+[2023-12-26 23:02:32,091] batch: 1179, lenEpisode: 27
+[2023-12-26 23:02:33,015] kl: 0.01695, lrMultiplier: 0.088, loss: 1.54580, entropy: 0.93006, explVarOld: 0.238, explVarNew: 0.247
+[2023-12-26 23:02:43,365] batch: 1180, lenEpisode: 35
+[2023-12-26 23:02:44,286] kl: 0.01872, lrMultiplier: 0.088, loss: 1.57270, entropy: 0.91697, explVarOld: 0.241, explVarNew: 0.259
+[2023-12-26 23:02:48,490] batch: 1181, lenEpisode: 10
+[2023-12-26 23:02:49,392] kl: 0.02129, lrMultiplier: 0.088, loss: 1.66816, entropy: 0.94172, explVarOld: 0.199, explVarNew: 0.228
+[2023-12-26 23:02:52,120] batch: 1182, lenEpisode: 8
+[2023-12-26 23:02:53,046] kl: 0.02764, lrMultiplier: 0.088, loss: 1.60018, entropy: 0.94913, explVarOld: 0.230, explVarNew: 0.272
+[2023-12-26 23:02:56,470] batch: 1183, lenEpisode: 11
+[2023-12-26 23:02:57,402] kl: 0.03305, lrMultiplier: 0.088, loss: 1.60574, entropy: 0.96596, explVarOld: 0.247, explVarNew: 0.271
+[2023-12-26 23:03:01,671] batch: 1184, lenEpisode: 10
+[2023-12-26 23:03:02,594] kl: 0.02780, lrMultiplier: 0.088, loss: 1.66065, entropy: 0.97708, explVarOld: 0.256, explVarNew: 0.284
+[2023-12-26 23:03:07,608] batch: 1185, lenEpisode: 12
+[2023-12-26 23:03:08,503] kl: 0.02221, lrMultiplier: 0.088, loss: 1.71446, entropy: 0.98216, explVarOld: 0.213, explVarNew: 0.225
+[2023-12-26 23:03:11,408] batch: 1186, lenEpisode: 9
+[2023-12-26 23:03:12,322] kl: 0.02535, lrMultiplier: 0.088, loss: 1.62120, entropy: 0.98833, explVarOld: 0.211, explVarNew: 0.236
+[2023-12-26 23:03:15,034] batch: 1187, lenEpisode: 8
+[2023-12-26 23:03:15,953] kl: 0.01832, lrMultiplier: 0.088, loss: 1.57390, entropy: 0.94956, explVarOld: 0.258, explVarNew: 0.296
+[2023-12-26 23:03:18,129] batch: 1188, lenEpisode: 7
+[2023-12-26 23:03:19,047] kl: 0.03587, lrMultiplier: 0.088, loss: 1.54311, entropy: 0.94106, explVarOld: 0.238, explVarNew: 0.254
+[2023-12-26 23:03:22,740] batch: 1189, lenEpisode: 11
+[2023-12-26 23:03:23,643] kl: 0.01787, lrMultiplier: 0.088, loss: 1.56116, entropy: 0.89893, explVarOld: 0.231, explVarNew: 0.253
+[2023-12-26 23:03:28,855] batch: 1190, lenEpisode: 15
+[2023-12-26 23:03:29,793] kl: 0.02868, lrMultiplier: 0.088, loss: 1.65599, entropy: 0.88309, explVarOld: 0.187, explVarNew: 0.218
+[2023-12-26 23:03:34,651] batch: 1191, lenEpisode: 12
+[2023-12-26 23:03:35,636] kl: 0.02118, lrMultiplier: 0.088, loss: 1.53062, entropy: 0.92710, explVarOld: 0.247, explVarNew: 0.270
+[2023-12-26 23:03:39,975] batch: 1192, lenEpisode: 9
+[2023-12-26 23:03:40,895] kl: 0.03648, lrMultiplier: 0.088, loss: 1.63035, entropy: 0.96420, explVarOld: 0.203, explVarNew: 0.213
+[2023-12-26 23:03:43,674] batch: 1193, lenEpisode: 9
+[2023-12-26 23:03:44,576] kl: 0.02648, lrMultiplier: 0.088, loss: 1.55785, entropy: 0.91911, explVarOld: 0.248, explVarNew: 0.267
+[2023-12-26 23:03:51,562] batch: 1194, lenEpisode: 19
+[2023-12-26 23:03:52,486] kl: 0.03125, lrMultiplier: 0.088, loss: 1.55992, entropy: 0.94764, explVarOld: 0.271, explVarNew: 0.295
+[2023-12-26 23:03:58,851] batch: 1195, lenEpisode: 19
+[2023-12-26 23:03:59,771] kl: 0.03468, lrMultiplier: 0.088, loss: 1.51571, entropy: 0.92029, explVarOld: 0.293, explVarNew: 0.321
+[2023-12-26 23:04:04,315] batch: 1196, lenEpisode: 13
+[2023-12-26 23:04:05,286] kl: 0.04337, lrMultiplier: 0.088, loss: 1.66768, entropy: 0.93641, explVarOld: 0.207, explVarNew: 0.229
+[2023-12-26 23:04:10,091] batch: 1197, lenEpisode: 13
+[2023-12-26 23:04:11,039] kl: 0.02564, lrMultiplier: 0.088, loss: 1.58138, entropy: 0.96419, explVarOld: 0.265, explVarNew: 0.305
+[2023-12-26 23:04:14,403] batch: 1198, lenEpisode: 9
+[2023-12-26 23:04:15,309] kl: 0.06310, lrMultiplier: 0.088, loss: 1.57933, entropy: 0.93404, explVarOld: 0.260, explVarNew: 0.275
+[2023-12-26 23:04:19,143] batch: 1199, lenEpisode: 10
+[2023-12-26 23:04:20,047] kl: 0.04462, lrMultiplier: 0.088, loss: 1.46750, entropy: 0.92888, explVarOld: 0.272, explVarNew: 0.291
+[2023-12-26 23:04:24,555] batch: 1200, lenEpisode: 12
+[2023-12-26 23:04:25,492] kl: 0.05216, lrMultiplier: 0.088, loss: 1.64234, entropy: 0.93818, explVarOld: 0.191, explVarNew: 0.213
+[2023-12-26 23:04:25,492] evalBatch: 1200
+[2023-12-26 23:04:57,984] numPlayouts: 1000, win: 7, lose: 3, tie: 0, avgCurrStarted: 0.7
+[2023-12-26 23:05:01,117] batch: 1201, lenEpisode: 9
+[2023-12-26 23:05:02,028] kl: 0.02750, lrMultiplier: 0.088, loss: 1.49590, entropy: 0.94496, explVarOld: 0.300, explVarNew: 0.319
+[2023-12-26 23:05:07,448] batch: 1202, lenEpisode: 15
+[2023-12-26 23:05:08,350] kl: 0.03631, lrMultiplier: 0.088, loss: 1.47163, entropy: 0.91971, explVarOld: 0.287, explVarNew: 0.297
+[2023-12-26 23:05:11,140] batch: 1203, lenEpisode: 9
+[2023-12-26 23:05:12,051] kl: 0.03444, lrMultiplier: 0.088, loss: 1.48419, entropy: 0.93303, explVarOld: 0.283, explVarNew: 0.304
+[2023-12-26 23:05:15,161] batch: 1204, lenEpisode: 8
+[2023-12-26 23:05:16,071] kl: 0.04450, lrMultiplier: 0.088, loss: 1.53436, entropy: 0.92693, explVarOld: 0.214, explVarNew: 0.235
+[2023-12-26 23:05:22,034] batch: 1205, lenEpisode: 15
+[2023-12-26 23:05:22,995] kl: 0.02718, lrMultiplier: 0.088, loss: 1.43807, entropy: 0.89283, explVarOld: 0.291, explVarNew: 0.302
+[2023-12-26 23:05:26,086] batch: 1206, lenEpisode: 11
+[2023-12-26 23:05:27,037] kl: 0.03490, lrMultiplier: 0.088, loss: 1.57375, entropy: 0.92944, explVarOld: 0.212, explVarNew: 0.236
+[2023-12-26 23:05:29,102] batch: 1207, lenEpisode: 7
+[2023-12-26 23:05:30,005] kl: 0.06884, lrMultiplier: 0.088, loss: 1.52029, entropy: 0.88952, explVarOld: 0.263, explVarNew: 0.280
+[2023-12-26 23:05:33,142] batch: 1208, lenEpisode: 8
+[2023-12-26 23:05:34,060] kl: 0.04401, lrMultiplier: 0.088, loss: 1.43256, entropy: 0.81688, explVarOld: 0.227, explVarNew: 0.247
+[2023-12-26 23:05:37,615] batch: 1209, lenEpisode: 9
+[2023-12-26 23:05:38,539] kl: 0.05162, lrMultiplier: 0.088, loss: 1.54037, entropy: 0.90857, explVarOld: 0.228, explVarNew: 0.240
+[2023-12-26 23:05:44,692] batch: 1210, lenEpisode: 16
+[2023-12-26 23:05:45,608] kl: 0.02420, lrMultiplier: 0.088, loss: 1.46336, entropy: 0.86196, explVarOld: 0.243, explVarNew: 0.255
+[2023-12-26 23:05:47,913] batch: 1211, lenEpisode: 7
+[2023-12-26 23:05:48,839] kl: 0.03496, lrMultiplier: 0.088, loss: 1.35510, entropy: 0.94094, explVarOld: 0.340, explVarNew: 0.362
+[2023-12-26 23:05:54,527] batch: 1212, lenEpisode: 15
+[2023-12-26 23:05:55,448] kl: 0.02541, lrMultiplier: 0.088, loss: 1.58039, entropy: 0.90541, explVarOld: 0.239, explVarNew: 0.252
+[2023-12-26 23:05:59,566] batch: 1213, lenEpisode: 10
+[2023-12-26 23:06:00,494] kl: 0.04385, lrMultiplier: 0.088, loss: 1.48736, entropy: 0.89341, explVarOld: 0.252, explVarNew: 0.273
+[2023-12-26 23:06:02,531] batch: 1214, lenEpisode: 7
+[2023-12-26 23:06:03,445] kl: 0.02350, lrMultiplier: 0.088, loss: 1.57424, entropy: 0.85918, explVarOld: 0.166, explVarNew: 0.179
+[2023-12-26 23:06:09,941] batch: 1215, lenEpisode: 17
+[2023-12-26 23:06:10,852] kl: 0.03811, lrMultiplier: 0.088, loss: 1.40160, entropy: 0.85923, explVarOld: 0.274, explVarNew: 0.298
+[2023-12-26 23:06:16,700] batch: 1216, lenEpisode: 16
+[2023-12-26 23:06:17,599] kl: 0.01740, lrMultiplier: 0.088, loss: 1.53451, entropy: 0.90518, explVarOld: 0.237, explVarNew: 0.249
+[2023-12-26 23:06:22,407] batch: 1217, lenEpisode: 10
+[2023-12-26 23:06:23,337] kl: 0.03108, lrMultiplier: 0.088, loss: 1.62501, entropy: 0.87929, explVarOld: 0.192, explVarNew: 0.222
+[2023-12-26 23:06:30,325] batch: 1218, lenEpisode: 21
+[2023-12-26 23:06:31,251] kl: 0.02704, lrMultiplier: 0.088, loss: 1.57042, entropy: 0.91088, explVarOld: 0.210, explVarNew: 0.223
+[2023-12-26 23:06:36,658] batch: 1219, lenEpisode: 15
+[2023-12-26 23:06:37,585] kl: 0.02953, lrMultiplier: 0.088, loss: 1.57774, entropy: 0.88521, explVarOld: 0.217, explVarNew: 0.230
+[2023-12-26 23:06:41,607] batch: 1220, lenEpisode: 12
+[2023-12-26 23:06:42,502] kl: 0.02232, lrMultiplier: 0.088, loss: 1.63183, entropy: 0.92110, explVarOld: 0.221, explVarNew: 0.237
+[2023-12-26 23:06:44,849] batch: 1221, lenEpisode: 9
+[2023-12-26 23:06:45,785] kl: 0.02191, lrMultiplier: 0.088, loss: 1.43824, entropy: 0.81278, explVarOld: 0.218, explVarNew: 0.247
+[2023-12-26 23:06:50,086] batch: 1222, lenEpisode: 10
+[2023-12-26 23:06:51,012] kl: 0.01768, lrMultiplier: 0.088, loss: 1.51689, entropy: 0.84771, explVarOld: 0.170, explVarNew: 0.217
+[2023-12-26 23:06:57,324] batch: 1223, lenEpisode: 17
+[2023-12-26 23:06:58,259] kl: 0.03821, lrMultiplier: 0.088, loss: 1.53388, entropy: 0.86788, explVarOld: 0.171, explVarNew: 0.201
+[2023-12-26 23:07:01,335] batch: 1224, lenEpisode: 8
+[2023-12-26 23:07:02,270] kl: 0.01656, lrMultiplier: 0.088, loss: 1.54225, entropy: 0.84354, explVarOld: 0.231, explVarNew: 0.246
+[2023-12-26 23:07:05,450] batch: 1225, lenEpisode: 8
+[2023-12-26 23:07:06,357] kl: 0.01804, lrMultiplier: 0.088, loss: 1.53309, entropy: 0.80379, explVarOld: 0.211, explVarNew: 0.209
+[2023-12-26 23:07:10,008] batch: 1226, lenEpisode: 11
+[2023-12-26 23:07:10,938] kl: 0.03440, lrMultiplier: 0.088, loss: 1.50790, entropy: 0.87735, explVarOld: 0.219, explVarNew: 0.233
+[2023-12-26 23:07:15,451] batch: 1227, lenEpisode: 11
+[2023-12-26 23:07:16,351] kl: 0.02527, lrMultiplier: 0.088, loss: 1.48053, entropy: 0.83712, explVarOld: 0.211, explVarNew: 0.250
+[2023-12-26 23:07:18,352] batch: 1228, lenEpisode: 7
+[2023-12-26 23:07:19,276] kl: 0.02115, lrMultiplier: 0.088, loss: 1.47952, entropy: 0.84854, explVarOld: 0.176, explVarNew: 0.189
+[2023-12-26 23:07:23,507] batch: 1229, lenEpisode: 9
+[2023-12-26 23:07:24,421] kl: 0.02484, lrMultiplier: 0.088, loss: 1.46090, entropy: 0.83663, explVarOld: 0.206, explVarNew: 0.225
+[2023-12-26 23:07:30,995] batch: 1230, lenEpisode: 15
+[2023-12-26 23:07:31,899] kl: 0.01685, lrMultiplier: 0.088, loss: 1.48876, entropy: 0.82308, explVarOld: 0.193, explVarNew: 0.208
+[2023-12-26 23:07:36,993] batch: 1231, lenEpisode: 16
+[2023-12-26 23:07:37,909] kl: 0.02245, lrMultiplier: 0.088, loss: 1.52360, entropy: 0.85015, explVarOld: 0.180, explVarNew: 0.204
+[2023-12-26 23:07:40,720] batch: 1232, lenEpisode: 8
+[2023-12-26 23:07:41,655] kl: 0.01003, lrMultiplier: 0.088, loss: 1.50810, entropy: 0.89564, explVarOld: 0.213, explVarNew: 0.215
+[2023-12-26 23:07:44,741] batch: 1233, lenEpisode: 8
+[2023-12-26 23:07:45,651] kl: 0.02941, lrMultiplier: 0.088, loss: 1.56421, entropy: 0.88197, explVarOld: 0.182, explVarNew: 0.203
+[2023-12-26 23:07:47,709] batch: 1234, lenEpisode: 7
+[2023-12-26 23:07:48,626] kl: 0.01902, lrMultiplier: 0.088, loss: 1.48568, entropy: 0.81805, explVarOld: 0.155, explVarNew: 0.195
+[2023-12-26 23:07:52,819] batch: 1235, lenEpisode: 9
+[2023-12-26 23:07:53,729] kl: 0.02073, lrMultiplier: 0.088, loss: 1.44750, entropy: 0.82424, explVarOld: 0.208, explVarNew: 0.234
+[2023-12-26 23:07:56,568] batch: 1236, lenEpisode: 7
+[2023-12-26 23:07:57,493] kl: 0.02753, lrMultiplier: 0.088, loss: 1.43958, entropy: 0.82806, explVarOld: 0.197, explVarNew: 0.220
+[2023-12-26 23:08:03,145] batch: 1237, lenEpisode: 16
+[2023-12-26 23:08:04,056] kl: 0.02115, lrMultiplier: 0.088, loss: 1.50308, entropy: 0.86093, explVarOld: 0.177, explVarNew: 0.224
+[2023-12-26 23:08:10,153] batch: 1238, lenEpisode: 17
+[2023-12-26 23:08:11,057] kl: 0.02421, lrMultiplier: 0.088, loss: 1.51492, entropy: 0.82950, explVarOld: 0.180, explVarNew: 0.194
+[2023-12-26 23:08:15,317] batch: 1239, lenEpisode: 12
+[2023-12-26 23:08:16,228] kl: 0.02624, lrMultiplier: 0.088, loss: 1.40513, entropy: 0.80662, explVarOld: 0.205, explVarNew: 0.251
+[2023-12-26 23:08:18,444] batch: 1240, lenEpisode: 7
+[2023-12-26 23:08:19,387] kl: 0.02215, lrMultiplier: 0.088, loss: 1.48203, entropy: 0.79552, explVarOld: 0.185, explVarNew: 0.210
+[2023-12-26 23:08:23,579] batch: 1241, lenEpisode: 10
+[2023-12-26 23:08:24,492] kl: 0.02191, lrMultiplier: 0.088, loss: 1.41801, entropy: 0.80907, explVarOld: 0.238, explVarNew: 0.249
+[2023-12-26 23:08:29,594] batch: 1242, lenEpisode: 13
+[2023-12-26 23:08:30,513] kl: 0.04549, lrMultiplier: 0.088, loss: 1.39321, entropy: 0.80165, explVarOld: 0.238, explVarNew: 0.268
+[2023-12-26 23:08:36,053] batch: 1243, lenEpisode: 16
+[2023-12-26 23:08:36,961] kl: 0.01578, lrMultiplier: 0.088, loss: 1.45050, entropy: 0.85749, explVarOld: 0.270, explVarNew: 0.295
+[2023-12-26 23:08:39,940] batch: 1244, lenEpisode: 9
+[2023-12-26 23:08:40,866] kl: 0.03429, lrMultiplier: 0.088, loss: 1.44373, entropy: 0.83460, explVarOld: 0.242, explVarNew: 0.267
+[2023-12-26 23:08:45,012] batch: 1245, lenEpisode: 10
+[2023-12-26 23:08:45,918] kl: 0.01279, lrMultiplier: 0.088, loss: 1.46987, entropy: 0.83175, explVarOld: 0.242, explVarNew: 0.254
+[2023-12-26 23:08:47,984] batch: 1246, lenEpisode: 7
+[2023-12-26 23:08:48,885] kl: 0.02394, lrMultiplier: 0.088, loss: 1.43360, entropy: 0.80222, explVarOld: 0.221, explVarNew: 0.238
+[2023-12-26 23:08:53,886] batch: 1247, lenEpisode: 15
+[2023-12-26 23:08:54,785] kl: 0.01721, lrMultiplier: 0.088, loss: 1.41869, entropy: 0.80455, explVarOld: 0.192, explVarNew: 0.208
+[2023-12-26 23:08:57,639] batch: 1248, lenEpisode: 9
+[2023-12-26 23:08:58,547] kl: 0.03223, lrMultiplier: 0.088, loss: 1.42423, entropy: 0.81976, explVarOld: 0.235, explVarNew: 0.254
+[2023-12-26 23:09:02,278] batch: 1249, lenEpisode: 11
+[2023-12-26 23:09:03,199] kl: 0.01199, lrMultiplier: 0.088, loss: 1.48248, entropy: 0.86081, explVarOld: 0.233, explVarNew: 0.244
+[2023-12-26 23:09:06,228] batch: 1250, lenEpisode: 8
+[2023-12-26 23:09:07,163] kl: 0.03044, lrMultiplier: 0.088, loss: 1.37123, entropy: 0.81538, explVarOld: 0.282, explVarNew: 0.304
+[2023-12-26 23:09:07,163] evalBatch: 1250
+[2023-12-26 23:09:32,638] numPlayouts: 1000, win: 9, lose: 1, tie: 0, avgCurrStarted: 0.6
+[2023-12-26 23:09:38,154] batch: 1251, lenEpisode: 15
+[2023-12-26 23:09:39,057] kl: 0.02106, lrMultiplier: 0.088, loss: 1.39723, entropy: 0.77187, explVarOld: 0.248, explVarNew: 0.257
+[2023-12-26 23:09:45,085] batch: 1252, lenEpisode: 17
+[2023-12-26 23:09:46,003] kl: 0.02400, lrMultiplier: 0.088, loss: 1.50981, entropy: 0.75524, explVarOld: 0.105, explVarNew: 0.123
+[2023-12-26 23:09:48,876] batch: 1253, lenEpisode: 8
+[2023-12-26 23:09:49,802] kl: 0.02059, lrMultiplier: 0.088, loss: 1.41588, entropy: 0.82825, explVarOld: 0.207, explVarNew: 0.230
+[2023-12-26 23:09:53,316] batch: 1254, lenEpisode: 9
+[2023-12-26 23:09:54,222] kl: 0.03044, lrMultiplier: 0.088, loss: 1.49822, entropy: 0.84016, explVarOld: 0.214, explVarNew: 0.241
+[2023-12-26 23:09:57,975] batch: 1255, lenEpisode: 9
+[2023-12-26 23:09:58,892] kl: 0.01442, lrMultiplier: 0.088, loss: 1.48742, entropy: 0.79559, explVarOld: 0.184, explVarNew: 0.204
+[2023-12-26 23:10:01,016] batch: 1256, lenEpisode: 7
+[2023-12-26 23:10:01,911] kl: 0.02477, lrMultiplier: 0.088, loss: 1.37170, entropy: 0.79322, explVarOld: 0.269, explVarNew: 0.293
+[2023-12-26 23:10:06,754] batch: 1257, lenEpisode: 13
+[2023-12-26 23:10:07,714] kl: 0.01516, lrMultiplier: 0.088, loss: 1.36705, entropy: 0.78917, explVarOld: 0.183, explVarNew: 0.196
+[2023-12-26 23:10:11,387] batch: 1258, lenEpisode: 11
+[2023-12-26 23:10:12,292] kl: 0.01974, lrMultiplier: 0.088, loss: 1.41650, entropy: 0.73664, explVarOld: 0.117, explVarNew: 0.148
+[2023-12-26 23:10:15,418] batch: 1259, lenEpisode: 9
+[2023-12-26 23:10:16,318] kl: 0.02137, lrMultiplier: 0.088, loss: 1.43755, entropy: 0.78611, explVarOld: 0.155, explVarNew: 0.171
+[2023-12-26 23:10:22,298] batch: 1260, lenEpisode: 16
+[2023-12-26 23:10:23,203] kl: 0.01972, lrMultiplier: 0.088, loss: 1.45730, entropy: 0.83477, explVarOld: 0.230, explVarNew: 0.255
+[2023-12-26 23:10:26,913] batch: 1261, lenEpisode: 9
+[2023-12-26 23:10:27,837] kl: 0.03956, lrMultiplier: 0.088, loss: 1.36674, entropy: 0.79543, explVarOld: 0.233, explVarNew: 0.256
+[2023-12-26 23:10:31,067] batch: 1262, lenEpisode: 8
+[2023-12-26 23:10:31,971] kl: 0.03729, lrMultiplier: 0.088, loss: 1.40667, entropy: 0.80211, explVarOld: 0.256, explVarNew: 0.257
+[2023-12-26 23:10:35,224] batch: 1263, lenEpisode: 8
+[2023-12-26 23:10:36,129] kl: 0.02939, lrMultiplier: 0.088, loss: 1.49272, entropy: 0.78643, explVarOld: 0.122, explVarNew: 0.149
+[2023-12-26 23:10:41,602] batch: 1264, lenEpisode: 15
+[2023-12-26 23:10:42,505] kl: 0.03025, lrMultiplier: 0.088, loss: 1.46293, entropy: 0.77516, explVarOld: 0.167, explVarNew: 0.188
+[2023-12-26 23:10:45,143] batch: 1265, lenEpisode: 8
+[2023-12-26 23:10:46,051] kl: 0.01193, lrMultiplier: 0.088, loss: 1.43380, entropy: 0.77201, explVarOld: 0.162, explVarNew: 0.178
+[2023-12-26 23:10:48,927] batch: 1266, lenEpisode: 9
+[2023-12-26 23:10:49,832] kl: 0.03844, lrMultiplier: 0.088, loss: 1.37754, entropy: 0.77047, explVarOld: 0.175, explVarNew: 0.189
+[2023-12-26 23:10:52,570] batch: 1267, lenEpisode: 7
+[2023-12-26 23:10:53,487] kl: 0.01243, lrMultiplier: 0.088, loss: 1.44270, entropy: 0.81086, explVarOld: 0.192, explVarNew: 0.216
+[2023-12-26 23:10:56,205] batch: 1268, lenEpisode: 7
+[2023-12-26 23:10:57,103] kl: 0.03614, lrMultiplier: 0.088, loss: 1.42889, entropy: 0.73395, explVarOld: 0.162, explVarNew: 0.176
+[2023-12-26 23:11:01,977] batch: 1269, lenEpisode: 17
+[2023-12-26 23:11:02,889] kl: 0.01130, lrMultiplier: 0.088, loss: 1.42121, entropy: 0.78030, explVarOld: 0.228, explVarNew: 0.239
+[2023-12-26 23:11:05,653] batch: 1270, lenEpisode: 7
+[2023-12-26 23:11:06,620] kl: 0.01258, lrMultiplier: 0.088, loss: 1.39040, entropy: 0.77882, explVarOld: 0.228, explVarNew: 0.265
+[2023-12-26 23:11:10,169] batch: 1271, lenEpisode: 9
+[2023-12-26 23:11:11,124] kl: 0.02777, lrMultiplier: 0.088, loss: 1.47542, entropy: 0.77527, explVarOld: 0.148, explVarNew: 0.166
+[2023-12-26 23:11:19,299] batch: 1272, lenEpisode: 17
+[2023-12-26 23:11:20,231] kl: 0.02277, lrMultiplier: 0.088, loss: 1.37763, entropy: 0.76666, explVarOld: 0.226, explVarNew: 0.234
+[2023-12-26 23:11:23,148] batch: 1273, lenEpisode: 8
+[2023-12-26 23:11:24,069] kl: 0.03947, lrMultiplier: 0.088, loss: 1.48488, entropy: 0.81404, explVarOld: 0.197, explVarNew: 0.219
+[2023-12-26 23:11:27,064] batch: 1274, lenEpisode: 8
+[2023-12-26 23:11:27,993] kl: 0.03776, lrMultiplier: 0.088, loss: 1.40257, entropy: 0.81072, explVarOld: 0.226, explVarNew: 0.237
+[2023-12-26 23:11:31,103] batch: 1275, lenEpisode: 8
+[2023-12-26 23:11:32,009] kl: 0.04969, lrMultiplier: 0.088, loss: 1.35992, entropy: 0.79682, explVarOld: 0.211, explVarNew: 0.235
+[2023-12-26 23:11:34,185] batch: 1276, lenEpisode: 7
+[2023-12-26 23:11:35,113] kl: 0.02220, lrMultiplier: 0.088, loss: 1.50046, entropy: 0.76915, explVarOld: 0.169, explVarNew: 0.179
+[2023-12-26 23:11:40,815] batch: 1277, lenEpisode: 16
+[2023-12-26 23:11:41,731] kl: 0.01546, lrMultiplier: 0.088, loss: 1.53887, entropy: 0.86154, explVarOld: 0.202, explVarNew: 0.217
+[2023-12-26 23:11:44,077] batch: 1278, lenEpisode: 7
+[2023-12-26 23:11:45,031] kl: 0.01952, lrMultiplier: 0.088, loss: 1.40185, entropy: 0.81317, explVarOld: 0.234, explVarNew: 0.250
+[2023-12-26 23:11:57,134] batch: 1279, lenEpisode: 36
+[2023-12-26 23:11:58,039] kl: 0.02242, lrMultiplier: 0.088, loss: 1.36059, entropy: 0.79820, explVarOld: 0.182, explVarNew: 0.196
+[2023-12-26 23:12:01,289] batch: 1280, lenEpisode: 9
+[2023-12-26 23:12:02,202] kl: 0.02324, lrMultiplier: 0.088, loss: 1.50114, entropy: 0.81824, explVarOld: 0.224, explVarNew: 0.237
+[2023-12-26 23:12:07,005] batch: 1281, lenEpisode: 14
+[2023-12-26 23:12:07,912] kl: 0.01909, lrMultiplier: 0.088, loss: 1.36739, entropy: 0.79365, explVarOld: 0.220, explVarNew: 0.233
+[2023-12-26 23:12:12,697] batch: 1282, lenEpisode: 13
+[2023-12-26 23:12:13,601] kl: 0.03936, lrMultiplier: 0.088, loss: 1.39436, entropy: 0.80078, explVarOld: 0.202, explVarNew: 0.223
+[2023-12-26 23:12:15,749] batch: 1283, lenEpisode: 7
+[2023-12-26 23:12:16,662] kl: 0.02807, lrMultiplier: 0.088, loss: 1.51343, entropy: 0.79715, explVarOld: 0.205, explVarNew: 0.217
+[2023-12-26 23:12:21,240] batch: 1284, lenEpisode: 15
+[2023-12-26 23:12:22,146] kl: 0.04247, lrMultiplier: 0.088, loss: 1.53915, entropy: 0.83632, explVarOld: 0.155, explVarNew: 0.171
+[2023-12-26 23:12:26,242] batch: 1285, lenEpisode: 12
+[2023-12-26 23:12:27,149] kl: 0.02381, lrMultiplier: 0.088, loss: 1.52725, entropy: 0.81579, explVarOld: 0.130, explVarNew: 0.152
+[2023-12-26 23:12:29,138] batch: 1286, lenEpisode: 7
+[2023-12-26 23:12:30,055] kl: 0.05212, lrMultiplier: 0.088, loss: 1.47154, entropy: 0.83960, explVarOld: 0.200, explVarNew: 0.208
+[2023-12-26 23:12:35,077] batch: 1287, lenEpisode: 14
+[2023-12-26 23:12:36,028] kl: 0.02163, lrMultiplier: 0.088, loss: 1.50221, entropy: 0.80690, explVarOld: 0.177, explVarNew: 0.192
+[2023-12-26 23:12:39,496] batch: 1288, lenEpisode: 8
+[2023-12-26 23:12:40,410] kl: 0.02843, lrMultiplier: 0.088, loss: 1.48429, entropy: 0.86931, explVarOld: 0.242, explVarNew: 0.265
+[2023-12-26 23:12:45,579] batch: 1289, lenEpisode: 14
+[2023-12-26 23:12:46,514] kl: 0.01784, lrMultiplier: 0.088, loss: 1.52300, entropy: 0.80667, explVarOld: 0.122, explVarNew: 0.135
+[2023-12-26 23:12:48,672] batch: 1290, lenEpisode: 7
+[2023-12-26 23:12:49,599] kl: 0.01258, lrMultiplier: 0.088, loss: 1.46307, entropy: 0.81051, explVarOld: 0.173, explVarNew: 0.190
+[2023-12-26 23:12:52,322] batch: 1291, lenEpisode: 7
+[2023-12-26 23:12:53,231] kl: 0.01949, lrMultiplier: 0.088, loss: 1.46838, entropy: 0.79402, explVarOld: 0.153, explVarNew: 0.163
+[2023-12-26 23:12:58,492] batch: 1292, lenEpisode: 14
+[2023-12-26 23:12:59,398] kl: 0.01963, lrMultiplier: 0.088, loss: 1.50844, entropy: 0.84783, explVarOld: 0.190, explVarNew: 0.209
+[2023-12-26 23:13:10,541] batch: 1293, lenEpisode: 25
+[2023-12-26 23:13:11,438] kl: 0.02417, lrMultiplier: 0.088, loss: 1.46056, entropy: 0.87427, explVarOld: 0.174, explVarNew: 0.196
+[2023-12-26 23:13:15,007] batch: 1294, lenEpisode: 9
+[2023-12-26 23:13:15,912] kl: 0.02534, lrMultiplier: 0.088, loss: 1.49885, entropy: 0.84547, explVarOld: 0.175, explVarNew: 0.188
+[2023-12-26 23:13:21,162] batch: 1295, lenEpisode: 15
+[2023-12-26 23:13:22,059] kl: 0.01300, lrMultiplier: 0.088, loss: 1.44012, entropy: 0.85175, explVarOld: 0.250, explVarNew: 0.266
+[2023-12-26 23:13:26,401] batch: 1296, lenEpisode: 9
+[2023-12-26 23:13:27,336] kl: 0.02100, lrMultiplier: 0.088, loss: 1.49969, entropy: 0.84505, explVarOld: 0.163, explVarNew: 0.186
+[2023-12-26 23:13:30,495] batch: 1297, lenEpisode: 8
+[2023-12-26 23:13:31,421] kl: 0.01277, lrMultiplier: 0.088, loss: 1.47023, entropy: 0.80770, explVarOld: 0.183, explVarNew: 0.202
+[2023-12-26 23:13:36,073] batch: 1298, lenEpisode: 10
+[2023-12-26 23:13:37,034] kl: 0.01350, lrMultiplier: 0.088, loss: 1.49204, entropy: 0.85428, explVarOld: 0.200, explVarNew: 0.218
+[2023-12-26 23:13:42,053] batch: 1299, lenEpisode: 16
+[2023-12-26 23:13:42,962] kl: 0.01390, lrMultiplier: 0.088, loss: 1.42903, entropy: 0.79503, explVarOld: 0.103, explVarNew: 0.124
+[2023-12-26 23:13:46,829] batch: 1300, lenEpisode: 12
+[2023-12-26 23:13:47,747] kl: 0.02669, lrMultiplier: 0.088, loss: 1.46640, entropy: 0.80874, explVarOld: 0.194, explVarNew: 0.207
+[2023-12-26 23:13:47,747] evalBatch: 1300
+[2023-12-26 23:14:15,333] numPlayouts: 1000, win: 9, lose: 1, tie: 0, avgCurrStarted: 0.6
+[2023-12-26 23:14:19,242] batch: 1301, lenEpisode: 10
+[2023-12-26 23:14:20,152] kl: 0.01158, lrMultiplier: 0.088, loss: 1.53966, entropy: 0.85727, explVarOld: 0.177, explVarNew: 0.199
+[2023-12-26 23:14:23,078] batch: 1302, lenEpisode: 9
+[2023-12-26 23:14:23,994] kl: 0.03084, lrMultiplier: 0.088, loss: 1.54249, entropy: 0.86273, explVarOld: 0.167, explVarNew: 0.182
+[2023-12-26 23:14:26,802] batch: 1303, lenEpisode: 8
+[2023-12-26 23:14:27,717] kl: 0.01880, lrMultiplier: 0.088, loss: 1.55858, entropy: 0.86946, explVarOld: 0.208, explVarNew: 0.216
+[2023-12-26 23:14:33,149] batch: 1304, lenEpisode: 18
+[2023-12-26 23:14:34,073] kl: 0.01921, lrMultiplier: 0.088, loss: 1.45125, entropy: 0.85306, explVarOld: 0.221, explVarNew: 0.237
+[2023-12-26 23:14:36,338] batch: 1305, lenEpisode: 7
+[2023-12-26 23:14:37,289] kl: 0.02083, lrMultiplier: 0.088, loss: 1.59072, entropy: 0.83086, explVarOld: 0.163, explVarNew: 0.178
+[2023-12-26 23:14:42,185] batch: 1306, lenEpisode: 15
+[2023-12-26 23:14:43,098] kl: 0.02606, lrMultiplier: 0.088, loss: 1.48512, entropy: 0.77796, explVarOld: 0.194, explVarNew: 0.209
+[2023-12-26 23:14:45,169] batch: 1307, lenEpisode: 7
+[2023-12-26 23:14:46,083] kl: 0.02520, lrMultiplier: 0.088, loss: 1.56128, entropy: 0.85068, explVarOld: 0.156, explVarNew: 0.173
+[2023-12-26 23:14:48,765] batch: 1308, lenEpisode: 7
+[2023-12-26 23:14:49,667] kl: 0.02774, lrMultiplier: 0.088, loss: 1.51237, entropy: 0.82481, explVarOld: 0.152, explVarNew: 0.169
+[2023-12-26 23:14:53,369] batch: 1309, lenEpisode: 9
+[2023-12-26 23:14:54,291] kl: 0.02568, lrMultiplier: 0.088, loss: 1.58895, entropy: 0.87111, explVarOld: 0.161, explVarNew: 0.175
+[2023-12-26 23:14:59,642] batch: 1310, lenEpisode: 15
+[2023-12-26 23:15:00,558] kl: 0.02318, lrMultiplier: 0.088, loss: 1.47532, entropy: 0.79955, explVarOld: 0.167, explVarNew: 0.184
+[2023-12-26 23:15:04,584] batch: 1311, lenEpisode: 11
+[2023-12-26 23:15:05,492] kl: 0.03610, lrMultiplier: 0.088, loss: 1.51520, entropy: 0.85564, explVarOld: 0.199, explVarNew: 0.212
+[2023-12-26 23:15:10,675] batch: 1312, lenEpisode: 17
+[2023-12-26 23:15:11,579] kl: 0.01412, lrMultiplier: 0.088, loss: 1.61356, entropy: 0.87575, explVarOld: 0.155, explVarNew: 0.177
+[2023-12-26 23:15:17,887] batch: 1313, lenEpisode: 15
+[2023-12-26 23:15:18,792] kl: 0.03444, lrMultiplier: 0.088, loss: 1.52944, entropy: 0.84624, explVarOld: 0.175, explVarNew: 0.185
+[2023-12-26 23:15:23,340] batch: 1314, lenEpisode: 13
+[2023-12-26 23:15:24,246] kl: 0.01838, lrMultiplier: 0.088, loss: 1.60223, entropy: 0.82465, explVarOld: 0.111, explVarNew: 0.119
+[2023-12-26 23:15:29,747] batch: 1315, lenEpisode: 13
+[2023-12-26 23:15:30,667] kl: 0.03485, lrMultiplier: 0.088, loss: 1.69767, entropy: 0.91663, explVarOld: 0.038, explVarNew: 0.056
+[2023-12-26 23:15:33,301] batch: 1316, lenEpisode: 7
+[2023-12-26 23:15:34,204] kl: 0.03161, lrMultiplier: 0.088, loss: 1.53987, entropy: 0.86069, explVarOld: 0.221, explVarNew: 0.234
+[2023-12-26 23:15:39,124] batch: 1317, lenEpisode: 12
+[2023-12-26 23:15:40,066] kl: 0.01285, lrMultiplier: 0.088, loss: 1.49719, entropy: 0.83752, explVarOld: 0.177, explVarNew: 0.194
+[2023-12-26 23:15:43,634] batch: 1318, lenEpisode: 8
+[2023-12-26 23:15:44,532] kl: 0.03131, lrMultiplier: 0.088, loss: 1.50322, entropy: 0.80984, explVarOld: 0.133, explVarNew: 0.150
+[2023-12-26 23:15:48,810] batch: 1319, lenEpisode: 11
+[2023-12-26 23:15:49,720] kl: 0.01720, lrMultiplier: 0.088, loss: 1.58086, entropy: 0.89343, explVarOld: 0.188, explVarNew: 0.201
+[2023-12-26 23:15:54,410] batch: 1320, lenEpisode: 12
+[2023-12-26 23:15:55,309] kl: 0.03586, lrMultiplier: 0.088, loss: 1.60510, entropy: 0.87189, explVarOld: 0.143, explVarNew: 0.158
+[2023-12-26 23:16:00,297] batch: 1321, lenEpisode: 14
+[2023-12-26 23:16:01,208] kl: 0.02043, lrMultiplier: 0.088, loss: 1.40743, entropy: 0.78645, explVarOld: 0.177, explVarNew: 0.193
+[2023-12-26 23:16:06,942] batch: 1322, lenEpisode: 13
+[2023-12-26 23:16:07,859] kl: 0.01798, lrMultiplier: 0.088, loss: 1.57576, entropy: 0.79989, explVarOld: 0.135, explVarNew: 0.141
+[2023-12-26 23:16:10,721] batch: 1323, lenEpisode: 9
+[2023-12-26 23:16:11,647] kl: 0.01654, lrMultiplier: 0.088, loss: 1.51694, entropy: 0.82590, explVarOld: 0.124, explVarNew: 0.141
+[2023-12-26 23:16:14,212] batch: 1324, lenEpisode: 7
+[2023-12-26 23:16:15,128] kl: 0.01202, lrMultiplier: 0.088, loss: 1.53206, entropy: 0.83797, explVarOld: 0.109, explVarNew: 0.120
+[2023-12-26 23:16:21,233] batch: 1325, lenEpisode: 14
+[2023-12-26 23:16:22,150] kl: 0.01870, lrMultiplier: 0.088, loss: 1.48727, entropy: 0.83112, explVarOld: 0.173, explVarNew: 0.186
+[2023-12-26 23:16:24,398] batch: 1326, lenEpisode: 7
+[2023-12-26 23:16:25,317] kl: 0.02232, lrMultiplier: 0.088, loss: 1.50006, entropy: 0.82220, explVarOld: 0.168, explVarNew: 0.182
+[2023-12-26 23:16:30,623] batch: 1327, lenEpisode: 14
+[2023-12-26 23:16:31,527] kl: 0.01802, lrMultiplier: 0.088, loss: 1.48843, entropy: 0.83664, explVarOld: 0.150, explVarNew: 0.168
+[2023-12-26 23:16:34,905] batch: 1328, lenEpisode: 9
+[2023-12-26 23:16:35,820] kl: 0.02413, lrMultiplier: 0.088, loss: 1.54131, entropy: 0.82849, explVarOld: 0.197, explVarNew: 0.207
+[2023-12-26 23:16:38,515] batch: 1329, lenEpisode: 7
+[2023-12-26 23:16:39,433] kl: 0.02673, lrMultiplier: 0.088, loss: 1.37826, entropy: 0.79987, explVarOld: 0.190, explVarNew: 0.206
+[2023-12-26 23:16:42,104] batch: 1330, lenEpisode: 9
+[2023-12-26 23:16:43,021] kl: 0.03058, lrMultiplier: 0.088, loss: 1.52998, entropy: 0.86508, explVarOld: 0.141, explVarNew: 0.165
+[2023-12-26 23:16:47,137] batch: 1331, lenEpisode: 13
+[2023-12-26 23:16:48,037] kl: 0.01668, lrMultiplier: 0.088, loss: 1.61993, entropy: 0.80339, explVarOld: 0.192, explVarNew: 0.203
+[2023-12-26 23:16:52,683] batch: 1332, lenEpisode: 11
+[2023-12-26 23:16:53,600] kl: 0.03546, lrMultiplier: 0.088, loss: 1.49939, entropy: 0.79732, explVarOld: 0.204, explVarNew: 0.218
+[2023-12-26 23:16:59,460] batch: 1333, lenEpisode: 19
+[2023-12-26 23:17:00,401] kl: 0.01893, lrMultiplier: 0.088, loss: 1.41326, entropy: 0.79117, explVarOld: 0.223, explVarNew: 0.248
+[2023-12-26 23:17:06,598] batch: 1334, lenEpisode: 24
+[2023-12-26 23:17:07,501] kl: 0.02771, lrMultiplier: 0.088, loss: 1.52601, entropy: 0.82203, explVarOld: 0.174, explVarNew: 0.196
+[2023-12-26 23:17:11,478] batch: 1335, lenEpisode: 11
+[2023-12-26 23:17:12,425] kl: 0.02256, lrMultiplier: 0.088, loss: 1.47964, entropy: 0.83442, explVarOld: 0.156, explVarNew: 0.168
+[2023-12-26 23:17:16,074] batch: 1336, lenEpisode: 10
+[2023-12-26 23:17:16,975] kl: 0.02004, lrMultiplier: 0.088, loss: 1.44452, entropy: 0.82931, explVarOld: 0.216, explVarNew: 0.226
+[2023-12-26 23:17:20,615] batch: 1337, lenEpisode: 9
+[2023-12-26 23:17:21,523] kl: 0.02009, lrMultiplier: 0.088, loss: 1.55244, entropy: 0.88996, explVarOld: 0.185, explVarNew: 0.216
+[2023-12-26 23:17:24,339] batch: 1338, lenEpisode: 8
+[2023-12-26 23:17:25,241] kl: 0.02432, lrMultiplier: 0.088, loss: 1.48176, entropy: 0.79540, explVarOld: 0.195, explVarNew: 0.201
+[2023-12-26 23:17:29,328] batch: 1339, lenEpisode: 9
+[2023-12-26 23:17:30,251] kl: 0.01619, lrMultiplier: 0.088, loss: 1.52799, entropy: 0.82821, explVarOld: 0.193, explVarNew: 0.212
+[2023-12-26 23:17:34,613] batch: 1340, lenEpisode: 12
+[2023-12-26 23:17:35,521] kl: 0.03236, lrMultiplier: 0.088, loss: 1.45422, entropy: 0.77149, explVarOld: 0.191, explVarNew: 0.210
+[2023-12-26 23:17:42,271] batch: 1341, lenEpisode: 21
+[2023-12-26 23:17:43,181] kl: 0.02418, lrMultiplier: 0.088, loss: 1.54654, entropy: 0.85602, explVarOld: 0.192, explVarNew: 0.208
+[2023-12-26 23:17:47,534] batch: 1342, lenEpisode: 9
+[2023-12-26 23:17:48,448] kl: 0.01905, lrMultiplier: 0.088, loss: 1.42608, entropy: 0.82182, explVarOld: 0.190, explVarNew: 0.202
+[2023-12-26 23:17:53,788] batch: 1343, lenEpisode: 17
+[2023-12-26 23:17:54,713] kl: 0.03068, lrMultiplier: 0.088, loss: 1.50995, entropy: 0.80385, explVarOld: 0.166, explVarNew: 0.184
+[2023-12-26 23:17:59,297] batch: 1344, lenEpisode: 12
+[2023-12-26 23:18:00,217] kl: 0.01857, lrMultiplier: 0.088, loss: 1.43317, entropy: 0.81760, explVarOld: 0.177, explVarNew: 0.193
+[2023-12-26 23:18:06,971] batch: 1345, lenEpisode: 18
+[2023-12-26 23:18:07,874] kl: 0.01465, lrMultiplier: 0.088, loss: 1.58741, entropy: 0.85949, explVarOld: 0.186, explVarNew: 0.198
+[2023-12-26 23:18:13,747] batch: 1346, lenEpisode: 20
+[2023-12-26 23:18:14,651] kl: 0.02045, lrMultiplier: 0.088, loss: 1.41062, entropy: 0.84077, explVarOld: 0.209, explVarNew: 0.230
+[2023-12-26 23:18:16,799] batch: 1347, lenEpisode: 7
+[2023-12-26 23:18:17,708] kl: 0.01319, lrMultiplier: 0.088, loss: 1.59850, entropy: 0.84716, explVarOld: 0.188, explVarNew: 0.209
+[2023-12-26 23:18:25,103] batch: 1348, lenEpisode: 20
+[2023-12-26 23:18:26,010] kl: 0.01390, lrMultiplier: 0.088, loss: 1.61140, entropy: 0.89759, explVarOld: 0.204, explVarNew: 0.226
+[2023-12-26 23:18:31,337] batch: 1349, lenEpisode: 17
+[2023-12-26 23:18:32,254] kl: 0.02127, lrMultiplier: 0.088, loss: 1.42641, entropy: 0.82311, explVarOld: 0.218, explVarNew: 0.230
+[2023-12-26 23:18:36,542] batch: 1350, lenEpisode: 11
+[2023-12-26 23:18:37,471] kl: 0.02697, lrMultiplier: 0.088, loss: 1.54473, entropy: 0.88781, explVarOld: 0.175, explVarNew: 0.183
+[2023-12-26 23:18:37,471] evalBatch: 1350
+[2023-12-26 23:19:04,618] numPlayouts: 1000, win: 9, lose: 1, tie: 0, avgCurrStarted: 0.4
+[2023-12-26 23:19:10,519] batch: 1351, lenEpisode: 20
+[2023-12-26 23:19:11,428] kl: 0.02883, lrMultiplier: 0.088, loss: 1.53956, entropy: 0.89271, explVarOld: 0.209, explVarNew: 0.222
+[2023-12-26 23:19:16,564] batch: 1352, lenEpisode: 15
+[2023-12-26 23:19:17,521] kl: 0.02868, lrMultiplier: 0.088, loss: 1.50166, entropy: 0.86565, explVarOld: 0.255, explVarNew: 0.272
+[2023-12-26 23:19:22,499] batch: 1353, lenEpisode: 17
+[2023-12-26 23:19:23,426] kl: 0.01919, lrMultiplier: 0.088, loss: 1.48278, entropy: 0.82854, explVarOld: 0.173, explVarNew: 0.179
+[2023-12-26 23:19:28,452] batch: 1354, lenEpisode: 15
+[2023-12-26 23:19:29,366] kl: 0.02208, lrMultiplier: 0.088, loss: 1.53036, entropy: 0.84279, explVarOld: 0.169, explVarNew: 0.200
+[2023-12-26 23:19:33,540] batch: 1355, lenEpisode: 11
+[2023-12-26 23:19:34,448] kl: 0.02915, lrMultiplier: 0.088, loss: 1.55588, entropy: 0.85431, explVarOld: 0.198, explVarNew: 0.216
+[2023-12-26 23:19:37,544] batch: 1356, lenEpisode: 8
+[2023-12-26 23:19:38,465] kl: 0.01645, lrMultiplier: 0.088, loss: 1.54167, entropy: 0.92645, explVarOld: 0.224, explVarNew: 0.235
+[2023-12-26 23:19:40,956] batch: 1357, lenEpisode: 8
+[2023-12-26 23:19:41,852] kl: 0.02810, lrMultiplier: 0.088, loss: 1.51900, entropy: 0.90522, explVarOld: 0.208, explVarNew: 0.219
+[2023-12-26 23:19:45,142] batch: 1358, lenEpisode: 9
+[2023-12-26 23:19:46,063] kl: 0.02255, lrMultiplier: 0.088, loss: 1.63614, entropy: 0.87908, explVarOld: 0.138, explVarNew: 0.160
+[2023-12-26 23:19:49,571] batch: 1359, lenEpisode: 11
+[2023-12-26 23:19:50,474] kl: 0.03463, lrMultiplier: 0.088, loss: 1.56388, entropy: 0.84415, explVarOld: 0.194, explVarNew: 0.216
+[2023-12-26 23:19:53,855] batch: 1360, lenEpisode: 11
+[2023-12-26 23:19:54,756] kl: 0.02586, lrMultiplier: 0.088, loss: 1.53241, entropy: 0.88593, explVarOld: 0.207, explVarNew: 0.222
+[2023-12-26 23:19:58,421] batch: 1361, lenEpisode: 9
+[2023-12-26 23:19:59,320] kl: 0.03259, lrMultiplier: 0.088, loss: 1.56028, entropy: 0.87126, explVarOld: 0.182, explVarNew: 0.199
+[2023-12-26 23:20:01,605] batch: 1362, lenEpisode: 7
+[2023-12-26 23:20:02,504] kl: 0.02699, lrMultiplier: 0.088, loss: 1.51301, entropy: 0.85033, explVarOld: 0.214, explVarNew: 0.236
+[2023-12-26 23:20:07,702] batch: 1363, lenEpisode: 14
+[2023-12-26 23:20:08,616] kl: 0.02299, lrMultiplier: 0.088, loss: 1.58139, entropy: 0.86877, explVarOld: 0.177, explVarNew: 0.190
+[2023-12-26 23:20:11,140] batch: 1364, lenEpisode: 7
+[2023-12-26 23:20:12,049] kl: 0.03083, lrMultiplier: 0.088, loss: 1.45745, entropy: 0.82859, explVarOld: 0.212, explVarNew: 0.224
+[2023-12-26 23:20:15,302] batch: 1365, lenEpisode: 10
+[2023-12-26 23:20:16,215] kl: 0.01438, lrMultiplier: 0.088, loss: 1.59497, entropy: 0.84173, explVarOld: 0.195, explVarNew: 0.209
+[2023-12-26 23:20:19,257] batch: 1366, lenEpisode: 9
+[2023-12-26 23:20:20,167] kl: 0.01780, lrMultiplier: 0.088, loss: 1.62133, entropy: 0.89692, explVarOld: 0.177, explVarNew: 0.195
+[2023-12-26 23:20:23,036] batch: 1367, lenEpisode: 8
+[2023-12-26 23:20:23,963] kl: 0.01985, lrMultiplier: 0.088, loss: 1.47920, entropy: 0.85595, explVarOld: 0.209, explVarNew: 0.217
+[2023-12-26 23:20:27,122] batch: 1368, lenEpisode: 9
+[2023-12-26 23:20:28,040] kl: 0.01635, lrMultiplier: 0.088, loss: 1.55326, entropy: 0.84636, explVarOld: 0.178, explVarNew: 0.211
+[2023-12-26 23:20:34,496] batch: 1369, lenEpisode: 19
+[2023-12-26 23:20:35,395] kl: 0.01258, lrMultiplier: 0.088, loss: 1.56800, entropy: 0.86819, explVarOld: 0.179, explVarNew: 0.190
+[2023-12-26 23:20:37,848] batch: 1370, lenEpisode: 8
+[2023-12-26 23:20:38,753] kl: 0.01312, lrMultiplier: 0.088, loss: 1.51516, entropy: 0.86910, explVarOld: 0.225, explVarNew: 0.238
+[2023-12-26 23:20:41,692] batch: 1371, lenEpisode: 8
+[2023-12-26 23:20:42,619] kl: 0.01572, lrMultiplier: 0.088, loss: 1.43937, entropy: 0.82426, explVarOld: 0.248, explVarNew: 0.260
+[2023-12-26 23:20:45,993] batch: 1372, lenEpisode: 9
+[2023-12-26 23:20:46,899] kl: 0.02132, lrMultiplier: 0.088, loss: 1.56617, entropy: 0.85473, explVarOld: 0.214, explVarNew: 0.226
+[2023-12-26 23:20:49,635] batch: 1373, lenEpisode: 9
+[2023-12-26 23:20:50,532] kl: 0.02895, lrMultiplier: 0.088, loss: 1.48117, entropy: 0.86725, explVarOld: 0.188, explVarNew: 0.208
+[2023-12-26 23:20:54,640] batch: 1374, lenEpisode: 11
+[2023-12-26 23:20:55,553] kl: 0.01376, lrMultiplier: 0.088, loss: 1.57046, entropy: 0.85171, explVarOld: 0.192, explVarNew: 0.197
+[2023-12-26 23:21:00,386] batch: 1375, lenEpisode: 14
+[2023-12-26 23:21:01,299] kl: 0.02975, lrMultiplier: 0.088, loss: 1.58117, entropy: 0.84480, explVarOld: 0.186, explVarNew: 0.199
+[2023-12-26 23:21:04,527] batch: 1376, lenEpisode: 10
+[2023-12-26 23:21:05,429] kl: 0.02363, lrMultiplier: 0.088, loss: 1.60720, entropy: 0.81342, explVarOld: 0.161, explVarNew: 0.172
+[2023-12-26 23:21:09,682] batch: 1377, lenEpisode: 9
+[2023-12-26 23:21:10,589] kl: 0.02401, lrMultiplier: 0.088, loss: 1.62856, entropy: 0.88176, explVarOld: 0.224, explVarNew: 0.254
+[2023-12-26 23:21:14,823] batch: 1378, lenEpisode: 11
+[2023-12-26 23:21:15,769] kl: 0.02081, lrMultiplier: 0.088, loss: 1.54835, entropy: 0.88143, explVarOld: 0.209, explVarNew: 0.236
+[2023-12-26 23:21:19,286] batch: 1379, lenEpisode: 10
+[2023-12-26 23:21:20,210] kl: 0.02389, lrMultiplier: 0.088, loss: 1.56618, entropy: 0.83606, explVarOld: 0.234, explVarNew: 0.238
+[2023-12-26 23:21:24,064] batch: 1380, lenEpisode: 13
+[2023-12-26 23:21:24,981] kl: 0.02433, lrMultiplier: 0.088, loss: 1.47338, entropy: 0.83601, explVarOld: 0.234, explVarNew: 0.254
+[2023-12-26 23:21:30,941] batch: 1381, lenEpisode: 19
+[2023-12-26 23:21:31,858] kl: 0.01573, lrMultiplier: 0.088, loss: 1.44708, entropy: 0.85299, explVarOld: 0.255, explVarNew: 0.274
+[2023-12-26 23:21:37,201] batch: 1382, lenEpisode: 18
+[2023-12-26 23:21:38,142] kl: 0.03585, lrMultiplier: 0.088, loss: 1.43828, entropy: 0.87648, explVarOld: 0.224, explVarNew: 0.245
+[2023-12-26 23:21:42,101] batch: 1383, lenEpisode: 10
+[2023-12-26 23:21:43,009] kl: 0.02947, lrMultiplier: 0.088, loss: 1.50973, entropy: 0.85814, explVarOld: 0.196, explVarNew: 0.206
+[2023-12-26 23:21:45,764] batch: 1384, lenEpisode: 9
+[2023-12-26 23:21:46,672] kl: 0.03340, lrMultiplier: 0.088, loss: 1.59484, entropy: 0.87892, explVarOld: 0.202, explVarNew: 0.222
+[2023-12-26 23:21:52,297] batch: 1385, lenEpisode: 17
+[2023-12-26 23:21:53,194] kl: 0.01363, lrMultiplier: 0.088, loss: 1.36261, entropy: 0.78730, explVarOld: 0.246, explVarNew: 0.259
+[2023-12-26 23:21:59,039] batch: 1386, lenEpisode: 19
+[2023-12-26 23:21:59,959] kl: 0.02753, lrMultiplier: 0.088, loss: 1.61032, entropy: 0.86800, explVarOld: 0.162, explVarNew: 0.179
+[2023-12-26 23:22:06,597] batch: 1387, lenEpisode: 17
+[2023-12-26 23:22:07,508] kl: 0.01836, lrMultiplier: 0.088, loss: 1.42301, entropy: 0.87218, explVarOld: 0.211, explVarNew: 0.228
+[2023-12-26 23:22:10,783] batch: 1388, lenEpisode: 7
+[2023-12-26 23:22:11,693] kl: 0.02177, lrMultiplier: 0.088, loss: 1.58911, entropy: 0.85230, explVarOld: 0.203, explVarNew: 0.221
+[2023-12-26 23:22:13,811] batch: 1389, lenEpisode: 7
+[2023-12-26 23:22:14,735] kl: 0.01757, lrMultiplier: 0.088, loss: 1.63579, entropy: 0.86920, explVarOld: 0.144, explVarNew: 0.165
+[2023-12-26 23:22:19,194] batch: 1390, lenEpisode: 12
+[2023-12-26 23:22:20,110] kl: 0.02939, lrMultiplier: 0.088, loss: 1.42826, entropy: 0.77310, explVarOld: 0.230, explVarNew: 0.244
+[2023-12-26 23:22:22,180] batch: 1391, lenEpisode: 7
+[2023-12-26 23:22:23,089] kl: 0.01672, lrMultiplier: 0.088, loss: 1.51195, entropy: 0.79381, explVarOld: 0.232, explVarNew: 0.251
+[2023-12-26 23:22:25,963] batch: 1392, lenEpisode: 9
+[2023-12-26 23:22:26,884] kl: 0.03515, lrMultiplier: 0.088, loss: 1.65036, entropy: 0.80304, explVarOld: 0.215, explVarNew: 0.224
+[2023-12-26 23:22:32,629] batch: 1393, lenEpisode: 19
+[2023-12-26 23:22:33,543] kl: 0.01843, lrMultiplier: 0.088, loss: 1.55939, entropy: 0.81968, explVarOld: 0.191, explVarNew: 0.216
+[2023-12-26 23:22:36,573] batch: 1394, lenEpisode: 8
+[2023-12-26 23:22:37,479] kl: 0.04308, lrMultiplier: 0.088, loss: 1.50294, entropy: 0.84781, explVarOld: 0.219, explVarNew: 0.254
+[2023-12-26 23:22:41,803] batch: 1395, lenEpisode: 11
+[2023-12-26 23:22:42,709] kl: 0.01644, lrMultiplier: 0.088, loss: 1.47369, entropy: 0.85871, explVarOld: 0.264, explVarNew: 0.280
+[2023-12-26 23:22:47,915] batch: 1396, lenEpisode: 15
+[2023-12-26 23:22:48,824] kl: 0.01806, lrMultiplier: 0.088, loss: 1.50672, entropy: 0.82900, explVarOld: 0.190, explVarNew: 0.199
+[2023-12-26 23:22:54,539] batch: 1397, lenEpisode: 15
+[2023-12-26 23:22:55,443] kl: 0.01213, lrMultiplier: 0.088, loss: 1.40948, entropy: 0.89517, explVarOld: 0.231, explVarNew: 0.243
+[2023-12-26 23:22:58,527] batch: 1398, lenEpisode: 8
+[2023-12-26 23:22:59,434] kl: 0.01072, lrMultiplier: 0.088, loss: 1.47965, entropy: 0.84028, explVarOld: 0.209, explVarNew: 0.226
+[2023-12-26 23:23:02,434] batch: 1399, lenEpisode: 9
+[2023-12-26 23:23:03,347] kl: 0.01922, lrMultiplier: 0.088, loss: 1.30114, entropy: 0.78663, explVarOld: 0.277, explVarNew: 0.298
+[2023-12-26 23:23:07,832] batch: 1400, lenEpisode: 14
+[2023-12-26 23:23:08,743] kl: 0.01060, lrMultiplier: 0.088, loss: 1.44192, entropy: 0.80503, explVarOld: 0.214, explVarNew: 0.237
+[2023-12-26 23:23:08,744] evalBatch: 1400
+[2023-12-26 23:23:38,985] numPlayouts: 1000, win: 8, lose: 2, tie: 0, avgCurrStarted: 0.3
+[2023-12-26 23:23:43,992] batch: 1401, lenEpisode: 13
+[2023-12-26 23:23:44,919] kl: 0.02573, lrMultiplier: 0.088, loss: 1.55931, entropy: 0.82398, explVarOld: 0.202, explVarNew: 0.224
+[2023-12-26 23:23:49,159] batch: 1402, lenEpisode: 10
+[2023-12-26 23:23:50,194] kl: 0.02129, lrMultiplier: 0.088, loss: 1.51707, entropy: 0.84863, explVarOld: 0.190, explVarNew: 0.202
+[2023-12-26 23:23:54,338] batch: 1403, lenEpisode: 11
+[2023-12-26 23:23:55,240] kl: 0.02116, lrMultiplier: 0.088, loss: 1.48249, entropy: 0.78932, explVarOld: 0.200, explVarNew: 0.212
+[2023-12-26 23:23:59,772] batch: 1404, lenEpisode: 14
+[2023-12-26 23:24:00,713] kl: 0.03444, lrMultiplier: 0.088, loss: 1.45951, entropy: 0.81692, explVarOld: 0.251, explVarNew: 0.258
+[2023-12-26 23:24:03,390] batch: 1405, lenEpisode: 7
+[2023-12-26 23:24:04,299] kl: 0.02384, lrMultiplier: 0.088, loss: 1.44546, entropy: 0.80990, explVarOld: 0.203, explVarNew: 0.219
+[2023-12-26 23:24:07,011] batch: 1406, lenEpisode: 7
+[2023-12-26 23:24:07,916] kl: 0.02260, lrMultiplier: 0.088, loss: 1.46944, entropy: 0.84162, explVarOld: 0.215, explVarNew: 0.226
+[2023-12-26 23:24:11,020] batch: 1407, lenEpisode: 11
+[2023-12-26 23:24:11,919] kl: 0.02751, lrMultiplier: 0.088, loss: 1.54829, entropy: 0.86198, explVarOld: 0.223, explVarNew: 0.237
+[2023-12-26 23:24:15,131] batch: 1408, lenEpisode: 10
+[2023-12-26 23:24:16,036] kl: 0.01562, lrMultiplier: 0.088, loss: 1.47388, entropy: 0.79684, explVarOld: 0.267, explVarNew: 0.281
+[2023-12-26 23:24:20,346] batch: 1409, lenEpisode: 9
+[2023-12-26 23:24:21,245] kl: 0.02303, lrMultiplier: 0.088, loss: 1.33052, entropy: 0.80213, explVarOld: 0.211, explVarNew: 0.226
+[2023-12-26 23:24:25,654] batch: 1410, lenEpisode: 10
+[2023-12-26 23:24:26,560] kl: 0.01570, lrMultiplier: 0.088, loss: 1.40064, entropy: 0.80491, explVarOld: 0.239, explVarNew: 0.255
+[2023-12-26 23:24:29,797] batch: 1411, lenEpisode: 9
+[2023-12-26 23:24:30,726] kl: 0.02117, lrMultiplier: 0.088, loss: 1.47357, entropy: 0.78348, explVarOld: 0.231, explVarNew: 0.246
+[2023-12-26 23:24:36,519] batch: 1412, lenEpisode: 16
+[2023-12-26 23:24:37,439] kl: 0.02591, lrMultiplier: 0.088, loss: 1.43287, entropy: 0.81373, explVarOld: 0.274, explVarNew: 0.288
+[2023-12-26 23:24:42,211] batch: 1413, lenEpisode: 13
+[2023-12-26 23:24:43,136] kl: 0.01366, lrMultiplier: 0.088, loss: 1.48265, entropy: 0.81574, explVarOld: 0.253, explVarNew: 0.263
+[2023-12-26 23:24:50,290] batch: 1414, lenEpisode: 18
+[2023-12-26 23:24:51,236] kl: 0.01572, lrMultiplier: 0.088, loss: 1.53311, entropy: 0.84861, explVarOld: 0.243, explVarNew: 0.265
+[2023-12-26 23:24:55,598] batch: 1415, lenEpisode: 13
+[2023-12-26 23:24:56,549] kl: 0.02249, lrMultiplier: 0.088, loss: 1.32174, entropy: 0.82543, explVarOld: 0.273, explVarNew: 0.295
+[2023-12-26 23:25:01,831] batch: 1416, lenEpisode: 14
+[2023-12-26 23:25:02,738] kl: 0.01455, lrMultiplier: 0.088, loss: 1.40894, entropy: 0.78427, explVarOld: 0.276, explVarNew: 0.294
+[2023-12-26 23:25:09,391] batch: 1417, lenEpisode: 22
+[2023-12-26 23:25:10,307] kl: 0.02405, lrMultiplier: 0.088, loss: 1.38241, entropy: 0.81943, explVarOld: 0.268, explVarNew: 0.289
+[2023-12-26 23:25:13,957] batch: 1418, lenEpisode: 10
+[2023-12-26 23:25:14,866] kl: 0.02144, lrMultiplier: 0.088, loss: 1.40997, entropy: 0.78737, explVarOld: 0.259, explVarNew: 0.277
+[2023-12-26 23:25:18,930] batch: 1419, lenEpisode: 8
+[2023-12-26 23:25:19,855] kl: 0.02023, lrMultiplier: 0.088, loss: 1.41386, entropy: 0.76684, explVarOld: 0.215, explVarNew: 0.241
+[2023-12-26 23:25:24,264] batch: 1420, lenEpisode: 13
+[2023-12-26 23:25:25,191] kl: 0.01181, lrMultiplier: 0.088, loss: 1.39103, entropy: 0.83043, explVarOld: 0.313, explVarNew: 0.330
+[2023-12-26 23:25:28,777] batch: 1421, lenEpisode: 10
+[2023-12-26 23:25:29,677] kl: 0.01733, lrMultiplier: 0.088, loss: 1.31676, entropy: 0.75704, explVarOld: 0.332, explVarNew: 0.343
+[2023-12-26 23:25:32,841] batch: 1422, lenEpisode: 9
+[2023-12-26 23:25:33,747] kl: 0.02587, lrMultiplier: 0.088, loss: 1.40752, entropy: 0.79731, explVarOld: 0.285, explVarNew: 0.295
+[2023-12-26 23:25:36,558] batch: 1423, lenEpisode: 11
+[2023-12-26 23:25:37,472] kl: 0.01802, lrMultiplier: 0.088, loss: 1.37557, entropy: 0.77807, explVarOld: 0.288, explVarNew: 0.303
+[2023-12-26 23:25:40,669] batch: 1424, lenEpisode: 8
+[2023-12-26 23:25:41,611] kl: 0.02507, lrMultiplier: 0.088, loss: 1.33898, entropy: 0.75937, explVarOld: 0.310, explVarNew: 0.328
+[2023-12-26 23:25:46,755] batch: 1425, lenEpisode: 12
+[2023-12-26 23:25:47,679] kl: 0.01115, lrMultiplier: 0.088, loss: 1.42034, entropy: 0.78595, explVarOld: 0.286, explVarNew: 0.298
+[2023-12-26 23:25:52,043] batch: 1426, lenEpisode: 10
+[2023-12-26 23:25:52,950] kl: 0.02596, lrMultiplier: 0.088, loss: 1.39497, entropy: 0.79144, explVarOld: 0.307, explVarNew: 0.319
+[2023-12-26 23:25:56,299] batch: 1427, lenEpisode: 8
+[2023-12-26 23:25:57,200] kl: 0.01217, lrMultiplier: 0.088, loss: 1.51114, entropy: 0.86040, explVarOld: 0.256, explVarNew: 0.272
+[2023-12-26 23:26:01,284] batch: 1428, lenEpisode: 9
+[2023-12-26 23:26:02,179] kl: 0.02410, lrMultiplier: 0.088, loss: 1.32286, entropy: 0.74747, explVarOld: 0.342, explVarNew: 0.358
+[2023-12-26 23:26:06,594] batch: 1429, lenEpisode: 11
+[2023-12-26 23:26:07,499] kl: 0.01123, lrMultiplier: 0.088, loss: 1.43394, entropy: 0.77924, explVarOld: 0.272, explVarNew: 0.297
+[2023-12-26 23:26:13,471] batch: 1430, lenEpisode: 14
+[2023-12-26 23:26:14,411] kl: 0.02198, lrMultiplier: 0.088, loss: 1.46745, entropy: 0.83734, explVarOld: 0.310, explVarNew: 0.329
+[2023-12-26 23:26:18,757] batch: 1431, lenEpisode: 9
+[2023-12-26 23:26:19,661] kl: 0.02767, lrMultiplier: 0.088, loss: 1.38429, entropy: 0.83011, explVarOld: 0.284, explVarNew: 0.308
+[2023-12-26 23:26:22,622] batch: 1432, lenEpisode: 8
+[2023-12-26 23:26:23,527] kl: 0.01690, lrMultiplier: 0.088, loss: 1.48324, entropy: 0.78629, explVarOld: 0.273, explVarNew: 0.298
+[2023-12-26 23:26:27,833] batch: 1433, lenEpisode: 11
+[2023-12-26 23:26:28,736] kl: 0.02104, lrMultiplier: 0.088, loss: 1.38267, entropy: 0.75339, explVarOld: 0.273, explVarNew: 0.277
+[2023-12-26 23:26:32,013] batch: 1434, lenEpisode: 8
+[2023-12-26 23:26:32,906] kl: 0.02194, lrMultiplier: 0.088, loss: 1.41926, entropy: 0.80295, explVarOld: 0.266, explVarNew: 0.280
+[2023-12-26 23:26:35,465] batch: 1435, lenEpisode: 8
+[2023-12-26 23:26:36,354] kl: 0.03754, lrMultiplier: 0.088, loss: 1.45232, entropy: 0.80038, explVarOld: 0.283, explVarNew: 0.305
+[2023-12-26 23:26:41,774] batch: 1436, lenEpisode: 12
+[2023-12-26 23:26:42,740] kl: 0.01255, lrMultiplier: 0.088, loss: 1.42789, entropy: 0.77809, explVarOld: 0.262, explVarNew: 0.284
+[2023-12-26 23:26:45,506] batch: 1437, lenEpisode: 7
+[2023-12-26 23:26:46,403] kl: 0.02381, lrMultiplier: 0.088, loss: 1.44096, entropy: 0.78872, explVarOld: 0.286, explVarNew: 0.303
+[2023-12-26 23:26:51,076] batch: 1438, lenEpisode: 9
+[2023-12-26 23:26:51,993] kl: 0.01868, lrMultiplier: 0.088, loss: 1.46950, entropy: 0.79801, explVarOld: 0.267, explVarNew: 0.285
+[2023-12-26 23:26:55,267] batch: 1439, lenEpisode: 9
+[2023-12-26 23:26:56,183] kl: 0.01449, lrMultiplier: 0.088, loss: 1.40363, entropy: 0.82292, explVarOld: 0.316, explVarNew: 0.330
+[2023-12-26 23:26:59,460] batch: 1440, lenEpisode: 8
+[2023-12-26 23:27:00,379] kl: 0.02373, lrMultiplier: 0.088, loss: 1.30345, entropy: 0.81590, explVarOld: 0.350, explVarNew: 0.372
+[2023-12-26 23:27:03,163] batch: 1441, lenEpisode: 7
+[2023-12-26 23:27:04,072] kl: 0.02419, lrMultiplier: 0.088, loss: 1.29174, entropy: 0.75109, explVarOld: 0.322, explVarNew: 0.348
+[2023-12-26 23:27:09,007] batch: 1442, lenEpisode: 13
+[2023-12-26 23:27:09,922] kl: 0.02780, lrMultiplier: 0.088, loss: 1.43484, entropy: 0.78124, explVarOld: 0.210, explVarNew: 0.234
+[2023-12-26 23:27:13,121] batch: 1443, lenEpisode: 8
+[2023-12-26 23:27:14,047] kl: 0.01437, lrMultiplier: 0.088, loss: 1.41251, entropy: 0.75536, explVarOld: 0.282, explVarNew: 0.303
+[2023-12-26 23:27:17,388] batch: 1444, lenEpisode: 10
+[2023-12-26 23:27:18,304] kl: 0.02351, lrMultiplier: 0.088, loss: 1.40938, entropy: 0.79859, explVarOld: 0.308, explVarNew: 0.329
+[2023-12-26 23:27:21,798] batch: 1445, lenEpisode: 12
+[2023-12-26 23:27:22,716] kl: 0.01601, lrMultiplier: 0.088, loss: 1.35530, entropy: 0.77528, explVarOld: 0.289, explVarNew: 0.315
+[2023-12-26 23:27:27,245] batch: 1446, lenEpisode: 13
+[2023-12-26 23:27:28,166] kl: 0.01462, lrMultiplier: 0.088, loss: 1.30351, entropy: 0.75234, explVarOld: 0.283, explVarNew: 0.297
+[2023-12-26 23:27:31,381] batch: 1447, lenEpisode: 10
+[2023-12-26 23:27:32,295] kl: 0.01623, lrMultiplier: 0.088, loss: 1.38180, entropy: 0.74485, explVarOld: 0.265, explVarNew: 0.296
+[2023-12-26 23:27:36,392] batch: 1448, lenEpisode: 9
+[2023-12-26 23:27:37,313] kl: 0.02696, lrMultiplier: 0.088, loss: 1.30956, entropy: 0.70800, explVarOld: 0.291, explVarNew: 0.317
+[2023-12-26 23:27:42,101] batch: 1449, lenEpisode: 13
+[2023-12-26 23:27:43,019] kl: 0.01481, lrMultiplier: 0.088, loss: 1.42928, entropy: 0.83098, explVarOld: 0.316, explVarNew: 0.343
+[2023-12-26 23:27:46,629] batch: 1450, lenEpisode: 10
+[2023-12-26 23:27:47,539] kl: 0.01810, lrMultiplier: 0.088, loss: 1.29078, entropy: 0.70894, explVarOld: 0.316, explVarNew: 0.324
+[2023-12-26 23:27:47,539] evalBatch: 1450
+[2023-12-26 23:28:18,082] numPlayouts: 1000, win: 9, lose: 1, tie: 0, avgCurrStarted: 0.5
+[2023-12-26 23:28:22,700] batch: 1451, lenEpisode: 10
+[2023-12-26 23:28:23,621] kl: 0.02028, lrMultiplier: 0.088, loss: 1.41726, entropy: 0.76084, explVarOld: 0.245, explVarNew: 0.270
+[2023-12-26 23:28:27,742] batch: 1452, lenEpisode: 8
+[2023-12-26 23:28:28,662] kl: 0.01796, lrMultiplier: 0.088, loss: 1.39556, entropy: 0.74572, explVarOld: 0.266, explVarNew: 0.276
+[2023-12-26 23:28:31,813] batch: 1453, lenEpisode: 8
+[2023-12-26 23:28:32,749] kl: 0.02544, lrMultiplier: 0.088, loss: 1.42211, entropy: 0.81434, explVarOld: 0.226, explVarNew: 0.262
+[2023-12-26 23:28:35,881] batch: 1454, lenEpisode: 8
+[2023-12-26 23:28:36,795] kl: 0.01302, lrMultiplier: 0.088, loss: 1.42386, entropy: 0.74819, explVarOld: 0.208, explVarNew: 0.223
+[2023-12-26 23:28:40,727] batch: 1455, lenEpisode: 11
+[2023-12-26 23:28:41,643] kl: 0.01425, lrMultiplier: 0.088, loss: 1.33916, entropy: 0.73015, explVarOld: 0.320, explVarNew: 0.343
+[2023-12-26 23:28:44,517] batch: 1456, lenEpisode: 7
+[2023-12-26 23:28:45,441] kl: 0.01699, lrMultiplier: 0.088, loss: 1.36667, entropy: 0.73758, explVarOld: 0.270, explVarNew: 0.302
+[2023-12-26 23:28:48,593] batch: 1457, lenEpisode: 12
+[2023-12-26 23:28:49,498] kl: 0.01543, lrMultiplier: 0.088, loss: 1.34411, entropy: 0.76432, explVarOld: 0.326, explVarNew: 0.342
+[2023-12-26 23:28:53,775] batch: 1458, lenEpisode: 13
+[2023-12-26 23:28:54,683] kl: 0.01349, lrMultiplier: 0.088, loss: 1.30653, entropy: 0.74930, explVarOld: 0.323, explVarNew: 0.331
+[2023-12-26 23:28:58,197] batch: 1459, lenEpisode: 10
+[2023-12-26 23:28:59,103] kl: 0.02487, lrMultiplier: 0.088, loss: 1.35498, entropy: 0.75257, explVarOld: 0.301, explVarNew: 0.322
+[2023-12-26 23:29:04,412] batch: 1460, lenEpisode: 16
+[2023-12-26 23:29:05,315] kl: 0.02305, lrMultiplier: 0.088, loss: 1.27623, entropy: 0.69286, explVarOld: 0.326, explVarNew: 0.349
+[2023-12-26 23:29:09,707] batch: 1461, lenEpisode: 12
+[2023-12-26 23:29:10,631] kl: 0.04362, lrMultiplier: 0.088, loss: 1.28271, entropy: 0.72368, explVarOld: 0.298, explVarNew: 0.315
+[2023-12-26 23:29:15,548] batch: 1462, lenEpisode: 12
+[2023-12-26 23:29:16,453] kl: 0.01674, lrMultiplier: 0.088, loss: 1.27497, entropy: 0.68313, explVarOld: 0.317, explVarNew: 0.333
+[2023-12-26 23:29:20,045] batch: 1463, lenEpisode: 9
+[2023-12-26 23:29:20,960] kl: 0.02681, lrMultiplier: 0.088, loss: 1.27842, entropy: 0.71161, explVarOld: 0.269, explVarNew: 0.310
+[2023-12-26 23:29:25,895] batch: 1464, lenEpisode: 12
+[2023-12-26 23:29:26,803] kl: 0.01826, lrMultiplier: 0.088, loss: 1.30091, entropy: 0.68288, explVarOld: 0.282, explVarNew: 0.296
+[2023-12-26 23:29:31,503] batch: 1465, lenEpisode: 13
+[2023-12-26 23:29:32,418] kl: 0.01026, lrMultiplier: 0.088, loss: 1.26557, entropy: 0.67433, explVarOld: 0.295, explVarNew: 0.315
+[2023-12-26 23:29:36,143] batch: 1466, lenEpisode: 11
+[2023-12-26 23:29:37,049] kl: 0.03126, lrMultiplier: 0.088, loss: 1.29383, entropy: 0.76352, explVarOld: 0.312, explVarNew: 0.348
+[2023-12-26 23:29:41,533] batch: 1467, lenEpisode: 12
+[2023-12-26 23:29:42,447] kl: 0.01614, lrMultiplier: 0.088, loss: 1.25509, entropy: 0.70049, explVarOld: 0.330, explVarNew: 0.343
+[2023-12-26 23:29:45,795] batch: 1468, lenEpisode: 7
+[2023-12-26 23:29:46,698] kl: 0.01877, lrMultiplier: 0.088, loss: 1.34281, entropy: 0.65766, explVarOld: 0.287, explVarNew: 0.326
+[2023-12-26 23:29:51,285] batch: 1469, lenEpisode: 14
+[2023-12-26 23:29:52,188] kl: 0.01912, lrMultiplier: 0.088, loss: 1.25955, entropy: 0.70758, explVarOld: 0.320, explVarNew: 0.355
+[2023-12-26 23:29:55,370] batch: 1470, lenEpisode: 11
+[2023-12-26 23:29:56,317] kl: 0.01581, lrMultiplier: 0.088, loss: 1.32655, entropy: 0.69800, explVarOld: 0.280, explVarNew: 0.327
+[2023-12-26 23:29:59,408] batch: 1471, lenEpisode: 9
+[2023-12-26 23:30:00,355] kl: 0.01635, lrMultiplier: 0.088, loss: 1.36256, entropy: 0.71837, explVarOld: 0.243, explVarNew: 0.275
+[2023-12-26 23:30:04,055] batch: 1472, lenEpisode: 10
+[2023-12-26 23:30:04,961] kl: 0.01692, lrMultiplier: 0.088, loss: 1.34360, entropy: 0.72722, explVarOld: 0.278, explVarNew: 0.316
+[2023-12-26 23:30:09,159] batch: 1473, lenEpisode: 11
+[2023-12-26 23:30:10,058] kl: 0.01318, lrMultiplier: 0.088, loss: 1.26648, entropy: 0.68259, explVarOld: 0.304, explVarNew: 0.336
+[2023-12-26 23:30:12,702] batch: 1474, lenEpisode: 7
+[2023-12-26 23:30:13,602] kl: 0.01698, lrMultiplier: 0.088, loss: 1.27790, entropy: 0.71015, explVarOld: 0.332, explVarNew: 0.351
+[2023-12-26 23:30:17,946] batch: 1475, lenEpisode: 10
+[2023-12-26 23:30:18,872] kl: 0.02845, lrMultiplier: 0.088, loss: 1.26577, entropy: 0.67140, explVarOld: 0.292, explVarNew: 0.324
+[2023-12-26 23:30:21,956] batch: 1476, lenEpisode: 7
+[2023-12-26 23:30:22,869] kl: 0.01940, lrMultiplier: 0.088, loss: 1.34945, entropy: 0.71552, explVarOld: 0.270, explVarNew: 0.307
+[2023-12-26 23:30:25,657] batch: 1477, lenEpisode: 8
+[2023-12-26 23:30:26,584] kl: 0.02317, lrMultiplier: 0.088, loss: 1.38609, entropy: 0.72675, explVarOld: 0.281, explVarNew: 0.305
+[2023-12-26 23:30:31,653] batch: 1478, lenEpisode: 13
+[2023-12-26 23:30:32,601] kl: 0.02081, lrMultiplier: 0.088, loss: 1.33068, entropy: 0.70729, explVarOld: 0.255, explVarNew: 0.262
+[2023-12-26 23:30:35,515] batch: 1479, lenEpisode: 7
+[2023-12-26 23:30:36,435] kl: 0.02913, lrMultiplier: 0.088, loss: 1.37243, entropy: 0.74451, explVarOld: 0.262, explVarNew: 0.296
+[2023-12-26 23:30:41,555] batch: 1480, lenEpisode: 12
+[2023-12-26 23:30:42,473] kl: 0.01317, lrMultiplier: 0.088, loss: 1.26596, entropy: 0.70440, explVarOld: 0.277, explVarNew: 0.300
+[2023-12-26 23:30:46,986] batch: 1481, lenEpisode: 13
+[2023-12-26 23:30:47,910] kl: 0.02266, lrMultiplier: 0.088, loss: 1.29818, entropy: 0.67283, explVarOld: 0.295, explVarNew: 0.327
+[2023-12-26 23:30:51,125] batch: 1482, lenEpisode: 11
+[2023-12-26 23:30:52,038] kl: 0.01667, lrMultiplier: 0.088, loss: 1.27830, entropy: 0.66809, explVarOld: 0.302, explVarNew: 0.323
+[2023-12-26 23:30:55,246] batch: 1483, lenEpisode: 9
+[2023-12-26 23:30:56,161] kl: 0.01745, lrMultiplier: 0.088, loss: 1.30674, entropy: 0.70154, explVarOld: 0.276, explVarNew: 0.302
+[2023-12-26 23:31:00,556] batch: 1484, lenEpisode: 12
+[2023-12-26 23:31:01,479] kl: 0.01922, lrMultiplier: 0.088, loss: 1.22954, entropy: 0.67215, explVarOld: 0.302, explVarNew: 0.321
+[2023-12-26 23:31:05,368] batch: 1485, lenEpisode: 9
+[2023-12-26 23:31:06,295] kl: 0.02213, lrMultiplier: 0.088, loss: 1.30857, entropy: 0.69152, explVarOld: 0.313, explVarNew: 0.319
+[2023-12-26 23:31:09,870] batch: 1486, lenEpisode: 9
+[2023-12-26 23:31:10,793] kl: 0.03168, lrMultiplier: 0.088, loss: 1.22997, entropy: 0.64553, explVarOld: 0.295, explVarNew: 0.324
+[2023-12-26 23:31:14,713] batch: 1487, lenEpisode: 9
+[2023-12-26 23:31:15,625] kl: 0.02559, lrMultiplier: 0.088, loss: 1.30609, entropy: 0.65287, explVarOld: 0.245, explVarNew: 0.261
+[2023-12-26 23:31:18,291] batch: 1488, lenEpisode: 7
+[2023-12-26 23:31:19,194] kl: 0.01942, lrMultiplier: 0.088, loss: 1.26665, entropy: 0.69514, explVarOld: 0.363, explVarNew: 0.374
+[2023-12-26 23:31:23,069] batch: 1489, lenEpisode: 10
+[2023-12-26 23:31:23,975] kl: 0.02557, lrMultiplier: 0.088, loss: 1.28306, entropy: 0.69093, explVarOld: 0.280, explVarNew: 0.297
+[2023-12-26 23:31:26,696] batch: 1490, lenEpisode: 7
+[2023-12-26 23:31:27,606] kl: 0.01851, lrMultiplier: 0.088, loss: 1.21875, entropy: 0.65624, explVarOld: 0.305, explVarNew: 0.323
+[2023-12-26 23:31:30,486] batch: 1491, lenEpisode: 7
+[2023-12-26 23:31:31,387] kl: 0.01703, lrMultiplier: 0.088, loss: 1.29569, entropy: 0.64057, explVarOld: 0.271, explVarNew: 0.294
+[2023-12-26 23:31:35,617] batch: 1492, lenEpisode: 12
+[2023-12-26 23:31:36,557] kl: 0.02019, lrMultiplier: 0.088, loss: 1.25140, entropy: 0.67973, explVarOld: 0.296, explVarNew: 0.317
+[2023-12-26 23:31:39,266] batch: 1493, lenEpisode: 7
+[2023-12-26 23:31:40,191] kl: 0.01207, lrMultiplier: 0.088, loss: 1.16139, entropy: 0.64491, explVarOld: 0.339, explVarNew: 0.357
+[2023-12-26 23:31:43,044] batch: 1494, lenEpisode: 9
+[2023-12-26 23:31:43,961] kl: 0.02310, lrMultiplier: 0.088, loss: 1.25237, entropy: 0.68131, explVarOld: 0.313, explVarNew: 0.326
+[2023-12-26 23:31:47,055] batch: 1495, lenEpisode: 8
+[2023-12-26 23:31:47,973] kl: 0.02179, lrMultiplier: 0.088, loss: 1.26810, entropy: 0.65362, explVarOld: 0.321, explVarNew: 0.354
+[2023-12-26 23:31:51,496] batch: 1496, lenEpisode: 9
+[2023-12-26 23:31:52,412] kl: 0.02766, lrMultiplier: 0.088, loss: 1.20532, entropy: 0.64720, explVarOld: 0.301, explVarNew: 0.331
+[2023-12-26 23:31:56,228] batch: 1497, lenEpisode: 9
+[2023-12-26 23:31:57,137] kl: 0.02212, lrMultiplier: 0.088, loss: 1.32402, entropy: 0.68100, explVarOld: 0.334, explVarNew: 0.350
+[2023-12-26 23:32:01,599] batch: 1498, lenEpisode: 11
+[2023-12-26 23:32:02,498] kl: 0.02344, lrMultiplier: 0.088, loss: 1.23680, entropy: 0.65144, explVarOld: 0.314, explVarNew: 0.329
+[2023-12-26 23:32:06,546] batch: 1499, lenEpisode: 15
+[2023-12-26 23:32:07,443] kl: 0.02208, lrMultiplier: 0.088, loss: 1.23372, entropy: 0.64620, explVarOld: 0.326, explVarNew: 0.355
+[2023-12-26 23:32:12,337] batch: 1500, lenEpisode: 12
+[2023-12-26 23:32:13,236] kl: 0.01872, lrMultiplier: 0.088, loss: 1.22873, entropy: 0.63897, explVarOld: 0.304, explVarNew: 0.317
+[2023-12-26 23:32:13,236] evalBatch: 1500
+[2023-12-26 23:32:46,723] numPlayouts: 1000, win: 9, lose: 1, tie: 0, avgCurrStarted: 0.5

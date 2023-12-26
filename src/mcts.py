@@ -5,7 +5,7 @@ from .players import Player
 from .patterns import sortfn
 from operator import itemgetter
 
-def uniform_prior(state: Gomoku):
+def uniform_probs(state: Gomoku):
     actions = state.actions()
     probs = np.ones(len(actions))/len(actions)
     return zip(probs, actions)
@@ -14,6 +14,9 @@ def softmax(x):
     probs = np.exp(x - np.max(x))
     probs /= np.sum(probs)
     return probs
+
+def dirichlet_noise(x):
+    return np.random.dirichlet([.03] * x)
 
 class Node(object):
     def __init__(self, parent = None, p: float = 1.0):
@@ -45,12 +48,10 @@ class Node(object):
 
 class Tree(object):
     def __init__(self, 
-                 prior_fn: Callable = uniform_prior,
+                 iterations: int, 
                  policy_value_fn: Callable = None,
-                 iterations: int = 10000, 
                  c_puct: float = 5,
                  gamma: float = 1.0,
-                 noise: Callable = lambda x: np.random.dirichlet([.03] * x),
                  ):
         
         self.root = Node()
@@ -58,9 +59,10 @@ class Tree(object):
         self.iterations = iterations
         self.gamma = gamma
         
-        self.prior_fn = prior_fn
-        self.policy_value_fn = policy_value_fn
-        self.noise = noise
+        if policy_value_fn is None:
+            self.policy_value_fn = lambda s: (uniform_probs(s), self.rollout(s))
+        else:
+            self.policy_value_fn = policy_value_fn
 
     def iterate(self, state: Gomoku):
         node = self.root
@@ -74,13 +76,7 @@ class Tree(object):
             reward = state.score() * player
         
         else:
-            if self.policy_value_fn is not None:
-                probs_actions, reward = self.policy_value_fn(state)
-                
-            else:
-                probs_actions = self.prior_fn(state)
-                reward = self.rollout(state)
-                
+            probs_actions, reward = self.policy_value_fn(state)
             node.expand(probs_actions)
             reward *= player
         
@@ -118,20 +114,17 @@ class Tree(object):
 
 class UCT_Player(Player):
     def __init__(self, 
-                 policy_value_fn: Callable = None,
-                 prior_fn: Callable = uniform_prior, 
+                 iterations: int, 
+                 policy_value_fn: Callable = None, 
                  c_puct: float = 5, 
-                 iterations: int = 2000, 
                  temp: float = .001,
                  ):
         
-        self.noise = lambda x: np.random.dirichlet(0.3*np.ones(x))
+        self.noise = dirichlet_noise
         self.tree = Tree(
-            policy_value_fn=policy_value_fn,
-            prior_fn=prior_fn, 
-            c_puct=c_puct, 
             iterations=iterations,
-            noise=self.noise,
+            policy_value_fn=policy_value_fn,
+            c_puct=c_puct,
         )
         
         self.temp = temp
@@ -192,6 +185,7 @@ if __name__ == "__main__":
     from .policy_value_net import PolicyValueNet
     from .gomoku import Gomoku
     
+    reset_probs = False
     curr_starts = False
     
     game_kwargs = {
@@ -204,17 +198,21 @@ if __name__ == "__main__":
     
     net = PolicyValueNet(
         game_kwargs['M'], game_kwargs['N'],
-        model_file='./best_policy.model',
+        model_file='current_policy2.model',
     )
     
     pure_player = UCT_Player(
         c_puct = 5,
-        iterations = 3000,
+        iterations = 5000,
         temp = .001,
     )
     
+    policy_value_fn = net.policy_value_fn_sorted
+    if reset_probs:
+        policy_value_fn = lambda s: (uniform_probs(s), policy_value_fn(s)[1])
+    
     curr_player = UCT_Player(
-        policy_value_fn = net.policy_value_fn_sorted, 
+        policy_value_fn = policy_value_fn, 
         c_puct = 5,
         iterations = 400,
         temp = .001,

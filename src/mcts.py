@@ -67,26 +67,30 @@ class Tree(object):
         while not node.is_terminal():
             action, node = node.select(**self.policy_kwargs)
             state.play(action)
-
-        if self.policy_value_fn is not None:
-            probs_actions, reward = self.policy_value_fn(state)
-            if not state.fin():
-                node.expand(probs_actions)
-            else:
-                reward = state.score()
+        
+        player = state.player
+        
+        if state.fin():
+            reward = state.score() * player
+        
         else:
-            probs_actions = self.prior_fn(state)
-            if not state.fin():
-                node.expand(probs_actions)
-            reward = self.rollout(state)
+            if self.policy_value_fn is not None:
+                probs_actions, reward = self.policy_value_fn(state)
+                
+            else:
+                probs_actions = self.prior_fn(state)
+                reward = self.rollout(state)
+                
+            node.expand(probs_actions)
+            reward *= player
+        
         self.backpropagate(node, -reward)
     
     def rollout(self, state: Gomoku):
-        player = state.player
         while not state.fin():
             action = state.actions()[0]
             state.play(action)
-        return state.score() * player
+        return state.score()
     
     def backpropagate(self, node: Node, reward: float):
         while node is not None:
@@ -183,58 +187,3 @@ class UCT_Player(Player):
         action = actions[action_i]
         
         return action, probs_dict
-    
-if __name__ == "__main__":
-    import torch
-    from .policy_value_net import PolicyValueNet
-    from collections import defaultdict
-    from .data import play_until_end
-    
-    game_kwargs = dict(M=6, N=6, K=4)
-    init_model = "./current_policy.model"
-    temp = .001
-    n_playout = 400
-    c_puct = 5
-    pure_mcts_playout_num = 1000
-    policy_value_net = PolicyValueNet(game_kwargs['M'],
-                                      game_kwargs['N'],
-                                      model_file=init_model,
-                                      use_gpu=torch.cuda.is_available())
-    current_mcts_player = UCT_Player(policy_value_fn=policy_value_net.policy_value_fn_sorted,
-                                      policy_kwargs={'C': 5},
-                                      iterations=n_playout,
-                                      temp=temp)
-    pure_mcts_player = UCT_Player(policy_kwargs={'C': 5},
-                                  iterations=pure_mcts_playout_num,
-                                  temp=temp)
-
-    n_games = 10
-    game = Gomoku(**game_kwargs)
-    game.set_play_only()
-    avg_curr_starts = .0
-    win_cnt = defaultdict(int)
-    for i in range(n_games):
-        end_game, curr_starts = play_until_end(
-            game, 
-            current_mcts_player, 
-            pure_mcts_player)
-        winner = end_game.score()
-        if not curr_starts:
-            winner = -winner
-        new_game = Gomoku(**game_kwargs)
-        history = end_game.history()
-        if curr_starts:
-            new_game.play(history.pop(0))
-        for i in range(len(history)):
-            move = history[i]
-            if i % 2 == 1:
-                action, probs = current_mcts_player.next_move(new_game, get_probs=True)
-                print("Output: {}, Probs: {}, Board: {}".format(action, list(probs), new_game))
-            new_game.play(move)
-        win_cnt[winner] += 1
-        avg_curr_starts += curr_starts
-    win_ratio = (1.0*win_cnt[1] + 0.5*win_cnt[0]) / n_games
-    avg_curr_starts /= n_games
-    print("num_playouts: {}, win: {}, lose: {}, tie: {}, first_player: {}".format(
-            pure_mcts_playout_num,
-            win_cnt[1], win_cnt[-1], win_cnt[0], avg_curr_starts))

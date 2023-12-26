@@ -105,7 +105,7 @@ class Gomoku:
             states[2][self.last_move] = 1.
         if self.player == 1:
             states[3] = 1.
-        return states
+        return states[:, ::-1, :]
     
     def update_line_cache(self, 
                           length: int, 

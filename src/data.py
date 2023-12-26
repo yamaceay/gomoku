@@ -75,6 +75,7 @@ def play_self_until_end_zero(
     game: Gomoku, 
     player: UCT_Player = None, 
     epsilon: float = .0,
+    verbose: bool = False,
     ) -> list[tuple[np.ndarray, np.ndarray, np.ndarray]]:
     
     if game.fin() or player is None:
@@ -84,7 +85,11 @@ def play_self_until_end_zero(
     list_probs = []
     new_game = game.copy()
     
-    for _ in tqdm(range(game.M * game.N)):
+    game_bar = range(game.M * game.N)
+    if verbose:
+        game_bar = tqdm(game_bar)
+        
+    for _ in game_bar:
         if new_game.fin():
             break
         list_states += [new_game.to_zero_input()]
@@ -159,14 +164,14 @@ if __name__ == '__main__':
     
     
     uct = UCT_Player(
-        policy_kwargs={"C": 5},
+        c_puct={"C": 5},
         iterations=400,
         temp=.001,
     )
     
     uct2 = UCT_Player(
         policy_value_fn=net.policy_value_fn_sorted,
-        policy_kwargs={"C": 5},
+        c_puct={"C": 5},
         iterations=400,
         temp=.001,
     )

@@ -48,13 +48,13 @@ class Tree(object):
                  prior_fn: Callable = uniform_prior,
                  policy_value_fn: Callable = None,
                  iterations: int = 10000, 
-                 policy_kwargs: dict = {}, 
+                 c_puct: float = 5,
                  gamma: float = 1.0,
                  noise: Callable = lambda x: np.random.dirichlet([.03] * x),
                  ):
         
         self.root = Node()
-        self.policy_kwargs = policy_kwargs
+        self.c_puct = c_puct
         self.iterations = iterations
         self.gamma = gamma
         
@@ -65,7 +65,7 @@ class Tree(object):
     def iterate(self, state: Gomoku):
         node = self.root
         while not node.is_terminal():
-            action, node = node.select(**self.policy_kwargs)
+            action, node = node.select(self.c_puct)
             state.play(action)
         
         player = state.player
@@ -120,7 +120,7 @@ class UCT_Player(Player):
     def __init__(self, 
                  policy_value_fn: Callable = None,
                  prior_fn: Callable = uniform_prior, 
-                 policy_kwargs: dict = {}, 
+                 c_puct: float = 5, 
                  iterations: int = 2000, 
                  temp: float = .001,
                  ):
@@ -129,7 +129,7 @@ class UCT_Player(Player):
         self.tree = Tree(
             policy_value_fn=policy_value_fn,
             prior_fn=prior_fn, 
-            policy_kwargs=policy_kwargs, 
+            c_puct=c_puct, 
             iterations=iterations,
             noise=self.noise,
         )
@@ -187,3 +187,51 @@ class UCT_Player(Player):
         action = actions[action_i]
         
         return action, probs_dict
+    
+if __name__ == "__main__":
+    from .policy_value_net import PolicyValueNet
+    from .gomoku import Gomoku
+    
+    curr_starts = False
+    
+    game_kwargs = {
+        'M': 6,
+        'N': 6,
+        'K': 4,
+    }
+    
+    game = Gomoku(**game_kwargs)
+    
+    net = PolicyValueNet(
+        game_kwargs['M'], game_kwargs['N'],
+        model_file='./best_policy.model',
+    )
+    
+    pure_player = UCT_Player(
+        c_puct = 5,
+        iterations = 3000,
+        temp = .001,
+    )
+    
+    curr_player = UCT_Player(
+        policy_value_fn = net.policy_value_fn_sorted, 
+        c_puct = 5,
+        iterations = 400,
+        temp = .001,
+    )
+    
+    if not curr_starts:
+        action = pure_player.next_move(game)
+        game.play(action)
+        print(game)
+        
+    while not game.fin():
+        action = curr_player.next_move(game)
+        game.play(action)
+        print(game)
+        if game.fin():
+            break
+        action = pure_player.next_move(game)
+        game.play(action)
+        print(game)
+    

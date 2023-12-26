@@ -21,6 +21,26 @@ def set_learning_rate(optimizer, lr):
         param_group['lr'] = lr
 
 
+def entropy_fn(log_act_probs):
+    return -torch.mean(
+        torch.sum(torch.exp(log_act_probs) * log_act_probs, 1)
+    )
+    
+def policy_loss_fn(mcts_probs, log_act_probs):
+    return -torch.mean(
+        torch.sum(mcts_probs*log_act_probs, 1)
+    )
+    
+def kl_divergence(old_probs, new_probs):
+    return np.mean(
+        np.sum(old_probs * (
+            np.log(old_probs + 1e-10) - np.log(new_probs + 1e-10)
+        ), axis=1)
+    )
+    
+def explained_var(labels, preds):
+    return 1 - np.var(labels - preds) / np.var(labels)
+
 class Net(nn.Module):
     """policy-value network module"""
     def __init__(self, board_width, board_height):
@@ -144,24 +164,19 @@ class PolicyValueNet():
         # define the loss = (z - v)^2 - pi^T * log(p) + c||theta||^2
         # Note: the L2 penalty is incorporated in optimizer
         value_loss = F.mse_loss(value.view(-1), winner_batch)
-        policy_loss = -torch.mean(torch.sum(mcts_probs*log_act_probs, 1))
+        policy_loss = policy_loss_fn(mcts_probs, log_act_probs)
         loss = value_loss + policy_loss
         # backward and optimize
         loss.backward()
         self.optimizer.step()
         # calc policy entropy, for monitoring only
-        entropy = -torch.mean(
-                torch.sum(torch.exp(log_act_probs) * log_act_probs, 1)
-                )
-        # return loss.data[0], entropy.data[0]
-        #for pytorch version >= 0.5 please use the following line instead.
+        entropy = entropy_fn(log_act_probs)
         return loss.item(), entropy.item()
 
     def get_policy_param(self):
         net_params = self.policy_value_net.state_dict()
         return net_params
 
-    def save_model(self, model_file):
-        """ save model params to file """
+    def save_model(self, model_file: str):
         net_params = self.get_policy_param()  # get model params
         torch.save(net_params, model_file)

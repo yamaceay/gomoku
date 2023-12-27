@@ -1,7 +1,6 @@
 from tqdm import tqdm
-from .zero import AlphaZeroPlayer
 from .adp import ADP_Player, ADP_Dense_Player
-# from .mcts_adp import UCT_Zero_Player
+from .mcts import UCT_Player
 from .players import Player
 from .gomoku import Gomoku
 from .data import collect_play_data, play_until_end
@@ -103,22 +102,22 @@ def tournament(game_kwargs, models: list[tuple[Player, float] | Player], n_test_
     
 #     return results
 
-def eval_by_zero(game_kwargs: dict[str, int], 
-                 curr_model: ADP_Player, 
-                 zero_model: AlphaZeroPlayer, 
-                 n_test_games: int, 
-                 epsilon: float = .1):
-    len_histories = []
-    for _ in tqdm(range(n_test_games), position=1, leave=False, desc="Testing"):
-        win, curr_model_starts, len_history = comp_models(game_kwargs, curr_model, zero_model, epsilon1=epsilon)
-        zero_model.restart()
-        curr_model_won = int((win > 0) == curr_model_starts)
-        if curr_model_won:
-            print("Current model won against zero, amazing!!")
-            return game_kwargs['M'] * game_kwargs['N']
-        len_histories += [len_history]
-    avg_len_history = sum(len_histories) / len(len_histories)
-    return avg_len_history
+# def eval_by_zero(game_kwargs: dict[str, int], 
+#                  curr_model: ADP_Player, 
+#                  zero_model: UCT_Player, 
+#                  n_test_games: int, 
+#                  epsilon: float = .1):
+#     len_histories = []
+#     for _ in tqdm(range(n_test_games), position=1, leave=False, desc="Testing"):
+#         win, curr_model_starts, len_history = comp_models(game_kwargs, curr_model, zero_model, epsilon1=epsilon)
+#         zero_model.restart()
+#         curr_model_won = int((win > 0) == curr_model_starts)
+#         if curr_model_won:
+#             print("Current model won against zero, amazing!!")
+#             return game_kwargs['M'] * game_kwargs['N']
+#         len_histories += [len_history]
+#     avg_len_history = sum(len_histories) / len(len_histories)
+#     return avg_len_history
  
 class EvolutionStrategy:
     def __init__(self, dir_path: str, logger, epoch: int = 0) -> tuple[int, float]:
@@ -187,7 +186,6 @@ def train_adp(
     checkpoint: int = 50,
     eval: bool = True, 
     train: bool = True,
-    zero_play: bool = False,
     select_best: bool = False,
     eval_iterations: int = 2500,
     eval_max_depth: int = 8,
@@ -210,10 +208,6 @@ def train_adp(
         **player_args
     )
     
-    zero_model = None
-    if zero_play or eval:
-        zero_model = AlphaZeroPlayer(game_kwargs)
-    
     buffer = deque(maxlen=buffer_size)
     scheduler = lr_scheduler.ExponentialLR(adp_model.nn.optimizer, gamma=lr_args['lr_decay'])
     
@@ -232,11 +226,6 @@ def train_adp(
         trainer_args = {
             "player": adp_model,
         }
-
-        if zero_play:
-            trainer_args = {
-                "player": zero_model,
-            }
         
         buffer.extend(collect_play_data(
             game=game, 

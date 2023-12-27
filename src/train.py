@@ -2,11 +2,27 @@ from __future__ import print_function
 import random
 import numpy as np
 from collections import defaultdict, deque
-from .game import Board, Game
-from .mcts_pure import MCTSPlayer as MCTS_Pure
-from .mcts_alphaZero import MCTSPlayer
-from .policy_value_net_pytorch import PolicyValueNet
+from .mcts import UCT_Player
+from .policy_value_net import PolicyValueNet, kl_divergence, explained_var
+from .data import collect_self_play_data_zero, extend_play_data, play_until_end
+from .gomoku import Gomoku
 import torch
+from tqdm import tqdm
+import os
+import logging
+
+DIR = '_zero'
+LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
+MODELS_PATH = os.path.join(DIR, "models")
+CURR_MODEL_PATH = os.path.join(MODELS_PATH, "current_policy.model")
+BEST_MODEL_PATH = os.path.join(MODELS_PATH, "best_policy.model")
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('[%(asctime)s] %(message)s')
+file_handler = logging.FileHandler(LOSSES_PATH)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 class TrainPipeline():
     def __init__(self, 
@@ -15,8 +31,9 @@ class TrainPipeline():
                  K: int = 4,
                  init_model: str = None,
                  lr: float = 2e-3,
-                 lr_multiplier: float = 1.0,
-                 temp: float = 1.0,
+                 lr_multiplier: float = 1.,
+                 temp: float = .001,
+                 epsilon: float = .25,
                  n_playout: int = 400,
                  c_puct: float = 5,
                  buffer_size: int = 10000,
@@ -27,19 +44,23 @@ class TrainPipeline():
                  check_freq: int = 50,
                  game_batch_num: int = 1500,
                  pure_mcts_playout_num: int = 1000,
+                 playout_num_max: int = 5000,
+                 playout_num_incr: int = 1000,
+                 lr_step: float = 1.5,
+                 lr_range: float = 10,
+                 kl_range: float = 2,
                  ):
         # params of the board and the game
         self.M = M
         self.N = N
         self.K = K
-        self.board = Board(M=self.M,
-                           N=self.N,
-                           K=self.K)
-        self.game: Game = Game(self.board)
         # training params
         self.lr = lr
         self.lr_multiplier = lr_multiplier  # adaptively adjust the learning rate based on KL
+        self.lr_step = lr_step
+        self.lr_range = lr_range
         self.temp = temp  # the temperature param
+        self.epsilon = epsilon # the epsilon greedy param for self-play policy
         self.n_playout = n_playout  # num of simulations for each move
         self.c_puct = c_puct
         self.buffer_size = buffer_size
@@ -48,62 +69,41 @@ class TrainPipeline():
         self.play_batch_size = play_batch_size
         self.epochs = epochs  # num of train_steps for each update
         self.kl_targ = kl_targ
+        self.kl_range = kl_range
         self.check_freq = check_freq
         self.game_batch_num = game_batch_num
         self.best_win_ratio = 0.0
         self.model_file = init_model
+        self.use_gpu = torch.cuda.is_available()
         # num of simulations used for the pure mcts, which is used as
         # the opponent to evaluate the trained policy
         self.pure_mcts_playout_num = pure_mcts_playout_num
+        self.playout_num_max = playout_num_max
+        self.playout_num_incr = playout_num_incr
         # start training from an initial policy-value net
         self.policy_value_net = PolicyValueNet(self.M,
                                                 self.N,
                                                 model_file=init_model,
-                                                use_gpu=torch.cuda.is_available())
-        self.mcts_player = MCTSPlayer(self.policy_value_net.policy_value_fn,
+                                                use_gpu=self.use_gpu)
+        self.mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                       c_puct=self.c_puct,
-                                      n_playout=self.n_playout,
-                                      is_selfplay=1)
-
-    def get_equi_data(self, play_data):
-        """augment the data set by rotation and flipping
-        play_data: [(state, mcts_prob, winner_z), ..., ...]
-        """
-        extend_data = []
-        for state, mcts_prob, winner in play_data:
-            for i in [1, 2, 3, 4]:
-                # rotate counterclockwise
-                equi_state = np.array([np.rot90(s, i) for s in state])
-                equi_mcts_prob = np.rot90(np.flipud(
-                    mcts_prob.reshape(self.N, self.M)), i)
-                extend_data.append((equi_state,
-                                    np.flipud(equi_mcts_prob).flatten(),
-                                    winner))
-                # flip horizontally
-                equi_state = np.array([np.fliplr(s) for s in equi_state])
-                equi_mcts_prob = np.fliplr(equi_mcts_prob)
-                extend_data.append((equi_state,
-                                    np.flipud(equi_mcts_prob).flatten(),
-                                    winner))
-        return extend_data
+                                      iterations=self.n_playout,
+                                      temp=temp)
 
     def collect_selfplay_data(self, n_games=1):
         """collect self-play data for training"""
+        game = Gomoku(M=self.M, N=self.N, K=self.K)
+        game.set_play_only()
         for i in range(n_games):
-            winner, play_data = self.game.start_self_play(self.mcts_player,
-                                                          temp=self.temp)
-            play_data = list(play_data)[:]
-            self.episode_len = len(play_data)
-            # augment the data
-            play_data = self.get_equi_data(play_data)
+            play_data = collect_self_play_data_zero(game, 1, self.mcts_player, self.epsilon)
+            play_data = extend_play_data(play_data)
+            self.episode_len = len(play_data) // 8
             self.data_buffer.extend(play_data)
 
     def policy_update(self):
         """update the policy-value net"""
         mini_batch = random.sample(self.data_buffer, self.batch_size)
-        state_batch = [data[0] for data in mini_batch]
-        mcts_probs_batch = [data[1] for data in mini_batch]
-        winner_batch = [data[2] for data in mini_batch]
+        state_batch, mcts_probs_batch, winner_batch = map(list, zip(*mini_batch))
         old_probs, old_v = self.policy_value_net.policy_value(state_batch)
         for i in range(self.epochs):
             loss, entropy = self.policy_value_net.train_step(
@@ -112,90 +112,93 @@ class TrainPipeline():
                     winner_batch,
                     self.lr*self.lr_multiplier)
             new_probs, new_v = self.policy_value_net.policy_value(state_batch)
-            kl = np.mean(np.sum(old_probs * (
-                    np.log(old_probs + 1e-10) - np.log(new_probs + 1e-10)),
-                    axis=1)
-            )
-            if kl > self.kl_targ * 4:  # early stopping if D_KL diverges badly
+            kl = kl_divergence(old_probs, new_probs)
+            if kl > 2 * self.kl_targ * self.kl_range:  # early stopping if D_KL diverges badly
                 break
         # adaptively adjust the learning rate
-        if kl > self.kl_targ * 2 and self.lr_multiplier > 0.1:
-            self.lr_multiplier /= 1.5
-        elif kl < self.kl_targ / 2 and self.lr_multiplier < 10:
-            self.lr_multiplier *= 1.5
-
-        explained_var_old = (1 -
-                             np.var(np.array(winner_batch) - old_v.flatten()) /
-                             np.var(np.array(winner_batch)))
-        explained_var_new = (1 -
-                             np.var(np.array(winner_batch) - new_v.flatten()) /
-                             np.var(np.array(winner_batch)))
-        print(("kl:{:.5f},"
-               "lr_multiplier:{:.3f},"
-               "loss:{},"
-               "entropy:{},"
-               "explained_var_old:{:.3f},"
-               "explained_var_new:{:.3f}"
-               ).format(kl,
-                        self.lr_multiplier,
-                        loss,
-                        entropy,
-                        explained_var_old,
-                        explained_var_new))
-        return loss, entropy
+        if kl > self.kl_targ * self.kl_range and self.lr_multiplier * self.lr_range > 1:
+            self.lr_multiplier /= self.lr_step
+        elif kl < self.kl_targ / self.kl_range and self.lr_multiplier / self.lr_range < 1:
+            self.lr_multiplier *= self.lr_step
+        
+        explained_var_old = explained_var(np.array(winner_batch), old_v.flatten())
+        explained_var_new = explained_var(np.array(winner_batch), new_v.flatten())
+            
+        return loss, entropy, kl, explained_var_old, explained_var_new
 
     def policy_evaluate(self, n_games=10):
         """
         Evaluate the trained policy by playing against the pure MCTS player
         Note: this is only for monitoring the progress of training
         """
-        current_mcts_player = MCTSPlayer(self.policy_value_net.policy_value_fn,
+        current_mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                          c_puct=self.c_puct,
-                                         n_playout=self.n_playout)
-        pure_mcts_player = MCTS_Pure(c_puct=5,
-                                     n_playout=self.pure_mcts_playout_num)
+                                         iterations=self.n_playout,
+                                         temp=self.temp)
+        pure_mcts_player = UCT_Player(c_puct=self.c_puct,
+                                     iterations=self.pure_mcts_playout_num,
+                                     temp=self.temp)
         win_cnt = defaultdict(int)
+        game = Gomoku(M=self.M, N=self.N, K=self.K)
+        game.set_play_only()
+        avg_curr_starts = .0
         for i in range(n_games):
-            winner = self.game.start_play(current_mcts_player,
-                                          pure_mcts_player,
-                                          start_player=i % 2,
-                                          is_shown=0)
+            end_game, curr_starts = play_until_end(
+                game, 
+                current_mcts_player, 
+                pure_mcts_player)
+            winner = end_game.score()
+            if not curr_starts:
+                winner = -winner
             win_cnt[winner] += 1
-        win_ratio = 1.0*(win_cnt[1] + 0.5*win_cnt[-1]) / n_games
-        print("num_playouts:{}, win: {}, lose: {}, tie:{}".format(
-                self.pure_mcts_playout_num,
-                win_cnt[1], win_cnt[2], win_cnt[-1]))
-        return win_ratio
+            avg_curr_starts += curr_starts
+        win_ratio = (1.0*win_cnt[1] + 0.5*win_cnt[0]) / n_games
+        avg_curr_starts /= n_games
+        return win_ratio, win_cnt, avg_curr_starts
 
     def run(self):
         """run the training pipeline"""
         try:
-            for i in range(self.game_batch_num):
+            pbar = tqdm(range(self.game_batch_num), position=0, leave=False, desc="Batches")
+            for i in pbar:
                 self.collect_selfplay_data(self.play_batch_size)
-                print("batch i:{}, episode_len:{}".format(
-                        i+1, self.episode_len))
+                logger.info(f"batch: {i+1}, lenEpisode: {self.episode_len}")
                 if len(self.data_buffer) > self.batch_size:
-                    loss, entropy = self.policy_update()
+                    loss, entropy, kl, explained_var_old, explained_var_new = self.policy_update()
+                    policy_update_results = {
+                        "kl": f"{kl:.5f}",
+                        "lrMultiplier": f"{self.lr_multiplier:.3f}",
+                        "loss": f"{loss:.5f}",
+                        "entropy": f"{entropy:.5f}",
+                        "explVarOld": f"{explained_var_old:.3f}",
+                        "explVarNew": f"{explained_var_new:.3f}",
+                    }
+                    pbar.set_postfix(policy_update_results)
+                    logger.info(", ".join([f"{k}: {v}" for k, v in policy_update_results.items()]))
+                
                 # check the performance of the current model,
                 # and save the model params
                 if (i+1) % self.check_freq == 0:
-                    print("current self-play batch: {}".format(i+1))
-                    win_ratio = self.policy_evaluate()
-                    self.policy_value_net.save_model('./current_policy.model')
+                    logger.info(f"evalBatch: {i+1}")
+                    win_ratio, win_cnt, avg_curr_starts = self.policy_evaluate()
+                    self.policy_value_net.save_model(CURR_MODEL_PATH)
                     if win_ratio > self.best_win_ratio:
-                        print("New best policy!!!!!!!!")
+                        logger.info("BEST POLICY!!!!!!!")
                         self.best_win_ratio = win_ratio
                         # update the best_policy
-                        self.policy_value_net.save_model('./best_policy.model')
+                        self.policy_value_net.save_model(BEST_MODEL_PATH)
                         if (self.best_win_ratio == 1.0 and
-                                self.pure_mcts_playout_num < 5000):
-                            self.pure_mcts_playout_num += 1000
+                                self.pure_mcts_playout_num < self.playout_num_max):
+                            self.pure_mcts_playout_num += self.playout_num_incr
                             self.best_win_ratio = 0.0
+                    logger.info("numPlayouts: {}, win: {}, lose: {}, tie: {}, avgCurrStarted: {}".format(
+                        self.pure_mcts_playout_num,
+                        win_cnt[1], win_cnt[-1], win_cnt[0], avg_curr_starts)
+                    )
         except KeyboardInterrupt:
             print('\n\rquit')
 
 
 if __name__ == '__main__':
-    training_pipeline = TrainPipeline(init_model="./current_policy.model")
-    # training_pipeline = TrainPipeline()
+    training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
     training_pipeline.run()

@@ -4,4 +4,4 @@ from .players import *
 from .patterns import *
 from .adp import *
 from .eval import *
-from .mcts_adp import *
+from .mcts_hybrid import *

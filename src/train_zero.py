@@ -15,6 +15,8 @@ import logging
 DIR = '_zero'
 LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
 MODELS_PATH = os.path.join(DIR, "models")
+CURR_MODEL_PATH = os.path.join(MODELS_PATH, "current_policy.model")
+BEST_MODEL_PATH = os.path.join(MODELS_PATH, "best_policy.model")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -30,7 +32,7 @@ class TrainPipeline():
                  K: int = 4,
                  init_model: str = None,
                  lr: float = 2e-3,
-                 lr_multiplier: float = 1.0,
+                 lr_multiplier: float = 1.,
                  temp: float = .001,
                  epsilon: float = .25,
                  n_playout: int = 400,
@@ -88,8 +90,6 @@ class TrainPipeline():
                                       c_puct=self.c_puct,
                                       iterations=self.n_playout,
                                       temp=temp)
-        self.curr_model_path = os.path.join(MODELS_PATH, "current_policy.model")
-        self.best_model_path = os.path.join(MODELS_PATH, "best_policy.model")
 
     def collect_selfplay_data(self, n_games=1):
         """collect self-play data for training"""
@@ -182,12 +182,12 @@ class TrainPipeline():
                 if (i+1) % self.check_freq == 0:
                     logger.info(f"evalBatch: {i+1}")
                     win_ratio, win_cnt, avg_curr_starts = self.policy_evaluate()
-                    self.policy_value_net.save_model(self.curr_model_path)
+                    self.policy_value_net.save_model(CURR_MODEL_PATH)
                     if win_ratio > self.best_win_ratio:
                         logger.info("BEST POLICY!!!!!!!")
                         self.best_win_ratio = win_ratio
                         # update the best_policy
-                        self.policy_value_net.save_model(self.best_model_path)
+                        self.policy_value_net.save_model(BEST_MODEL_PATH)
                         if (self.best_win_ratio == 1.0 and
                                 self.pure_mcts_playout_num < self.playout_num_max):
                             self.pure_mcts_playout_num += self.playout_num_incr
@@ -201,5 +201,5 @@ class TrainPipeline():
 
 
 if __name__ == '__main__':
-    training_pipeline = TrainPipeline()
+    training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
     training_pipeline.run()

@@ -3,8 +3,7 @@ from .players import Player
 import torch
 from .gomoku import Gomoku
 from .patterns import PB_DICT_5, Pattern
-from .zero import AlphaZeroConv
-from .net import Net, Dense_Net, Conv_Net, Pre_Dense_Net
+from .net import Net, Dense_Net, Conv_Net
 from tqdm import tqdm
         
 class ADP_Player(Player):
@@ -173,39 +172,6 @@ class ADP_Dense_Player(ADP_Player):
         features, reward = self.extract_features(state)
         if features is None:
             return reward
-        return self.nn(features)
-    
-class ADP_Pre_Player(ADP_Player):
-    def __init__(self, 
-                 game_kwargs: dict[str, int],
-                 alpha: float = 1, 
-                 gamma: float = 0.9, 
-                 **kwargs,
-                 ):
-        
-        self.conv_nn = AlphaZeroConv(
-            M = game_kwargs['M'],
-            N = game_kwargs['N'],
-            K = game_kwargs['K'],
-        )
-        
-        super(ADP_Pre_Player, self).__init__(
-            nn=Pre_Dense_Net(**kwargs),
-            game_kwargs=game_kwargs,
-            alpha=alpha,
-            gamma=gamma,
-        )
-        
-    def extract_features(self, state: Gomoku):
-        features = self.conv_nn.forward(state)
-        return torch.FloatTensor(features).to(self.device)
-    
-    def forward(self, state: Gomoku):
-        if state.fin():
-            reward = state.score()
-            return torch.FloatTensor([reward]).to(self.device)
-        
-        features = self.extract_features(state)
         return self.nn(features)
 
 class ADP_Conv_Player(ADP_Player):

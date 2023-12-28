@@ -99,19 +99,3 @@ class Dense_Net(Net):
             torch.nn.Linear(self.hidden_dim, self.output_dim),
             torch.nn.Tanh(),
         )
-        
-        
-class Pre_Dense_Net(Net):
-    def __init__(self, **kwargs):
-        self.input_dim = PRE_INPUT_DIM
-        self.hidden_dim = PRE_HIDDEN_DIM
-        self.output_dim = PRE_OUTPUT_DIM
-        
-        super(Pre_Dense_Net, self).__init__(**kwargs)
-        
-        self.compile_model(
-            torch.nn.Linear(self.input_dim, self.hidden_dim),
-            torch.nn.Tanh(),
-            torch.nn.Linear(self.hidden_dim, self.output_dim),
-            torch.nn.Tanh(),
-        )

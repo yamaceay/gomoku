@@ -209,7 +209,7 @@ if __name__ == "__main__":
     
     policy_value_fn = net.policy_value_fn_sorted
     if reset_probs:
-        policy_value_fn = lambda s: (uniform_probs(s), policy_value_fn(s)[1])
+        policy_value_fn = lambda s: (uniform_probs(s), net.policy_value_fn_sorted(s)[1])
     
     curr_player = UCT_Player(
         policy_value_fn = policy_value_fn, 

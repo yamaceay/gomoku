@@ -65,7 +65,7 @@ def collect_play_data(
                   disable=True):
         
         new_game, _ = play_until_end(game, **round_kwargs)
-        for feature in new_game.history_str_aug():
+        for feature in new_game.gen_equi_data():
             label = new_game.score()
             play_data += [(feature, label)]
     

@@ -9,11 +9,12 @@ class Gomoku:
         self.N = N
         self.K = K
         self.ADJ = ADJ
-        self.player = 1
         
+        self.player = 1
         self.play_only = False
         self.board = np.zeros((self.M, self.N), dtype=np.int8)
         self.last_move = None
+        self.history = []
         
         self._line_cache = {len(pattern): {} for pattern in PB_DICT_5}
         self._adjacents = set()
@@ -62,7 +63,7 @@ class Gomoku:
 
     def actions(self) -> list[tuple[int, int]]:
         moves = self._legal_actions
-        if self.ADJ and len(self._history):
+        if self.ADJ and len(self.history):
             moves = self._adjacents.intersection(moves)
             if not len(moves):
                 return []
@@ -79,21 +80,21 @@ class Gomoku:
     def no_move(self) -> bool:
         return len(self._legal_actions) == 0
 
-    def history(self, rot: bool = False, lrf: bool = False, udf: bool = False) -> list[tuple[int, int]]:
-        if not len(self._history):
+    def get_history(self, rot: bool = False, lrf: bool = False, udf: bool = False) -> list[tuple[int, int]]:
+        if not len(self.history):
             return []
-        moves = list(Pattern.loc_to_move(self._history))
+        moves = self.history
         transform_fn = lambda move: self._move_forward(move, rot, lrf, udf)
         return list(map(transform_fn, moves))
     
-    def history_str(self, *args, **kwargs) -> str:
+    def get_history_str(self, *args, **kwargs) -> str:
         if not len(self._history):
             return ""
-        return Pattern.move_to_loc(*self.history(*args, **kwargs))
+        return Pattern.move_to_loc(*self.get_history(*args, **kwargs))
     
-    def history_str_aug(self) -> list[str]:
+    def gen_equi_data(self) -> list[str]:
         return [
-            self.history_str(*transformation)
+            self.get_history_str(*transformation)
             for transformation in self._transformations
         ]
     
@@ -196,6 +197,7 @@ class Gomoku:
                             continue
                         self._adjacents.add((new_x, new_y))
         
+        self.history += [move]
         if not len(self._history):
             self._history = Pattern.move_to_loc(move)
         else:

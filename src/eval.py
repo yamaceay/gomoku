@@ -39,7 +39,7 @@ def comp_models(game_kwargs: dict[str, int],
     with torch.no_grad():
         game, learner_starts = play_until_end(game, **round_kwargs)
     
-    return game.score(), learner_starts, len(game.history())
+    return game.score(), learner_starts, len(game.get_history())
 
 def tournament(game_kwargs, models: list[tuple[Player, float] | Player], n_test_games: int, start_ind: int = 0) -> list[tuple[int, int, int, int]]:
     total_ind = 0

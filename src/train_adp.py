@@ -3,15 +3,15 @@ import random
 import numpy as np
 from collections import defaultdict, deque
 from .mcts import UCT_Player
-from .policy_value_net import PolicyValueNet, kl_divergence, explained_var
-from .data import collect_self_play_data_zero, extend_play_data, play_until_end
+from .policy_value_net_adp import PolicyValueNet, kl_divergence, explained_var
+from .data_adp import collect_self_play_data_zero, extend_play_data, play_until_end
 from .gomoku import Gomoku
 import torch
 from tqdm import tqdm
 import os
 import logging
 
-DIR = '_zero'
+DIR = '_adp'
 LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
 MODELS_PATH = os.path.join(DIR, "models")
 CURR_MODEL_PATH = os.path.join(MODELS_PATH, "current_policy.model")
@@ -31,7 +31,7 @@ class TrainPipeline():
                  K: int = 4,
                  init_model: str = None,
                  lr: float = 2e-3,
-                 lr_multiplier: float = .088,
+                 lr_multiplier: float = 1.,
                  temp: float = .001,
                  epsilon: float = .25,
                  n_playout: int = 400,
@@ -43,7 +43,7 @@ class TrainPipeline():
                  kl_targ: float = 0.02,
                  check_freq: int = 50,
                  game_batch_num: int = 1500,
-                 pure_mcts_playout_num: int = 3000,
+                 pure_mcts_playout_num: int = 1000,
                  playout_num_max: int = 5000,
                  playout_num_incr: int = 1000,
                  lr_step: float = 1.5,
@@ -103,11 +103,12 @@ class TrainPipeline():
     def policy_update(self):
         """update the policy-value net"""
         mini_batch = random.sample(self.data_buffer, self.batch_size)
-        state_batch, mcts_probs_batch, winner_batch = map(list, zip(*mini_batch))
+        state_batch, next_state_batch, mcts_probs_batch, winner_batch = map(list, zip(*mini_batch))
         old_probs, old_v = self.policy_value_net.policy_value(state_batch)
         for i in range(self.epochs):
             loss, entropy = self.policy_value_net.train_step(
                     state_batch,
+                    next_state_batch,
                     mcts_probs_batch,
                     winner_batch,
                     self.lr*self.lr_multiplier)
@@ -184,13 +185,6 @@ class TrainPipeline():
                     self.policy_value_net.save_model(CURR_MODEL_PATH)
                     if win_ratio > self.best_win_ratio:
                         logger.info("BEST POLICY!!!!!!!")
-                    
-                    logger.info("numPlayouts: {}, win: {}, lose: {}, tie: {}, avgCurrStarted: {}".format(
-                        self.pure_mcts_playout_num,
-                        win_cnt[1], win_cnt[-1], win_cnt[0], avg_curr_starts)
-                    )
-                    
-                    if win_ratio > self.best_win_ratio:
                         self.best_win_ratio = win_ratio
                         # update the best_policy
                         self.policy_value_net.save_model(BEST_MODEL_PATH)
@@ -198,11 +192,15 @@ class TrainPipeline():
                                 self.pure_mcts_playout_num < self.playout_num_max):
                             self.pure_mcts_playout_num += self.playout_num_incr
                             self.best_win_ratio = 0.0
-                            
+                    logger.info("numPlayouts: {}, win: {}, lose: {}, tie: {}, avgCurrStarted: {}".format(
+                        self.pure_mcts_playout_num,
+                        win_cnt[1], win_cnt[-1], win_cnt[0], avg_curr_starts)
+                    )
         except KeyboardInterrupt:
             print('\n\rquit')
 
 
 if __name__ == '__main__':
-    training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
+    # training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
+    training_pipeline = TrainPipeline()
     training_pipeline.run()

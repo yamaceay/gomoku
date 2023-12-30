@@ -33,8 +33,8 @@ def comp_models(game_kwargs: dict[str, int],
     game = Gomoku(**game_kwargs)
     player1_play_only = isinstance(player1, ADP_Player) and player1.play_only
     player2_play_only = isinstance(player2, ADP_Player) and player2.play_only
-    if player1_play_only and player2_play_only:
-        game.set_play_only()
+    if not player1_play_only or not player2_play_only:
+        game.unset_play_only()
     
     with torch.no_grad():
         game, learner_starts = play_until_end(game, **round_kwargs)
@@ -214,8 +214,8 @@ def train_adp(
     game = Gomoku(**game_kwargs) 
     
     assert isinstance(adp_model, ADP_Player)
-    if adp_model.play_only:
-        game.set_play_only()
+    if not adp_model.play_only:
+        game.unset_play_only()
     
     for epoch in tqdm(range(epochs_start, epochs_end, epochs_step), position=0, leave=False, desc="Epochs"):
         learner_args = {

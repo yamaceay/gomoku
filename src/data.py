@@ -158,7 +158,6 @@ if __name__ == '__main__':
     }
     
     game = Gomoku(**game_kwargs)
-    game.set_play_only()
     
     net = PolicyValueNet(game_kwargs["M"], game_kwargs["N"])
     

@@ -49,8 +49,8 @@ class ADP_Player(Player):
                 continue
 
             game = Gomoku(**self.game_kwargs)
-            if self.play_only:
-                game.set_play_only()
+            if not self.play_only:
+                game.unset_play_only()
                 
             history = [self(game).to(self.device)]
             for move in moves:

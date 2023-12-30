@@ -90,7 +90,6 @@ class TrainPipeline():
     def collect_selfplay_data(self, n_games=1):
         """collect self-play data for training"""
         game = Gomoku(**self.game_kwargs)
-        game.set_play_only()
         for i in range(n_games):
             play_data = collect_self_play_data_zero(game, 1, self.mcts_player, self.epsilon)
             play_data = extend_play_data(play_data)
@@ -138,7 +137,6 @@ class TrainPipeline():
                                      temp=self.temp)
         win_cnt = defaultdict(int)
         game = Gomoku(**self.game_kwargs)
-        game.set_play_only()
         avg_curr_starts = .0
         for i in range(n_games):
             end_game, curr_starts = play_until_end(

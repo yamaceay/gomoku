@@ -12,7 +12,7 @@ class Gomoku:
         self.ADJ = ADJ
         
         self.player = 1
-        self.play_only = False
+        self.play_only = True
         self.board = np.zeros((self.M, self.N), dtype=np.int8)
         self.last_move = None
         self.history = []
@@ -39,8 +39,8 @@ class Gomoku:
             (True, True, True)
         ]
     
-    def set_play_only(self) -> None:
-        self.play_only = True
+    def unset_play_only(self) -> None:
+        self.play_only = False
     
     def copy(self):
         return copy.deepcopy(self)

@@ -198,7 +198,7 @@ if __name__ == "__main__":
     
     net = PolicyValueNet(
         game_kwargs['M'], game_kwargs['N'],
-        model_file='_zero/models/current_policy.model',
+        model_file='_zero/models/curr_6_6_4.model',
     )
     
     pure_player = UCT_Player(

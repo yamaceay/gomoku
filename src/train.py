@@ -14,8 +14,8 @@ import logging
 DIR = '_zero'
 LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
 MODELS_PATH = os.path.join(DIR, "models")
-CURR_MODEL_PATH = os.path.join(MODELS_PATH, "current_policy.model")
-BEST_MODEL_PATH = os.path.join(MODELS_PATH, "best_policy.model")
+CURR_MODEL_PATH = os.path.join(MODELS_PATH, "curr_6_6_4.model")
+BEST_MODEL_PATH = os.path.join(MODELS_PATH, "best_6_6_4.model")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -43,7 +43,7 @@ class TrainPipeline():
                  kl_targ: float = 0.02,
                  check_freq: int = 50,
                  game_batch_num: int = 1500,
-                 pure_mcts_playout_num: int = 3000,
+                 pure_mcts_playout_num: int = 5000,
                  playout_num_max: int = 5000,
                  playout_num_incr: int = 1000,
                  lr_step: float = 1.5,
@@ -51,9 +51,7 @@ class TrainPipeline():
                  kl_range: float = 2,
                  ):
         # params of the board and the game
-        self.M = M
-        self.N = N
-        self.K = K
+        self.game_kwargs = {'M': M, 'N': N, 'K': K}
         # training params
         self.lr = lr
         self.lr_multiplier = lr_multiplier  # adaptively adjust the learning rate based on KL
@@ -81,10 +79,9 @@ class TrainPipeline():
         self.playout_num_max = playout_num_max
         self.playout_num_incr = playout_num_incr
         # start training from an initial policy-value net
-        self.policy_value_net = PolicyValueNet(self.M,
-                                                self.N,
-                                                model_file=init_model,
-                                                use_gpu=self.use_gpu)
+        self.policy_value_net = PolicyValueNet(game_kwargs=self.game_kwargs,
+                                               model_file=init_model,
+                                               use_gpu=self.use_gpu)
         self.mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                       c_puct=self.c_puct,
                                       iterations=self.n_playout,
@@ -92,7 +89,7 @@ class TrainPipeline():
 
     def collect_selfplay_data(self, n_games=1):
         """collect self-play data for training"""
-        game = Gomoku(M=self.M, N=self.N, K=self.K)
+        game = Gomoku(**self.game_kwargs)
         game.set_play_only()
         for i in range(n_games):
             play_data = collect_self_play_data_zero(game, 1, self.mcts_player, self.epsilon)
@@ -139,7 +136,7 @@ class TrainPipeline():
                                      iterations=self.pure_mcts_playout_num,
                                      temp=self.temp)
         win_cnt = defaultdict(int)
-        game = Gomoku(M=self.M, N=self.N, K=self.K)
+        game = Gomoku(**self.game_kwargs)
         game.set_play_only()
         avg_curr_starts = .0
         for i in range(n_games):

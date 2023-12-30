@@ -80,17 +80,19 @@ class Net(nn.Module):
 
 class PolicyValueNet():
     """policy-value network """
-    def __init__(self, board_width, board_height,
-                 model_file=None, use_gpu=False):
+    def __init__(self, 
+                 game_kwargs: dict[str, int],
+                 model_file: str = None, 
+                 use_gpu: bool = False):
         self.use_gpu = use_gpu
-        self.board_width = board_width
-        self.board_height = board_height
+        self.board_width = game_kwargs['M']
+        self.board_height = game_kwargs['N']
         self.l2_const = 1e-4  # coef of l2 penalty
         # the policy value net module
         if self.use_gpu:
-            self.policy_value_net = Net(board_width, board_height).cuda()
+            self.policy_value_net = Net(self.board_width, self.board_height).cuda()
         else:
-            self.policy_value_net = Net(board_width, board_height)
+            self.policy_value_net = Net(self.board_width, self.board_height)
         self.optimizer = optim.Adam(self.policy_value_net.parameters(),
                                     weight_decay=self.l2_const)
 

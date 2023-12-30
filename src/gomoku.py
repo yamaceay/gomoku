@@ -4,7 +4,8 @@ import copy
 from .patterns import PB_DICT_5, Pattern, pb_heuristic
 
 class Gomoku:
-    def __init__(self, M: int, N: int, K: int, ADJ: int = 0):
+    def __init__(self, M: int = 0, N: int = 0, K: int = 0, ADJ: int = 0):
+        assert M > 0 and N > 0 and K > 0 and ADJ >= 0, "Invalid game parameters: {}, {}, {}, {}".format(M, N, K, ADJ)
         self.M = M
         self.N = N
         self.K = K

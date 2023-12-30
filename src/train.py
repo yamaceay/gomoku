@@ -14,8 +14,8 @@ import logging
 DIR = '_zero'
 LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
 MODELS_PATH = os.path.join(DIR, "models")
-CURR_MODEL_PATH = os.path.join(MODELS_PATH, "curr_6_6_4.model")
-BEST_MODEL_PATH = os.path.join(MODELS_PATH, "best_6_6_4.model")
+CURR_MODEL_PATH = os.path.join(MODELS_PATH, "curr_8_8_5.model")
+BEST_MODEL_PATH = os.path.join(MODELS_PATH, "best_8_8_5.model")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -26,12 +26,12 @@ logger.addHandler(file_handler)
 
 class TrainPipeline():
     def __init__(self, 
-                 M: int = 6,
-                 N: int = 6,
-                 K: int = 4,
+                 M: int = 8,
+                 N: int = 8,
+                 K: int = 5,
                  init_model: str = None,
                  lr: float = 2e-3,
-                 lr_multiplier: float = .088,
+                 lr_multiplier: float = 1.,
                  temp: float = .001,
                  epsilon: float = .25,
                  n_playout: int = 400,
@@ -43,7 +43,7 @@ class TrainPipeline():
                  kl_targ: float = 0.02,
                  check_freq: int = 50,
                  game_batch_num: int = 1500,
-                 pure_mcts_playout_num: int = 5000,
+                 pure_mcts_playout_num: int = 1000,
                  playout_num_max: int = 5000,
                  playout_num_incr: int = 1000,
                  lr_step: float = 1.5,
@@ -72,7 +72,8 @@ class TrainPipeline():
         self.game_batch_num = game_batch_num
         self.best_win_ratio = 0.0
         self.model_file = init_model
-        self.use_gpu = torch.cuda.is_available()
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
         # num of simulations used for the pure mcts, which is used as
         # the opponent to evaluate the trained policy
         self.pure_mcts_playout_num = pure_mcts_playout_num
@@ -81,7 +82,7 @@ class TrainPipeline():
         # start training from an initial policy-value net
         self.policy_value_net = PolicyValueNet(game_kwargs=self.game_kwargs,
                                                model_file=init_model,
-                                               use_gpu=self.use_gpu)
+                                               device=self.device)
         self.mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                       c_puct=self.c_puct,
                                       iterations=self.n_playout,
@@ -199,5 +200,6 @@ class TrainPipeline():
 
 
 if __name__ == '__main__':
-    training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
+    # training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
+    training_pipeline = TrainPipeline()
     training_pipeline.run()

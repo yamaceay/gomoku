@@ -31,10 +31,10 @@ class TrainPipeline():
                  K: int = 5,
                  init_model: str = None,
                  lr: float = 2e-3,
-                 lr_multiplier: float = 1.,
+                 lr_multiplier: float = .088,
                  temp: float = .001,
                  epsilon: float = .25,
-                 n_playout: int = 400,
+                 n_playout: int = 600,
                  c_puct: float = 5,
                  buffer_size: int = 10000,
                  batch_size: int = 512,
@@ -43,9 +43,9 @@ class TrainPipeline():
                  kl_targ: float = 0.02,
                  check_freq: int = 50,
                  game_batch_num: int = 1500,
-                 pure_mcts_playout_num: int = 1000,
-                 playout_num_max: int = 5000,
-                 playout_num_incr: int = 1000,
+                 pure_mcts_playout_num: int = 1500,
+                 playout_num_max: int = 7500,
+                 playout_num_incr: int = 1500,
                  lr_step: float = 1.5,
                  lr_range: float = 10,
                  kl_range: float = 2,
@@ -200,6 +200,6 @@ class TrainPipeline():
 
 
 if __name__ == '__main__':
-    # training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
-    training_pipeline = TrainPipeline()
+    training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
+    # training_pipeline = TrainPipeline()
     training_pipeline.run()

@@ -7199,4 +7199,3 @@
 [2024-01-03 15:22:19,593] kl: 0.02185, lrMultiplier: 0.088, loss: 1.92994, entropy: 1.44853, explVarOld: 0.404, explVarNew: 0.434
 [2024-01-03 15:22:19,594] evalBatch: 400
 [2024-01-03 15:29:12,873] numPlayouts: 1500, win: 5, lose: 5, tie: 0, avgCurrStarted: 0.6
-[2024-01-03 15:29:57,544] batch: 401, lenEpisode: 13

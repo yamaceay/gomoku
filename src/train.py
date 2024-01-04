@@ -2,8 +2,9 @@ from __future__ import print_function
 import random
 import numpy as np
 from collections import defaultdict, deque
-from .mcts import UCT_Player
-from .net import Policy_Value_Net, kl_divergence, explained_var
+from .mcts import Deep_Player
+from .net import Policy_Value_Net
+from .calc import kl_divergence, explained_var
 from .data import play_n_games_for_train, extend_play_data, play_game
 from .gomoku import Gomoku
 import torch
@@ -41,9 +42,9 @@ class TrainPipeline():
                  play_batch_size: int = 1,
                  epochs: int = 5,
                  kl_targ: float = 0.02,
-                 check_freq: int = 50,
+                 check_freq: int = 10,
                  game_batch_num: int = 1100,
-                 pure_mcts_playout_num: int = 1500,
+                 pure_mcts_playout_num: int = 3000,
                  playout_num_max: int = 7500,
                  playout_num_incr: int = 1500,
                  lr_step: float = 1.5,
@@ -83,7 +84,7 @@ class TrainPipeline():
         self.policy_value_net = Policy_Value_Net(game_kwargs=self.game_kwargs,
                                                model_file=init_model,
                                                device=self.device)
-        self.mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
+        self.mcts_player = Deep_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                       c_puct=self.c_puct,
                                       iterations=self.n_playout,
                                       temp=temp)
@@ -128,11 +129,11 @@ class TrainPipeline():
         Evaluate the trained policy by playing against the pure MCTS player
         Note: this is only for monitoring the progress of training
         """
-        current_mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
+        current_mcts_player = Deep_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
                                          c_puct=self.c_puct,
                                          iterations=self.n_playout,
                                          temp=self.temp)
-        pure_mcts_player = UCT_Player(c_puct=self.c_puct,
+        pure_mcts_player = Deep_Player(c_puct=self.c_puct,
                                      iterations=self.pure_mcts_playout_num,
                                      temp=self.temp)
         win_cnt = defaultdict(int)

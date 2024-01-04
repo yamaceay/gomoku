@@ -2,20 +2,13 @@ import numpy as np
 from .gomoku import Gomoku, sortfn
 from typing import Callable
 from .player import Player
+from .calc import dirichlet_noise, softmax
 from operator import itemgetter
 
 def uniform_probs(state: Gomoku):
     actions = state.actions()
     probs = np.ones(len(actions))/len(actions)
     return zip(probs, actions)
-
-def softmax(x):
-    probs = np.exp(x - np.max(x))
-    probs /= np.sum(probs)
-    return probs
-
-def dirichlet_noise(x):
-    return np.random.dirichlet([.03] * x)
 
 class Node(object):
     def __init__(self, parent = None, p: float = 1.0):
@@ -44,6 +37,9 @@ class Node(object):
 
     def is_root(self):
         return self.parent is None
+    
+    def __repr__(self) -> str:
+        return f"Node(Parent={self.parent}, # Children={len(self.children)}), N={self.n}, Q={self.Q}, P={self.p}"
 
 class Tree(object):
     def __init__(self, 
@@ -111,7 +107,7 @@ class Tree(object):
         
         return zip(probs, actions)
 
-class UCT_Player(Player):
+class Deep_Player(Player):
     def __init__(self, 
                  iterations: int, 
                  policy_value_fn: Callable = None, 
@@ -134,8 +130,13 @@ class UCT_Player(Player):
     def update_history(self, state: Gomoku) -> bool:
         prev_history = list(self.history)
         self.history = list(state.history)
-        if self.memory and len(self.history) and len(self.history) > len(prev_history):
-            if all([h1 == h2 for h1, h2 in zip(prev_history, self.history)]):
+        if self.memory and len(self.history) > len(prev_history):
+            invalid_match = False
+            for h1, h2 in zip(prev_history, self.history):
+                if h1 != h2:
+                    invalid_match = True
+                    break
+            if not invalid_match:
                 rest_history = self.history[len(prev_history):]
                 not_found = False
                 for move in rest_history:
@@ -144,10 +145,8 @@ class UCT_Player(Player):
                         break
                     self.tree.root = self.tree.root.children[move]
                     self.tree.root.parent = None
-                if not_found:
-                    self.tree.root = Node()
-                    return False
-                return True
+                if not not_found:
+                    return True
         self.tree.root = Node()
         return False
 
@@ -191,9 +190,9 @@ if __name__ == "__main__":
         model_file='_zero/models/curr_8_8_5.model',
     )
     
-    pure_player = UCT_Player(
+    pure_player = Deep_Player(
         c_puct = 5,
-        iterations = 5000,
+        iterations = 7500,
         temp = .001,
         memory = True,
     )
@@ -202,7 +201,7 @@ if __name__ == "__main__":
     if reset_probs:
         policy_value_fn = lambda s: (uniform_probs(s), net.policy_value_fn_sorted(s)[1])
     
-    curr_player = UCT_Player(
+    curr_player = Deep_Player(
         policy_value_fn = policy_value_fn, 
         c_puct = 5,
         iterations = 600,

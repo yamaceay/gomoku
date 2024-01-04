@@ -3,6 +3,15 @@ import numpy as np
 import random
 import copy
 
+def sortfn(items: list, key: Callable = None, reverse: bool = True) -> list:
+    sorted_args = {}
+    if key is None:
+        sorted_args.update(dict(key=key))
+    sorted_list = sorted(items, **sorted_args)
+    if reverse:
+        sorted_list = reversed(sorted_list)
+    return list(sorted_list)
+
 class Gomoku:
     def __init__(self, M: int = 0, N: int = 0, K: int = 0):
         assert M > 0 and N > 0 and K > 0, "Invalid game parameters: {}, {}, {}".format(M, N, K)
@@ -11,7 +20,6 @@ class Gomoku:
         self.K = K
         
         self.player = 1
-        self.play_only = True
         self.board = np.zeros((self.M, self.N), dtype=np.int8)
         self.last_move = None
         self.history = []
@@ -157,12 +165,3 @@ class Pattern:
             move = (x, y)
             moves += [move]
         return tuple(moves)
-
-def sortfn(items: list, key: Callable = None, reverse: bool = True) -> list:
-    sorted_args = {}
-    if key is None:
-        sorted_args.update(dict(key=key))
-    sorted_list = sorted(items, **sorted_args)
-    if reverse:
-        sorted_list = reversed(sorted_list)
-    return list(sorted_list)

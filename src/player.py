@@ -20,7 +20,7 @@ class Player:
             return action, zip(probs, actions)
         return action
 
-class Dummy_Player(Player):
+class Rand_Player(Player):
     def next_move_probs(self, game: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         actions = game.actions()
         probs = np.random.random(len(actions))

@@ -2,7 +2,7 @@ from .gomoku import Gomoku
 from .player import Player
 from tqdm import tqdm
 import random
-from .mcts import UCT_Player
+from .mcts import Deep_Player
 import numpy as np
 
 def play_game(
@@ -41,7 +41,7 @@ def play_game(
 
 def play_game_for_train(
     game: Gomoku, 
-    player: UCT_Player = None, 
+    player: Deep_Player = None, 
     epsilon: float = .0,
     verbose: bool = False,
     ) -> list[tuple[np.ndarray, np.ndarray, np.ndarray]]:
@@ -78,12 +78,13 @@ def play_game_for_train(
 def play_n_games_for_train(
     game: Gomoku,
     n_games: int = 1, 
-    player: UCT_Player = None,
+    player: Deep_Player = None,
     epsilon: float = .0,
     ) -> list[tuple[str, float]]:
     
     return [
-        play_game_for_train(
+        (state, probs, winner)
+        for state, probs, winner in play_game_for_train(
             game, 
             player=player, 
             epsilon=epsilon

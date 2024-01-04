@@ -11,34 +11,13 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
+from .calc import policy_loss_fn, entropy_fn
 from .gomoku import Gomoku, sortfn
-
 
 def set_learning_rate(optimizer, lr):
     """Sets the learning rate to the given value"""
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
-
-
-def entropy_fn(log_act_probs):
-    return -torch.mean(
-        torch.sum(torch.exp(log_act_probs) * log_act_probs, 1)
-    )
-    
-def policy_loss_fn(mcts_probs, log_act_probs):
-    return -torch.mean(
-        torch.sum(mcts_probs*log_act_probs, 1)
-    )
-    
-def kl_divergence(old_probs, new_probs):
-    return np.mean(
-        np.sum(old_probs * (
-            np.log(old_probs + 1e-10) - np.log(new_probs + 1e-10)
-        ), axis=1)
-    )
-    
-def explained_var(labels, preds):
-    return 1 - np.var(labels - preds) / np.var(labels)
 
 class Net(nn.Module):
     """policy-value network module"""

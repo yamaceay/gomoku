@@ -2,7 +2,6 @@ from .gomoku import Gomoku
 from .data import play_game
 from .player import Player
 from tqdm import tqdm
-import pandas as pd
 
 def competition(
     game: Gomoku,

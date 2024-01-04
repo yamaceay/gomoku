@@ -1,8 +1,7 @@
 import numpy as np
-from .gomoku import Gomoku
+from .gomoku import Gomoku, sortfn
 from typing import Callable
-from .players import Player
-from .patterns import sortfn
+from .player import Player
 from operator import itemgetter
 
 def uniform_probs(state: Gomoku):
@@ -118,6 +117,7 @@ class UCT_Player(Player):
                  policy_value_fn: Callable = None, 
                  c_puct: float = 5, 
                  temp: float = .001,
+                 memory: bool = False,
                  ):
         
         self.noise = dirichlet_noise
@@ -129,26 +129,27 @@ class UCT_Player(Player):
         
         self.temp = temp
         self.history = []
+        self.memory = memory
 
     def update_history(self, state: Gomoku) -> bool:
-        prev_history = self.history
-        self.history = state.get_history()
-        if len(self.history) >= len(prev_history):
-            for h1, h2 in zip(prev_history, self.history):
-                if h1 != h2:
+        prev_history = list(self.history)
+        self.history = list(state.history)
+        if self.memory and len(self.history) and len(self.history) > len(prev_history):
+            if all([h1 == h2 for h1, h2 in zip(prev_history, self.history)]):
+                rest_history = self.history[len(prev_history):]
+                not_found = False
+                for move in rest_history:
+                    if move not in self.tree.root.children:
+                        not_found = True
+                        break
+                    self.tree.root = self.tree.root.children[move]
+                    self.tree.root.parent = None
+                if not_found:
                     self.tree.root = Node()
                     return False
-            rest_history = self.history[len(prev_history):]
-            for move in rest_history:
-                if move not in self.tree.root.children:
-                    self.tree.root = Node()
-                    return False
-                self.tree.root = self.tree.root.children[move]
-                self.tree.root.parent = None
-        else:
-            self.tree.root = Node()
-            return False
-        return True
+                return True
+        self.tree.root = Node()
+        return False
 
     def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         self.update_history(state)
@@ -156,18 +157,7 @@ class UCT_Player(Player):
         move_probs = sortfn(move_probs)
         return move_probs
     
-    def next_move(self, state: Gomoku, epsilon: float = .0, get_probs: bool = False) -> tuple[int, int] | list[tuple[float, tuple[int, int]]]:
-        probs_actions = self.next_move_probs(state)
-        probs, actions = zip(*probs_actions)
-        if epsilon != .0:
-            probs += epsilon * (self.noise(len(probs)) - probs)
-        action_i = np.random.choice(list(range(len(actions))), p=probs)
-        action = actions[action_i]
-        if get_probs:
-            return action, zip(probs, actions)
-        return action
-    
-    def next_move_data(self, state: Gomoku, epsilon: float = .0) -> tuple[int, int, list[tuple[float, tuple[int, int]]]]:
+    def next_move_for_train(self, state: Gomoku, epsilon: float = .0) -> tuple[int, int, list[tuple[float, tuple[int, int]]]]:
         self.update_history(state)
         probs_actions = self.tree.get_move_probs(state, temp=self.temp)
         probs, actions = zip(*sorted(probs_actions, key=itemgetter(1)))
@@ -182,29 +172,30 @@ class UCT_Player(Player):
         return action, probs_dict
     
 if __name__ == "__main__":
-    from .policy_value_net import PolicyValueNet
+    from .net import Policy_Value_Net
     from .gomoku import Gomoku
     
     reset_probs = False
     curr_starts = False
     
     game_kwargs = {
-        'M': 6,
-        'N': 6,
-        'K': 4,
+        'M': 8,
+        'N': 8,
+        'K': 5,
     }
     
     game = Gomoku(**game_kwargs)
     
-    net = PolicyValueNet(
-        game_kwargs['M'], game_kwargs['N'],
-        model_file='_zero/models/curr_6_6_4.model',
+    net = Policy_Value_Net(
+        game_kwargs=game_kwargs,
+        model_file='_zero/models/curr_8_8_5.model',
     )
     
     pure_player = UCT_Player(
         c_puct = 5,
         iterations = 5000,
         temp = .001,
+        memory = True,
     )
     
     policy_value_fn = net.policy_value_fn_sorted
@@ -214,7 +205,7 @@ if __name__ == "__main__":
     curr_player = UCT_Player(
         policy_value_fn = policy_value_fn, 
         c_puct = 5,
-        iterations = 400,
+        iterations = 600,
         temp = .001,
     )
     

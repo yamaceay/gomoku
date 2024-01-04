@@ -1,6 +1,0 @@
-{"first": 250, "second": 500, "avg_win": 0.44, "avg_len": 22.24}
-{"first": 250, "second": 750, "avg_win": 0.32, "avg_len": 20.76}
-{"first": 250, "second": 1000, "avg_win": 0.36, "avg_len": 21.28}
-{"first": 500, "second": 750, "avg_win": 0.52, "avg_len": 21.8}
-{"first": 500, "second": 1000, "avg_win": 0.4, "avg_len": 24.88}
-{"first": 750, "second": 1000, "avg_win": 0.44, "avg_len": 33.68}

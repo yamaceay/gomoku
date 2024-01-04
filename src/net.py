@@ -1,101 +1,164 @@
-import os
+# -*- coding: utf-8 -*-
+"""
+An implementation of the policyValueNet in PyTorch
+Tested in PyTorch 0.2.0 and 0.3.0
+
+@author: Junxiao Song
+"""
+
 import torch
-from .patterns import PB_DICT_5
-import logging
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+import numpy as np
+from .gomoku import Gomoku, sortfn
 
-INPUT_DIM = 2 * (5 * (len(PB_DICT_5) - 1) + 1) + 2 * (2 * len(PB_DICT_5)) + 2
-HIDDEN_DIM = 100
-OUTPUT_DIM = 1
 
-PRE_INPUT_DIM = 128
-PRE_HIDDEN_DIM = 32
-PRE_OUTPUT_DIM = 1
+def set_learning_rate(optimizer, lr):
+    """Sets the learning rate to the given value"""
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
 
-INPUT_CHANNELS = 4
-HIDDEN_CHANNELS = 32
-OUTPUT_CHANNELS = 64
+
+def entropy_fn(log_act_probs):
+    return -torch.mean(
+        torch.sum(torch.exp(log_act_probs) * log_act_probs, 1)
+    )
     
-class Net(torch.nn.Module):
+def policy_loss_fn(mcts_probs, log_act_probs):
+    return -torch.mean(
+        torch.sum(mcts_probs*log_act_probs, 1)
+    )
+    
+def kl_divergence(old_probs, new_probs):
+    return np.mean(
+        np.sum(old_probs * (
+            np.log(old_probs + 1e-10) - np.log(new_probs + 1e-10)
+        ), axis=1)
+    )
+    
+def explained_var(labels, preds):
+    return 1 - np.var(labels - preds) / np.var(labels)
+
+class Net(nn.Module):
+    """policy-value network module"""
+    def __init__(self, board_width, board_height):
+        super(Net, self).__init__()
+
+        self.board_width = board_width
+        self.board_height = board_height
+        # common layers
+        self.conv1 = nn.Conv2d(4, 32, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        # action policy layers
+        self.act_conv1 = nn.Conv2d(128, 4, kernel_size=1)
+        self.act_fc1 = nn.Linear(4*board_width*board_height,
+                                 board_width*board_height)
+        # state value layers
+        self.val_conv1 = nn.Conv2d(128, 2, kernel_size=1)
+        self.val_fc1 = nn.Linear(2*board_width*board_height, 64)
+        self.val_fc2 = nn.Linear(64, 1)
+
+    def forward(self, state_input):
+        # common layers
+        x = F.relu(self.conv1(state_input))
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        # action policy layers
+        x_act = F.relu(self.act_conv1(x))
+        x_act = x_act.view(-1, 4*self.board_width*self.board_height)
+        x_act = F.log_softmax(self.act_fc1(x_act), dim=1)
+        # state value layers
+        x_val = F.relu(self.val_conv1(x))
+        x_val = x_val.view(-1, 2*self.board_width*self.board_height)
+        x_val = F.relu(self.val_fc1(x_val))
+        x_val = F.tanh(self.val_fc2(x_val))
+        return x_act, x_val
+
+
+class Policy_Value_Net():
+    """policy-value network """
     def __init__(self, 
-                 model_path: str = None, 
-                 logger: logging.Logger = logging.getLogger(__name__),
-                 lr: float = 0.1,
-                 **kwargs):
+                 game_kwargs: dict[str, int],
+                 model_file: str = None, 
+                 device: torch.DeviceObjType = torch.device('cpu')):
+        self.device = device
+        self.board_width = game_kwargs['M']
+        self.board_height = game_kwargs['N']
+        self.l2_const = 1e-4  # coef of l2 penalty
+        # the policy value net module
+        self.policy_value_net = Net(self.board_width, self.board_height).to(device)
+        self.optimizer = optim.Adam(self.policy_value_net.parameters(),
+                                    weight_decay=self.l2_const)
 
-        self.model_path = model_path
-        self.logger = logger
-        self.lr = lr
-        
-        super(Net, self).__init__(**kwargs)
-    
-    @staticmethod
-    def device() -> torch.DeviceObjType:
-        if torch.cuda.is_available():
-            return torch.device("cuda")
-        return torch.device("cpu")
-        
-    def compile_model(self, *layers) -> None: 
-        self.model = torch.nn.Sequential(*layers)
-        self.model = self.model.to(self.device())
-        
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
-        
-        self.loss_fn = torch.nn.MSELoss(reduction='mean')
-        
-        try:
-            self.load_model()
-        except Exception as e:
-            self.logger.error(e)
-            self.logger.info('Initializing new model')
-    
-    def forward(self, x) -> torch.Tensor:
-        return self.model(x)
-    
-    def load_model(self, filepath: str = None) -> None:
-        if filepath is None:
-            filepath = self.model_path
-        assert filepath is not None, "Filepath is required"
-        assert os.path.exists(filepath), f"Filepath does not exist: {filepath}"
-        self.model.load_state_dict(torch.load(filepath))
-        
-    def save_model(self, filepath: str) -> None:
-        torch.save(self.model.state_dict(), filepath)
+        if model_file:
+            net_params = torch.load(model_file)
+            self.policy_value_net.load_state_dict(net_params)
 
-class Conv_Net(Net):
-    def __init__(self, M: int, N: int, **kwargs):
-        self.board_size = (M, N)
-        self.input_channels = INPUT_CHANNELS
-        self.hidden_channels = HIDDEN_CHANNELS
-        self.output_channels = OUTPUT_CHANNELS
-        self.output_dim = OUTPUT_DIM
-        
-        super(Conv_Net, self).__init__(**kwargs)
-                
-        self.compile_model(
-            torch.nn.Conv2d(self.input_channels, self.hidden_channels, kernel_size=3, padding=1),
-            torch.nn.BatchNorm2d(self.hidden_channels),
-            torch.nn.ReLU(),
-            torch.nn.MaxPool2d(kernel_size=2, stride=2),
-            torch.nn.Conv2d(self.hidden_channels, self.output_channels, kernel_size=3),
-            torch.nn.BatchNorm2d(self.output_channels),
-            torch.nn.ReLU(),
-            torch.nn.MaxPool2d(kernel_size=2),
-            torch.nn.Flatten(),
-            torch.nn.Linear(self.output_channels, self.output_dim),
-            torch.nn.Tanh(),
-        )
-        
-class Dense_Net(Net):
-    def __init__(self, **kwargs):
-        self.input_dim = INPUT_DIM
-        self.hidden_dim = HIDDEN_DIM
-        self.output_dim = OUTPUT_DIM
-        
-        super(Dense_Net, self).__init__(**kwargs)
-        
-        self.compile_model(
-            torch.nn.Linear(self.input_dim, self.hidden_dim),
-            torch.nn.Tanh(),
-            torch.nn.Linear(self.hidden_dim, self.output_dim),
-            torch.nn.Tanh(),
-        )
+    def policy_value(self, state_batch):
+        """
+        input: a batch of states
+        output: a batch of action probabilities and state values
+        """
+        state_batch = np.ascontiguousarray(state_batch)
+        state_batch = torch.FloatTensor(state_batch).to(self.device)
+        log_act_probs, value = self.policy_value_net(state_batch)
+        act_probs = np.exp(log_act_probs.data.cpu().numpy())
+        return act_probs, value.data.cpu().numpy()
+
+    def policy_value_fn(self, state: Gomoku):
+        """
+        input: board
+        output: a list of (action, probability) tuples for each available
+        action and the score of the board state
+        """
+        actions = sorted(state.actions())
+        legal_positions = [a[0] * state.N + a[1] for a in actions]
+        current_state = np.ascontiguousarray(state.encode().reshape(
+                -1, 4, self.board_width, self.board_height))
+        log_act_probs, value = self.policy_value_net(
+                torch.from_numpy(current_state).to(self.device).float())
+        act_probs = np.exp(log_act_probs.data.cpu().numpy().flatten())
+        act_probs = zip(legal_positions, act_probs[legal_positions])
+        value = value.data[0][0]
+        return act_probs, value
+    
+    def policy_value_fn_sorted(self, state):
+        act_probs, value = self.policy_value_fn(state)
+        act_probs = sortfn([(p, (a // state.N, a % state.N)) for a, p in act_probs])
+        return act_probs, value
+
+    def train_step(self, state_batch, mcts_probs, winner_batch, lr):
+        """perform a training step"""
+        # wrap in Variable
+        state_batch = torch.FloatTensor(np.ascontiguousarray(state_batch)).to(self.device)
+        mcts_probs = torch.FloatTensor(np.ascontiguousarray(mcts_probs)).to(self.device)
+        winner_batch = torch.FloatTensor(np.ascontiguousarray(winner_batch)).to(self.device)
+
+        # zero the parameter gradients
+        self.optimizer.zero_grad()
+        # set learning rate
+        set_learning_rate(self.optimizer, lr)
+
+        # forward
+        log_act_probs, value = self.policy_value_net(state_batch)
+        # define the loss = (z - v)^2 - pi^T * log(p) + c||theta||^2
+        # Note: the L2 penalty is incorporated in optimizer
+        value_loss = F.mse_loss(value.view(-1), winner_batch)
+        policy_loss = policy_loss_fn(mcts_probs, log_act_probs)
+        loss = value_loss + policy_loss
+        # backward and optimize
+        loss.backward()
+        self.optimizer.step()
+        # calc policy entropy, for monitoring only
+        entropy = entropy_fn(log_act_probs)
+        return loss.item(), entropy.item()
+
+    def get_policy_param(self):
+        net_params = self.policy_value_net.state_dict()
+        return net_params
+
+    def save_model(self, model_file: str):
+        net_params = self.get_policy_param()  # get model params
+        torch.save(net_params, model_file)

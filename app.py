@@ -1,9 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from src import Gomoku, \
-    Player, RandomPlayer, \
-    uct_score, UCT_Player, \
-    ADP_Dense_Player, \
-    AlphaZeroPlayer
+    Player, Dummy_Player, \
+    UCT_Player, Policy_Value_Net \
 
 app = Flask(__name__, static_url_path='/static')
 game = None
@@ -24,13 +22,7 @@ adp_kwargs = {
 player: Player = None
 
 players = {
-    '_RANDOM': RandomPlayer(),
-    '_ADP_v1': ADP_Dense_Player(model_path="_dens2/models/epoch_250.h5", game_kwargs=game_kwargs, **adp_kwargs),
-    '_ADP_v2': ADP_Dense_Player(model_path="_dens2/models/epoch_500.h5", game_kwargs=game_kwargs, **adp_kwargs),
-    '_ADP_v3': ADP_Dense_Player(model_path="_dens2/models/epoch_750.h5", game_kwargs=game_kwargs, **adp_kwargs),
-    '_ADP_v4': ADP_Dense_Player(model_path="_dens2/models/epoch_1000.h5", game_kwargs=game_kwargs, **adp_kwargs),
-    '_UCT_100': UCT_Player(iterations=100, policy=uct_score),
-    '_UCT_1k': UCT_Player(iterations=1000, policy=uct_score),
+    '_RANDOM': Dummy_Player(),
     '_ALPHAZERO': AlphaZeroPlayer(game_kwargs=game_kwargs, epsilon=.1),
 }
 

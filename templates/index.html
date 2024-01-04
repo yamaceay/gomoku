@@ -161,25 +161,10 @@
                 <label for="player">Player:</label>
                 <select id="player" name="player">
                     <option value="_RANDOM">_</option>
-                    <option value="_ADP_v1">_ADP_v1</option>
-                    <option value="_ADP_v2">_ADP_v2</option>
-                    <option value="_ADP_v3">_ADP_v3</option>
-                    <option value="_ADP_v4">_ADP_v4</option>
-                    <option value="_UCT_100">_UCT_100</option>
-                    <option value="_UCT_1k">_UCT_1k</option>
                     <option value="_ALPHAZERO">_ALPHAZERO</option>
                 </select>
             </div>
 
-            <div>
-                <label for="you">You:</label>
-                <select id="you" name="you">
-                    <option value="_HUMAN">_HUMAN</option>
-                    <option value="_RANDOM">_RANDOM</option>
-                    <option value="_ADP">_ADP</option>
-                    <option value="_ALPHAZERO">_ALPHAZERO</option>
-                </select>
-            </div>
             <button type="button" onclick="startGame()">Start Game</button>
         </div>
     </form>
@@ -204,7 +189,6 @@
             K = parseInt(document.getElementById('winLength').value);
             ADJ = parseInt(document.getElementById('adj').value);
             player = document.getElementById('player').value;
-            you = document.getElementById('you').value;
 
             // Überprüfen Sie, ob die Werte gültig sind
             if (isNaN(M) || isNaN(N) || isNaN(K) || M <= 0 || N <= 0 || K <= 0) {

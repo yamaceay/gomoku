@@ -3,8 +3,8 @@ import random
 import numpy as np
 from collections import defaultdict, deque
 from .mcts import UCT_Player
-from .policy_value_net import PolicyValueNet, kl_divergence, explained_var
-from .data import collect_self_play_data_zero, extend_play_data, play_until_end
+from .net import Policy_Value_Net, kl_divergence, explained_var
+from .data import play_n_games_for_train, extend_play_data, play_game
 from .gomoku import Gomoku
 import torch
 from tqdm import tqdm
@@ -80,7 +80,7 @@ class TrainPipeline():
         self.playout_num_max = playout_num_max
         self.playout_num_incr = playout_num_incr
         # start training from an initial policy-value net
-        self.policy_value_net = PolicyValueNet(game_kwargs=self.game_kwargs,
+        self.policy_value_net = Policy_Value_Net(game_kwargs=self.game_kwargs,
                                                model_file=init_model,
                                                device=self.device)
         self.mcts_player = UCT_Player(policy_value_fn=self.policy_value_net.policy_value_fn_sorted,
@@ -92,7 +92,7 @@ class TrainPipeline():
         """collect self-play data for training"""
         game = Gomoku(**self.game_kwargs)
         for i in range(n_games):
-            play_data = collect_self_play_data_zero(game, 1, self.mcts_player, self.epsilon)
+            play_data = play_n_games_for_train(game, 1, self.mcts_player, self.epsilon)
             play_data = extend_play_data(play_data)
             self.episode_len = len(play_data) // 8
             self.data_buffer.extend(play_data)
@@ -139,7 +139,7 @@ class TrainPipeline():
         game = Gomoku(**self.game_kwargs)
         avg_curr_starts = .0
         for i in range(n_games):
-            end_game, curr_starts = play_until_end(
+            end_game, curr_starts = play_game(
                 game, 
                 current_mcts_player, 
                 pure_mcts_player)

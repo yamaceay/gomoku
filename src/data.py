@@ -11,6 +11,8 @@ def play_game(
     player2: Player = None,
     epsilon1: float = .0,
     epsilon2: float = .0,
+    fairness: float = .5,
+    verbose: bool = False,
     ) -> tuple[Gomoku, bool]:
     
     if game.fin() or (player1 is None and player2 is None):
@@ -22,20 +24,28 @@ def play_game(
         while not new_game.fin():
             action = player1.next_move(new_game, epsilon=epsilon1)
             new_game.play(action)
+            if verbose:
+                print(new_game)
         return new_game, True    
     
-    player2_starts = random.random() < .5
+    player2_starts = random.random() < fairness
     if player2_starts:
         action = player2.next_move(new_game, epsilon=epsilon2)
         new_game.play(action)
+        if verbose:
+            print(new_game)
     
     while not new_game.fin():
         action = player1.next_move(new_game, epsilon=epsilon1)
         new_game.play(action)
+        if verbose:
+            print(new_game)
         if new_game.fin():
             break
         action = player2.next_move(new_game, epsilon=epsilon2)
         new_game.play(action)
+        if verbose:
+            print(new_game)
 
     return new_game, not player2_starts
 

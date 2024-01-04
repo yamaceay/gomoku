@@ -177,13 +177,9 @@ if __name__ == "__main__":
     reset_probs = False
     curr_starts = False
     
-    game_kwargs = {
-        'M': 8,
-        'N': 8,
-        'K': 5,
-    }
+    game_kwargs = (8, 8, 5)
     
-    game = Gomoku(**game_kwargs)
+    game = Gomoku(*game_kwargs)
     
     net = Policy_Value_Net(
         game_kwargs=game_kwargs,

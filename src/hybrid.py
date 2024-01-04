@@ -68,39 +68,33 @@ class Flat_Player(Player):
         
         return zip(probs, actions)
     
-if __name__ == "__main__":
-    first_starts = False
-    
-    game_kwargs = {
-        'M': 8,
-        'N': 8,
-        'K': 5,
-    }
+if __name__ == "__main__":    
+    game_kwargs = (6, 6, 4)
+
+    model_file = f"_zero/models/curr_{game_kwargs[0]}_{game_kwargs[1]}_{game_kwargs[2]}.model"
+    net = Policy_Value_Net(
+        game_kwargs=game_kwargs, 
+        model_file=model_file,
+    )
+
+    list_iterations = [625, 1250, 2500, 5000]
+    iterations = list_iterations[0]
 
     player1 = UCT_Player(
         c_puct = 5,
-        iterations = 1000,
+        iterations = iterations,
         temp = .001,
     )
 
     player2 = UCT_No_Memory_Player(
         c_puct = 5,
-        iterations = 1000,
+        iterations = iterations,
         temp = .001,
     )
     
-    game = Gomoku(**game_kwargs)
-
-    # net = Policy_Value_Net(
-    #     game_kwargs=game_kwargs, 
-    #     model_file="_zero/models/curr_8_8_5.model",
-    # )
-
-    # curr_player = Flat_Player(
-    #     policy_value_fn = net.policy_value_fn_sorted,
-    #     temp = .001,
-    # )
+    game = Gomoku(*game_kwargs)
     
+    first_starts = True
     if not first_starts:
         action = player2.next_move(game)
         game.play(action)

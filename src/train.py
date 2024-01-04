@@ -12,11 +12,14 @@ from tqdm import tqdm
 import os
 import logging
 
+M, N, K = 8, 8, 5
+game_kwargs = (M, N, K)
+
 DIR = '_zero'
 LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
 MODELS_PATH = os.path.join(DIR, "models")
-CURR_MODEL_PATH = os.path.join(MODELS_PATH, "curr_8_8_5.model")
-BEST_MODEL_PATH = os.path.join(MODELS_PATH, "best_8_8_5.model")
+CURR_MODEL_PATH = os.path.join(MODELS_PATH, f"curr_{M}_{N}_{K}.model")
+BEST_MODEL_PATH = os.path.join(MODELS_PATH, f"best_{M}_{N}_{K}.model")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -26,10 +29,7 @@ file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
 class TrainPipeline():
-    def __init__(self, 
-                 M: int = 8,
-                 N: int = 8,
-                 K: int = 5,
+    def __init__(self,
                  init_model: str = None,
                  lr: float = 2e-3,
                  lr_multiplier: float = .088,
@@ -52,7 +52,7 @@ class TrainPipeline():
                  kl_range: float = 2,
                  ):
         # params of the board and the game
-        self.game_kwargs = {'M': M, 'N': N, 'K': K}
+        self.game_kwargs = game_kwargs
         # training params
         self.lr = lr
         self.lr_multiplier = lr_multiplier  # adaptively adjust the learning rate based on KL
@@ -91,7 +91,7 @@ class TrainPipeline():
 
     def collect_selfplay_data(self, n_games=1):
         """collect self-play data for training"""
-        game = Gomoku(**self.game_kwargs)
+        game = Gomoku(*self.game_kwargs)
         for i in range(n_games):
             play_data = play_n_games_for_train(game, 1, self.mcts_player, self.epsilon)
             play_data = extend_play_data(play_data)
@@ -137,7 +137,7 @@ class TrainPipeline():
                                      iterations=self.pure_mcts_playout_num,
                                      temp=self.temp)
         win_cnt = defaultdict(int)
-        game = Gomoku(**self.game_kwargs)
+        game = Gomoku(*self.game_kwargs)
         avg_curr_starts = .0
         for i in range(n_games):
             end_game, curr_starts = play_game(

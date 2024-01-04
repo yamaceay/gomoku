@@ -59,12 +59,12 @@ class Net(nn.Module):
 class Policy_Value_Net():
     """policy-value network """
     def __init__(self, 
-                 game_kwargs: dict[str, int],
+                 game_kwargs: tuple[int, int, int],
                  model_file: str = None, 
                  device: torch.DeviceObjType = torch.device('cpu')):
         self.device = device
-        self.board_width = game_kwargs['M']
-        self.board_height = game_kwargs['N']
+        self.board_width = game_kwargs[0]
+        self.board_height = game_kwargs[1]
         self.l2_const = 1e-4  # coef of l2 penalty
         # the policy value net module
         self.policy_value_net = Net(self.board_width, self.board_height).to(device)

@@ -13,7 +13,7 @@ def sortfn(items: list, key: Callable = None, reverse: bool = True) -> list:
     return list(sorted_list)
 
 class Gomoku:
-    def __init__(self, M: int = 0, N: int = 0, K: int = 0):
+    def __init__(self, M: int, N: int, K: int):
         assert M > 0 and N > 0 and K > 0, "Invalid game parameters: {}, {}, {}".format(M, N, K)
         self.M = M
         self.N = N

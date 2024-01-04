@@ -6,12 +6,7 @@ from src import Gomoku, \
 app = Flask(__name__, static_url_path='/static')
 game = None
 
-game_kwargs = {
-    'M': 8,
-    'N': 8,
-    'K': 5,
-    'ADJ': 2,
-}
+game_kwargs = (8, 8, 5)
 
 adp_kwargs = {
     'alpha': 0.9,

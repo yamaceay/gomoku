@@ -11,6 +11,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
+
 from .calc import policy_loss_fn, entropy_fn
 from .gomoku import Gomoku, sortfn
 

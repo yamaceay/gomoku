@@ -1,5 +1,6 @@
 from typing import Callable
 import numpy as np
+
 from .net import Policy_Value_Net
 from .gomoku import Gomoku
 from .player import Player

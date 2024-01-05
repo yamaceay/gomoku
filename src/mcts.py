@@ -1,4 +1,5 @@
 import numpy as np
+
 from .gomoku import Gomoku, sortfn
 from typing import Callable
 from .player import Player
@@ -169,53 +170,3 @@ class Deep_Player(Player):
         action = actions[action_i]
         
         return action, probs_dict
-    
-if __name__ == "__main__":
-    from .net import Policy_Value_Net
-    from .gomoku import Gomoku
-    
-    reset_probs = False
-    curr_starts = False
-    
-    game_kwargs = (8, 8, 5)
-    
-    game = Gomoku(*game_kwargs)
-    
-    net = Policy_Value_Net(
-        game_kwargs=game_kwargs,
-        model_file='_zero/models/curr_8_8_5.model',
-    )
-    
-    pure_player = Deep_Player(
-        c_puct = 5,
-        iterations = 7500,
-        temp = .001,
-        memory = True,
-    )
-    
-    policy_value_fn = net.policy_value_fn_sorted
-    if reset_probs:
-        policy_value_fn = lambda s: (uniform_probs(s), net.policy_value_fn_sorted(s)[1])
-    
-    curr_player = Deep_Player(
-        policy_value_fn = policy_value_fn, 
-        c_puct = 5,
-        iterations = 600,
-        temp = .001,
-    )
-    
-    if not curr_starts:
-        action = pure_player.next_move(game)
-        game.play(action)
-        print(game)
-        
-    while not game.fin():
-        action = curr_player.next_move(game)
-        game.play(action)
-        print(game)
-        if game.fin():
-            break
-        action = pure_player.next_move(game)
-        game.play(action)
-        print(game)
-    

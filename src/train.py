@@ -1,6 +1,7 @@
 from __future__ import print_function
 import random
 import numpy as np
+
 from collections import defaultdict, deque
 from .mcts import Deep_Player
 from .net import Policy_Value_Net
@@ -140,7 +141,7 @@ class TrainPipeline():
         game = Gomoku(*self.game_kwargs)
         avg_curr_starts = .0
         for i in range(n_games):
-            end_game, curr_starts = play_game(
+            end_game, curr_starts, _ = play_game(
                 game, 
                 current_mcts_player, 
                 pure_mcts_player)

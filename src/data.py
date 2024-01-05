@@ -4,6 +4,8 @@ from tqdm import tqdm
 import random
 from .mcts import Deep_Player
 import numpy as np
+from time import time
+
 
 def play_game(
     game: Gomoku, 
@@ -13,16 +15,21 @@ def play_game(
     epsilon2: float = .0,
     fairness: float = .5,
     verbose: bool = False,
-    ) -> tuple[Gomoku, bool]:
+    timeline: bool = False,
+    ) -> tuple[Gomoku, bool, list[float]]:
     
     if game.fin() or (player1 is None and player2 is None):
-        return game, True
+        return game, True, []
         
+    time_list = []
     new_game = game.copy()
     
     if player2 is None:
         while not new_game.fin():
+            start = time()
             action = player1.next_move(new_game, epsilon=epsilon1)
+            if timeline:
+                time_list += [time() - start]
             new_game.play(action)
             if verbose:
                 print(new_game)
@@ -30,24 +37,33 @@ def play_game(
     
     player2_starts = random.random() < fairness
     if player2_starts:
+        start = time()
         action = player2.next_move(new_game, epsilon=epsilon2)
+        if timeline:
+            time_list += [time() - start]
         new_game.play(action)
         if verbose:
             print(new_game)
     
     while not new_game.fin():
+        start = time()
         action = player1.next_move(new_game, epsilon=epsilon1)
+        if timeline:
+            time_list += [time() - start]
         new_game.play(action)
         if verbose:
             print(new_game)
         if new_game.fin():
             break
+        start = time()
         action = player2.next_move(new_game, epsilon=epsilon2)
+        if timeline:
+            time_list += [time() - start]
         new_game.play(action)
         if verbose:
             print(new_game)
 
-    return new_game, not player2_starts
+    return new_game, not player2_starts, time_list
 
 def play_game_for_train(
     game: Gomoku, 

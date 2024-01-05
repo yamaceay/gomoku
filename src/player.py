@@ -14,6 +14,9 @@ class Player:
         probs, actions = zip(*probs_actions)
         if epsilon != .0:
             probs += epsilon * (self.noise(len(probs)) - probs)
+
+        probs /= sum(probs)
+        
         action_i = np.random.choice(list(range(len(actions))), p=probs)
         action = actions[action_i]
         if get_probs:

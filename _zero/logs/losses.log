@@ -10817,3 +10817,5 @@
 [2024-01-05 10:34:53,992] kl: 0.02183, lrMultiplier: 0.088, loss: 1.61752, entropy: 1.10808, explVarOld: 0.405, explVarNew: 0.429
 [2024-01-05 10:35:21,412] batch: 672, lenEpisode: 10
 [2024-01-05 10:35:23,242] kl: 0.02822, lrMultiplier: 0.088, loss: 1.50373, entropy: 1.10367, explVarOld: 0.451, explVarNew: 0.501
+[2024-01-05 10:36:09,793] batch: 673, lenEpisode: 17
+[2024-01-05 10:36:11,597] kl: 0.02339, lrMultiplier: 0.088, loss: 1.63531, entropy: 1.12318, explVarOld: 0.422, explVarNew: 0.441

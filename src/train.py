@@ -19,6 +19,7 @@ game_kwargs = (M, N, K)
 DIR = '_zero'
 LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
 MODELS_PATH = os.path.join(DIR, "models")
+BUFFER_PATH = os.path.join(DIR, "data_buffer.npy")
 CURR_MODEL_PATH = os.path.join(MODELS_PATH, f"curr_{M}_{N}_{K}.model")
 BEST_MODEL_PATH = os.path.join(MODELS_PATH, f"best_{M}_{N}_{K}.model")
 
@@ -33,7 +34,7 @@ class TrainPipeline():
     def __init__(self,
                  init_model: str = None,
                  lr: float = 2e-3,
-                 lr_multiplier: float = .044,
+                 lr_multiplier: float = .088,
                  temp: float = .001,
                  epsilon: float = .25,
                  n_playout: int = 600,
@@ -156,6 +157,13 @@ class TrainPipeline():
 
     def run(self):
         """run the training pipeline"""
+        # read buffer if possible
+        with open(BUFFER_PATH, "rb") as f:
+            try:
+                self.data_buffer = deque(np.load(f), maxlen=self.buffer_size)
+            except FileNotFoundError:
+                pass
+        
         try:
             pbar = tqdm(range(self.game_batch_num), position=0, leave=False, desc="Batches")
             for i in pbar:
@@ -200,8 +208,12 @@ class TrainPipeline():
         except KeyboardInterrupt:
             print('\n\rquit')
 
+        # save buffer
+        with open(BUFFER_PATH, "wb") as f:
+            np.save(f, np.array(self.data_buffer))
 
 if __name__ == '__main__':
     training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
     # training_pipeline = TrainPipeline()
     training_pipeline.run()
+

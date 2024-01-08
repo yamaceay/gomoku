@@ -19,7 +19,7 @@ game_kwargs = (M, N, K)
 DIR = '_zero'
 LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
 MODELS_PATH = os.path.join(DIR, "models")
-BUFFER_PATH = os.path.join(DIR, "data_buffer.npy")
+BUFFER_PATH = os.path.join(DIR, "data_buffer.pkl")
 CURR_MODEL_PATH = os.path.join(MODELS_PATH, f"curr_{M}_{N}_{K}.model")
 BEST_MODEL_PATH = os.path.join(MODELS_PATH, f"best_{M}_{N}_{K}.model")
 
@@ -34,7 +34,7 @@ class TrainPipeline():
     def __init__(self,
                  init_model: str = None,
                  lr: float = 2e-3,
-                 lr_multiplier: float = .088,
+                 lr_multiplier: float = 1.,
                  temp: float = .001,
                  epsilon: float = .25,
                  n_playout: int = 600,
@@ -46,11 +46,11 @@ class TrainPipeline():
                  kl_targ: float = 0.02,
                  check_freq: int = 50,
                  game_batch_num: int = 1500,
-                 pure_mcts_playout_num: int = 3000,
+                 pure_mcts_playout_num: int = 1500,
                  playout_num_max: int = 7500,
                  playout_num_incr: int = 1500,
                  lr_step: float = 1.5,
-                 lr_range: float = 10,
+                 lr_range: float = 15,
                  kl_range: float = 2,
                  ):
         # params of the board and the game
@@ -158,11 +158,11 @@ class TrainPipeline():
     def run(self):
         """run the training pipeline"""
         # read buffer if possible
-        with open(BUFFER_PATH, "rb") as f:
-            try:
-                self.data_buffer = deque(np.load(f), maxlen=self.buffer_size)
-            except FileNotFoundError:
-                pass
+        try:
+            with open(BUFFER_PATH, "rb") as f:
+                self.data_buffer = deque(pickle.load(f), maxlen=self.buffer_size)
+        except FileNotFoundError:
+            pass
         
         try:
             pbar = tqdm(range(self.game_batch_num), position=0, leave=False, desc="Batches")
@@ -210,7 +210,7 @@ class TrainPipeline():
 
         # save buffer
         with open(BUFFER_PATH, "wb") as f:
-            np.save(f, np.array(self.data_buffer))
+            pickle.dump(list(self.data_buffer), f)
 
 if __name__ == '__main__':
     training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)

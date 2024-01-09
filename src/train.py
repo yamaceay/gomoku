@@ -12,6 +12,7 @@ import torch
 from tqdm import tqdm
 import os
 import logging
+import pickle 
 
 M, N, K = 8, 8, 5
 game_kwargs = (M, N, K)

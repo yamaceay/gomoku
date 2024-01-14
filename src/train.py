@@ -47,7 +47,7 @@ class TrainPipeline():
                  kl_targ: float = 0.02,
                  check_freq: int = 50,
                  game_batch_num: int = 1500,
-                 pure_mcts_playout_num: int = 1500,
+                 pure_mcts_playout_num: int = 3000,
                  playout_num_max: int = 7500,
                  playout_num_incr: int = 1500,
                  lr_step: float = 1.5,

@@ -214,7 +214,7 @@ class TrainPipeline():
             pickle.dump(list(self.data_buffer), f)
 
 if __name__ == '__main__':
-    # training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
-    training_pipeline = TrainPipeline()
+    training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
+    # training_pipeline = TrainPipeline()
     training_pipeline.run()
 

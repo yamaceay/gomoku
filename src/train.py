@@ -35,7 +35,7 @@ class TrainPipeline():
     def __init__(self,
                  init_model: str = None,
                  lr: float = 2e-3,
-                 lr_multiplier: float = 1,
+                 lr_multiplier: float = .198,
                  temp: float = .001,
                  epsilon: float = .25,
                  n_playout: int = 600,

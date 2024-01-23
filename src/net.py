@@ -109,9 +109,12 @@ class Policy_Value_Net():
         act_probs = sortfn([(p, (a // state.N, a % state.N)) for a, p in act_probs])
         return act_probs, value
 
-    def train_step(self, state_batch, mcts_probs, winner_batch, lr):
+    def train_step(self, batch, lr, gamma: float = 1.0):
         """perform a training step"""
         # wrap in Variable
+        state_batch, mcts_probs, winner_batch, *next_state_batch = batch
+        next_state_given = len(next_state_batch)
+        
         state_batch = torch.FloatTensor(np.ascontiguousarray(state_batch)).to(self.device)
         mcts_probs = torch.FloatTensor(np.ascontiguousarray(mcts_probs)).to(self.device)
         winner_batch = torch.FloatTensor(np.ascontiguousarray(winner_batch)).to(self.device)
@@ -123,6 +126,10 @@ class Policy_Value_Net():
 
         # forward
         log_act_probs, value = self.policy_value_net(state_batch)
+        if next_state_given:
+            next_state_batch = torch.FloatTensor(np.ascontiguousarray(next_state_batch)).to(self.device)
+            _, next_value = self.policy_value_net(next_state_batch)
+            winner_batch += gamma * next_value.item().cpu().numpy()
         # define the loss = (z - v)^2 - pi^T * log(p) + c||theta||^2
         # Note: the L2 penalty is incorporated in optimizer
         value_loss = F.mse_loss(value.view(-1), winner_batch)

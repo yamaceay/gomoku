@@ -70,13 +70,15 @@ def play_game_for_train(
     player: Deep_Player = None, 
     epsilon: float = .0,
     verbose: bool = False,
-    ) -> list[tuple[np.ndarray, np.ndarray, np.ndarray]]:
+    next_state: bool = False,
+    ) -> list[tuple[np.ndarray, np.ndarray, np.ndarray]] | list[tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
     
     if game.fin() or player is None:
         return []
         
     list_states = []
     list_probs = []
+    
     new_game = game.copy()
     
     game_bar = range(game.M * game.N)
@@ -98,6 +100,13 @@ def play_game_for_train(
 
     winner = new_game.score()
     list_winner = np.ones(len(list_probs)) * winner
+    
+    if next_state:
+        list_states += [new_game.encode()]
+        list_probs += [np.zeros_like(list_probs[-1])]
+        list_winner += [0]
+        return zip(list_states[:-1], list_probs, list_winner, list_states[1:])
+    
     return zip(list_states, list_probs, list_winner)  
 
 
@@ -106,14 +115,15 @@ def play_n_games_for_train(
     n_games: int = 1, 
     player: Deep_Player = None,
     epsilon: float = .0,
+    next_state: bool = False,
     ) -> list[tuple[str, float]]:
     
     return [
-        (state, probs, winner)
-        for state, probs, winner in play_game_for_train(
+        args for args in play_game_for_train(
             game, 
             player=player, 
-            epsilon=epsilon
+            epsilon=epsilon,
+            next_state=next_state,
         ) 
         for _ in tqdm(
             range(n_games), 
@@ -125,24 +135,38 @@ def play_n_games_for_train(
     ]
 
 def extend_play_data(
-    play_data: list[tuple[np.ndarray, np.ndarray, np.ndarray]]
-    ) -> list[tuple[np.ndarray, np.ndarray, np.ndarray]]:
+    play_data: list[tuple[np.ndarray, np.ndarray, np.ndarray]] | list[tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]]
+    ) -> list[tuple[np.ndarray, np.ndarray, np.ndarray]] | list[tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
     
     extend_data = []
-    for state, mcts_prob, winner in play_data:
+    next_state_given = False
+    for args in play_data:
+        state, mcts_prob, winner, *next_state = args
+        next_state_given = len(next_state)
+        if next_state_given:
+            next_state = next_state[0]
         _, m, n = state.shape
         for i in range(1, 5):
             # rotate counterclockwise
             equi_state = np.array([np.rot90(s, i) for s in state])
             equi_mcts_prob = np.rot90(np.flipud(
                 mcts_prob.reshape(m, n)), i)
-            extend_data.append((equi_state,
+            extended_play_data = [equi_state,
                                 np.flipud(equi_mcts_prob).flatten(),
-                                winner))
+                                winner]
+            if next_state_given:
+                equi_next_state = np.array([np.rot90(s, i) for s in next_state])
+                extended_play_data.append(equi_next_state)
+            extend_data.append(tuple(extended_play_data))
             # flip horizontally
             equi_state = np.array([np.fliplr(s) for s in equi_state])
             equi_mcts_prob = np.fliplr(equi_mcts_prob)
-            extend_data.append((equi_state,
+            extended_play_data = [equi_state,
                                 np.flipud(equi_mcts_prob).flatten(),
-                                winner))
+                                winner]
+            if next_state_given:
+                equi_next_state = np.array([np.fliplr(s) for s in equi_next_state])
+                extended_play_data.append(equi_next_state)
+            extend_data.append(tuple(extended_play_data))
     return extend_data
+    

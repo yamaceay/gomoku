@@ -53,6 +53,8 @@ class TrainPipeline():
                  lr_step: float = 1.5,
                  lr_range: float = 5,
                  kl_range: float = 2,
+                 next_state: bool = True,
+                 gamma: float = 1.0,
                  ):
         # params of the board and the game
         self.game_kwargs = game_kwargs
@@ -63,6 +65,8 @@ class TrainPipeline():
         self.lr_range = lr_range
         self.temp = temp  # the temperature param
         self.epsilon = epsilon # the epsilon greedy param for self-play policy
+        self.next_state = next_state
+        self.gamma = gamma # discount factor for next state
         self.n_playout = n_playout  # num of simulations for each move
         self.c_puct = c_puct
         self.buffer_size = buffer_size
@@ -96,7 +100,7 @@ class TrainPipeline():
         """collect self-play data for training"""
         game = Gomoku(*self.game_kwargs)
         for i in range(n_games):
-            play_data = play_n_games_for_train(game, 1, self.mcts_player, self.epsilon)
+            play_data = play_n_games_for_train(game, 1, self.mcts_player, self.epsilon, self.next_state)
             play_data = extend_play_data(play_data)
             self.episode_len = len(play_data) // 8
             self.data_buffer.extend(play_data)
@@ -104,13 +108,11 @@ class TrainPipeline():
     def policy_update(self):
         """update the policy-value net"""
         mini_batch = random.sample(self.data_buffer, self.batch_size)
-        state_batch, mcts_probs_batch, winner_batch = map(list, zip(*mini_batch))
+        state_batch, mcts_probs_batch, winner_batch, *next_state_batch = map(list, zip(*mini_batch))
         old_probs, old_v = self.policy_value_net.policy_value(state_batch)
         for i in range(self.epochs):
             loss, entropy = self.policy_value_net.train_step(
-                    state_batch,
-                    mcts_probs_batch,
-                    winner_batch,
+                    (state_batch, mcts_probs_batch, winner_batch, *next_state_batch),
                     self.lr*self.lr_multiplier)
             new_probs, new_v = self.policy_value_net.policy_value(state_batch)
             kl = kl_divergence(old_probs, new_probs)

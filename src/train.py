@@ -21,8 +21,8 @@ DIR = '_zero'
 LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
 MODELS_PATH = os.path.join(DIR, "models")
 BUFFER_PATH = os.path.join(DIR, "data_buffer.pkl")
-CURR_MODEL_PATH = os.path.join(MODELS_PATH, f"curr_{M}_{N}_{K}.model")
-BEST_MODEL_PATH = os.path.join(MODELS_PATH, f"best_{M}_{N}_{K}.model")
+CURR_MODEL_PATH = os.path.join(MODELS_PATH, f"curr_{M}_{N}_{K}.model2")
+BEST_MODEL_PATH = os.path.join(MODELS_PATH, f"best_{M}_{N}_{K}.model2")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -221,7 +221,7 @@ class TrainPipeline():
             pickle.dump(list(self.data_buffer), f)
 
 if __name__ == '__main__':
-    # training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
-    training_pipeline = TrainPipeline()
+    training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
+    # training_pipeline = TrainPipeline()
     training_pipeline.run()
 

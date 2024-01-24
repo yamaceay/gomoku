@@ -105,7 +105,7 @@ def play_game_for_train(
         list_states += [new_game.encode()]
         list_probs += [np.zeros_like(list_probs[-1])]
         list_winner += [0]
-        return zip(list_states[:-1], list_probs, list_winner, list_states[1:])
+        return zip(list(list_states[:-1]), list_probs, list_winner, list(list_states[1:]))
     
     return zip(list_states, list_probs, list_winner)  
 

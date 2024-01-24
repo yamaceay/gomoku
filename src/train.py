@@ -124,8 +124,13 @@ class TrainPipeline():
         elif kl < self.kl_targ / self.kl_range and self.lr_multiplier / self.lr_range < 1:
             self.lr_multiplier *= self.lr_step
         
-        explained_var_old = explained_var(np.array(winner_batch), old_v.flatten())
-        explained_var_new = explained_var(np.array(winner_batch), new_v.flatten())
+        winner_batch = np.array(winner_batch)
+        if self.next_state:
+            _, next_v = self.policy_value_net.policy_value(next_state_batch[0])
+            winner_batch += self.gamma * next_v.flatten()
+        
+        explained_var_old = explained_var(winner_batch, old_v.flatten())
+        explained_var_new = explained_var(winner_batch, new_v.flatten())
             
         return loss, entropy, kl, explained_var_old, explained_var_new
 

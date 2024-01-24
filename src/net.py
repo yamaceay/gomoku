@@ -130,7 +130,7 @@ class Policy_Value_Net():
             next_state_batch = next_state_batch[0]
             next_state_batch = torch.FloatTensor(np.ascontiguousarray(next_state_batch)).to(self.device)
             _, next_value = self.policy_value_net(next_state_batch)
-            winner_batch += gamma * next_value.cpu().numpy()
+            winner_batch += gamma * next_value.detach()
         # define the loss = (z - v)^2 - pi^T * log(p) + c||theta||^2
         # Note: the L2 penalty is incorporated in optimizer
         value_loss = F.mse_loss(value.view(-1), winner_batch)

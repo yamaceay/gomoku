@@ -54,7 +54,7 @@ class TrainPipeline():
                  lr_range: float = 5,
                  kl_range: float = 2,
                  next_state: bool = True,
-                 gamma: float = .9,
+                 gamma: float = .5,
                  ):
         # params of the board and the game
         self.game_kwargs = game_kwargs

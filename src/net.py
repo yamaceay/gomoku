@@ -127,6 +127,7 @@ class Policy_Value_Net():
         # forward
         log_act_probs, value = self.policy_value_net(state_batch)
         if next_state_given:
+            next_state_batch = next_state_batch[0]
             next_state_batch = torch.FloatTensor(np.ascontiguousarray(next_state_batch)).to(self.device)
             _, next_value = self.policy_value_net(next_state_batch)
             winner_batch += gamma * next_value.item().cpu().numpy()

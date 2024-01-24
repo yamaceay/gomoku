@@ -35,7 +35,7 @@ class TrainPipeline():
     def __init__(self,
                  init_model: str = None,
                  lr: float = 2e-3,
-                 lr_multiplier: float = .198,
+                 lr_multiplier: float = 1,
                  temp: float = .001,
                  epsilon: float = .25,
                  n_playout: int = 600,
@@ -47,14 +47,14 @@ class TrainPipeline():
                  kl_targ: float = 0.02,
                  check_freq: int = 50,
                  game_batch_num: int = 1500,
-                 pure_mcts_playout_num: int = 3000,
+                 pure_mcts_playout_num: int = 1500,
                  playout_num_max: int = 7500,
                  playout_num_incr: int = 1500,
                  lr_step: float = 1.5,
                  lr_range: float = 5,
                  kl_range: float = 2,
                  next_state: bool = True,
-                 gamma: float = 1.0,
+                 gamma: float = .9,
                  ):
         # params of the board and the game
         self.game_kwargs = game_kwargs
@@ -216,7 +216,7 @@ class TrainPipeline():
             pickle.dump(list(self.data_buffer), f)
 
 if __name__ == '__main__':
-    training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
-    # training_pipeline = TrainPipeline()
+    # training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
+    training_pipeline = TrainPipeline()
     training_pipeline.run()
 

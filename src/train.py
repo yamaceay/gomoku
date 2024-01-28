@@ -21,8 +21,8 @@ DIR = '_zero'
 LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
 MODELS_PATH = os.path.join(DIR, "models")
 BUFFER_PATH = os.path.join(DIR, "data_buffer.pkl")
-CURR_MODEL_PATH = os.path.join(MODELS_PATH, f"curr_{M}_{N}_{K}.model2")
-BEST_MODEL_PATH = os.path.join(MODELS_PATH, f"best_{M}_{N}_{K}.model2")
+CURR_MODEL_PATH = os.path.join(MODELS_PATH, f"curr_{M}_{N}_{K}.model_p")
+BEST_MODEL_PATH = os.path.join(MODELS_PATH, f"best_{M}_{N}_{K}.model_p")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -110,6 +110,10 @@ class TrainPipeline():
         mini_batch = random.sample(self.data_buffer, self.batch_size)
         state_batch, mcts_probs_batch, winner_batch, *next_state_batch = map(list, zip(*mini_batch))
         old_probs, old_v = self.policy_value_net.policy_value(state_batch)
+        if self.next_state:
+            next_state_batch = next_state_batch[0]
+            _, next_old_v = self.policy_value_net.policy_value(next_state_batch)
+            old_v -= self.gamma * next_old_v
         for i in range(self.epochs):
             loss, entropy = self.policy_value_net.train_step(
                     (state_batch, mcts_probs_batch, winner_batch, *next_state_batch),
@@ -126,9 +130,8 @@ class TrainPipeline():
         
         winner_batch = np.array(winner_batch)
         if self.next_state:
-            _, next_v = self.policy_value_net.policy_value(next_state_batch[0])
-            winner_batch += self.gamma * next_v.flatten()
-        
+            _, next_new_v = self.policy_value_net.policy_value(next_state_batch[0])
+            new_v -= self.gamma * next_new_v
         explained_var_old = explained_var(winner_batch, old_v.flatten())
         explained_var_new = explained_var(winner_batch, new_v.flatten())
             

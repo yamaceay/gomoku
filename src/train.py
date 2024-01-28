@@ -21,8 +21,8 @@ DIR = '_zero'
 LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
 MODELS_PATH = os.path.join(DIR, "models")
 BUFFER_PATH = os.path.join(DIR, "data_buffer.pkl")
-CURR_MODEL_PATH = os.path.join(MODELS_PATH, f"curr_{M}_{N}_{K}.model_p")
-BEST_MODEL_PATH = os.path.join(MODELS_PATH, f"best_{M}_{N}_{K}.model_p")
+CURR_MODEL_PATH = os.path.join(MODELS_PATH, f"curr_{M}_{N}_{K}.model1")
+BEST_MODEL_PATH = os.path.join(MODELS_PATH, f"best_{M}_{N}_{K}.model1")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -53,7 +53,7 @@ class TrainPipeline():
                  lr_step: float = 1.5,
                  lr_range: float = 5,
                  kl_range: float = 2,
-                 next_state: bool = True,
+                 next_state: bool = False,
                  gamma: float = .9,
                  ):
         # params of the board and the game
@@ -132,6 +132,7 @@ class TrainPipeline():
         if self.next_state:
             _, next_new_v = self.policy_value_net.policy_value(next_state_batch[0])
             new_v -= self.gamma * next_new_v
+
         explained_var_old = explained_var(winner_batch, old_v.flatten())
         explained_var_new = explained_var(winner_batch, new_v.flatten())
             

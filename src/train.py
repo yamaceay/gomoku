@@ -14,13 +14,13 @@ import os
 import logging
 import pickle 
 
-M, N, K = 8, 8, 5
+M, N, K = 10, 10, 5
 game_kwargs = (M, N, K)
 
 DIR = '_zero'
-LOSSES_PATH = os.path.join(DIR, "logs/losses.log")
+LOSSES_PATH = os.path.join(DIR, "logs/losses5.log")
 MODELS_PATH = os.path.join(DIR, "models")
-BUFFER_PATH = os.path.join(DIR, "data_buffer.pkl")
+BUFFER_PATH = os.path.join(DIR, "data_buffer5.pkl")
 CURR_MODEL_PATH = os.path.join(MODELS_PATH, f"curr_{M}_{N}_{K}.model1")
 BEST_MODEL_PATH = os.path.join(MODELS_PATH, f"best_{M}_{N}_{K}.model1")
 
@@ -38,7 +38,7 @@ class TrainPipeline():
                  lr_multiplier: float = 1,
                  temp: float = .001,
                  epsilon: float = .25,
-                 n_playout: int = 600,
+                 n_playout: int = 800,
                  c_puct: float = 5,
                  buffer_size: int = 10000,
                  batch_size: int = 512,
@@ -47,9 +47,9 @@ class TrainPipeline():
                  kl_targ: float = 0.02,
                  check_freq: int = 50,
                  game_batch_num: int = 1500,
-                 pure_mcts_playout_num: int = 1500,
-                 playout_num_max: int = 7500,
-                 playout_num_incr: int = 1500,
+                 pure_mcts_playout_num: int = 2000,
+                 playout_num_max: int = 10000,
+                 playout_num_incr: int = 2000,
                  lr_step: float = 1.5,
                  lr_range: float = 5,
                  kl_range: float = 2,
@@ -110,10 +110,9 @@ class TrainPipeline():
         mini_batch = random.sample(self.data_buffer, self.batch_size)
         state_batch, mcts_probs_batch, winner_batch, *next_state_batch = map(list, zip(*mini_batch))
         old_probs, old_v = self.policy_value_net.policy_value(state_batch)
+        next_old_v = np.zeros_like(old_v)
         if self.next_state:
-            next_state_batch = next_state_batch[0]
-            _, next_old_v = self.policy_value_net.policy_value(next_state_batch)
-            old_v -= self.gamma * next_old_v
+            _, next_old_v = self.policy_value_net.policy_value(next_state_batch[0])
         for i in range(self.epochs):
             loss, entropy = self.policy_value_net.train_step(
                     (state_batch, mcts_probs_batch, winner_batch, *next_state_batch),
@@ -129,12 +128,13 @@ class TrainPipeline():
             self.lr_multiplier *= self.lr_step
         
         winner_batch = np.array(winner_batch)
+
+        next_new_v = np.zeros_like(new_v)
         if self.next_state:
             _, next_new_v = self.policy_value_net.policy_value(next_state_batch[0])
-            new_v -= self.gamma * next_new_v
 
-        explained_var_old = explained_var(winner_batch, old_v.flatten())
-        explained_var_new = explained_var(winner_batch, new_v.flatten())
+        explained_var_old = explained_var(winner_batch + next_old_v.flatten(), old_v.flatten())
+        explained_var_new = explained_var(winner_batch + next_new_v.flatten(), new_v.flatten())
             
         return loss, entropy, kl, explained_var_old, explained_var_new
 

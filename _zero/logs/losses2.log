@@ -1,0 +1,26 @@
+[2024-01-29 00:35:59,346] batch: 1, lenEpisode: 25
+[2024-01-29 00:36:45,094] batch: 2, lenEpisode: 30
+[2024-01-29 00:38:04,588] batch: 3, lenEpisode: 64
+[2024-01-29 00:38:07,034] kl: 0.08774, lrMultiplier: 0.667, loss: 4.56516, entropy: 4.13366, explVarOld: 0.000, explVarNew: 0.001
+[2024-01-29 00:38:53,480] batch: 4, lenEpisode: 31
+[2024-01-29 00:38:56,163] kl: 0.04531, lrMultiplier: 0.444, loss: 4.62835, entropy: 4.06765, explVarOld: 0.000, explVarNew: -0.000
+[2024-01-29 00:39:39,973] batch: 5, lenEpisode: 32
+[2024-01-29 00:39:42,604] kl: 0.02519, lrMultiplier: 0.444, loss: 4.60611, entropy: 4.05840, explVarOld: 0.002, explVarNew: 0.002
+[2024-01-29 00:40:48,543] batch: 6, lenEpisode: 47
+[2024-01-29 00:40:51,203] kl: 0.04200, lrMultiplier: 0.296, loss: 4.66463, entropy: 3.89822, explVarOld: 0.004, explVarNew: -0.021
+[2024-01-29 00:41:56,100] batch: 7, lenEpisode: 41
+[2024-01-29 00:41:58,758] kl: 0.01533, lrMultiplier: 0.296, loss: 4.64361, entropy: 3.86390, explVarOld: -0.050, explVarNew: -0.010
+[2024-01-29 00:42:51,072] batch: 8, lenEpisode: 32
+[2024-01-29 00:42:53,757] kl: 0.01354, lrMultiplier: 0.296, loss: 4.60583, entropy: 3.88351, explVarOld: 0.005, explVarNew: 0.001
+[2024-01-29 00:43:59,102] batch: 9, lenEpisode: 42
+[2024-01-29 00:44:01,714] kl: 0.01928, lrMultiplier: 0.296, loss: 4.55293, entropy: 3.77492, explVarOld: -0.001, explVarNew: -0.000
+[2024-01-29 00:44:46,900] batch: 10, lenEpisode: 27
+[2024-01-29 00:44:49,529] kl: 0.02765, lrMultiplier: 0.296, loss: 4.45878, entropy: 3.62189, explVarOld: 0.000, explVarNew: 0.000
+[2024-01-29 00:45:41,513] batch: 11, lenEpisode: 31
+[2024-01-29 00:45:44,168] kl: 0.02846, lrMultiplier: 0.296, loss: 4.44318, entropy: 3.66398, explVarOld: 0.000, explVarNew: 0.000
+[2024-01-29 00:46:41,537] batch: 12, lenEpisode: 36
+[2024-01-29 00:46:44,148] kl: 0.03324, lrMultiplier: 0.296, loss: 4.42211, entropy: 3.54619, explVarOld: -0.000, explVarNew: -0.000
+[2024-01-29 00:47:48,942] batch: 13, lenEpisode: 41
+[2024-01-29 00:47:51,559] kl: 0.03555, lrMultiplier: 0.296, loss: 4.36618, entropy: 3.53093, explVarOld: -0.000, explVarNew: -0.000
+[2024-01-29 00:48:51,783] batch: 14, lenEpisode: 37
+[2024-01-29 00:48:54,389] kl: 0.05124, lrMultiplier: 0.198, loss: 4.33777, entropy: 3.52063, explVarOld: -0.000, explVarNew: -0.000

@@ -72,7 +72,7 @@ class Flat_Player(Player):
 if __name__ == "__main__":    
     game_kwargs = (6, 6, 4)
 
-    model_file = f"_zero/models/curr_{game_kwargs[0]}_{game_kwargs[1]}_{game_kwargs[2]}.model"
+    model_file = f"bin/models/curr_{game_kwargs[0]}_{game_kwargs[1]}_{game_kwargs[2]}.model"
     net = Policy_Value_Net(
         game_kwargs=game_kwargs, 
         model_file=model_file,
@@ -82,13 +82,13 @@ if __name__ == "__main__":
     iterations = list_iterations[0]
 
     player1 = UCT_Player(
-        c_puct = 5,
+        k_ucb = 5,
         iterations = iterations,
         temp = .001,
     )
 
     player2 = UCT_No_Memory_Player(
-        c_puct = 5,
+        k_ucb = 5,
         iterations = iterations,
         temp = .001,
     )

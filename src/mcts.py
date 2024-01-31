@@ -46,12 +46,12 @@ class Tree(object):
     def __init__(self, 
                  iterations: int, 
                  policy_value_fn: Callable = None,
-                 c_puct: float = 5,
+                 k_ucb: float = 5,
                  gamma: float = 1.0,
                  ):
         
         self.root = Node()
-        self.c_puct = c_puct
+        self.k_ucb = k_ucb
         self.iterations = iterations
         self.gamma = gamma
         
@@ -63,7 +63,7 @@ class Tree(object):
     def iterate(self, state: Gomoku):
         node = self.root
         while not node.is_terminal():
-            action, node = node.select(self.c_puct)
+            action, node = node.select(self.k_ucb)
             state.play(action)
         
         player = state.player
@@ -112,7 +112,7 @@ class Deep_Player(Player):
     def __init__(self, 
                  iterations: int, 
                  policy_value_fn: Callable = None, 
-                 c_puct: float = 5, 
+                 k_ucb: float = 5, 
                  temp: float = .001,
                  memory: bool = False,
                  ):
@@ -121,7 +121,7 @@ class Deep_Player(Player):
         self.tree = Tree(
             iterations=iterations,
             policy_value_fn=policy_value_fn,
-            c_puct=c_puct,
+            k_ucb=k_ucb,
         )
         
         self.temp = temp

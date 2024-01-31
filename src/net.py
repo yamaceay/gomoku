@@ -109,7 +109,7 @@ class Policy_Value_Net():
         act_probs = sortfn([(p, (a // state.N, a % state.N)) for a, p in act_probs])
         return act_probs, value
 
-    def train_step(self, batch, lr, gamma: float = 1.0):
+    def fit_one(self, batch, lr, gamma: float = 1.0):
         """perform a training step"""
         # wrap in Variable
         state_batch, mcts_probs, winner_batch, *next_state_batch = batch

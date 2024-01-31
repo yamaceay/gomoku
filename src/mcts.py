@@ -78,7 +78,7 @@ class Tree(object):
         
         self.backpropagate(node, -reward)
     
-    def rollout(self, state: Gomoku):
+    def rollout(self, state: Gomoku) -> float:
         while not state.fin():
             action = state.actions()[0]
             state.play(action)

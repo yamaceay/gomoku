@@ -9,7 +9,11 @@ class Player:
     def next_move_probs(self, game: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         raise NotImplementedError
     
-    def next_move(self, state: Gomoku, epsilon: float = .0, get_probs: bool = False) -> tuple[int, int] | list[tuple[float, tuple[int, int]]]:
+    def next_move(self, 
+                  state: Gomoku, 
+                  epsilon: float = .0, 
+                  get_probs: bool = False) -> tuple[int, int] | list[tuple[float, tuple[int, int]]]:
+        
         probs_actions = self.next_move_probs(state)
         probs, actions = zip(*probs_actions)
         if epsilon != .0:

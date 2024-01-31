@@ -116,7 +116,7 @@ def play_n_games_for_train(
     player: Deep_Player = None,
     epsilon: float = .0,
     next_state: bool = False,
-    ) -> list[tuple[str, float]]:
+    ) -> list[tuple[np.ndarray, np.ndarray, np.ndarray]] | list[tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
     
     return [
         args for args in play_game_for_train(
@@ -147,7 +147,6 @@ def extend_play_data(
             next_state = next_state[0]
         _, m, n = state.shape
         for i in range(1, 5):
-            # rotate counterclockwise
             equi_state = np.array([np.rot90(s, i) for s in state])
             equi_mcts_prob = np.rot90(np.flipud(
                 mcts_prob.reshape(m, n)), i)
@@ -158,7 +157,7 @@ def extend_play_data(
                 equi_next_state = np.array([np.rot90(s, i) for s in next_state])
                 extended_play_data.append(equi_next_state)
             extend_data.append(tuple(extended_play_data))
-            # flip horizontally
+            
             equi_state = np.array([np.fliplr(s) for s in equi_state])
             equi_mcts_prob = np.fliplr(equi_mcts_prob)
             extended_play_data = [equi_state,

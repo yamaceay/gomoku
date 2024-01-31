@@ -59,7 +59,7 @@ class Flat_Player(Player):
         self.policy_value_fn = policy_value_fn
         self.temp = temp
         
-    def next_move_probs(self, state: Gomoku):
+    def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:
         probs_actions, _ = self.policy_value_fn(state) 
         probs, actions = zip(*probs_actions)
         probs = np.array(probs) 

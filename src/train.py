@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-from collections import defaultdict, deque
+from collections import deque
 from .mcts import Deep_Player
 from .net import Policy_Value_Net
 from .calc import kl_divergence, explained_var
@@ -29,7 +29,7 @@ file_handler = logging.FileHandler(LOSSES_PATH)
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
-class TrainPipeline():
+class Trainer():
     def __init__(self,
                  model_file: str = None,
                  
@@ -40,8 +40,8 @@ class TrainPipeline():
                  
                  n_batches: int = 1500, # S: 1500, M: 1500, L: 1000
                  batch_size: int = 512,
-                 n_games_per_batch: int = 1,
                  r_checkpoint: int = 50,
+                 n_eval_games: int = 10,
                  n_epochs: int = 5,
                  buffer_size: int = 10000,
                  
@@ -76,8 +76,8 @@ class TrainPipeline():
         
         self.n_batches = n_batches
         self.batch_size = batch_size
-        self.n_games_per_batch = n_games_per_batch
         self.n_epochs = n_epochs
+        self.n_eval_games = n_eval_games
         self.r_checkpoint = r_checkpoint
         self.buffer_size = buffer_size
         self.data_buffer = deque(maxlen=self.buffer_size)
@@ -97,20 +97,7 @@ class TrainPipeline():
                                     model_file=self.model_file,
                                     device=self.device)
 
-    def collect_selfplay_data(self, n_games=1):
-        zero = Deep_Player(policy_value_fn=self.net.policy_value_fn_sorted,
-                                          iterations=self.n_zero,
-                                          k_ucb=self.k_ucb,
-                                          temp=self.temp)
-        
-        game = Gomoku(*self.game_kwargs)
-        for i in range(n_games):
-            play_data = play_n_games_for_train(game, 1, zero, self.epsilon, self.next_state)
-            play_data = extend_play_data(play_data)
-            self.episode_len = len(play_data) // 8
-            self.data_buffer.extend(play_data)
-
-    def fit(self):
+    def fit(self) -> tuple[float, float, float, float, float]:
         mini_batch = random.sample(self.data_buffer, self.batch_size)
         state_batch, mcts_probs_batch, winner_batch, *next_state_batch = map(list, zip(*mini_batch))
         old_probs, old_v = self.net.policy_value(state_batch)
@@ -137,7 +124,7 @@ class TrainPipeline():
             
         return loss, entropy, kl, expl_var, expl_var_diff
 
-    def test(self, n_games=10):
+    def test(self) -> tuple[float, list[int], float]:
         zero = Deep_Player(policy_value_fn=self.net.policy_value_fn_sorted,
                            k_ucb=self.k_ucb,
                            iterations=self.n_zero,
@@ -148,7 +135,7 @@ class TrainPipeline():
         outcomes = [0, 0, 0] # tie, win, lose
         game = Gomoku(*self.game_kwargs)
         avg_curr_starts = .0
-        for i in range(n_games):
+        for _ in range(self.n_eval_games):
             end_game, curr_starts, _ = play_game(game, zero, uct)
             winner = end_game.score()
             if not curr_starts:
@@ -156,8 +143,8 @@ class TrainPipeline():
             outcomes[winner] += 1
             avg_curr_starts += curr_starts
         win_ratio = outcomes[1] + outcomes[0] / 2 
-        win_ratio /= n_games
-        avg_curr_starts /= n_games
+        win_ratio /= self.n_eval_games
+        avg_curr_starts /= self.n_eval_games
         return win_ratio, outcomes, avg_curr_starts
 
     def train(self):
@@ -170,7 +157,20 @@ class TrainPipeline():
         try:
             pbar = tqdm(range(self.n_batches), position=0, leave=False, desc="Batches")
             for i in pbar:
-                self.collect_selfplay_data(self.n_games_per_batch)
+                zero = Deep_Player(policy_value_fn=self.net.policy_value_fn_sorted,
+                                   iterations=self.n_zero,
+                                   k_ucb=self.k_ucb,
+                                   temp=self.temp)
+                game = Gomoku(*self.game_kwargs)
+                play_data = play_n_games_for_train(game=game,
+                                                   player=zero, 
+                                                   epsilon=self.epsilon, 
+                                                   next_state=self.next_state)
+                
+                play_data = extend_play_data(play_data)
+                self.episode_len = len(play_data) // 8
+                self.data_buffer.extend(play_data)
+                
                 logger.info(f"batch: {i+1}, len_episode: {self.episode_len}")
                 if len(self.data_buffer) > self.batch_size:
                     loss, entropy, kl, expl_var, d_expl_var = self.fit()
@@ -185,8 +185,6 @@ class TrainPipeline():
                     pbar.set_postfix(fit_results)
                     logger.info(", ".join([f"{k}: {v}" for k, v in fit_results.items()]))
                 
-                # check the performance of the current model,
-                # and save the model params
                 if (i+1) % self.r_checkpoint == 0:
                     logger.info(f"eval_batch: {i+1}")
                     win_ratio, outcomes, avg_curr_starts = self.test()
@@ -201,6 +199,7 @@ class TrainPipeline():
                         "tie": f"{outcomes[0]}",
                         "first_turn_rate": f"{avg_curr_starts:.3f}",
                     }
+                    pbar.set_postfix(test_results)
                     logger.info(", ".join([f"{k}: {v}" for k, v in test_results.items()]))
                     
                     if win_ratio > self.best_win_ratio:
@@ -218,12 +217,11 @@ class TrainPipeline():
         except KeyboardInterrupt:
             print('\n\rStopped')
 
-        # save buffer
         with open(BUFFER_PATH, "wb") as f:
             pickle.dump(list(self.data_buffer), f)
 
 if __name__ == '__main__':
-    # training_pipeline = TrainPipeline(init_model=CURR_MODEL_PATH)
-    training_pipeline = TrainPipeline()
-    training_pipeline.train()
+    # trainer = Trainer(init_model=CURR_MODEL_PATH)
+    trainer = Trainer()
+    trainer.train()
 

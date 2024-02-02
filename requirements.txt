@@ -1,4 +1,10 @@
-Flask==3.0.0
-numpy==1.24.3
-torch==2.0.0
-tqdm==4.64.1
+# all
+numpy
+tqdm
+scikit-learn
+torch
+
+# stats.ipynb only
+pandas
+matplotlib
+seaborn

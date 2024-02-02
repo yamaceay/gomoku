@@ -22,6 +22,15 @@ BUFFER_PATH = os.path.join(DIR, f"buf_{game_kwargs_str}.pkl")
 CURR_MODEL_PATH = os.path.join(DIR, f"models/curr_{game_kwargs_str}.model")
 BEST_MODEL_PATH = os.path.join(DIR, f"models/best_{game_kwargs_str}.model")
 
+TRAIN_ARGS = {
+    "6_6_4": dict(n_zero = 400, n_uct = 1000, n_uct_step = 1000, n_uct_max = 5000, n_batches = 1500),
+    "8_8_5": dict(n_zero = 500, n_uct = 1500, n_uct_step = 1500, n_uct_max = 6000, n_batches = 1500),
+    "10_10_5": dict(n_zero = 600, n_uct = 2000, n_uct_step = 2000, n_uct_max = 6000, n_batches = 1000),
+}
+
+assert game_kwargs_str in TRAIN_ARGS, f"stringified game kwargs must be in {list(TRAIN_ARGS.keys())}"
+train_kwargs = TRAIN_ARGS[game_kwargs_str]
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter('[%(asctime)s] %(message)s')
@@ -33,12 +42,12 @@ class Trainer():
     def __init__(self,
                  model_file: str = None,
                  
-                 n_zero: int = 400, # S: 400, M: 500, L: 600
-                 n_uct: int = 1000, # S: 1000, M: 1500, L: 2000
-                 n_uct_step: int = 1000, # S: 1000, M: 1500, L: 2000
-                 n_uct_max: int = 5000, # S: 5000, M: 7500, L: 10000
+                 n_zero: int = train_kwargs["n_zero"],
+                 n_uct: int = train_kwargs["n_uct"],
+                 n_uct_step: int = train_kwargs["n_uct_step"],
+                 n_uct_max: int = train_kwargs["n_uct_max"],
                  
-                 n_batches: int = 1500, # S: 1500, M: 1500, L: 1000
+                 n_batches: int = train_kwargs["n_batches"],
                  batch_size: int = 512,
                  r_checkpoint: int = 50,
                  n_eval_games: int = 10,
@@ -56,7 +65,7 @@ class Trainer():
                  epsilon: float = .25,
                  temp: float = .001,
                  k_ucb: float = 5,
-                 gamma: float = .9,
+                 gamma: float = .0,
                  ):
     
         self.game_kwargs = game_kwargs
@@ -80,7 +89,7 @@ class Trainer():
         self.n_eval_games = n_eval_games
         self.r_checkpoint = r_checkpoint
         self.buffer_size = buffer_size
-        self.data_buffer = deque(maxlen=self.buffer_size)
+        self.cache = deque(maxlen=self.buffer_size)
         
         self.lr = lr
         self.lr_multiplier = lr_multiplier
@@ -98,7 +107,7 @@ class Trainer():
                                     device=self.device)
 
     def fit(self) -> tuple[float, float, float, float, float]:
-        mini_batch = random.sample(self.data_buffer, self.batch_size)
+        mini_batch = random.sample(self.cache, self.batch_size)
         state_batch, mcts_probs_batch, winner_batch, *next_state_batch = map(list, zip(*mini_batch))
         old_probs, old_v = self.net.policy_value(state_batch)
         for _ in range(self.n_epochs):
@@ -150,7 +159,7 @@ class Trainer():
     def train(self):
         try:
             with open(BUFFER_PATH, "rb") as f:
-                self.data_buffer = deque(pickle.load(f), maxlen=self.buffer_size)
+                self.cache = deque(pickle.load(f), maxlen=self.buffer_size)
         except FileNotFoundError:
             pass
         
@@ -169,10 +178,10 @@ class Trainer():
                 
                 play_data = extend_play_data(play_data)
                 self.episode_len = len(play_data) // 8
-                self.data_buffer.extend(play_data)
+                self.cache.extend(play_data)
                 
                 logger.info(f"batch: {i+1}, len_episode: {self.episode_len}")
-                if len(self.data_buffer) > self.batch_size:
+                if len(self.cache) > self.batch_size:
                     loss, entropy, kl, expl_var, d_expl_var = self.fit()
                     fit_results = {
                         "kl": f"{kl:.5f}",
@@ -218,7 +227,7 @@ class Trainer():
             print('\n\rStopped')
 
         with open(BUFFER_PATH, "wb") as f:
-            pickle.dump(list(self.data_buffer), f)
+            pickle.dump(list(self.cache), f)
 
 if __name__ == '__main__':
     # trainer = Trainer(init_model=CURR_MODEL_PATH)

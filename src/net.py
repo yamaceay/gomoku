@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
+from torchsummary import summary
+from torchviz import make_dot
 import numpy as np
 
 from .calc import policy_loss_fn, entropy_fn
@@ -23,7 +25,7 @@ class CNN(nn.Module):
             nn.ReLU()
         )
 
-        self.act_layers = nn.Sequential(
+        self.policy_layers = nn.Sequential(
             nn.Conv2d(128, 4, kernel_size=1),
             nn.ReLU(),
             nn.Flatten(),
@@ -31,7 +33,7 @@ class CNN(nn.Module):
             nn.LogSoftmax(dim=1)
         )
 
-        self.val_layers = nn.Sequential(
+        self.value_layers = nn.Sequential(
             nn.Conv2d(128, 2, kernel_size=1),
             nn.ReLU(),
             nn.Flatten(),
@@ -43,9 +45,9 @@ class CNN(nn.Module):
 
     def forward(self, state_input: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         x = self.conv_layers(state_input)
-        x_act = self.act_layers(x)
-        x_val = self.val_layers(x)
-        return x_act, x_val
+        x_policy = self.policy_layers(x)
+        x_value = self.value_layers(x)
+        return x_policy, x_value
 
 class Zero_Net():
     def __init__(self, 
@@ -123,3 +125,16 @@ class Zero_Net():
     def save_model(self, model_file: str):
         net_params = self.cnn.state_dict()
         torch.save(net_params, model_file)
+
+if __name__ == '__main__':
+
+    (M, N, K) = (8, 8, 5)
+    net = CNN(M, N)
+    summary(net, (4, M, N))
+    x = torch.rand(1, 4, M, N)
+    
+    # torch.onnx.export(net, x, f"out/{M}_{N}_{K}/cnn.onnx")
+    
+    graph = make_dot(net(x), params=dict(net.named_parameters()))
+    graph.render(f"out/{M}_{N}_{K}/cnn", format="png")
+    

@@ -59,7 +59,8 @@ class Trainer():
                  weight_decay: float = .0001,
                  
                  epsilon: float = .25,
-                 temp: float = .001,
+                 temp: float = 1,
+                 cooldown: float = .99,
                  k_ucb: float = 5,
                  gamma: float = .0,
                  ):
@@ -73,7 +74,9 @@ class Trainer():
         self.n_uct_step = n_uct_step
         self.n_uct_max = n_uct_max
         
+        self.cooldown = cooldown
         self.temp = temp
+        self.temp_init = temp
         self.epsilon = epsilon
         self.gamma = gamma
         self.k_ucb = k_ucb
@@ -105,20 +108,20 @@ class Trainer():
     def fit(self) -> tuple[float, float, float, float, float]:
         mini_batch = random.sample(self.cache, self.batch_size)
         states, policies, rewards, *next_states = map(list, zip(*mini_batch))
-        old_probs, old_v = self.net.forward_batch(states)
+        old_policy, old_value = self.net.forward_batch(states)
         
         kl = .0
         for _ in range(self.n_epochs):
             batch = (states, policies, rewards, *next_states)
             loss, entropy = self.net.fit_one(batch, self.gamma)
-            new_probs, new_v = self.net.forward_batch(states)
-            kl += kl_divergence(old_probs, new_probs)
+            new_policy, new_value = self.net.forward_batch(states)
+            kl += kl_divergence(old_policy, new_policy)
         kl /= self.n_epochs
         
         rewards = np.array(rewards)
 
-        expl_var_prev = explained_var(rewards, old_v.flatten())
-        expl_var = explained_var(rewards, new_v.flatten())
+        expl_var_prev = explained_var(rewards, old_value.reshape(-1))
+        expl_var = explained_var(rewards, new_value.reshape(-1))
         
         self.scheduler.step(kl)
         self.lr = self.scheduler.get_last_lr()[0]
@@ -182,6 +185,7 @@ class Trainer():
                         "kl": f"{kl:.5f}",
                         "lr": f"{self.lr:.6f}",
                         "loss": f"{loss:.5f}",
+                        "temp": f"{self.temp:.5f}",
                         "entropy": f"{entropy:.5f}",
                         "expl_var": f"{expl_var:.3f}",
                         "d_expl_var": f"{d_expl_var:.3f}",
@@ -217,7 +221,8 @@ class Trainer():
                     elif win_ratio <= 1 - self.perfect_win_ratio and self.n_uct > self.n_uct_step:
                         self.n_uct -= self.n_uct_step
                         self.best_win_ratio = 0.0
-                            
+                self.temp *= self.cooldown
+                
         except KeyboardInterrupt:
             print('\n\rStopped')
 

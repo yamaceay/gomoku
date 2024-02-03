@@ -61,51 +61,51 @@ class Policy_Value_Net():
         self.optimizer = optim.Adam(self.cnn.parameters(), **opt_args)
 
         if model_file:
-            net_params = torch.load(model_file)
-            self.cnn.load_state_dict(net_params)
+            self.load_model(model_file)
 
     def forward(self, state_batch: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
         state_batch = self.torch_batch(state_batch)
         log_act_probs, value = self.cnn(state_batch)
-        act_probs = np.exp(log_act_probs.data.cpu().numpy())
-        return act_probs, value.detach().cpu().numpy()
+        log_act_probs, value = log_act_probs.detach(), value.detach()
+        act_probs = np.exp(log_act_probs.cpu().numpy())
+        return act_probs, value.cpu().numpy()
 
-    def policy_value_fn(self, state: Gomoku) -> tuple[list[tuple[float, int]], float]:
+    def policy_value(self, state: Gomoku) -> tuple[list[tuple[float, int]], float]:
         actions = sorted(state.actions())
         legal_positions = [a[0] * state.N + a[1] for a in actions]
-        current_state = state.encode().reshape(
+        curr_state = state.encode().reshape(
                 -1, 4, self.M, self.N)
-        current_state = self.torch_batch(current_state)
-        log_act_probs, value = self.cnn(current_state)
-        act_probs = np.exp(log_act_probs.detach().cpu().numpy().flatten())
+        curr_state = self.torch_batch(curr_state)
+        log_act_probs, value = self.cnn(curr_state)
+        log_act_probs, value = log_act_probs.detach(), value.detach()
+        act_probs = np.exp(log_act_probs.cpu().numpy().flatten())
         act_probs = zip(legal_positions, act_probs[legal_positions])
-        value = value.detach()[0][0]
-        return act_probs, value
+        return act_probs, value[0][0]
     
-    def policy_value_fn_sorted(self, state: Gomoku) -> tuple[list[tuple[float, tuple[int, int]]], float]:
-        act_probs, value = self.policy_value_fn(state)
+    def predict(self, state: Gomoku) -> tuple[list[tuple[float, tuple[int, int]]], float]:
+        with torch.no_grad():
+            act_probs, value = self.policy_value(state)
         act_probs = sortfn([(p, (a // state.N, a % state.N)) for a, p in act_probs])
         return act_probs, value
 
     def fit_one(self, batch: list, gamma: float = 1.0) -> tuple[float, float]:
-        state_batch, mcts_probs, winner_batch, *next_state_batch = batch
-        next_state_given = len(next_state_batch)
+        states, policies, rewards, *next_states = batch
+        next_state_given = len(next_states)
         
-        state_batch = self.torch_batch(state_batch)
-        mcts_probs = self.torch_batch(mcts_probs)
-        winner_batch = self.torch_batch(winner_batch)
+        states = self.torch_batch(states)
+        policies = self.torch_batch(policies)
+        rewards = self.torch_batch(rewards)
 
         self.optimizer.zero_grad()
 
-        log_act_probs, value = self.cnn(state_batch)
+        log_act_probs, value = self.cnn(states)
         if next_state_given:
-            next_state_batch = next_state_batch[0]
-            next_state_batch = self.torch_batch(next_state_batch)
-            _, next_value = self.cnn(next_state_batch)
-            winner_batch += gamma * next_value.view(-1).detach()
+            next_states = self.torch_batch(next_states[0])
+            _, next_value = self.cnn(next_states)
+            rewards += gamma * next_value.view(-1).detach()
 
-        value_loss = F.mse_loss(value.view(-1), winner_batch)
-        policy_loss = policy_loss_fn(mcts_probs, log_act_probs)
+        value_loss = F.mse_loss(value.view(-1), rewards)
+        policy_loss = policy_loss_fn(policies, log_act_probs)
         loss = value_loss + policy_loss
         loss.backward()
         self.optimizer.step()
@@ -115,6 +115,10 @@ class Policy_Value_Net():
     
     def torch_batch(self, batch: np.ndarray) -> torch.Tensor:
         return torch.FloatTensor(np.ascontiguousarray(batch)).to(self.device)
+
+    def load_model(self, model_file: str):
+        net_params = torch.load(model_file)
+        self.cnn.load_state_dict(net_params)
 
     def save_model(self, model_file: str):
         net_params = self.cnn.state_dict()

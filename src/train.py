@@ -103,30 +103,30 @@ class Trainer():
 
     def fit(self) -> tuple[float, float, float, float, float]:
         mini_batch = random.sample(self.cache, self.batch_size)
-        state_batch, mcts_probs_batch, winner_batch, *next_state_batch = map(list, zip(*mini_batch))
-        old_probs, old_v = self.net.forward(state_batch)
+        states, policies, rewards, *next_states = map(list, zip(*mini_batch))
+        old_probs, old_v = self.net.forward(states)
         
         kl = .0
         for _ in range(self.n_epochs):
-            batch = (state_batch, mcts_probs_batch, winner_batch, *next_state_batch)
+            batch = (states, policies, rewards, *next_states)
             loss, entropy = self.net.fit_one(batch, self.gamma)
-            new_probs, new_v = self.net.forward(state_batch)
+            new_probs, new_v = self.net.forward(states)
             kl += kl_divergence(old_probs, new_probs)
         kl /= self.n_epochs
         self.scheduler.step(kl)
         self.lr = self.scheduler.get_last_lr()[0]
         
-        winner_batch = np.array(winner_batch)
+        rewards = np.array(rewards)
 
-        expl_var_prev = explained_var(winner_batch, old_v.flatten())
-        expl_var = explained_var(winner_batch, new_v.flatten())
+        expl_var_prev = explained_var(rewards, old_v.flatten())
+        expl_var = explained_var(rewards, new_v.flatten())
         
         expl_var_diff = expl_var - expl_var_prev
             
         return loss, entropy, kl, expl_var, expl_var_diff
 
     def test(self) -> tuple[float, list[int], float]:
-        zero = Deep_Player(policy_value_fn=self.net.policy_value_fn_sorted,
+        zero = Deep_Player(policy_value_fn=self.net.predict,
                            k_ucb=self.k_ucb,
                            iterations=self.n_zero,
                            temp=self.temp)
@@ -158,7 +158,7 @@ class Trainer():
         try:
             pbar = tqdm(range(self.n_batches), position=0, leave=False, desc="Batches")
             for i in pbar:
-                zero = Deep_Player(policy_value_fn=self.net.policy_value_fn_sorted,
+                zero = Deep_Player(policy_value_fn=self.net.predict,
                                    iterations=self.n_zero,
                                    k_ucb=self.k_ucb,
                                    temp=self.temp)

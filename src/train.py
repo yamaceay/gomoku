@@ -60,6 +60,7 @@ class Trainer():
                  
                  epsilon: float = .25,
                  temp: float = 1,
+                 temp_min: float = .0001,
                  cooldown: float = .99,
                  k_ucb: float = 5,
                  gamma: float = .0,
@@ -77,6 +78,7 @@ class Trainer():
         self.cooldown = cooldown
         self.temp = temp
         self.temp_init = temp
+        self.temp_min = temp_min
         self.epsilon = epsilon
         self.gamma = gamma
         self.k_ucb = k_ucb
@@ -221,7 +223,8 @@ class Trainer():
                     elif win_ratio <= 1 - self.perfect_win_ratio and self.n_uct > self.n_uct_step:
                         self.n_uct -= self.n_uct_step
                         self.best_win_ratio = 0.0
-                self.temp *= self.cooldown
+                if self.temp > self.temp_min:
+                    self.temp *= self.cooldown
                 
         except KeyboardInterrupt:
             print('\n\rStopped')

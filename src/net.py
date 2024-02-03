@@ -47,7 +47,7 @@ class CNN(nn.Module):
         x_val = self.val_layers(x)
         return x_act, x_val
 
-class Policy_Value_Net():
+class Zero_Net():
     def __init__(self, 
                  game_kwargs: tuple[int, int, int],
                  model_file: str = None, 
@@ -63,14 +63,14 @@ class Policy_Value_Net():
         if model_file:
             self.load_model(model_file)
 
-    def forward(self, state_batch: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
+    def forward_batch(self, state_batch: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
         state_batch = self.torch_batch(state_batch)
         log_act_probs, value = self.cnn(state_batch)
         log_act_probs, value = log_act_probs.detach(), value.detach()
         act_probs = np.exp(log_act_probs.cpu().numpy())
         return act_probs, value.cpu().numpy()
 
-    def policy_value(self, state: Gomoku) -> tuple[list[tuple[float, int]], float]:
+    def forward(self, state: Gomoku) -> tuple[list[tuple[float, int]], float]:
         actions = sorted(state.actions())
         legal_positions = [a[0] * state.N + a[1] for a in actions]
         curr_state = state.encode().reshape(
@@ -84,7 +84,7 @@ class Policy_Value_Net():
     
     def predict(self, state: Gomoku) -> tuple[list[tuple[float, tuple[int, int]]], float]:
         with torch.no_grad():
-            act_probs, value = self.policy_value(state)
+            act_probs, value = self.forward(state)
         act_probs = sortfn([(p, (a // state.N, a % state.N)) for a, p in act_probs])
         return act_probs, value
 

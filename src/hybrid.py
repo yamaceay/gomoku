@@ -1,7 +1,7 @@
 from typing import Callable
 import numpy as np
 
-from .net import Policy_Value_Net
+from .net import Zero_Net
 from .gomoku import Gomoku
 from .player import Player
 from .calc import softmax
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     game_kwargs = (6, 6, 4)
 
     model_file = f"bin/models/curr_{game_kwargs[0]}_{game_kwargs[1]}_{game_kwargs[2]}.model"
-    net = Policy_Value_Net(
+    net = Zero_Net(
         game_kwargs=game_kwargs, 
         model_file=model_file,
     )

@@ -1,11 +1,11 @@
 import random
 import numpy as np
 from collections import deque
-from skrl.resources.schedulers.torch import KLAdaptiveLR
 import torch
 
 from .mcts import Deep_Player
-from .net import Policy_Value_Net
+from .net import Zero_Net
+from skrl.resources.schedulers.torch import KLAdaptiveLR
 from .calc import kl_divergence, explained_var
 from .data import play_n_games_for_train, extend_play_data, play_game
 from .gomoku import Gomoku
@@ -94,32 +94,34 @@ class Trainer():
         self.best_win_ratio = 0.0
         self.perfect_win_ratio = 1.0
 
-        self.net = Policy_Value_Net(game_kwargs=self.game_kwargs,
-                                    model_file=self.model_file,
-                                    device=self.device,
-                                    opt_args=dict(lr=self.lr, weight_decay=self.weight_decay))
+        self.net = Zero_Net(game_kwargs=self.game_kwargs,
+                            model_file=self.model_file,
+                            device=self.device,
+                            opt_args=dict(lr=self.lr, weight_decay=self.weight_decay))
         
         self.scheduler = KLAdaptiveLR(self.net.optimizer)
+        # self.scheduler = torch.optim.lr_scheduler.StepLR(self.net.optimizer, step_size=100, gamma=0.9)
 
     def fit(self) -> tuple[float, float, float, float, float]:
         mini_batch = random.sample(self.cache, self.batch_size)
         states, policies, rewards, *next_states = map(list, zip(*mini_batch))
-        old_probs, old_v = self.net.forward(states)
+        old_probs, old_v = self.net.forward_batch(states)
         
         kl = .0
         for _ in range(self.n_epochs):
             batch = (states, policies, rewards, *next_states)
             loss, entropy = self.net.fit_one(batch, self.gamma)
-            new_probs, new_v = self.net.forward(states)
+            new_probs, new_v = self.net.forward_batch(states)
             kl += kl_divergence(old_probs, new_probs)
         kl /= self.n_epochs
-        self.scheduler.step(kl)
-        self.lr = self.scheduler.get_last_lr()[0]
         
         rewards = np.array(rewards)
 
         expl_var_prev = explained_var(rewards, old_v.flatten())
         expl_var = explained_var(rewards, new_v.flatten())
+        
+        self.scheduler.step(kl)
+        self.lr = self.scheduler.get_last_lr()[0]
         
         expl_var_diff = expl_var - expl_var_prev
             

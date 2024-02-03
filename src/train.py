@@ -17,10 +17,10 @@ game_kwargs = (M, N, K) = 6, 6, 4
 game_kwargs_str = f"{M}_{N}_{K}"
 
 DIR = 'bin'
-LOSSES_PATH = os.path.join(DIR, f"logs/{game_kwargs_str}.log")
-BUFFER_PATH = os.path.join(DIR, f"buf_{game_kwargs_str}.pkl")
-CURR_MODEL_PATH = os.path.join(DIR, f"models/curr_{game_kwargs_str}.model")
-BEST_MODEL_PATH = os.path.join(DIR, f"models/best_{game_kwargs_str}.model")
+LOSSES_PATH = os.path.join(DIR, f"logs/{game_kwargs_str}_x.log")
+BUFFER_PATH = os.path.join(DIR, f"buf_{game_kwargs_str}_x.pkl")
+CURR_MODEL_PATH = os.path.join(DIR, f"models/curr_{game_kwargs_str}_x.model")
+BEST_MODEL_PATH = os.path.join(DIR, f"models/best_{game_kwargs_str}_x.model")
 
 TRAIN_ARGS = {
     "6_6_4": dict(n_zero = 400, n_uct = 1000, n_uct_step = 1000, n_uct_max = 5000, n_batches = 1500),

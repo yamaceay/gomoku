@@ -11,37 +11,76 @@ def set_learning_rate(optimizer: torch.optim.Optimizer, lr: float):
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
-class Net(nn.Module):
-    def __init__(self, board_width: int, board_height: int):
-        super(Net, self).__init__()
+# class CNN(nn.Module):
+#     def __init__(self, M: int, N: int):
+#         super().__init__()
 
-        self.board_width = board_width
-        self.board_height = board_height
+#         self.M = M
+#         self.N = N
+
+#         self.conv_layers = nn.Sequential(
+#             nn.Conv2d(4, 32, kernel_size=3, padding=1),
+#             nn.ReLU(),
+#             nn.Conv2d(32, 64, kernel_size=3, padding=1),
+#             nn.ReLU(),
+#             nn.Conv2d(64, 128, kernel_size=3, padding=1),
+#             nn.ReLU()
+#         )
+
+#         self.act_layers = nn.Sequential(
+#             nn.Conv2d(128, 4, kernel_size=1),
+#             nn.ReLU(),
+#             nn.Flatten(),
+#             nn.Linear(4*self.M*self.N, self.M*self.N),
+#             nn.LogSoftmax(dim=1)
+#         )
+
+#         self.val_layers = nn.Sequential(
+#             nn.Conv2d(128, 2, kernel_size=1),
+#             nn.ReLU(),
+#             nn.Flatten(),
+#             nn.Linear(2*self.M*self.N, 64),
+#             nn.ReLU(),
+#             nn.Linear(64, 1),
+#             nn.Tanh()
+#         )
+
+#     def forward(self, state_input: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+#         x = self.conv_layers(state_input)
+#         x_act = self.act_layers(x)
+#         x_val = self.val_layers(x)
+#         return x_act, x_val
+
+class CNN(nn.Module):
+    def __init__(self, M: int, N: int):
+        super(CNN, self).__init__()
+
+        self.M = M
+        self.N = N
         
         self.conv1 = nn.Conv2d(4, 32, kernel_size=3, padding=1)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
         self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
         
         self.act_conv1 = nn.Conv2d(128, 4, kernel_size=1)
-        self.act_fc1 = nn.Linear(4*board_width*board_height,
-                                 board_width*board_height)
+        self.act_fc1 = nn.Linear(4*self.M*self.N,
+                                 self.M*self.N)
 
         self.val_conv1 = nn.Conv2d(128, 2, kernel_size=1)
-        self.val_fc1 = nn.Linear(2*board_width*board_height, 64)
+        self.val_fc1 = nn.Linear(2*self.M*self.N, 64)
         self.val_fc2 = nn.Linear(64, 1)
 
     def forward(self, state_input: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-
         x = F.relu(self.conv1(state_input))
         x = F.relu(self.conv2(x))
         x = F.relu(self.conv3(x))
 
         x_act = F.relu(self.act_conv1(x))
-        x_act = x_act.view(-1, 4*self.board_width*self.board_height)
+        x_act = x_act.view(-1, 4*self.M*self.N)
         x_act = F.log_softmax(self.act_fc1(x_act), dim=1)
 
         x_val = F.relu(self.val_conv1(x))
-        x_val = x_val.view(-1, 2*self.board_width*self.board_height)
+        x_val = x_val.view(-1, 2*self.M*self.N)
         x_val = F.relu(self.val_fc1(x_val))
         x_val = F.tanh(self.val_fc2(x_val))
         return x_act, x_val
@@ -52,11 +91,11 @@ class Policy_Value_Net():
                  model_file: str = None, 
                  device: torch.DeviceObjType = torch.device('cpu')):
         self.device = device
-        self.board_width = game_kwargs[0]
-        self.board_height = game_kwargs[1]
+        self.M = game_kwargs[0]
+        self.N = game_kwargs[1]
         self.l2_const = 1e-4
 
-        self.policy_value_net = Net(self.board_width, self.board_height).to(device)
+        self.policy_value_net = CNN(self.M, self.N).to(device)
         self.optimizer = optim.Adam(self.policy_value_net.parameters(),
                                     weight_decay=self.l2_const)
 
@@ -75,7 +114,7 @@ class Policy_Value_Net():
         actions = sorted(state.actions())
         legal_positions = [a[0] * state.N + a[1] for a in actions]
         current_state = np.ascontiguousarray(state.encode().reshape(
-                -1, 4, self.board_width, self.board_height))
+                -1, 4, self.M, self.N))
         log_act_probs, value = self.policy_value_net(
                 torch.from_numpy(current_state).to(self.device).float())
         act_probs = np.exp(log_act_probs.data.cpu().numpy().flatten())

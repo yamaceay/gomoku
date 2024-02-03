@@ -1,10 +1,4 @@
-# all
-numpy
-tqdm
-scikit-learn
-torch
-
-# stats.ipynb only
-pandas
-matplotlib
-seaborn
+numpy==1.26.3
+skrl==1.0.0
+torch==2.2.0
+tqdm==4.66.1

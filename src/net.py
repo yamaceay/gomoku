@@ -7,10 +7,6 @@ import numpy as np
 from .calc import policy_loss_fn, entropy_fn
 from .gomoku import Gomoku, sortfn
 
-def set_learning_rate(optimizer: optim.Optimizer, lr: float):
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
-
 class CNN(nn.Module):
     def __init__(self, M: int, N: int):
         super().__init__()
@@ -92,7 +88,7 @@ class Policy_Value_Net():
         act_probs = sortfn([(p, (a // state.N, a % state.N)) for a, p in act_probs])
         return act_probs, value
 
-    def fit_one(self, batch: list, lr: float, gamma: float = 1.0) -> tuple[float, float]:
+    def fit_one(self, batch: list, gamma: float = 1.0) -> tuple[float, float]:
         state_batch, mcts_probs, winner_batch, *next_state_batch = batch
         next_state_given = len(next_state_batch)
         
@@ -101,7 +97,6 @@ class Policy_Value_Net():
         winner_batch = torch.FloatTensor(np.ascontiguousarray(winner_batch)).to(self.device)
 
         self.optimizer.zero_grad()
-        set_learning_rate(self.optimizer, lr)
 
         log_act_probs, value = self.cnn(state_batch)
         if next_state_given:

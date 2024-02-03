@@ -1,13 +1,14 @@
 import random
 import numpy as np
-
 from collections import deque
+from skrl.resources.schedulers.torch import KLAdaptiveLR
+import torch
+
 from .mcts import Deep_Player
 from .net import Policy_Value_Net
 from .calc import kl_divergence, explained_var
 from .data import play_n_games_for_train, extend_play_data, play_game
 from .gomoku import Gomoku
-import torch
 from tqdm import tqdm
 import os
 import logging
@@ -55,13 +56,7 @@ class Trainer():
                  buffer_size: int = 10000,
                  
                  lr: float = .002,
-                 lr_multiplier: float = 1,
-                 lr_step: float = 1.5,
-                 lr_range: float = 5,
                  weight_decay: float = .0001,
-                 
-                 kl_targ: float = 0.02,
-                 kl_range: float = 2,
                  
                  epsilon: float = .25,
                  temp: float = .001,
@@ -92,14 +87,9 @@ class Trainer():
         self.buffer_size = buffer_size
         self.cache = deque(maxlen=self.buffer_size)
         
+        self.lr_init = lr
         self.lr = lr
-        self.lr_multiplier = lr_multiplier
-        self.lr_step = lr_step
-        self.lr_range = lr_range
         self.weight_decay = weight_decay
-        
-        self.kl_targ = kl_targ
-        self.kl_range = kl_range
         
         self.best_win_ratio = 0.0
         self.perfect_win_ratio = 1.0
@@ -108,23 +98,23 @@ class Trainer():
                                     model_file=self.model_file,
                                     device=self.device,
                                     opt_args=dict(lr=self.lr, weight_decay=self.weight_decay))
+        
+        self.scheduler = KLAdaptiveLR(self.net.optimizer)
 
     def fit(self) -> tuple[float, float, float, float, float]:
         mini_batch = random.sample(self.cache, self.batch_size)
         state_batch, mcts_probs_batch, winner_batch, *next_state_batch = map(list, zip(*mini_batch))
         old_probs, old_v = self.net.forward(state_batch)
+        
+        kl = .0
         for _ in range(self.n_epochs):
             batch = (state_batch, mcts_probs_batch, winner_batch, *next_state_batch)
-            loss, entropy = self.net.fit_one(batch, self.lr*self.lr_multiplier, self.gamma)
+            loss, entropy = self.net.fit_one(batch, self.gamma)
             new_probs, new_v = self.net.forward(state_batch)
-            kl = kl_divergence(old_probs, new_probs)
-            if kl > 2 * self.kl_targ * self.kl_range:
-                break
-
-        if kl > self.kl_targ * self.kl_range and self.lr_multiplier * self.lr_range > 1:
-            self.lr_multiplier /= self.lr_step
-        elif kl < self.kl_targ / self.kl_range and self.lr_multiplier / self.lr_range < 1:
-            self.lr_multiplier *= self.lr_step
+            kl += kl_divergence(old_probs, new_probs)
+        kl /= self.n_epochs
+        self.scheduler.step(kl)
+        self.lr = self.scheduler.get_last_lr()[0]
         
         winner_batch = np.array(winner_batch)
 
@@ -173,21 +163,22 @@ class Trainer():
                                    k_ucb=self.k_ucb,
                                    temp=self.temp)
                 game = Gomoku(*self.game_kwargs)
+                
                 play_data = play_n_games_for_train(game=game,
-                                                   player=zero, 
-                                                   epsilon=self.epsilon, 
-                                                   next_state=self.next_state)
+                                   player=zero, 
+                                   epsilon=self.epsilon, 
+                                   next_state=self.next_state)
                 
                 play_data = extend_play_data(play_data)
-                self.episode_len = len(play_data) // 8
+                episode_len = len(play_data) // 8
                 self.cache.extend(play_data)
                 
-                logger.info(f"batch: {i+1}, len_episode: {self.episode_len}")
+                logger.info(f"batch: {i+1}, len_episode: {episode_len}")
                 if len(self.cache) > self.batch_size:
                     loss, entropy, kl, expl_var, d_expl_var = self.fit()
                     fit_results = {
                         "kl": f"{kl:.5f}",
-                        "lr": f"{self.lr * self.lr_multiplier:.6f}",
+                        "lr": f"{self.lr:.6f}",
                         "loss": f"{loss:.5f}",
                         "entropy": f"{entropy:.5f}",
                         "expl_var": f"{expl_var:.3f}",

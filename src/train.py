@@ -58,6 +58,7 @@ class Trainer():
                  lr_multiplier: float = 1,
                  lr_step: float = 1.5,
                  lr_range: float = 5,
+                 weight_decay: float = .0001,
                  
                  kl_targ: float = 0.02,
                  kl_range: float = 2,
@@ -79,7 +80,7 @@ class Trainer():
         
         self.temp = temp
         self.epsilon = epsilon
-        self.gamma = gamma 
+        self.gamma = gamma
         self.k_ucb = k_ucb
         self.next_state = gamma > 0
         
@@ -95,6 +96,7 @@ class Trainer():
         self.lr_multiplier = lr_multiplier
         self.lr_step = lr_step
         self.lr_range = lr_range
+        self.weight_decay = weight_decay
         
         self.kl_targ = kl_targ
         self.kl_range = kl_range
@@ -104,17 +106,17 @@ class Trainer():
 
         self.net = Policy_Value_Net(game_kwargs=self.game_kwargs,
                                     model_file=self.model_file,
-                                    device=self.device)
+                                    device=self.device,
+                                    opt_args=dict(lr=self.lr, weight_decay=self.weight_decay))
 
     def fit(self) -> tuple[float, float, float, float, float]:
         mini_batch = random.sample(self.cache, self.batch_size)
         state_batch, mcts_probs_batch, winner_batch, *next_state_batch = map(list, zip(*mini_batch))
-        old_probs, old_v = self.net.policy_value(state_batch)
+        old_probs, old_v = self.net.forward(state_batch)
         for _ in range(self.n_epochs):
-            loss, entropy = self.net.fit_one(
-                    (state_batch, mcts_probs_batch, winner_batch, *next_state_batch),
-                    self.lr*self.lr_multiplier, self.gamma)
-            new_probs, new_v = self.net.policy_value(state_batch)
+            batch = (state_batch, mcts_probs_batch, winner_batch, *next_state_batch)
+            loss, entropy = self.net.fit_one(batch, self.lr*self.lr_multiplier, self.gamma)
+            new_probs, new_v = self.net.forward(state_batch)
             kl = kl_divergence(old_probs, new_probs)
             if kl > 2 * self.kl_targ * self.kl_range:
                 break

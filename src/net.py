@@ -7,106 +7,71 @@ import numpy as np
 from .calc import policy_loss_fn, entropy_fn
 from .gomoku import Gomoku, sortfn
 
-def set_learning_rate(optimizer: torch.optim.Optimizer, lr: float):
+def set_learning_rate(optimizer: optim.Optimizer, lr: float):
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
-# class CNN(nn.Module):
-#     def __init__(self, M: int, N: int):
-#         super().__init__()
-
-#         self.M = M
-#         self.N = N
-
-#         self.conv_layers = nn.Sequential(
-#             nn.Conv2d(4, 32, kernel_size=3, padding=1),
-#             nn.ReLU(),
-#             nn.Conv2d(32, 64, kernel_size=3, padding=1),
-#             nn.ReLU(),
-#             nn.Conv2d(64, 128, kernel_size=3, padding=1),
-#             nn.ReLU()
-#         )
-
-#         self.act_layers = nn.Sequential(
-#             nn.Conv2d(128, 4, kernel_size=1),
-#             nn.ReLU(),
-#             nn.Flatten(),
-#             nn.Linear(4*self.M*self.N, self.M*self.N),
-#             nn.LogSoftmax(dim=1)
-#         )
-
-#         self.val_layers = nn.Sequential(
-#             nn.Conv2d(128, 2, kernel_size=1),
-#             nn.ReLU(),
-#             nn.Flatten(),
-#             nn.Linear(2*self.M*self.N, 64),
-#             nn.ReLU(),
-#             nn.Linear(64, 1),
-#             nn.Tanh()
-#         )
-
-#     def forward(self, state_input: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-#         x = self.conv_layers(state_input)
-#         x_act = self.act_layers(x)
-#         x_val = self.val_layers(x)
-#         return x_act, x_val
-
 class CNN(nn.Module):
     def __init__(self, M: int, N: int):
-        super(CNN, self).__init__()
+        super().__init__()
 
         self.M = M
         self.N = N
-        
-        self.conv1 = nn.Conv2d(4, 32, kernel_size=3, padding=1)
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
-        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
-        
-        self.act_conv1 = nn.Conv2d(128, 4, kernel_size=1)
-        self.act_fc1 = nn.Linear(4*self.M*self.N,
-                                 self.M*self.N)
 
-        self.val_conv1 = nn.Conv2d(128, 2, kernel_size=1)
-        self.val_fc1 = nn.Linear(2*self.M*self.N, 64)
-        self.val_fc2 = nn.Linear(64, 1)
+        self.conv_layers = nn.Sequential(
+            nn.Conv2d(4, 32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(32, 64, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.ReLU()
+        )
+
+        self.act_layers = nn.Sequential(
+            nn.Conv2d(128, 4, kernel_size=1),
+            nn.ReLU(),
+            nn.Flatten(),
+            nn.Linear(4*self.M*self.N, self.M*self.N),
+            nn.LogSoftmax(dim=1)
+        )
+
+        self.val_layers = nn.Sequential(
+            nn.Conv2d(128, 2, kernel_size=1),
+            nn.ReLU(),
+            nn.Flatten(),
+            nn.Linear(2*self.M*self.N, 64),
+            nn.ReLU(),
+            nn.Linear(64, 1),
+            nn.Tanh()
+        )
 
     def forward(self, state_input: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-        x = F.relu(self.conv1(state_input))
-        x = F.relu(self.conv2(x))
-        x = F.relu(self.conv3(x))
-
-        x_act = F.relu(self.act_conv1(x))
-        x_act = x_act.view(-1, 4*self.M*self.N)
-        x_act = F.log_softmax(self.act_fc1(x_act), dim=1)
-
-        x_val = F.relu(self.val_conv1(x))
-        x_val = x_val.view(-1, 2*self.M*self.N)
-        x_val = F.relu(self.val_fc1(x_val))
-        x_val = F.tanh(self.val_fc2(x_val))
+        x = self.conv_layers(state_input)
+        x_act = self.act_layers(x)
+        x_val = self.val_layers(x)
         return x_act, x_val
 
 class Policy_Value_Net():
     def __init__(self, 
                  game_kwargs: tuple[int, int, int],
                  model_file: str = None, 
-                 device: torch.DeviceObjType = torch.device('cpu')):
+                 device: torch.DeviceObjType = torch.device('cpu'),
+                 opt_args: dict = {}):
         self.device = device
-        self.M = game_kwargs[0]
-        self.N = game_kwargs[1]
-        self.l2_const = 1e-4
+        self.M, self.N, _ = game_kwargs
+        self.opt_args = opt_args
 
-        self.policy_value_net = CNN(self.M, self.N).to(device)
-        self.optimizer = optim.Adam(self.policy_value_net.parameters(),
-                                    weight_decay=self.l2_const)
+        self.cnn = CNN(self.M, self.N).to(device)
+        self.optimizer = optim.Adam(self.cnn.parameters(), **opt_args)
 
         if model_file:
             net_params = torch.load(model_file)
-            self.policy_value_net.load_state_dict(net_params)
+            self.cnn.load_state_dict(net_params)
 
-    def policy_value(self, state_batch: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
+    def forward(self, state_batch: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
         state_batch = np.ascontiguousarray(state_batch)
         state_batch = torch.FloatTensor(state_batch).to(self.device)
-        log_act_probs, value = self.policy_value_net(state_batch)
+        log_act_probs, value = self.cnn(state_batch)
         act_probs = np.exp(log_act_probs.data.cpu().numpy())
         return act_probs, value.data.cpu().numpy()
 
@@ -115,7 +80,7 @@ class Policy_Value_Net():
         legal_positions = [a[0] * state.N + a[1] for a in actions]
         current_state = np.ascontiguousarray(state.encode().reshape(
                 -1, 4, self.M, self.N))
-        log_act_probs, value = self.policy_value_net(
+        log_act_probs, value = self.cnn(
                 torch.from_numpy(current_state).to(self.device).float())
         act_probs = np.exp(log_act_probs.data.cpu().numpy().flatten())
         act_probs = zip(legal_positions, act_probs[legal_positions])
@@ -138,11 +103,11 @@ class Policy_Value_Net():
         self.optimizer.zero_grad()
         set_learning_rate(self.optimizer, lr)
 
-        log_act_probs, value = self.policy_value_net(state_batch)
+        log_act_probs, value = self.cnn(state_batch)
         if next_state_given:
             next_state_batch = next_state_batch[0]
             next_state_batch = torch.FloatTensor(np.ascontiguousarray(next_state_batch)).to(self.device)
-            _, next_value = self.policy_value_net(next_state_batch)
+            _, next_value = self.cnn(next_state_batch)
             winner_batch += gamma * next_value.view(-1).detach()
 
         value_loss = F.mse_loss(value.view(-1), winner_batch)
@@ -155,7 +120,7 @@ class Policy_Value_Net():
         return loss.item(), entropy.item()
 
     def get_policy_param(self) -> dict:
-        net_params = self.policy_value_net.state_dict()
+        net_params = self.cnn.state_dict()
         return net_params
 
     def save_model(self, model_file: str):

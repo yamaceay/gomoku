@@ -65,22 +65,21 @@ class Policy_Value_Net():
             self.cnn.load_state_dict(net_params)
 
     def forward(self, state_batch: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
-        state_batch = np.ascontiguousarray(state_batch)
-        state_batch = torch.FloatTensor(state_batch).to(self.device)
+        state_batch = self.torch_batch(state_batch)
         log_act_probs, value = self.cnn(state_batch)
         act_probs = np.exp(log_act_probs.data.cpu().numpy())
-        return act_probs, value.data.cpu().numpy()
+        return act_probs, value.detach().cpu().numpy()
 
     def policy_value_fn(self, state: Gomoku) -> tuple[list[tuple[float, int]], float]:
         actions = sorted(state.actions())
         legal_positions = [a[0] * state.N + a[1] for a in actions]
-        current_state = np.ascontiguousarray(state.encode().reshape(
-                -1, 4, self.M, self.N))
-        log_act_probs, value = self.cnn(
-                torch.from_numpy(current_state).to(self.device).float())
-        act_probs = np.exp(log_act_probs.data.cpu().numpy().flatten())
+        current_state = state.encode().reshape(
+                -1, 4, self.M, self.N)
+        current_state = self.torch_batch(current_state)
+        log_act_probs, value = self.cnn(current_state)
+        act_probs = np.exp(log_act_probs.detach().cpu().numpy().flatten())
         act_probs = zip(legal_positions, act_probs[legal_positions])
-        value = value.data[0][0]
+        value = value.detach()[0][0]
         return act_probs, value
     
     def policy_value_fn_sorted(self, state: Gomoku) -> tuple[list[tuple[float, tuple[int, int]]], float]:
@@ -92,16 +91,16 @@ class Policy_Value_Net():
         state_batch, mcts_probs, winner_batch, *next_state_batch = batch
         next_state_given = len(next_state_batch)
         
-        state_batch = torch.FloatTensor(np.ascontiguousarray(state_batch)).to(self.device)
-        mcts_probs = torch.FloatTensor(np.ascontiguousarray(mcts_probs)).to(self.device)
-        winner_batch = torch.FloatTensor(np.ascontiguousarray(winner_batch)).to(self.device)
+        state_batch = self.torch_batch(state_batch)
+        mcts_probs = self.torch_batch(mcts_probs)
+        winner_batch = self.torch_batch(winner_batch)
 
         self.optimizer.zero_grad()
 
         log_act_probs, value = self.cnn(state_batch)
         if next_state_given:
             next_state_batch = next_state_batch[0]
-            next_state_batch = torch.FloatTensor(np.ascontiguousarray(next_state_batch)).to(self.device)
+            next_state_batch = self.torch_batch(next_state_batch)
             _, next_value = self.cnn(next_state_batch)
             winner_batch += gamma * next_value.view(-1).detach()
 
@@ -113,11 +112,10 @@ class Policy_Value_Net():
 
         entropy = entropy_fn(log_act_probs)
         return loss.item(), entropy.item()
-
-    def get_policy_param(self) -> dict:
-        net_params = self.cnn.state_dict()
-        return net_params
+    
+    def torch_batch(self, batch: np.ndarray) -> torch.Tensor:
+        return torch.FloatTensor(np.ascontiguousarray(batch)).to(self.device)
 
     def save_model(self, model_file: str):
-        net_params = self.get_policy_param()
+        net_params = self.cnn.state_dict()
         torch.save(net_params, model_file)

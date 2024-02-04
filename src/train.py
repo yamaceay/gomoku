@@ -105,7 +105,6 @@ class Trainer():
                             opt_args=dict(lr=self.lr, weight_decay=self.weight_decay))
         
         self.scheduler = KLAdaptiveLR(self.net.optimizer)
-        # self.scheduler = torch.optim.lr_scheduler.StepLR(self.net.optimizer, step_size=100, gamma=0.9)
 
     def fit(self) -> tuple[float, float, float, float, float]:
         mini_batch = random.sample(self.cache, self.batch_size)
@@ -133,13 +132,17 @@ class Trainer():
         return loss, entropy, kl, expl_var, expl_var_diff
 
     def test(self) -> tuple[float, list[int], float]:
-        zero = Deep_Player(policy_value_fn=self.net.predict,
-                           k_ucb=self.k_ucb,
-                           iterations=self.n_zero,
-                           temp=self.temp)
-        uct = Deep_Player(k_ucb=self.k_ucb,
-                          iterations=self.n_uct,
-                          temp=self.temp)
+        zero = Deep_Player(
+            self.n_zero,
+            policy_value_fn=self.net.predict,
+            k_ucb=self.k_ucb,
+            temp=self.temp
+        )
+        uct = Deep_Player(self.n_uct,
+            k_ucb=self.k_ucb,
+            temp=self.temp_min # note that temp_min is used here
+        )
+        
         outcomes = [0, 0, 0] # tie, win, lose
         game = Gomoku(*self.game_kwargs)
         avg_curr_starts = .0

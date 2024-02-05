@@ -133,8 +133,6 @@ if __name__ == '__main__':
     summary(net, (4, M, N))
     x = torch.rand(1, 4, M, N)
     
-    # torch.onnx.export(net, x, f"out/{M}_{N}_{K}/cnn.onnx")
-    
     graph = make_dot(net(x), params=dict(net.named_parameters()))
     graph.render(f"out/{M}_{N}_{K}/cnn", format="png")
     

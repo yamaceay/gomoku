@@ -128,7 +128,7 @@ class Deep_Player(Player):
         self.history = []
         self.memory = memory
 
-    def update_history(self, state: Gomoku) -> bool:
+    def reuse_tree(self, state: Gomoku) -> bool:
         prev_history = list(self.history)
         self.history = list(state.history)
         if self.memory and len(self.history) > len(prev_history):
@@ -152,13 +152,13 @@ class Deep_Player(Player):
         return False
 
     def next_move_probs(self, state: Gomoku) -> list[tuple[float, tuple[int, int]]]:
-        self.update_history(state)
+        self.reuse_tree(state)
         move_probs = self.tree.get_move_probs(state, temp=self.temp)
         move_probs = sortfn(move_probs)
         return move_probs
     
     def next_move_for_train(self, state: Gomoku, epsilon: float = .0) -> tuple[int, int, list[tuple[float, tuple[int, int]]]]:
-        self.update_history(state)
+        self.reuse_tree(state)
         probs_actions = self.tree.get_move_probs(state, temp=self.temp)
         probs, actions = zip(*sorted(probs_actions, key=itemgetter(1)))
         action_indices = [a[0] * state.N + a[1] for a in actions]

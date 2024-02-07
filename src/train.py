@@ -14,7 +14,7 @@ import os
 import logging
 import pickle 
 
-game_kwargs = (M, N, K) = 10, 10, 5
+game_kwargs = (M, N, K) = 6, 6, 4
 game_kwargs_str = f"{M}_{N}_{K}"
 
 TRAIN_ARGS = {
@@ -26,7 +26,7 @@ TRAIN_ARGS = {
 assert game_kwargs_str in TRAIN_ARGS, f"stringified game kwargs must be in {list(TRAIN_ARGS.keys())}"
 train_kwargs = TRAIN_ARGS[game_kwargs_str]
 
-game_kwargs_str += "_y"
+# game_kwargs_str += "_y"
 
 DIR = 'bin'
 LOSSES_PATH = os.path.join(DIR, f"logs/{game_kwargs_str}.log")
@@ -98,6 +98,7 @@ class Trainer():
         self.lr = lr
         self.weight_decay = weight_decay
         
+        self.n_min_games = 2
         self.best_win_ratio = 0.0
         self.perfect_win_ratio = 1.0
 
@@ -161,10 +162,13 @@ class Trainer():
         return win_ratio, outcomes, avg_curr_starts
 
     def train(self):
+        batch_wins, batch_loses = self.buffer_size, self.buffer_size
+        
         try:
             with open(BUFFER_PATH, "rb") as f:
                 self.cache = deque(pickle.load(f), maxlen=self.buffer_size)
         except FileNotFoundError:
+            batch_wins, batch_loses = 0, 0
             pass
         
         try:
@@ -181,12 +185,16 @@ class Trainer():
                                    epsilon=self.epsilon, 
                                    next_state=self.next_state)
                 
+                batch_wins += int(play_data[0][2] == 1)
+                batch_loses += int(play_data[0][2] == -1)
+                is_skewed = min(batch_wins, batch_loses) < self.n_min_games
+                
                 play_data = extend_play_data(play_data)
                 episode_len = len(play_data) // 8
                 self.cache.extend(play_data)
                 
                 logger.info(f"batch: {i+1}, len_episode: {episode_len}")
-                if len(self.cache) > self.batch_size:
+                if len(self.cache) > self.batch_size and not is_skewed:
                     loss, entropy, kl, expl_var, d_expl_var = self.fit()
                     fit_results = {
                         "kl": f"{kl:.5f}",

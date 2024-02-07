@@ -1,0 +1,15 @@
+[2024-02-07 18:30:15,169] batch: 1, len_episode: 24
+[2024-02-07 18:31:14,251] batch: 2, len_episode: 34
+[2024-02-07 18:32:15,346] batch: 3, len_episode: 36
+[2024-02-07 18:32:18,986] kl: 0.00135, lr: 0.003000, loss: 4.61343, temp: 0.98010, entropy: 4.60451, expl_var: -inf, d_expl_var: nan
+[2024-02-07 18:34:12,191] batch: 4, len_episode: 59
+[2024-02-07 18:34:15,387] kl: 0.02201, lr: 0.002000, loss: 6.07910, temp: 0.97030, entropy: 4.60472, expl_var: 0.000, d_expl_var: 0.004
+[2024-02-07 18:35:27,172] batch: 5, len_episode: 37
+[2024-02-07 18:35:30,449] kl: 0.03060, lr: 0.001333, loss: 6.52203, temp: 0.96060, entropy: 4.58686, expl_var: 0.000, d_expl_var: 0.000
+[2024-02-07 18:37:19,487] batch: 1, len_episode: 33
+[2024-02-07 18:39:18,903] batch: 2, len_episode: 51
+[2024-02-07 18:39:22,498] kl: 0.00473, lr: 0.002000, loss: 4.69563, temp: 0.99000, entropy: 4.60091, expl_var: -inf, d_expl_var: nan
+[2024-02-07 18:40:53,499] batch: 3, len_episode: 36
+[2024-02-07 18:40:56,724] kl: 0.02031, lr: 0.001333, loss: 5.84127, temp: 0.98010, entropy: 4.57707, expl_var: 0.000, d_expl_var: -0.002
+[2024-02-07 18:42:31,584] batch: 4, len_episode: 38
+[2024-02-07 18:42:34,849] kl: 0.01866, lr: 0.000889, loss: 6.37587, temp: 0.97030, entropy: 4.52617, expl_var: 0.000, d_expl_var: -0.000

@@ -13,6 +13,10 @@ def sortfn(items: list, key: Callable = None, reverse: bool = True) -> list:
         sorted_list = reversed(sorted_list)
     return list(sorted_list)
 
+SMALL_GAME = S_GAME = (6, 6, 4)
+MEDIUM_GAME = M_GAME = (8, 8, 5)
+LARGE_GAME = L_GAME = (10, 10, 5)
+
 class Gomoku:
     def __init__(self, M: int, N: int, K: int):
         assert M > 0 and N > 0 and K > 0, "Invalid game parameters: {}, {}, {}".format(M, N, K)

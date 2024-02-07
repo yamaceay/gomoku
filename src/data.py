@@ -6,7 +6,6 @@ from .mcts import Deep_Player
 import numpy as np
 from time import time
 
-
 def play_game(
     game: Gomoku, 
     player1: Player = None, 
@@ -168,4 +167,3 @@ def extend_play_data(
                 extended_play_data.append(equi_next_state)
             extend_data.append(tuple(extended_play_data))
     return extend_data
-    

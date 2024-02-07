@@ -2,8 +2,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
-from torchsummary import summary
-from torchviz import make_dot
 import numpy as np
 
 from .calc import policy_loss_fn, entropy_fn
@@ -126,13 +124,15 @@ class Zero_Net():
         net_params = self.cnn.state_dict()
         torch.save(net_params, model_file)
 
-if __name__ == '__main__':
-
-    (M, N, K) = (8, 8, 5)
-    net = CNN(M, N)
-    summary(net, (4, M, N))
-    x = torch.rand(1, 4, M, N)
+# if __name__ == '__main__':
+#     from torchsummary import summary
+#     from torchviz import make_dot
     
-    graph = make_dot(net(x), params=dict(net.named_parameters()))
-    graph.render(f"out/{M}_{N}_{K}/cnn", format="png")
+#     (M, N, K) = (8, 8, 5)
+#     net = CNN(M, N)
+#     summary(net, (4, M, N))
+#     x = torch.rand(1, 4, M, N)
+    
+#     graph = make_dot(net(x), params=dict(net.named_parameters()))
+#     graph.render(f"out/{M}_{N}_{K}/cnn", format="png")
     

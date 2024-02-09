@@ -14,7 +14,7 @@ import os
 import logging
 import pickle 
 
-game_kwargs = (M, N, K) = 6, 6, 4
+game_kwargs = (M, N, K) = 10, 10, 5
 game_kwargs_str = f"{M}_{N}_{K}"
 
 TRAIN_ARGS = {

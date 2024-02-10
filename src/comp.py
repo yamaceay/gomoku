@@ -4,10 +4,79 @@ from .data import play_game
 from .net import Zero_Net
 from .mcts import Deep_Player
 from .hybrid import Flat_Player
+from .train import TRAIN_ARGS
 from tqdm import tqdm
 import numpy as np
 import pandas as pd
 import os
+import argparse
+
+parser = argparse.ArgumentParser(description="Compare players")
+parser.add_argument("--game", "-g", type=str, choices=["S", "M", "L"], help="game size")
+args = parser.parse_args()
+game_size = args.game
+
+game_kwargs = (M, N, K) = S_GAME if game_size == "S" else M_GAME if game_size == "M" else L_GAME
+game_kwargs_str = f"{M}_{N}_{K}"
+
+assert game_kwargs_str in TRAIN_ARGS, f"stringified game kwargs must be in {list(TRAIN_ARGS.keys())}"
+train_params = TRAIN_ARGS[game_kwargs_str]
+    
+n_zero = train_params["n_zero"]
+n_uct = train_params["n_uct"]
+n_uct_step = train_params["n_uct_step"]
+n_uct_max = train_params["n_uct_max"]
+
+IMG_DIR = f"out/{game_kwargs_str}"
+TIME_DIR = os.path.join(IMG_DIR, "timeseries")
+os.makedirs(TIME_DIR, exist_ok=True)
+COMP_DIR = os.path.join(IMG_DIR, "competition")
+os.makedirs(COMP_DIR, exist_ok=True)
+
+class Comparator:
+    def __init__(self,
+                 game: Gomoku = Gomoku(*game_kwargs),
+                 n_games: int = 10,
+                 ):
+        
+        self.game = game
+        self.n_games = n_games
+        
+    def comp(self, 
+             players: list[tuple[str, Player, float]], 
+             edges: list[tuple[int, int]] = None
+             ):
+        
+        for player in players:
+            player_path = os.path.join(TIME_DIR, f"{player[0]}.csv")
+            if not os.path.exists(player_path):
+                time_stats = pd.DataFrame(columns=list(range(M*N)))
+                time_stats.to_csv(player_path)
+
+        with tqdm(
+            range(len(edges) * self.n_games), 
+            desc="Competition",
+            position=0,
+            unit="game",
+        ) as bar:
+            for i, j in edges:
+                tested_player, rival_player = players[i], players[j]
+                    
+                comp_results = competition(
+                    self.game, self.n_games, 
+                    tested_player, rival_player, 
+                    fairness=.5, 
+                    timeline=True, 
+                    bar=bar,
+                )
+                
+                results_counts, results_lengths, fst_time_stats, snd_time_stats = comp_results
+                
+                append_csv(fst_time_stats, os.path.join(TIME_DIR, f"{tested_player[0]}.csv"))
+                append_csv(snd_time_stats, os.path.join(TIME_DIR, f"{rival_player[0]}.csv"))
+                
+                append_csv(results_counts, os.path.join(COMP_DIR, f"{tested_player[0]}_{rival_player[0]}_counts.csv"))
+                append_csv(results_lengths, os.path.join(COMP_DIR, f"{tested_player[0]}_{rival_player[0]}_lengths.csv"))
 
 def competition(
     game: Gomoku,
@@ -80,71 +149,27 @@ def append_csv(df: pd.DataFrame, path: str):
         df.to_csv(path, mode='a', header=False)
 
 if __name__ == '__main__':
-    (M, N, K) = CURR_GAME = S_GAME
-
     net = Zero_Net(
-        game_kwargs=CURR_GAME, 
-        model_file=f"bin/models/best_{M}_{N}_{K}.model",
+        game_kwargs=game_kwargs, 
+        model_file=f"bin/models/best_{game_kwargs_str}.model",
     )
 
     players = [
         ("FLAT", Flat_Player(policy_value_fn=net.predict), .0),
-        ("ZERO", Deep_Player(iterations=400, policy_value_fn=net.predict), .0),
-        ("ZEROX", Deep_Player(iterations=400, policy_value_fn=net.predict, memory=True), .0),
-        ("UCT1", Deep_Player(iterations=1000), .0),
-        ("UCT3", Deep_Player(iterations=3000), .0),
-        ("UCT6", Deep_Player(iterations=6000), .0),
+        ("ZERO", Deep_Player(iterations=n_zero, policy_value_fn=net.predict), .0),
     ]
 
-    IMG_DIR = f"out/{M}_{N}_{K}"
-    TIME_DIR = os.path.join(IMG_DIR, "timeseries")
-    os.makedirs(TIME_DIR, exist_ok=True)
-    COMP_DIR = os.path.join(IMG_DIR, "competition")
-    os.makedirs(COMP_DIR, exist_ok=True)
+    for n_uct_it in range(n_uct_step, n_uct_max + n_uct_step, n_uct_step):
+        players += [
+            (f"UCT_{n_uct_it}", Deep_Player(iterations=n_uct_it), .0)    
+        ]
+        
+    st_ind, nd_ind = 0, 2
     
-    game = Gomoku(*CURR_GAME)
-    n_games = 1
-    st_ind = 0
-    tested_players = players[st_ind:3]
-
-    n_players = len(players)
-    n_tested_players = len(tested_players)
-    n_rival_players = n_players - n_tested_players
-
-    n_rival_duels = n_tested_players * n_rival_players
-    n_each_duels = 2 ** (n_tested_players - 1) - 1
-    n_done_duels = 2 * st_ind
-    total_duels = n_rival_duels + n_each_duels - n_done_duels
-
-    for player in players:
-        player_path = os.path.join(TIME_DIR, f"{player[0]}.csv")
-        if not os.path.exists(player_path):
-            time_stats = pd.DataFrame(columns=list(range(game.M*game.N)))
-            time_stats.to_csv(player_path)
-
-    with tqdm(
-        range(total_duels * n_games), 
-        desc="Competition",
-        position=0,
-        unit="game",
-    ) as bar:
-        for i in range(n_tested_players):
-            tested_player = tested_players[i]
-            for j in range(i + st_ind + 1, n_players):
-                rival_player = players[j]
-                
-                comp_results = competition(
-                    game, n_games, 
-                    tested_player, rival_player, 
-                    fairness=.5, 
-                    timeline=True, 
-                    bar=bar,
-                )
-                
-                results_counts, results_lengths, fst_time_stats, snd_time_stats = comp_results
-                
-                append_csv(fst_time_stats, os.path.join(TIME_DIR, f"{tested_player[0]}.csv"))
-                append_csv(snd_time_stats, os.path.join(TIME_DIR, f"{rival_player[0]}.csv"))
-                
-                append_csv(results_counts, os.path.join(COMP_DIR, f"{tested_player[0]}_{rival_player[0]}_counts.csv"))
-                append_csv(results_lengths, os.path.join(COMP_DIR, f"{tested_player[0]}_{rival_player[0]}_lengths.csv"))
+    edges = []
+    for i in range(st_ind, nd_ind):
+        for j in range(i + 1, len(players)):
+            edges += [(i, j)]
+            
+    comparator = Comparator(n_games=10)
+    comparator.comp(players, edges)

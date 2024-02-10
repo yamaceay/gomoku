@@ -36,7 +36,7 @@ os.makedirs(COMP_DIR, exist_ok=True)
 class Comparator:
     def __init__(self,
                  game: Gomoku = Gomoku(*game_kwargs),
-                 n_games: int = 10,
+                 n_games: int = 50,
                  ):
         
         self.game = game
@@ -171,5 +171,5 @@ if __name__ == '__main__':
         for j in range(i + 1, len(players)):
             edges += [(i, j)]
             
-    comparator = Comparator(n_games=10)
+    comparator = Comparator()
     comparator.comp(players, edges)

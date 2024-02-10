@@ -8,17 +8,17 @@ from .net import Zero_Net
 from skrl.resources.schedulers.torch import KLAdaptiveLR
 from .calc import kl_divergence, explained_var
 from .data import play_n_games_for_train, extend_play_data, play_game
-from .gomoku import Gomoku
+from .gomoku import Gomoku, S_GAME, M_GAME, L_GAME
 from tqdm import tqdm
 import os
 import logging
 import pickle 
 
-game_kwargs = (M, N, K) = 10, 10, 5
+game_kwargs = (M, N, K) = S_GAME
 game_kwargs_str = f"{M}_{N}_{K}"
 
 TRAIN_ARGS = {
-    "6_6_4": dict(n_zero = 400, n_uct = 1000, n_uct_step = 1000, n_uct_max = 5000),
+    "6_6_4": dict(n_zero = 400, n_uct = 2000, n_uct_step = 1000, n_uct_max = 5000),
     "8_8_5": dict(n_zero = 500, n_uct = 1500, n_uct_step = 1500, n_uct_max = 6000),
     "10_10_5": dict(n_zero = 600, n_uct = 2000, n_uct_step = 2000, n_uct_max = 6000),
 }
@@ -246,7 +246,7 @@ class Trainer():
             pickle.dump(list(self.cache), f)
 
 if __name__ == '__main__':
-    # trainer = Trainer(init_model=CURR_MODEL_PATH)
-    trainer = Trainer()
+    trainer = Trainer(init_model=CURR_MODEL_PATH)
+    # trainer = Trainer()
     trainer.train()
 

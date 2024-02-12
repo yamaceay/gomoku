@@ -6,7 +6,7 @@
 # #SBATCH --gpus-per-node=1
 
 # training
-apptainer run --nv gomoku.sif python -m src.train
+# apptainer run --nv gomoku.sif python -m src.train
 
 # evaluation
-# apptainer run --nv gomoku.sif python -m src.comp -g L
+apptainer run --nv gomoku.sif python -m src.comp -g L

@@ -75,6 +75,7 @@ class Trainer():
         self.n_uct_step = n_uct_step
         self.n_uct_max = n_uct_max
         
+        self.temp_max = 1.0
         self.temp = temp
         self.epsilon = epsilon
         self.gamma = gamma
@@ -174,6 +175,7 @@ class Trainer():
                     self.n_zero,
                     policy_value_fn=self.net.predict,
                     k_ucb=self.k_ucb,
+                    temp=self.temp_max,
                 )
                 
                 game = Gomoku(*self.game_kwargs)

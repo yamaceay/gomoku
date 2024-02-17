@@ -14,7 +14,7 @@ import os
 import logging
 import pickle 
 
-game_kwargs = (M, N, K) = L_GAME
+game_kwargs = (M, N, K) = M_GAME
 game_kwargs_str = f"{M}_{N}_{K}"
 
 TRAIN_ARGS = {
@@ -57,13 +57,11 @@ class Trainer():
                  n_epochs: int = 5,
                  buffer_size: int = 10000,
                  
-                 lr: float = .000053,
+                 lr: float = .005,
                  weight_decay: float = .0001,
                  
                  epsilon: float = .25,
                  temp: float = .0001,
-                 temp_min: float = .0001,
-                 cooldown: float = .99,
                  k_ucb: float = 5,
                  gamma: float = .0,
                  ):
@@ -77,10 +75,7 @@ class Trainer():
         self.n_uct_step = n_uct_step
         self.n_uct_max = n_uct_max
         
-        self.cooldown = cooldown
         self.temp = temp
-        self.temp_init = temp
-        self.temp_min = temp_min
         self.epsilon = epsilon
         self.gamma = gamma
         self.k_ucb = k_ucb
@@ -114,36 +109,37 @@ class Trainer():
         states, policies, rewards, *next_states = map(list, zip(*mini_batch))
         old_policy, old_value = self.net.forward_batch(states)
         
-        kl = .0
+        kl_mean = .0
         for _ in range(self.n_epochs):
             batch = (states, policies, rewards, *next_states)
             loss, entropy = self.net.fit_one(batch, self.gamma)
             new_policy, new_value = self.net.forward_batch(states)
-            kl += kl_divergence(old_policy, new_policy)
-        kl /= self.n_epochs
+            kl_mean += kl_divergence(old_policy, new_policy)
+        kl_mean /= self.n_epochs
         
         rewards = np.array(rewards)
 
         expl_var_prev = explained_var(rewards, old_value.reshape(-1))
         expl_var = explained_var(rewards, new_value.reshape(-1))
         
-        self.scheduler.step(kl)
+        self.scheduler.step(kl_mean)
         self.lr = self.scheduler.get_last_lr()[0]
         
         expl_var_diff = expl_var - expl_var_prev
             
-        return loss, entropy, kl, expl_var, expl_var_diff
+        return loss, entropy, kl_mean, expl_var, expl_var_diff
 
     def test(self) -> tuple[float, list[int], float]:
         zero = Deep_Player(
             self.n_zero,
             policy_value_fn=self.net.predict,
             k_ucb=self.k_ucb,
-            temp=self.temp
+            temp=self.temp,
         )
-        uct = Deep_Player(self.n_uct,
+        uct = Deep_Player(
+            self.n_uct,
             k_ucb=self.k_ucb,
-            temp=self.temp_min # note that temp_min is used here
+            temp=self.temp,
         )
         
         outcomes = [0, 0, 0] # tie, win, lose
@@ -174,10 +170,12 @@ class Trainer():
         try:
             pbar = tqdm(range(self.n_batches), position=0, leave=False, desc="Batches")
             for i in pbar:
-                zero = Deep_Player(policy_value_fn=self.net.predict,
-                                   iterations=self.n_zero,
-                                   k_ucb=self.k_ucb,
-                                   temp=self.temp)
+                zero = Deep_Player(
+                    self.n_zero,
+                    policy_value_fn=self.net.predict,
+                    k_ucb=self.k_ucb,
+                )
+                
                 game = Gomoku(*self.game_kwargs)
                 
                 play_data = play_n_games_for_train(game=game,
@@ -200,7 +198,6 @@ class Trainer():
                         "kl": f"{kl:.5f}",
                         "lr": f"{self.lr:.6f}",
                         "loss": f"{loss:.5f}",
-                        "temp": f"{self.temp:.5f}",
                         "entropy": f"{entropy:.5f}",
                         "expl_var": f"{expl_var:.3f}",
                         "d_expl_var": f"{d_expl_var:.3f}",
@@ -236,8 +233,6 @@ class Trainer():
                     elif win_ratio <= 1 - self.perfect_win_ratio and self.n_uct > self.n_uct_step:
                         self.n_uct -= self.n_uct_step
                         self.best_win_ratio = 0.0
-                if self.temp > self.temp_min:
-                    self.temp *= self.cooldown
                 
         except KeyboardInterrupt:
             print('\n\rStopped')
@@ -246,7 +241,7 @@ class Trainer():
             pickle.dump(list(self.cache), f)
 
 if __name__ == '__main__':
-    trainer = Trainer(model_file=CURR_MODEL_PATH)
-    # trainer = Trainer()
+    # trainer = Trainer(model_file=CURR_MODEL_PATH)
+    trainer = Trainer()
     trainer.train()
 

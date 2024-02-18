@@ -13,14 +13,20 @@ from tqdm import tqdm
 import os
 import logging
 import pickle 
+import argparse
 
-game_kwargs = (M, N, K) = L_GAME
+parser = argparse.ArgumentParser(description="Compare players")
+parser.add_argument("--game", "-g", type=str, choices=["S", "M", "L"], help="game size")
+args = parser.parse_args()
+game_size = args.game
+
+game_kwargs = (M, N, K) = S_GAME if game_size == "S" else M_GAME if game_size == "M" else L_GAME
 game_kwargs_str = f"{M}_{N}_{K}"
 
 TRAIN_ARGS = {
-    "6_6_4": dict(n_zero = 400, n_uct = 3000, n_uct_step = 1000, n_uct_max = 5000),
+    "6_6_4": dict(n_zero = 400, n_uct = 5000, n_uct_step = 1000, n_uct_max = 5000),
     "8_8_5": dict(n_zero = 500, n_uct = 1500, n_uct_step = 1500, n_uct_max = 6000),
-    "10_10_5": dict(n_zero = 600, n_uct = 2000, n_uct_step = 2000, n_uct_max = 6000),
+    "10_10_5": dict(n_zero = 600, n_uct = 4000, n_uct_step = 2000, n_uct_max = 6000),
 }
 
 assert game_kwargs_str in TRAIN_ARGS, f"stringified game kwargs must be in {list(TRAIN_ARGS.keys())}"

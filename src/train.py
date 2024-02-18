@@ -14,7 +14,7 @@ import os
 import logging
 import pickle 
 
-game_kwargs = (M, N, K) = M_GAME
+game_kwargs = (M, N, K) = L_GAME
 game_kwargs_str = f"{M}_{N}_{K}"
 
 TRAIN_ARGS = {
@@ -57,7 +57,7 @@ class Trainer():
                  n_epochs: int = 5,
                  buffer_size: int = 10000,
                  
-                 lr: float = .005,
+                 lr: float = .002,
                  weight_decay: float = .0001,
                  
                  epsilon: float = .25,

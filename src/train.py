@@ -249,7 +249,7 @@ class Trainer():
             pickle.dump(list(self.cache), f)
 
 if __name__ == '__main__':
-    # trainer = Trainer(model_file=CURR_MODEL_PATH)
-    trainer = Trainer()
+    trainer = Trainer(model_file=CURR_MODEL_PATH)
+    # trainer = Trainer()
     trainer.train()
 

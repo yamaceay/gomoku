@@ -63,7 +63,7 @@ class Trainer():
                  n_epochs: int = 5,
                  buffer_size: int = 10000,
                  
-                 lr: float = .000176,
+                 lr: float = .000394,
                  weight_decay: float = .0001,
                  
                  epsilon: float = .25,

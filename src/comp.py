@@ -37,14 +37,16 @@ class Comparator:
     def __init__(self,
                  game: Gomoku = Gomoku(*game_kwargs),
                  n_games: int = 50,
+                 det_k: int = 2,
                  ):
         
         self.game = game
         self.n_games = n_games
+        self.det_k = det_k
         
     def comp(self, 
              players: list[tuple[str, Player, float]], 
-             edges: list[tuple[int, int]] = None
+             edges: list[tuple[int, int, bool]] = None
              ):
         
         for player in players:
@@ -59,11 +61,17 @@ class Comparator:
             position=0,
             unit="game",
         ) as bar:
-            for i, j in edges:
+            for i, j, det in edges:
                 tested_player, rival_player = players[i], players[j]
                     
+                game = self.game
+                if det:
+                    game = Gomoku(*game_kwargs)
+                    for _ in range(self.det_k):
+                        game.play(game.actions()[0])
+                
                 comp_results = competition(
-                    self.game, self.n_games, 
+                    game, self.n_games, 
                     tested_player, rival_player, 
                     fairness=.5, 
                     timeline=True, 
@@ -158,18 +166,21 @@ if __name__ == '__main__':
         ("FLAT", Flat_Player(policy_value_fn=net.predict), .0),
         ("ZERO", Deep_Player(iterations=n_zero, policy_value_fn=net.predict), .0),
     ]
+    nd_ind = len(players)
 
     for n_uct_it in range(n_uct_step, n_uct_max + n_uct_step, n_uct_step):
         players += [
             (f"UCT_{n_uct_it}", Deep_Player(iterations=n_uct_it), .0)    
         ]
-        
-    st_ind, nd_ind = 0, 2
     
     edges = []
-    for i in range(st_ind, nd_ind):
-        for j in range(i + 1, len(players)):
-            edges += [(i, j)]
+    for i in range(nd_ind):
+        for j in range(i + 1, nd_ind):
+            edges += [(i, j, True)]
+    
+    for i in range(nd_ind):
+        for j in range(nd_ind, len(players)):
+            edges += [(i, j, False)]
             
     comparator = Comparator()
     comparator.comp(players, edges)

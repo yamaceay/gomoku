@@ -63,7 +63,7 @@ class Trainer():
                  n_epochs: int = 5,
                  buffer_size: int = 10000,
                  
-                 lr: float = .002,
+                 lr: float = .000889,
                  weight_decay: float = .0001,
                  
                  epsilon: float = .25,
@@ -249,7 +249,7 @@ class Trainer():
             pickle.dump(list(self.cache), f)
 
 if __name__ == '__main__':
-    # trainer = Trainer(model_file=CURR_MODEL_PATH)
-    trainer = Trainer()
+    trainer = Trainer(model_file=CURR_MODEL_PATH)
+    # trainer = Trainer()
     trainer.train()
 

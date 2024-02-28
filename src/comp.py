@@ -163,7 +163,7 @@ if __name__ == '__main__':
     )
 
     players = [
-        ("FLAT", Flat_Player(policy_value_fn=net.predict), .0),
+        # ("FLAT", Flat_Player(policy_value_fn=net.predict), .0),
         ("ZERO", Deep_Player(iterations=n_zero, policy_value_fn=net.predict), .0),
     ]
     nd_ind = len(players)
@@ -181,6 +181,6 @@ if __name__ == '__main__':
     for i in range(nd_ind):
         for j in range(nd_ind, len(players)):
             edges += [(i, j, False)]
-            
+
     comparator = Comparator()
     comparator.comp(players, edges)

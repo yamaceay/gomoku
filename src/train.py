@@ -20,7 +20,7 @@ game_kwargs_str = f"{M}_{N}_{K}"
 
 TRAIN_ARGS = {
     "6_6_4": dict(n_zero = 400, n_uct = 5000, n_uct_step = 1000, n_uct_max = 5000),
-    "8_8_5": dict(n_zero = 500, n_uct = 1500, n_uct_step = 1500, n_uct_max = 6000),
+    "8_8_5": dict(n_zero = 500, n_uct = 3000, n_uct_step = 1500, n_uct_max = 6000),
     "10_10_5": dict(n_zero = 600, n_uct = 6000, n_uct_step = 2000, n_uct_max = 6000),
 }
 

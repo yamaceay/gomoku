@@ -5,8 +5,11 @@
 #SBATCH --output=logs/job-%j
 # #SBATCH --gpus-per-node=1
 
-# training
-apptainer run --nv gomoku.sif python -m src.train
-
-# evaluation
-# apptainer run --nv gomoku.sif python -m src.comp
+if [ $1 == "train" ]; then
+    apptainer run --nv gomoku.sif python -m src.train ${@:2}
+elif [ $1 == "eval" ]; then
+    apptainer run --nv gomoku.sif python -m src.comp ${@:2}
+else
+    echo "Usage: sbatch fit.sh <train|eval> …"
+    exit 1
+fi

@@ -171,11 +171,22 @@ def get_player(name: str, level: int) -> tuple[Player, bool]:
     return player, det
 
 if __name__ == '__main__':
-    player1, det1 = get_player("ZERO", 3)
-    player2, det2 = get_player("FLAT", 3)
-        
-    players = [player1, player2]
-    edges = [(0, 1, det1 and det2)]
+    import argparse
+    parser = argparse.ArgumentParser()
+    # accept array of players in <name: str>,<level: int> format
+    parser.add_argument("players", nargs="+", help="Players to compare")
+    args = parser.parse_args()
     
-    comparator = Comparator(n_games=1)
+    player_args = []
+    for i, player in enumerate(args.players):
+        name, level = player.split(",")
+        level = int(level)
+        player_args += [get_player(name, level)]
+
+    players = [player[0] for player in player_args]
+    edges = [(i, j, player_args[i][1] and player_args[j][1]) 
+             for i in range(len(player_args)) 
+             for j in range(i+1, len(player_args))]
+    
+    comparator = Comparator()
     comparator.comp(players, edges)

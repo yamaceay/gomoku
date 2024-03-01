@@ -9,13 +9,8 @@ from tqdm import tqdm
 import numpy as np
 import pandas as pd
 import os
-import argparse
 
-parser = argparse.ArgumentParser(description="Compare players")
-parser.add_argument("--game", "-g", type=str, choices=["S", "M", "L"], help="game size")
-args = parser.parse_args()
-game_size = args.game
-
+game_size = "S"
 game_kwargs = (M, N, K) = S_GAME if game_size == "S" else M_GAME if game_size == "M" else L_GAME
 game_kwargs_str = f"{M}_{N}_{K}"
 
@@ -156,31 +151,31 @@ def append_csv(df: pd.DataFrame, path: str):
     else:
         df.to_csv(path, mode='a', header=False)
 
+def get_player(name: str, level: int) -> tuple[Player, bool]:
+    det = True
+    if name == "UCT":
+        n_it = n_uct_step * level
+        player = (f"{name}_{n_it}", Deep_Player(iterations=n_it), .0)    
+        det = False
+    else:
+        net = Zero_Net(
+            game_kwargs=game_kwargs, 
+            model_file=f"bin/models/best_{game_kwargs_str}_v{level}.model",
+        )
+        if name == "FLAT":
+            player = (name, Flat_Player(policy_value_fn=net.predict), .0)
+        elif name == "ZERO":
+            player = (name, Deep_Player(iterations=n_zero, policy_value_fn=net.predict), .0)
+        elif name == "ZEROX": 
+            player = (name, Deep_Player(iterations=n_zero, policy_value_fn=net.predict, memory=True), .0)
+    return player, det
+
 if __name__ == '__main__':
-    net = Zero_Net(
-        game_kwargs=game_kwargs, 
-        model_file=f"bin/models/best_{game_kwargs_str}.model",
-    )
-
-    players = [
-        # ("FLAT", Flat_Player(policy_value_fn=net.predict), .0),
-        ("ZERO", Deep_Player(iterations=n_zero, policy_value_fn=net.predict), .0),
-    ]
-    nd_ind = len(players)
-
-    for n_uct_it in range(n_uct_step, n_uct_max + n_uct_step, n_uct_step):
-        players += [
-            (f"UCT_{n_uct_it}", Deep_Player(iterations=n_uct_it), .0)    
-        ]
+    player1, det1 = get_player("ZERO", 3)
+    player2, det2 = get_player("FLAT", 3)
+        
+    players = [player1, player2]
+    edges = [(0, 1, det1 and det2)]
     
-    edges = []
-    for i in range(nd_ind):
-        for j in range(i + 1, nd_ind):
-            edges += [(i, j, True)]
-    
-    for i in range(nd_ind):
-        for j in range(nd_ind, len(players)):
-            edges += [(i, j, False)]
-
-    comparator = Comparator()
+    comparator = Comparator(n_games=1)
     comparator.comp(players, edges)

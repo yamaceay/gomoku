@@ -13,13 +13,8 @@ from tqdm import tqdm
 import os
 import logging
 import pickle 
-import argparse
 
-parser = argparse.ArgumentParser(description="Compare players")
-parser.add_argument("--game", "-g", type=str, choices=["S", "M", "L"], help="game size")
-args = parser.parse_args()
-game_size = args.game
-
+game_size = "M"
 game_kwargs = (M, N, K) = S_GAME if game_size == "S" else M_GAME if game_size == "M" else L_GAME
 game_kwargs_str = f"{M}_{N}_{K}"
 

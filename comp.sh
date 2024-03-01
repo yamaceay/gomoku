@@ -23,12 +23,12 @@ for ((i=1; i<$lZero+1; i++)); do
     #     done
     # done
 
-    # # time-variant, zero vs zero
-    # for ((j=$i+1; j<$lZero+1; j++)); do
-    #     for zero in "${zeros[@]}"; do
-    #         sbatch fit.sh eval $zero,$i $zero,$j
-    #     done
-    # done
+    # time-variant, zero vs zero
+    for ((j=$i+1; j<$lZero+1; j++)); do
+        for zero in "${zeros[@]}"; do
+            sbatch fit.sh eval $zero,$i $zero,$j
+        done
+    done
 done
 
 

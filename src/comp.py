@@ -58,19 +58,14 @@ class Comparator:
         ) as bar:
             for i, j, det in edges:
                 tested_player, rival_player = players[i], players[j]
-                    
-                game = self.game
-                if det:
-                    game = Gomoku(*game_kwargs)
-                    for _ in range(self.det_k):
-                        game.play(game.actions()[0])
                 
                 comp_results = competition(
-                    game, self.n_games, 
+                    self.game, self.n_games, 
                     tested_player, rival_player, 
                     fairness=.5, 
                     timeline=True, 
                     bar=bar,
+                    det_k=self.det_k if det else 0,
                 )
                 
                 results_counts, results_lengths, fst_time_stats, snd_time_stats = comp_results
@@ -87,6 +82,7 @@ def competition(
     player1_args: tuple[str, Player, float], 
     player2_args: tuple[str, Player, float],
     bar: tqdm = None,
+    det_k: int = 0,
     *args, **kwargs
 ) -> pd.DataFrame:
     
@@ -97,7 +93,12 @@ def competition(
     
     results = []
     for _ in range(n_games):
-        new_game, curr_started, timeline = play_game(game, player1, player2, epsilon1, epsilon2, *args, **kwargs)
+        new_game = game.copy()
+        if det_k > 0:
+            for _ in range(det_k):
+                new_game.play(new_game.actions()[0])
+        
+        new_game, curr_started, timeline = play_game(new_game, player1, player2, epsilon1, epsilon2, *args, **kwargs)
         
         timeline += [np.nan] * (game.M*game.N - len(timeline))
         fst = pd.Series(timeline[0::2])
@@ -173,7 +174,6 @@ def get_player(name: str, level: int) -> tuple[Player, bool]:
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    # accept array of players in <name: str>,<level: int> format
     parser.add_argument("players", nargs="+", help="Players to compare")
     args = parser.parse_args()
     

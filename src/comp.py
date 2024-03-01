@@ -163,11 +163,11 @@ def get_player(name: str, level: int) -> tuple[Player, bool]:
             model_file=f"bin/models/best_{game_kwargs_str}_v{level}.model",
         )
         if name == "FLAT":
-            player = (name, Flat_Player(policy_value_fn=net.predict), .0)
+            player = (f"{name}_v{level}", Flat_Player(policy_value_fn=net.predict), .0)
         elif name == "ZERO":
-            player = (name, Deep_Player(iterations=n_zero, policy_value_fn=net.predict), .0)
+            player = (f"{name}_v{level}", Deep_Player(iterations=n_zero, policy_value_fn=net.predict), .0)
         elif name == "ZEROX": 
-            player = (name, Deep_Player(iterations=n_zero, policy_value_fn=net.predict, memory=True), .0)
+            player = (f"{name}_v{level}", Deep_Player(iterations=n_zero, policy_value_fn=net.predict, memory=True), .0)
     return player, det
 
 if __name__ == '__main__':

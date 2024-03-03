@@ -60,6 +60,7 @@ class Trainer():
                  
                  lr: float = .000176,
                  weight_decay: float = .0001,
+                 kl_threshold: float = .004,
                  
                  epsilon: float = .25,
                  temp: float = .0001,
@@ -104,7 +105,7 @@ class Trainer():
                             device=self.device,
                             opt_args=dict(lr=self.lr, weight_decay=self.weight_decay))
         
-        self.scheduler = KLAdaptiveLR(self.net.optimizer, kl_threshold=0.008)
+        self.scheduler = KLAdaptiveLR(self.net.optimizer, kl_threshold=kl_threshold)
 
     def fit(self) -> tuple[float, float, float, float, float]:
         mini_batch = random.sample(self.cache, self.batch_size)

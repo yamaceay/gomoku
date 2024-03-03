@@ -1,6 +1,6 @@
 #!/bin/bash
-lZero=3
-lUct=5
+lZero=5
+lUct=3
 zeros=(FLAT ZERO ZEROX)
 
 for ((i=1; i<$lZero+1; i++)); do

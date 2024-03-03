@@ -23,7 +23,7 @@ from .gomoku import Gomoku, S_GAME, M_GAME, L_GAME
 from .train import TRAIN_ARGS
 
 # %%
-game_kwargs = (M, N, K) = S_GAME
+game_kwargs = (M, N, K) = L_GAME
 game_kwargs_str = f"{M}_{N}_{K}"
 
 assert game_kwargs_str in TRAIN_ARGS, f"Game {game_kwargs_str} not in TRAIN_ARGS"

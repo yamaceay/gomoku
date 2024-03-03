@@ -58,7 +58,7 @@ class Trainer():
                  n_epochs: int = 5,
                  buffer_size: int = 10000,
                  
-                 lr: float = .002,
+                 lr: float = .000176,
                  weight_decay: float = .0001,
                  
                  epsilon: float = .25,
@@ -104,7 +104,7 @@ class Trainer():
                             device=self.device,
                             opt_args=dict(lr=self.lr, weight_decay=self.weight_decay))
         
-        self.scheduler = KLAdaptiveLR(self.net.optimizer, kl_threshold=0.004)
+        self.scheduler = KLAdaptiveLR(self.net.optimizer, kl_threshold=0.008)
 
     def fit(self) -> tuple[float, float, float, float, float]:
         mini_batch = random.sample(self.cache, self.batch_size)
@@ -244,7 +244,7 @@ class Trainer():
             pickle.dump(list(self.cache), f)
 
 if __name__ == '__main__':
-    # trainer = Trainer(model_file=CURR_MODEL_PATH)
-    trainer = Trainer()
+    trainer = Trainer(model_file=CURR_MODEL_PATH)
+    # trainer = Trainer()
     trainer.train()
 

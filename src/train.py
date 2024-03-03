@@ -20,14 +20,14 @@ game_kwargs_str = f"{M}_{N}_{K}"
 
 TRAIN_ARGS = {
     "6_6_4": dict(n_zero = 400, n_uct = 5000, n_uct_step = 1000, n_uct_max = 5000),
-    "8_8_5": dict(n_zero = 500, n_uct = 3000, n_uct_step = 1500, n_uct_max = 6000),
+    "8_8_5": dict(n_zero = 500, n_uct = 1500, n_uct_step = 1500, n_uct_max = 6000),
     "10_10_5": dict(n_zero = 600, n_uct = 6000, n_uct_step = 2000, n_uct_max = 6000),
 }
 
 assert game_kwargs_str in TRAIN_ARGS, f"stringified game kwargs must be in {list(TRAIN_ARGS.keys())}"
 train_kwargs = TRAIN_ARGS[game_kwargs_str]
 
-# game_kwargs_str += "_y"
+game_kwargs_str += "_02"
 
 DIR = 'bin'
 LOSSES_PATH = os.path.join(DIR, f"logs/{game_kwargs_str}.log")
@@ -58,7 +58,7 @@ class Trainer():
                  n_epochs: int = 5,
                  buffer_size: int = 10000,
                  
-                 lr: float = .000593,
+                 lr: float = .002,
                  weight_decay: float = .0001,
                  
                  epsilon: float = .25,
@@ -104,7 +104,7 @@ class Trainer():
                             device=self.device,
                             opt_args=dict(lr=self.lr, weight_decay=self.weight_decay))
         
-        self.scheduler = KLAdaptiveLR(self.net.optimizer)
+        self.scheduler = KLAdaptiveLR(self.net.optimizer, kl_threshold=0.004)
 
     def fit(self) -> tuple[float, float, float, float, float]:
         mini_batch = random.sample(self.cache, self.batch_size)
@@ -244,7 +244,7 @@ class Trainer():
             pickle.dump(list(self.cache), f)
 
 if __name__ == '__main__':
-    trainer = Trainer(model_file=CURR_MODEL_PATH)
-    # trainer = Trainer()
+    # trainer = Trainer(model_file=CURR_MODEL_PATH)
+    trainer = Trainer()
     trainer.train()
 

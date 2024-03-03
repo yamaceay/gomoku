@@ -13,11 +13,6 @@ for ((i=1; i<$lZero+1; i++)); do
 
     # time-invariant, zero vs uct
     for zero in "${zeros[@]}"; do
-        # iterate over all zeros
-        for zero2 in "${zeros[@]}"; do
-            sbatch fit.sh eval $zero,$i $zero2,$i
-        done
-
         for ((j=1; j<$lUct+1; j++)); do
             sbatch fit.sh eval $zero,$i UCT,$j
         done
@@ -30,5 +25,6 @@ for ((i=1; i<$lZero+1; i++)); do
         done
     done
 done
+
 
 

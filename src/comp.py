@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import os
 
-game_size = "L"
+game_size = "M"
 game_kwargs = (M, N, K) = S_GAME if game_size == "S" else M_GAME if game_size == "M" else L_GAME
 game_kwargs_str = f"{M}_{N}_{K}"
 

@@ -11,45 +11,18 @@ from .data import play_n_games_for_train, extend_play_data, play_game
 from .gomoku import Gomoku, S_GAME, M_GAME, L_GAME
 from tqdm import tqdm
 import os
-import logging
 import pickle 
-
-game_size = "M"
-game_kwargs = (M, N, K) = S_GAME if game_size == "S" else M_GAME if game_size == "M" else L_GAME
-game_kwargs_str = f"{M}_{N}_{K}"
 
 TRAIN_ARGS = {
     "6_6_4": dict(n_zero = 400, n_uct = 5000, n_uct_step = 1000, n_uct_max = 5000),
     "8_8_5": dict(n_zero = 500, n_uct = 4500, n_uct_step = 1500, n_uct_max = 6000),
     "10_10_5": dict(n_zero = 600, n_uct = 6000, n_uct_step = 2000, n_uct_max = 6000),
 }
-
-assert game_kwargs_str in TRAIN_ARGS, f"stringified game kwargs must be in {list(TRAIN_ARGS.keys())}"
-train_kwargs = TRAIN_ARGS[game_kwargs_str]
-
-# game_kwargs_str += "_01"
-
-DIR = 'bin'
-LOSSES_PATH = os.path.join(DIR, f"logs/{game_kwargs_str}.log")
-BUFFER_PATH = os.path.join(DIR, f"buf_{game_kwargs_str}.pkl")
-CURR_MODEL_PATH = os.path.join(DIR, f"models/curr_{game_kwargs_str}.model")
-BEST_MODEL_PATH = os.path.join(DIR, f"models/best_{game_kwargs_str}.model")
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-formatter = logging.Formatter('[%(asctime)s] %(message)s')
-file_handler = logging.FileHandler(LOSSES_PATH)
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
-
 class Trainer():
     def __init__(self,
+                 game_kwargs: tuple[int, int, int],
+                 train_kwargs: dict[str, int],
                  model_file: str = None,
-                 
-                 n_zero: int = train_kwargs["n_zero"],
-                 n_uct: int = train_kwargs["n_uct"],
-                 n_uct_step: int = train_kwargs["n_uct_step"],
-                 n_uct_max: int = train_kwargs["n_uct_max"],
                  
                  n_batches: int = 1000,
                  batch_size: int = 512,
@@ -72,10 +45,10 @@ class Trainer():
         self.model_file = model_file
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-        self.n_zero = n_zero
-        self.n_uct = n_uct
-        self.n_uct_step = n_uct_step
-        self.n_uct_max = n_uct_max
+        self.n_zero = train_kwargs["n_zero"]
+        self.n_uct = train_kwargs["n_uct"]
+        self.n_uct_step = train_kwargs["n_uct_step"]
+        self.n_uct_max = train_kwargs["n_uct_max"]
         
         self.temp_max = 1.0
         self.temp = temp
@@ -245,7 +218,37 @@ class Trainer():
             pickle.dump(list(self.cache), f)
 
 if __name__ == '__main__':
-    trainer = Trainer(model_file=CURR_MODEL_PATH)
-    # trainer = Trainer()
+    import logging
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--game_size", type=str, choices=["S", "M", "L"])
+    args = parser.parse_args()
+    
+    game_kwargs = S_GAME if args.game_size == "S" else M_GAME if args.game_size == "M" else L_GAME
+    game_kwargs_str = "_".join(map(str, game_kwargs))
+
+    train_kwargs = TRAIN_ARGS[game_kwargs_str]
+
+    # game_kwargs_str += "_01"
+
+    LOSSES_PATH = os.path.join(game_kwargs_str, f"train.log")
+    BUFFER_PATH = os.path.join(game_kwargs_str, f"buf.pkl")
+    CURR_MODEL_PATH = os.path.join(game_kwargs_str, f"models/curr.pkl")
+    BEST_MODEL_PATH = os.path.join(game_kwargs_str, f"models/best.pkl")
+    
+    model_file = CURR_MODEL_PATH if os.path.exists(CURR_MODEL_PATH) else None
+
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('[%(asctime)s] %(message)s')
+    file_handler = logging.FileHandler(LOSSES_PATH)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+    
+    trainer = Trainer(
+        game_kwargs=game_kwargs, 
+        train_kwargs=train_kwargs,
+        model_file=model_file
+    )
     trainer.train()
 

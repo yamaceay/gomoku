@@ -9,33 +9,16 @@ from tqdm import tqdm
 import numpy as np
 import pandas as pd
 import os
-
-game_size = "L"
-game_kwargs = (M, N, K) = S_GAME if game_size == "S" else M_GAME if game_size == "M" else L_GAME
-game_kwargs_str = f"{M}_{N}_{K}"
-
-assert game_kwargs_str in TRAIN_ARGS, f"stringified game kwargs must be in {list(TRAIN_ARGS.keys())}"
-train_params = TRAIN_ARGS[game_kwargs_str]
-    
-n_zero = train_params["n_zero"]
-n_uct = train_params["n_uct"]
-n_uct_step = train_params["n_uct_step"]
-n_uct_max = train_params["n_uct_max"]
-
-IMG_DIR = f"out/{game_kwargs_str}"
-TIME_DIR = os.path.join(IMG_DIR, "timeseries")
-os.makedirs(TIME_DIR, exist_ok=True)
-COMP_DIR = os.path.join(IMG_DIR, "competition")
-os.makedirs(COMP_DIR, exist_ok=True)
-
 class Comparator:
     def __init__(self,
-                 game: Gomoku = Gomoku(*game_kwargs),
+                 game_kwargs: tuple[int, int, int],
+                 game: Gomoku = None,
                  n_games: int = 50,
                  det_k: int = 2,
                  ):
         
-        self.game = game
+        self.game_kwargs = game_kwargs
+        self.game = game if game is not None else Gomoku(*game_kwargs)
         self.n_games = n_games
         self.det_k = det_k
         
@@ -47,7 +30,8 @@ class Comparator:
         for player in players:
             player_path = os.path.join(TIME_DIR, f"{player[0]}.csv")
             if not os.path.exists(player_path):
-                time_stats = pd.DataFrame(columns=list(range(M*N)))
+                n_columns = self.game_kwargs[0]*self.game_kwargs[1]
+                time_stats = pd.DataFrame(columns=list(range(n_columns)))
                 time_stats.to_csv(player_path)
 
         with tqdm(
@@ -152,7 +136,11 @@ def append_csv(df: pd.DataFrame, path: str):
     else:
         df.to_csv(path, mode='a', header=False)
 
-def get_player(name: str, level: int) -> tuple[Player, bool]:
+def get_player(name: str, level: int, game_kwargs: tuple[int, int, int]) -> tuple[Player, bool]:
+    train_kwargs = TRAIN_ARGS["_".join(map(str, game_kwargs))]
+    n_zero = train_kwargs["n_zero"]
+    n_uct_step = train_kwargs["n_uct_step"]
+    
     det = True
     if name == "UCT":
         n_it = n_uct_step * level
@@ -161,7 +149,7 @@ def get_player(name: str, level: int) -> tuple[Player, bool]:
     else:
         net = Zero_Net(
             game_kwargs=game_kwargs, 
-            model_file=f"bin/models/best_{game_kwargs_str}_v{level}.model",
+            model_file=f"{game_kwargs_str}/models/v{level}.pkl",
         )
         if name == "FLAT":
             player = (f"{name}_v{level}", Flat_Player(policy_value_fn=net.predict), .0)
@@ -175,18 +163,27 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("players", nargs="+", help="Players to compare")
+    parser.add_argument("--game_size", type=str, choices=["S", "M", "L"])
     args = parser.parse_args()
+    
+    game_kwargs = S_GAME if args.game_size == "S" else M_GAME if args.game_size == "M" else L_GAME
+    game_kwargs_str = "_".join(map(str, game_kwargs))
+    
+    TIME_DIR = os.path.join(game_kwargs_str, "timeseries")
+    os.makedirs(TIME_DIR, exist_ok=True)
+    COMP_DIR = os.path.join(game_kwargs_str, "competition")
+    os.makedirs(COMP_DIR, exist_ok=True)    
     
     player_args = []
     for i, player in enumerate(args.players):
         name, level = player.split(",")
         level = int(level)
-        player_args += [get_player(name, level)]
+        player_args += [get_player(name, level, game_kwargs)]
 
     players = [player[0] for player in player_args]
     edges = [(i, j, player_args[i][1] and player_args[j][1]) 
              for i in range(len(player_args)) 
              for j in range(i+1, len(player_args))]
     
-    comparator = Comparator()
+    comparator = Comparator(game_kwargs=game_kwargs)
     comparator.comp(players, edges)

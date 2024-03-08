@@ -1,5 +1,5 @@
 #!/bin/bash
-lZero=3
+lZero=5
 lUct=5
 zeros=(FLAT ZERO ZEROX)
 

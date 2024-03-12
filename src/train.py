@@ -27,7 +27,7 @@ TRAIN_ARGS = {
 assert game_kwargs_str in TRAIN_ARGS, f"stringified game kwargs must be in {list(TRAIN_ARGS.keys())}"
 train_kwargs = TRAIN_ARGS[game_kwargs_str]
 
-game_kwargs_str += "_01"
+game_kwargs_str += "_06"
 
 DIR = 'bin'
 LOSSES_PATH = os.path.join(DIR, f"logs/{game_kwargs_str}.log")
@@ -58,9 +58,9 @@ class Trainer():
                  n_epochs: int = 5,
                  buffer_size: int = 10000,
                  
-                 lr: float = .000117,
+                 lr: float = .000175,
                  weight_decay: float = .0001,
-                 kl_threshold: float = .004,
+                 kl_threshold: float = .008,
                  
                  epsilon: float = .25,
                  temp: float = .0001,

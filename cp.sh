@@ -15,5 +15,7 @@ function curr() {
 }
 
 for file in logs buf best curr; do
-	echo $($file 1)
+	for i in 2 6; do
+		rm -f $($file $i)
+	done
 done

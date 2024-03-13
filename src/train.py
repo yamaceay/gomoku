@@ -20,7 +20,7 @@ game_kwargs_str = f"{M}_{N}_{K}"
 
 TRAIN_ARGS = {
     "6_6_4": dict(n_zero = 400, n_uct = 5000, n_uct_step = 1000, n_uct_max = 5000),
-    "8_8_5": dict(n_zero = 500, n_uct = 3000, n_uct_step = 1500, n_uct_max = 6000),
+    "8_8_5": dict(n_zero = 500, n_uct = 4500, n_uct_step = 1500, n_uct_max = 6000),
     "10_10_5": dict(n_zero = 600, n_uct = 6000, n_uct_step = 2000, n_uct_max = 6000),
 }
 
@@ -51,16 +51,16 @@ class Trainer():
                  n_uct_step: int = train_kwargs["n_uct_step"],
                  n_uct_max: int = train_kwargs["n_uct_max"],
                  
-                 n_batches: int = 1000,
+                 n_batches: int = 500,
                  batch_size: int = 512,
                  r_checkpoint: int = 50,
                  n_eval_games: int = 10,
                  n_epochs: int = 5,
                  buffer_size: int = 10000,
                  
-                 lr: float = .000175,
+                 lr: float = .000078,
                  weight_decay: float = .0001,
-                 kl_threshold: float = .008,
+                 kl_threshold: float = .004,
                  
                  epsilon: float = .25,
                  temp: float = .0001,

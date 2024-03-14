@@ -15,7 +15,7 @@ function curr() {
 }
 
 for file in logs buf best curr; do
-	for i in 4; do
+	for i in 1 2 3 5; do
 		rm -f $($file $i)
 	done
 done

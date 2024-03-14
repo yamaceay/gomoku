@@ -27,7 +27,7 @@ TRAIN_ARGS = {
 assert game_kwargs_str in TRAIN_ARGS, f"stringified game kwargs must be in {list(TRAIN_ARGS.keys())}"
 train_kwargs = TRAIN_ARGS[game_kwargs_str]
 
-game_kwargs_str += "_06"
+game_kwargs_str += "_01"
 
 DIR = 'bin'
 LOSSES_PATH = os.path.join(DIR, f"logs/{game_kwargs_str}.log")

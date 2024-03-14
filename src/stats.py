@@ -264,7 +264,7 @@ def plot_entropy(train_df, ax, entropy_significance = -.5):
 
 # Measuring Value Estimation
 
-def plot_expl_var(train_df, ax1, ax2, expl_var_significance = .4, d_expl_var_significance = .01, n_epochs = 5):
+def plot_expl_var(train_df, ax1, ax2, expl_var_significance = .4, d_expl_var_significance = .01, n_batch_reps = 5):
     print(f"[Info] Explained-Variance(value): Measurement of how close the predicted value is to the actual reward")
 
     expl_var_corr = autocorr(train_df, "expl_var")
@@ -291,7 +291,7 @@ def plot_expl_var(train_df, ax1, ax2, expl_var_significance = .4, d_expl_var_sig
 
     d_expl_var_stats = pd.concat([train_df['expl_var'] - train_df['d_expl_var'], train_df['expl_var']], axis=1)
     ax2 = d_expl_var_stats.plot(kind="box", ax=ax2)
-    ax2.set_title(f"Expl. Var. Difference After {n_epochs} Epochs")
+    ax2.set_title(f"Expl. Var. Difference After {n_batch_reps} Epochs")
     ax2.set_xticklabels(["Before", "After"])
 
     return ax1, ax2
@@ -473,9 +473,9 @@ def plot_q2(q2, game_kwargs_str):
     plt.savefig(file, dpi=600, bbox_inches = 'tight')
     plt.close()
 
-def plot_q1(q1, game_kwargs_str, n_batches = 1000):
+def plot_q1(q1, game_kwargs_str, n_epochs = 1000):
     file = os.path.join(game_kwargs_str, "q1.png")
-    v_to_epoch = lambda v: int(v[1:]) * n_batches
+    v_to_epoch = lambda v: int(v[1:]) * n_epochs
     q1_uct, q1 = q1[q1.index.str.contains("UCT")], q1[~q1.index.str.contains("UCT")]
     q1.index = pd.MultiIndex.from_tuples(list(map(tuple, q1.index.str.split('_'))))
     q1 = q1.unstack().T

@@ -24,11 +24,11 @@ class Trainer():
                  train_kwargs: dict[str, int],
                  model_file: str = None,
                  
-                 n_batches: int = 1000,
+                 n_epochs: int = 1000,
                  batch_size: int = 512,
                  r_checkpoint: int = 50,
                  n_eval_games: int = 10,
-                 n_epochs: int = 5,
+                 n_batch_reps: int = 5,
                  buffer_size: int = 10000,
                  
                  lr: float = .000117,
@@ -57,9 +57,9 @@ class Trainer():
         self.k_ucb = k_ucb
         self.next_state = gamma > 0
         
-        self.n_batches = n_batches
-        self.batch_size = batch_size
         self.n_epochs = n_epochs
+        self.batch_size = batch_size
+        self.n_batch_reps = n_batch_reps
         self.n_eval_games = n_eval_games
         self.r_checkpoint = r_checkpoint
         self.buffer_size = buffer_size
@@ -86,12 +86,12 @@ class Trainer():
         old_policy, old_value = self.net.forward_batch(states)
         
         kl_mean = .0
-        for _ in range(self.n_epochs):
+        for _ in range(self.n_batch_reps):
             batch = (states, policies, rewards, *next_states)
             loss, entropy = self.net.fit_one(batch, self.gamma)
             new_policy, new_value = self.net.forward_batch(states)
             kl_mean += kl_divergence(old_policy, new_policy)
-        kl_mean /= self.n_epochs
+        kl_mean /= self.n_batch_reps
         
         rewards = np.array(rewards)
 
@@ -144,7 +144,7 @@ class Trainer():
             pass
         
         try:
-            pbar = tqdm(range(self.n_batches), position=0, leave=False, desc="Batches")
+            pbar = tqdm(range(self.n_epochs), position=0, leave=False, desc="Batches")
             for i in pbar:
                 zero = Deep_Player(
                     self.n_zero,

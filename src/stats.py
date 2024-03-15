@@ -50,7 +50,7 @@ def fairness_small(Pi_s = "c3,d4,d2,b4,c4,c5,c2,c1,e2,f2,b2"):
     ax.set_xlabel("Move")
     ax.set_ylabel("Value")
     ax.set_title("Analysis of Best Policy")
-    ax.legend(["V(s)", "Q(s, a)", "Fairness"])
+    ax.legend(["V(s)", "π(a | s)", "Fairness"])
     plt.savefig("6_6_4/win_strategy.png", dpi=300)
     plt.close()
     

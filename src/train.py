@@ -27,7 +27,7 @@ TRAIN_ARGS = {
 assert game_kwargs_str in TRAIN_ARGS, f"stringified game kwargs must be in {list(TRAIN_ARGS.keys())}"
 train_kwargs = TRAIN_ARGS[game_kwargs_str]
 
-game_kwargs_str += "_01"
+game_kwargs_str += "_04"
 
 DIR = 'bin'
 LOSSES_PATH = os.path.join(DIR, f"logs/{game_kwargs_str}.log")
@@ -51,7 +51,7 @@ class Trainer():
                  n_uct_step: int = train_kwargs["n_uct_step"],
                  n_uct_max: int = train_kwargs["n_uct_max"],
                  
-                 n_batches: int = 500,
+                 n_batches: int = 1000,
                  batch_size: int = 512,
                  r_checkpoint: int = 50,
                  n_eval_games: int = 10,

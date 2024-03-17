@@ -338,6 +338,17 @@ def plot_competition(game_kwargs_str, n_games=50):
         elif comp.endswith("counts.csv"):
             counts += [os.path.join(COMP_DIR, comp)]
 
+    lengths = [
+        "8_8_5/competition/FLAT_v4_UCT_6000_lengths.csv",
+        "8_8_5/competition/ZEROX_v3_UCT_4500_lengths.csv",
+        "8_8_5/competition/ZEROX_v3_UCT_6000_lengths.csv",
+    ]
+    counts = [
+        "8_8_5/competition/FLAT_v4_UCT_6000_counts.csv",
+        "8_8_5/competition/ZEROX_v3_UCT_4500_counts.csv",
+        "8_8_5/competition/ZEROX_v3_UCT_6000_counts.csv",
+    ]   
+
     lengths, counts = sorted(lengths), sorted(counts)
     for length_path, count_path in zip(lengths, counts):
         plot_path = length_path.replace("_lengths.csv", ".png")
@@ -527,12 +538,12 @@ def q_plot(all_scores, game_kwargs_str):
     plot_q3(q3, game_kwargs_str)
     
 if __name__ == "__main__":
-    fairness_small()
+    # fairness_small()
     
-    for game_kwargs in [S_GAME, M_GAME, L_GAME]:
+    for game_kwargs in [M_GAME]:
         game_kwargs_str = "_".join(map(str, game_kwargs))
 
-        plot_training(game_kwargs_str)
+        # plot_training(game_kwargs_str)
         plot_competition(game_kwargs_str)
         plot_timeseries(game_kwargs_str, anomaly_detection=False)
         

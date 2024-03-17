@@ -5,7 +5,7 @@ if [[ $1 == "S" ]]; then
     lZero=3
     lUct=5
 elif [[ $1 == "M" ]]; then
-    lZero=5
+    lZero=6
     lUct=4
 elif [[ $1 == "L" ]]; then
     lZero=5

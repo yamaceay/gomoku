@@ -1,0 +1,11 @@
+8_8_5/competition/FLAT_v1_FLAT_v6_counts.csv
+8_8_5/competition/FLAT_v1_FLAT_v6_lengths.csv
+8_8_5/competition/FLAT_v2_FLAT_v6_counts.csv
+8_8_5/competition/FLAT_v2_FLAT_v6_lengths.csv
+8_8_5/competition/FLAT_v3_FLAT_v6_counts.csv
+8_8_5/competition/FLAT_v3_FLAT_v6_lengths.csv
+8_8_5/competition/FLAT_v4_FLAT_v6_counts.csv
+8_8_5/competition/FLAT_v4_FLAT_v6_lengths.csv
+8_8_5/timeseries/FLAT_v6.csv
+8_8_5/timeseries/ZEROX_v6.csv
+8_8_5/timeseries/ZERO_v6.csv

@@ -6,3 +6,4 @@ from .calc import *
 from .hybrid import *
 from .data import *
 from .train import *
+from .comp import *

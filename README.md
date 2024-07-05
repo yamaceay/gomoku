@@ -33,6 +33,12 @@ git clone https://github.com/yamaceay/gomoku.git
 cd gomoku
 ```
 
+Then install the required Python packages by running the following command:
+
+```bash
+pip3 install -r requirements.txt
+```
+
 Make sure that your system allows running the scripts in this directory. If not, you can change the permissions by running the following command:
 
 ```bash

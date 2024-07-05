@@ -136,17 +136,27 @@ def append_csv(df: pd.DataFrame, path: str):
     else:
         df.to_csv(path, mode='a', header=False)
 
-def get_player(name: str, level: int, game_kwargs: tuple[int, int, int]) -> tuple[Player, bool]:
+def find_best_level(game_kwargs_str: str) -> int:
+    level = 0
+    while os.path.exists(f"{game_kwargs_str}/models/v{level + 1}.pkl"):
+        level += 1
+    return level
+
+def get_player(game_kwargs: tuple[int, int, int], name: str, level: int = 0) -> tuple[tuple[str, Player, float], bool]:
+    game_kwargs_str = "_".join(map(str, game_kwargs))
     train_kwargs = TRAIN_ARGS["_".join(map(str, game_kwargs))]
     n_zero = train_kwargs["n_zero"]
     n_uct_step = train_kwargs["n_uct_step"]
     
     det = True
     if name == "UCT":
+        assert level != -1, "UCT level must be specified"
         n_it = n_uct_step * level
         player = (f"{name}_{n_it}", Deep_Player(iterations=n_it), .0)    
         det = False
     else:
+        if level == 0:
+            level = find_best_level(game_kwargs_str)
         net = Zero_Net(
             game_kwargs=game_kwargs, 
             model_file=f"{game_kwargs_str}/models/v{level}.pkl",
@@ -178,7 +188,7 @@ if __name__ == '__main__':
     for i, player in enumerate(args.players):
         name, level = player.split(",")
         level = int(level)
-        player_args += [get_player(name, level, game_kwargs)]
+        player_args += [get_player(game_kwargs, name, level)]
 
     players = [player[0] for player in player_args]
     edges = [(i, j, player_args[i][1] and player_args[j][1]) 

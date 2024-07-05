@@ -123,15 +123,22 @@ class Gomoku:
     def __repr__(self) -> str:
         output = ""
         if not self.score():
-            output += "Current player: " + str(self.player)
+            if self.last_move is not None:
+                player_str = "X" if self.player == -1 else "O"
+                (i, j) = self.last_move
+                last_move_str = Pattern.move_to_loc((i, j - 1))
+                output += f"Last move: {player_str} in {last_move_str}"
         elif self.no_move():
             output += "Tie break"
         else:
-            output += "Winner: " + str(self.score())
+            winner = self.score()
+            winner_str = "X" if winner == 1 else "O"
+            output += f"Winner: {winner_str}"
 
         output += "\n"
+        output += " " + " ".join([""] + [str(i) for i in range(self.N)]) + "\n"
         for i in range(self.M):
-            row = []
+            row = [chr(ord('a') + i)]
             for j in range(self.N):
                 if self.board[i, j] == 1:
                     row += ["X"]

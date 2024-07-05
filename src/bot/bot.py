@@ -1,4 +1,5 @@
-from src import Gomoku, get_player
+from ..gomoku import Gomoku
+from ..comp import get_player
 import os
 
 class EndError(Exception):

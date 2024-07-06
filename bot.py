@@ -3,7 +3,6 @@ import random
 import copy
 import os
 import numpy as np
-from time import time
 import torch
 import torch.nn as nn
 import torch.optim as optim

@@ -1,7 +1,4 @@
 __pycache__
-*/__pycache__
-*.sif
-/logs
 .env
 dist
 build

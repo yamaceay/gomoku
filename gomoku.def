@@ -1,8 +1,0 @@
-Bootstrap: docker
-From: python:3.11
-
-%files
-    $PWD/requirements.txt requirements.txt
-
-%post
-    pip install --root-user-action=ignore -r requirements.txt

@@ -1,0 +1,21 @@
+INFO initial_board l_board.txt
+> ERROR File l_board.txt not found
+INFO initial_board board_l.txt
+> OK
+START
+> 7-7
+6-6
+TURN 6-6
+> 5-7
+TURN 6-7
+> 6-8
+TURN 5-6
+> 4-6
+TURN 5-5
+> 3-5
+TURN 4-4
+> 2-4
+TURN 2-4
+> ERROR Game ended
+END
+> OK
